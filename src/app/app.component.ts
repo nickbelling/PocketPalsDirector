@@ -1,12 +1,29 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { CommonModule, JsonPipe } from '@angular/common';
+import { StateYourBidnessService } from './games/state-your-bidness/database.service';
 
 @Component({
-  selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+    standalone: true,
+    imports: [CommonModule, RouterModule],
+    providers: [StateYourBidnessService],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'PocketPalsDirector';
+    private _db = inject(StateYourBidnessService);
+    protected gameState = this._db.state;
+    protected gameQuestions = this._db.questions;
+
+    public async change(): Promise<void> {
+        const state = this.gameState();
+        state.guessedAnswers.push('abc');
+        state.committedTo = state.committedTo + 1;
+        await this._db.setState(state);
+    }
+
+    public async reset(): Promise<void> {
+        await this._db.resetState();
+    }
 }
