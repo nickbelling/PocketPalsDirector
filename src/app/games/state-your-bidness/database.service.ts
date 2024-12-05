@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable } from '@angular/core';
 import { BaseGameDatabaseService } from '../base-database.service';
 
 export interface StateYourBidnessState {
@@ -28,4 +28,17 @@ export class StateYourBidnessService extends BaseGameDatabaseService<
     constructor() {
         super('games/state-your-bidness', STATE_YOUR_BUSINESS_STATE_DEFAULT);
     }
+
+    protected currentQuestion = computed(() => {
+        const state = this.state();
+        const questions = this.questions();
+
+        if (state.currentQuestion) {
+            return questions.find(
+                (q) => q.firebaseId === state.currentQuestion
+            );
+        } else {
+            return undefined;
+        }
+    });
 }

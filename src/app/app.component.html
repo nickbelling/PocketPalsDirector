@@ -28,4 +28,8 @@
     }
 </ul>
 
+<input type="text" [(ngModel)]="newQuestionName" />
+<textarea [(ngModel)]="newQuestionAnswers"></textarea>
+<button (click)="add()">Add question</button>
+
 <router-outlet></router-outlet>
