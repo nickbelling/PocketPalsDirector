@@ -1,35 +1,5 @@
-<h1>hello</h1>
-
-<button (click)="change()">Change</button>
-<button (click)="reset()">Reset</button>
-
-@let state = gameState();
-
-<p>committed to: {{state.committedTo}}</p>
-<ul>
-    @for (answer of state.guessedAnswers; track $index) {
-        <li>{{answer}}</li>
-    }
-</ul>
-
-<p>State: {{gameState() | json}}</p>
-
-<p>Questions:</p>
-<ul>
-    @for (question of gameQuestions(); track question.firebaseId) {
-        <li>{{question.name}}</li>
-        <ul>
-            @for (item of question.items; track item) {
-                <li>{{item}}</li>
-            }
-        </ul>
-    } @empty {
-        <li>No questions.</li>
-    }
-</ul>
-
-<input type="text" [(ngModel)]="newQuestionName" />
-<textarea [(ngModel)]="newQuestionAnswers"></textarea>
-<button (click)="add()">Add question</button>
+<mat-toolbar>
+    <span>Pocket Pals Director</span>
+</mat-toolbar>
 
 <router-outlet></router-outlet>
