@@ -1,8 +1,8 @@
 .preview-container {
     position: relative;
-    width: 100%;
     overflow: hidden;
-    border: 1px solid black;
+    width: 100%;
+    aspect-ratio: 16/9; // default, overridden in template
     background-color: lightblue;
 }
 

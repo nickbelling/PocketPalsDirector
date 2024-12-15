@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { GamePreview } from '../common/preview';
+import { GamePreview } from '../common/preview/preview';
 import { StateYourBidnessGame } from './state-your-bidness/game';
 
 @Component({
