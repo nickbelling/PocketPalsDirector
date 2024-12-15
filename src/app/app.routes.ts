@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { StateYourBidnessControllerComponent } from './games/state-your-bidness/controller.component';
-import { GameSelectorComponent } from './games/game-selector.component';
+import { StateYourBidnessController } from './games/state-your-bidness/controller';
+import { GameSelectorComponent } from './games/game-selector';
 
 export const routes: Routes = [
     {
@@ -16,7 +16,7 @@ export const routes: Routes = [
         children: [
             {
                 path: 'state-your-bidness',
-                component: StateYourBidnessControllerComponent,
+                component: StateYourBidnessController,
             },
         ],
     },

@@ -1,15 +1,15 @@
 import { Component, inject, signal } from '@angular/core';
-import { StateYourBidnessService } from './database.service';
+import { StateYourBidnessService } from './database';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'state-your-bidness-controller',
-    templateUrl: './controller.component.html',
+    templateUrl: './controller.html',
     imports: [CommonModule, FormsModule],
     providers: [StateYourBidnessService],
 })
-export class StateYourBidnessControllerComponent {
+export class StateYourBidnessController {
     private _db = inject(StateYourBidnessService);
     protected gameState = this._db.state;
     protected gameQuestions = this._db.questions;
