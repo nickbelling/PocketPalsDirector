@@ -1,23 +1,43 @@
 import { Routes } from '@angular/router';
-import { StateYourBidnessController } from './games/state-your-bidness/controller';
-import { GameSelectorComponent } from './games/game-selector';
+import { Dashboard } from './dashboard/dashboard';
+import { DashboardHome } from './dashboard/home/dashboard-home';
+import { GameDirector } from './game-director/game-director';
+import { GAMES } from './games/games';
 
 export const routes: Routes = [
     {
-        path: '**',
-        redirectTo: 'game-selector',
+        path: '',
+        redirectTo: 'admin',
+        pathMatch: 'full',
     },
     {
-        path: 'game-selector',
-        component: GameSelectorComponent,
-    },
-    {
-        path: 'controller',
+        path: 'admin',
+        component: Dashboard,
         children: [
             {
-                path: 'state-your-bidness',
-                component: StateYourBidnessController,
+                path: '',
+                redirectTo: 'home',
+                pathMatch: 'full',
             },
+            {
+                path: 'home',
+                component: DashboardHome,
+            },
+            // Create a "Director" for each game
+            ...GAMES.flatMap((gameDef) => [
+                {
+                    path: `director/${gameDef.slug}`,
+                    component: GameDirector,
+                    data: gameDef,
+                },
+            ]),
         ],
     },
+    // The raw game routes
+    ...GAMES.flatMap((gameDef) => [
+        {
+            path: `game/${gameDef.slug}`,
+            component: gameDef.game,
+        },
+    ]),
 ];

@@ -1,0 +1,167 @@
+@use 'sass:math';
+
+@mixin all-layout() {
+    /* This element should be the app's root element */
+    body > :first-child {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .layout {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .layout-fit {
+        @extend .layout;
+        flex-grow: 0;
+        flex-shrink: 0;
+        overflow: hidden;
+    }
+
+    .layout-fill {
+        @extend .layout;
+        flex-grow: 1;
+        flex-shrink: 1;
+        overflow: hidden;
+    }
+
+    // Create alignment maps so we can more easily generate all the permutations
+    // of alignment classes
+    $y-axes: (('top', start), ('middle', center), ('bottom', end));
+    $x-axes: (('left', start), ('center', center), ('right', end));
+
+    .layout-column {
+        @extend .layout;
+        flex-direction: column !important;
+
+        // Generate .layout-items-[left/center/right/etc]
+        @each $axis, $flex-term in $y-axes {
+            &.layout-items-#{$axis} {
+                @extend .layout;
+                justify-content: #{$flex-term};
+            }
+        }
+
+        @each $axis, $flex-term in $x-axes {
+            &.layout-items-#{$axis} {
+                @extend .layout;
+                align-items: #{$flex-term};
+            }
+        }
+
+        @each $y-axis, $_ in $y-axes {
+            @each $x-axis, $_ in $x-axes {
+                &.layout-items-#{$y-axis}-#{$x-axis} {
+                    @extend .layout-column, .layout-items-#{$y-axis};
+                    @extend .layout-column, .layout-items-#{$x-axis};
+                }
+            }
+        }
+
+        &.layout-items-fill {
+            @extend .layout;
+            align-items: stretch;
+
+            > * {
+                @extend .layout-fill;
+            }
+        }
+
+        &.layout-items-space {
+            @extend .layout;
+            justify-content: space-evenly;
+        }
+    }
+
+    .layout-row {
+        @extend .layout;
+        flex-direction: row !important;
+
+        // Generate .layout-items-[left/center/right/etc]
+        @each $axis, $flex-term in $x-axes {
+            &.layout-items-#{$axis} {
+                @extend .layout;
+                justify-content: #{$flex-term};
+            }
+        }
+
+        @each $axis, $flex-term in $y-axes {
+            &.layout-items-#{$axis} {
+                @extend .layout;
+                align-items: #{$flex-term};
+            }
+        }
+
+        @each $y-axis, $_ in $y-axes {
+            @each $x-axis, $_ in $x-axes {
+                &.layout-items-#{$y-axis}-#{$x-axis} {
+                    @extend .layout-row, .layout-items-#{$x-axis};
+                    @extend .layout-row, .layout-items-#{$y-axis};
+                }
+            }
+        }
+
+        &.layout-items-fill {
+            @extend .layout;
+            justify-items: stretch;
+
+            > * {
+                @extend .layout-fill;
+                flex-basis: 100%;
+            }
+        }
+
+        &.layout-items-space {
+            @extend .layout;
+            justify-content: space-evenly;
+        }
+    }
+
+    :not(.layout-row, .layout-column).layout-items-middle-center {
+        @extend .layout;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .layout-scroll-x {
+        overflow-x: scroll;
+        flex-shrink: 0;
+    }
+
+    .layout-scroll-y {
+        overflow-y: scroll;
+    }
+
+    .layout-scroll {
+        overflow: scroll;
+    }
+
+    .layout-wrap {
+        @extend .layout;
+        flex-wrap: wrap;
+    }
+
+    // Used for generating all the classes we'd want to make fractional versions of.
+    // Each item here becomes a percentage, e,g:
+    // "2" creates "1/2", "2/2", "3" creates "1/3", "2/3", "3/3", etc.
+    $percentage-fractions: (2, 3, 4, 5, 6, 12);
+
+    // Create the .layout-basis-* classes
+    @each $fraction-size in $percentage-fractions {
+        $fraction: 1;
+
+        @while ($fraction <= $fraction-size) {
+            .layout-basis-#{$fraction}\/#{$fraction-size} {
+                @extend .layout;
+                $basis: 100% * math.div($fraction, $fraction-size);
+
+                flex-basis: $basis;
+            }
+
+            $fraction: $fraction + 1;
+        }
+    }
+}

@@ -1,0 +1,37 @@
+@use '@angular/material' as mat;
+
+@mixin all-material() {
+    html {
+        @include mat.theme(
+            (
+                color: (
+                    theme-type: light,
+                    primary: mat.$azure-palette,
+                ),
+                typography: Roboto,
+                density: 0,
+            )
+        );
+
+        @include _toolbar();
+    }
+}
+
+@mixin _toolbar() {
+    @include mat.toolbar-overrides(
+        (
+            container-background-color: var(--mat-sys-primary),
+            container-text-color: var(--mat-sys-on-primary),
+        )
+    );
+
+    mat-toolbar {
+        flex-shrink: 0;
+
+        @include mat.icon-button-overrides(
+            (
+                icon-color: var(--mat-sys-on-primary),
+            )
+        );
+    }
+}

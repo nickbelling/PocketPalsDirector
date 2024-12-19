@@ -1,0 +1,17 @@
+@let gameDef = gameDefinition();
+
+<h3>{{gameDef.name || 'ERROR'}}</h3>
+
+@if (gameDef) {
+<div class="layout-row g">
+    <div class="layout-column layout-basis-2/5">
+        <ng-container *ngComponentOutlet="gameDef.controller" />
+    </div>
+
+    <div class="layout-column layout-basis-3/5 g">
+        <preview>
+            <ng-container *ngComponentOutlet="gameDef.game" />
+        </preview>
+    </div>
+</div>
+}

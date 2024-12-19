@@ -1,0 +1,11 @@
+<h3>Select a game</h3>
+
+<div class="layout-row">
+    <div class="layout-column layout-basis-1/5 g">
+        @for (game of games; track $index) {
+        <button mat-flat-button [routerLink]="['..', 'director', game.slug]">
+            {{game.name}}
+        </button>
+        }
+    </div>
+</div>

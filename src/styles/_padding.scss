@@ -1,0 +1,48 @@
+@mixin all-padding() {
+    :root {
+        --padding-amount: 1rem;
+    }
+
+    .p-top {
+        padding-top: var(--padding-amount);
+    }
+
+    .p-bottom {
+        padding-bottom: var(--padding-amount);
+    }
+
+    .p-left {
+        padding-left: var(--padding-amount);
+    }
+
+    .p-right {
+        padding-right: var(--padding-amount);
+    }
+
+    .p-x {
+        @extend .p-left;
+        @extend .p-right;
+    }
+
+    .p-y {
+        @extend .p-top;
+        @extend .p-bottom;
+    }
+
+    .p {
+        @extend .p-x;
+        @extend .p-y;
+    }
+
+    .g-row {
+        row-gap: var(--padding-amount);
+    }
+
+    .g-column {
+        column-gap: var(--padding-amount);
+    }
+
+    .g {
+        gap: var(--padding-amount);
+    }
+}

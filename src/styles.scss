@@ -1,29 +1,16 @@
-@use '@angular/material' as mat;
+@use './styles/material' as material;
+@use './styles/layout' as layout;
+@use './styles/padding' as padding;
 
-html {
-    @include mat.theme(
-        (
-            color: (
-                theme-type: light,
-                primary: mat.$azure-palette,
-            ),
-            typography: Roboto,
-            density: 0,
-        )
-    );
-
-    @include mat.toolbar-overrides(
-        (
-            container-background-color: var(--mat-sys-primary),
-            container-text-color: var(--mat-sys-on-primary),
-        )
-    );
-}
+@include material.all-material();
+@include layout.all-layout();
+@include padding.all-padding();
 
 html,
 body {
     height: 100%;
 }
+
 body {
     margin: 0;
     font-family: Roboto, 'Helvetica Neue', sans-serif;
