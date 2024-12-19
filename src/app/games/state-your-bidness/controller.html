@@ -1,7 +1,7 @@
-<button (click)="change()">Change</button>
-<button (click)="reset()">Reset</button>
+<button mat-flat-button class="error" (click)="reset()">Reset</button>
+<button mat-flat-button (click)="editQuestion()">Add Question</button>
 
-@let state = gameState();
+@let state = gameState(); @let questions = gameQuestions();
 
 <p>committed to: {{ state.committedTo }}</p>
 <ul>
@@ -10,13 +10,16 @@
     }
 </ul>
 
-<p>State: {{ gameState() | json }}</p>
-
 <p>Questions:</p>
 <ul>
-    @for (question of gameQuestions(); track question.firebaseId) {
-    <li>{{ question.name }}</li>
+    @for (question of questions; track question.firebaseId) {
+    <li>
+        {{ question.name }}
+        <button (click)="editQuestion(question)">Edit</button>
+        <button (click)="deleteQuestion(question)">Delete</button>
+    </li>
     <ul>
+        <li>Created at: {{question.createdAt}}</li>
         @for (item of question.items; track item) {
         <li>{{ item }}</li>
         }
@@ -25,7 +28,3 @@
     <li>No questions.</li>
     }
 </ul>
-
-<input type="text" [(ngModel)]="newQuestionName" />
-<textarea [(ngModel)]="newQuestionAnswers"></textarea>
-<button (click)="add()">Add question</button>

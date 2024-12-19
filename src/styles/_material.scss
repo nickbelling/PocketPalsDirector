@@ -13,8 +13,29 @@
             )
         );
 
+        @include _button();
+        @include _dialog();
         @include _toolbar();
     }
+}
+
+@mixin _button() {
+    .error {
+        @include mat.button-overrides(
+            (
+                filled-container-color: var(--mat-sys-error),
+                filled-label-text-color: var(--mat-sys-on-error),
+            )
+        );
+    }
+}
+
+@mixin _dialog() {
+    @include mat.dialog-overrides(
+        (
+            container-shape: 0px,
+        )
+    );
 }
 
 @mixin _toolbar() {
