@@ -1,39 +1,39 @@
 @let gameDef = gameDefinition();
 
-<h3>{{gameDef.name || 'ERROR'}}</h3>
+<h3>{{ gameDef.name || 'ERROR' }}</h3>
 
 @if (gameDef) {
-<div class="layout-row layout-fill g">
-    <div class="layout-scroll-y layout-basis-2/5 p-bottom">
-        <ng-container *ngComponentOutlet="gameDef.controller" />
-    </div>
+    <div class="layout-row layout-fill g">
+        <div class="layout-scroll-y layout-basis-2/5 p-bottom">
+            <ng-container *ngComponentOutlet="gameDef.controller" />
+        </div>
 
-    <div class="layout-column layout-basis-3/5 g">
-        <preview>
-            <ng-container *ngComponentOutlet="gameDef.game" />
-        </preview>
+        <div class="layout-column layout-basis-3/5 g">
+            <preview class="preview-nice">
+                <ng-container *ngComponentOutlet="gameDef.game" />
+            </preview>
 
-        <mat-form-field>
-            <mat-label>Browser source URL</mat-label>
-            <input matInput [value]="gameUrl()" readonly />
-            <button
-                mat-icon-button
-                matSuffix
-                matTooltip="Copy to clipboard"
-                [cdkCopyToClipboard]="gameUrl()"
-            >
-                <mat-icon>content_copy</mat-icon>
-            </button>
-            <a
-                mat-icon-button
-                matSuffix
-                matTooltip="Open in new tab"
-                href="{{gameUrl()}}"
-                target="_blank"
-            >
-                <mat-icon>open_in_new</mat-icon>
-            </a>
-        </mat-form-field>
+            <mat-form-field>
+                <mat-label>Browser source URL</mat-label>
+                <input matInput [value]="gameUrl()" readonly />
+                <button
+                    mat-icon-button
+                    matSuffix
+                    matTooltip="Copy to clipboard"
+                    [cdkCopyToClipboard]="gameUrl()"
+                >
+                    <mat-icon>content_copy</mat-icon>
+                </button>
+                <a
+                    mat-icon-button
+                    matSuffix
+                    matTooltip="Open in new tab"
+                    href="{{ gameUrl() }}"
+                    target="_blank"
+                >
+                    <mat-icon>open_in_new</mat-icon>
+                </a>
+            </mat-form-field>
+        </div>
     </div>
-</div>
 }

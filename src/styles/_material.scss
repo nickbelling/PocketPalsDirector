@@ -1,10 +1,6 @@
 @use '@angular/material' as mat;
 
 @mixin all-material() {
-    :root {
-        --rounding: 10px;
-    }
-
     html {
         @include mat.theme(
             (

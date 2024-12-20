@@ -1,6 +1,37 @@
+@use './reset' as reset;
+
 .pocket-pals-game {
-    display: block;
+    @include reset.reset();
+
+    display: flex;
     width: 1920px;
     height: 1080px;
+    flex-direction: column;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: var(--padding-amount);
     font-family: bebas-neue-pro-expanded, sans-serif;
+    color: white;
+    text-align: center;
+
+    h1 {
+        font-size: 60px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    h2 {
+        font-size: 50px;
+        font-weight: 500;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        text-shadow: var(--text-shadow);
+    }
 }

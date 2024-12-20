@@ -1,8 +1,4 @@
 @mixin all-padding() {
-    :root {
-        --padding-amount: 1rem;
-    }
-
     .p-top {
         padding-top: var(--padding-amount);
     }
