@@ -14,7 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
-const EXPORTS: Type<unknown>[] = [
+const CONTROLLER_MODULES: Type<unknown>[] = [
     CommonModule,
     FormsModule,
     MatButtonModule,
@@ -35,8 +35,8 @@ const EXPORTS: Type<unknown>[] = [
  * for game controllers.
  */
 @NgModule({
-    imports: EXPORTS,
-    exports: EXPORTS,
+    imports: CONTROLLER_MODULES,
+    exports: CONTROLLER_MODULES,
     providers: [SimpleDialogService, SortPipe],
 })
-export class CommonGameControllerModule {}
+export class CommonControllerModule {}
