@@ -1,6 +1,10 @@
 @use '@angular/material' as mat;
 
 @mixin all-material() {
+    :root {
+        --rounding: 10px;
+    }
+
     html {
         @include mat.theme(
             (
@@ -20,6 +24,15 @@
 }
 
 @mixin _button() {
+    @include mat.button-overrides(
+        (
+            filled-container-shape: var(--rounding),
+            outlined-container-shape: var(--rounding),
+            protected-container-shape: var(--rounding),
+            text-container-shape: var(--rounding),
+        )
+    );
+
     .error {
         @include mat.button-overrides(
             (
@@ -33,9 +46,13 @@
 @mixin _dialog() {
     @include mat.dialog-overrides(
         (
-            container-shape: 0px,
+            container-shape: var(--rounding),
         )
     );
+
+    mat-dialog-content {
+        min-width: 400px;
+    }
 }
 
 @mixin _toolbar() {
