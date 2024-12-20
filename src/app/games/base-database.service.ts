@@ -14,6 +14,7 @@ import {
     QueryDocumentSnapshot,
     serverTimestamp,
     setDoc,
+    Timestamp,
     Unsubscribe,
 } from 'firebase/firestore';
 import { FIRESTORE } from '../app.config';
@@ -27,12 +28,17 @@ function getConverter<T extends object>(): FirestoreDataConverter<Entity<T>> {
             return rest as T;
         },
         fromFirestore: (snapshot: QueryDocumentSnapshot): Entity<T> => {
+            // "createdAt" is stored as a Timestamp object in Firebase, but we
+            // want to interpret it as a number on this side.
             const data = snapshot.data() as T & {
-                createdAt?: { toMillis: () => number };
+                createdAt?: { toMillis: () => number } | number;
             };
 
             // Convert the createdAt timestamp to a number.
-            const createdAt = data.createdAt?.toMillis() ?? 0;
+            const createdAt =
+                typeof data.createdAt === 'number'
+                    ? data.createdAt
+                    : data.createdAt?.toMillis() ?? 0;
 
             const entity: Entity<T> = {
                 firebaseId: snapshot.id,
@@ -184,6 +190,29 @@ export abstract class BaseGameDatabaseService<
             `${this._questionsRef.path}/${firebaseId}`
         );
         await setDoc(questionDocRef, question, { merge: true });
+    }
+
+    /**
+     * Explicitly sets the `createdAt` value of the given question to a specific
+     * point in time. Because questions are ordered by their `createdAt` value,
+     * this allows you to reorder them by swapping their `createdAt` values.
+     * @param firebaseId The Firebase ID of the question to set the timestamp of.
+     * @param timestamp The timestamp to set, in milliseconds since epoch.
+     */
+    public async setQuestionTimestamp(
+        firebaseId: string,
+        timestamp: number
+    ): Promise<void> {
+        const newCreatedAt = Timestamp.fromMillis(timestamp);
+        const questionDocRef = doc(
+            this._firestore,
+            `${this._questionsRef.path}/${firebaseId}`
+        );
+        await setDoc(
+            questionDocRef,
+            { createdAt: newCreatedAt },
+            { merge: true }
+        );
     }
 
     /**
