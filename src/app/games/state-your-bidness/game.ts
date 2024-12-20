@@ -5,7 +5,6 @@ import { fadeInOutAnimation } from '../../common/animations/fade-in-out';
 
 @Component({
     imports: [CommonGameModule],
-    providers: [StateYourBidnessService],
     templateUrl: './game.html',
     styleUrl: './game.scss',
     host: { class: 'pocket-pals-game size-1920x1080' },

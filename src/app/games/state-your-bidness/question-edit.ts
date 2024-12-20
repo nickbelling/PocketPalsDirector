@@ -7,7 +7,6 @@ import { Entity } from '../base-database.service';
 @Component({
     templateUrl: './question-edit.html',
     imports: [CommonControllerModule],
-    providers: [StateYourBidnessService],
 })
 export class StateYourBidnessQuestionEditDialog {
     private _db = inject(StateYourBidnessService);

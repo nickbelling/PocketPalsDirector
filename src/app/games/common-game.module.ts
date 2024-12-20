@@ -8,7 +8,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { SimpleDialogService } from '../common/dialog/simple-dialog.service';
 import { SortPipe } from '../common/pipes/sort.pipe';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -46,7 +45,6 @@ const GAME_MODULES: Type<unknown>[] = [
 @NgModule({
     imports: CONTROLLER_MODULES,
     exports: CONTROLLER_MODULES,
-    providers: [SimpleDialogService],
 })
 export class CommonControllerModule {}
 

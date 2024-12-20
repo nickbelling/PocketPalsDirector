@@ -38,7 +38,7 @@ function getConverter<T extends object>(): FirestoreDataConverter<Entity<T>> {
             const createdAt =
                 typeof data.createdAt === 'number'
                     ? data.createdAt
-                    : data.createdAt?.toMillis() ?? 0;
+                    : (data.createdAt?.toMillis() ?? 0);
 
             const entity: Entity<T> = {
                 firebaseId: snapshot.id,
@@ -57,7 +57,7 @@ export type Entity<TEntity extends object> = TEntity & {
 
 export abstract class BaseGameDatabaseService<
     TState extends object,
-    TQuestion extends object
+    TQuestion extends object,
 > {
     /** Reference to the configured Firestore instance. */
     private _firestore = inject(FIRESTORE);
@@ -82,6 +82,7 @@ export abstract class BaseGameDatabaseService<
 
     /** @constructor */
     constructor(path: string, defaultState: TState) {
+        console.log('Initializing database service...');
         this._defaultState = defaultState;
 
         // Create the typed converters for use with this game
@@ -100,7 +101,7 @@ export abstract class BaseGameDatabaseService<
 
         // Create a reference to the TState document.
         this._stateRef = doc(this._firestore, path).withConverter(
-            stateConverter
+            stateConverter,
         );
 
         // Set up a snapshot of the TState document.
@@ -113,19 +114,19 @@ export abstract class BaseGameDatabaseService<
 
                 // Update the signal with the new data.
                 stateSignal.set(documentData);
-            }
+            },
         );
 
         // Create a reference to the TQuestion collection.
         this._questionsRef = collection(
             this._firestore,
-            `${path}/questions`
+            `${path}/questions`,
         ).withConverter(questionConverter);
 
         // Create a query across the collection.
         const questionsQuery = query(
             this._questionsRef,
-            orderBy('createdAt')
+            orderBy('createdAt'),
         ).withConverter(questionConverter);
 
         // Set up a snapshot of the TQuestion collection.
@@ -140,7 +141,7 @@ export abstract class BaseGameDatabaseService<
 
                 // Update the signal with the new array.
                 questionsSignal.set(collectionData);
-            }
+            },
         );
 
         // Unsubscribe from the snapshots when the
@@ -183,11 +184,11 @@ export abstract class BaseGameDatabaseService<
      */
     public async editQuestion(
         firebaseId: string,
-        question: TQuestion
+        question: TQuestion,
     ): Promise<void> {
         const questionDocRef = doc(
             this._firestore,
-            `${this._questionsRef.path}/${firebaseId}`
+            `${this._questionsRef.path}/${firebaseId}`,
         );
         await setDoc(questionDocRef, question, { merge: true });
     }
@@ -201,17 +202,17 @@ export abstract class BaseGameDatabaseService<
      */
     public async setQuestionTimestamp(
         firebaseId: string,
-        timestamp: number
+        timestamp: number,
     ): Promise<void> {
         const newCreatedAt = Timestamp.fromMillis(timestamp);
         const questionDocRef = doc(
             this._firestore,
-            `${this._questionsRef.path}/${firebaseId}`
+            `${this._questionsRef.path}/${firebaseId}`,
         );
         await setDoc(
             questionDocRef,
             { createdAt: newCreatedAt },
-            { merge: true }
+            { merge: true },
         );
     }
 
@@ -221,7 +222,7 @@ export abstract class BaseGameDatabaseService<
     public async removeQuestion(question: Entity<TQuestion>): Promise<void> {
         const questionDocRef = doc(
             this._firestore,
-            `${this._questionsRef.path}/${question.firebaseId}`
+            `${this._questionsRef.path}/${question.firebaseId}`,
         );
         await deleteDoc(questionDocRef);
     }

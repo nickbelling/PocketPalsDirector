@@ -23,7 +23,9 @@ export interface StateYourBidnessQuestion {
     items: string[];
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class StateYourBidnessService extends BaseGameDatabaseService<
     StateYourBidnessState,
     StateYourBidnessQuestion
@@ -38,7 +40,7 @@ export class StateYourBidnessService extends BaseGameDatabaseService<
 
         if (state.currentQuestion) {
             return questions.find(
-                (q) => q.firebaseId === state.currentQuestion
+                (q) => q.firebaseId === state.currentQuestion,
             );
         } else {
             return undefined;

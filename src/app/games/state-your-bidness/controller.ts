@@ -9,7 +9,6 @@ import { SimpleDialogType } from '../../common/dialog/model';
 
 @Component({
     imports: [CommonControllerModule],
-    providers: [StateYourBidnessService],
     templateUrl: './controller.html',
 })
 export class StateYourBidnessController {
