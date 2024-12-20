@@ -12,6 +12,28 @@
         <preview>
             <ng-container *ngComponentOutlet="gameDef.game" />
         </preview>
+
+        <mat-form-field>
+            <mat-label>Browser source URL</mat-label>
+            <input matInput [value]="gameUrl()" readonly />
+            <button
+                mat-icon-button
+                matSuffix
+                matTooltip="Copy to clipboard"
+                [cdkCopyToClipboard]="gameUrl()"
+            >
+                <mat-icon>content_copy</mat-icon>
+            </button>
+            <a
+                mat-icon-button
+                matSuffix
+                matTooltip="Open in new tab"
+                href="{{gameUrl()}}"
+                target="_blank"
+            >
+                <mat-icon>open_in_new</mat-icon>
+            </a>
+        </mat-form-field>
     </div>
 </div>
 }
