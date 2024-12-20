@@ -11,9 +11,11 @@
         >
             <mat-option [value]="null">None</mat-option>
             @for (question of questions; track question.firebaseId) {
-            <mat-option [value]="question.firebaseId">
-                <span>{{question.name}} ({{question.items.length}})</span>
-            </mat-option>
+                <mat-option [value]="question.firebaseId">
+                    <span
+                        >{{ question.name }} ({{ question.items.length }})</span
+                    >
+                </mat-option>
             }
         </mat-select>
         <mat-hint
@@ -58,7 +60,10 @@
             matSuffix
             matTooltip="Increment + 1"
             (click)="committedTo.set(committedTo() + 1)"
-            [disabled]="selectedQuestion() === undefined || committedTo() >= possibleItems()"
+            [disabled]="
+                selectedQuestion() === undefined ||
+                committedTo() >= possibleItems()
+            "
         >
             <mat-icon>arrow_circle_up</mat-icon>
         </button>
@@ -76,7 +81,10 @@
             matSuffix
             matTooltip="Save"
             (click)="setCommittedTo(committedTo())"
-            [disabled]="selectedQuestion() === undefined || state.committedTo === committedTo()"
+            [disabled]="
+                selectedQuestion() === undefined ||
+                state.committedTo === committedTo()
+            "
         >
             <mat-icon>save</mat-icon>
         </button>
@@ -87,34 +95,36 @@
     </mat-form-field>
 
     @if (selectedQuestion() !== undefined) {
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>{{selectedQuestion()?.name}}</mat-card-title>
-            <mat-card-subtitle
-                >{{selectedQuestion()?.description}}</mat-card-subtitle
-            >
-        </mat-card-header>
-        <mat-card-content>
-            <div class="button-grid">
-                @for (answer of selectedQuestion()!.items | sort; track $index)
-                {
-                <button
-                    mat-raised-button
-                    [disabled]="state.guessedAnswers.includes(answer)"
-                    (click)="setGuess(answer)"
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>{{ selectedQuestion()?.name }}</mat-card-title>
+                <mat-card-subtitle>{{
+                    selectedQuestion()?.description
+                }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="button-grid">
+                    @for (
+                        answer of selectedQuestion()!.items | sort;
+                        track $index
+                    ) {
+                        <button
+                            mat-raised-button
+                            [disabled]="state.guessedAnswers.includes(answer)"
+                            (click)="setGuess(answer)"
+                        >
+                            <span>{{ answer }}</span>
+                        </button>
+                    }
+                </div>
+            </mat-card-content>
+            <mat-card-actions>
+                <mat-slide-toggle
+                    [checked]="showingRemainingAnswers()"
+                    (toggleChange)="toggleShowRemainingAnswers()"
+                    >Show remaining answers</mat-slide-toggle
                 >
-                    <span>{{answer}}</span>
-                </button>
-                }
-            </div>
-        </mat-card-content>
-        <mat-card-actions align="end">
-            <mat-slide-toggle
-                [checked]="showingRemainingAnswers()"
-                (toggleChange)="toggleShowRemainingAnswers()"
-                >Show remaining answers</mat-slide-toggle
-            >
-        </mat-card-actions>
-    </mat-card>
+            </mat-card-actions>
+        </mat-card>
     }
 </div>

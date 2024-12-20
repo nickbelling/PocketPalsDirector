@@ -1,0 +1,44 @@
+.guesses {
+    display: grid;
+    height: 75%;
+    max-height: 75%;
+    width: 80%;
+    /* Creates flexible columns */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    /* Rows start at 50px but grow as needed */
+    grid-auto-rows: minmax(75px, 500px);
+    /* Spacing between items */
+    gap: var(--padding-amount);
+
+    .box {
+        display: flex;
+        padding: var(--padding-amount) calc(2 * var(--padding-amount));
+        border-radius: var(--rounding);
+        box-sizing: border-box;
+        box-shadow: var(--mat-sys-level5);
+        background-color: #000000a0;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        text-wrap: balance;
+        font-size: 50px;
+        overflow: hidden;
+
+        &.correct {
+            background-image: linear-gradient(
+                    56deg,
+                    rgba(43, 46, 224, 0.15) 0%,
+                    rgba(26, 218, 182, 0.15) 100%
+                ),
+                linear-gradient(336deg, rgb(50, 52, 221), rgb(60, 239, 241));
+        }
+
+        &.committed {
+            background-image: linear-gradient(
+                135deg,
+                rgb(245, 177, 77),
+                rgb(237, 53, 115)
+            );
+        }
+    }
+}

@@ -1,3 +1,45 @@
-<div>
-    <h1>hello 1920x1080</h1>
-</div>
+@let state = gameState();
+
+@if (currentQuestion() === undefined) {
+    <div>no question chosen</div>
+} @else {
+    <div class="layout-column">
+        <h1>{{ currentQuestion()?.name }}</h1>
+        <h2>
+            {{ currentQuestion()?.description }} ({{ possibleAnswersCount() }})
+        </h2>
+    </div>
+
+    <div class="guesses">
+        @for (answer of guessedAnswers(); track answer) {
+            <div class="box correct" [fitText]="answer">
+                <span>{{ answer }}</span>
+            </div>
+        }
+        @if (!state.showRemainingAnswers) {
+            @if (state.committedTo > guessedAnswers().length) {
+                @for (
+                    number of state.committedTo - guessedAnswerCount()
+                        | numberArray;
+                    track number
+                ) {
+                    <div class="box committed"></div>
+                }
+            }
+            @for (
+                number of unguessedAnswerCount() | numberArray;
+                track number
+            ) {
+                <div class="box"></div>
+            }
+        } @else {
+            @for (answer of answers(); track answer) {
+                @if (!guessedAnswers().includes(answer)) {
+                    <div class="box" [fitText]="answer">
+                        <span>{{ answer }}</span>
+                    </div>
+                }
+            }
+        }
+    </div>
+}
