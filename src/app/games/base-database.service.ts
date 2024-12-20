@@ -154,8 +154,8 @@ export abstract class BaseGameDatabaseService<
      * Sets the current state of the game.
      * @param state The new state object to set.
      */
-    public async setState(state: TState): Promise<void> {
-        await setDoc(this._stateRef, state);
+    public async setState(state: TState | Partial<TState>): Promise<void> {
+        await setDoc(this._stateRef, state, { merge: true });
     }
 
     /**
