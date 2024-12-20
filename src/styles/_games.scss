@@ -1,16 +1,44 @@
 @use './reset' as reset;
 
+.game-layout {
+    width: inherit;
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    padding: var(--padding-amount);
+
+    // Sit content in the middle, evenly spaced between
+    align-items: center;
+    justify-content: space-evenly;
+}
+
 .pocket-pals-game {
     @include reset.reset();
 
-    display: flex;
-    width: 1920px;
-    height: 1080px;
-    flex-direction: column;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: space-evenly;
-    padding: var(--padding-amount);
+    // Set default size to 1920x1080
+    @extend .size-1920x1080;
+
+    &:has(.game-panel) {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+    }
+
+    &:not(:has(.game-panel)) {
+        @extend .game-layout;
+    }
+
+    .game-panel {
+        // Fit panel to panel container
+        grid-row: 1;
+        grid-column: 1;
+        @extend .game-layout;
+    }
+
+    // Text
     font-family: bebas-neue-pro-expanded, sans-serif;
     color: white;
     text-align: center;
@@ -34,4 +62,14 @@
     h6 {
         text-shadow: var(--text-shadow);
     }
+}
+
+.size-1920x1080 {
+    width: 1920px;
+    height: 1080px;
+}
+
+.size-1440x1080 {
+    width: 1440px;
+    height: 1080px;
 }

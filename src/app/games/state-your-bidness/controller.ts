@@ -20,16 +20,16 @@ export class StateYourBidnessController {
     protected gameState = this._db.state;
     protected gameQuestions = this._db.questions;
 
-    protected selectedQuestionId = linkedSignal<string | null>(
-        () => this.gameState().currentQuestion
+    protected selectedQuestionId = computed(
+        () => this.gameState().currentQuestion,
     );
 
     protected committedTo = linkedSignal<number>(
-        () => this.gameState().committedTo
+        () => this.gameState().committedTo,
     );
 
     protected showingRemainingAnswers = linkedSignal<boolean>(
-        () => this.gameState().showRemainingAnswers
+        () => this.gameState().showRemainingAnswers,
     );
 
     protected selectedQuestion = computed(() => {
@@ -43,6 +43,10 @@ export class StateYourBidnessController {
         return selectedQuestion?.items.length || 0;
     });
 
+    protected guessedAnswerCount = computed(
+        () => this.gameState().guessedAnswers.length,
+    );
+
     public addQuestion(): void {
         this.editQuestion();
     }
@@ -54,7 +58,7 @@ export class StateYourBidnessController {
     }
 
     public async deleteQuestion(
-        question: Entity<StateYourBidnessQuestion>
+        question: Entity<StateYourBidnessQuestion>,
     ): Promise<void> {
         await this._confirm.open(
             SimpleDialogType.DeleteCancel,
@@ -64,7 +68,7 @@ export class StateYourBidnessController {
                 onDelete: async () => {
                     await this._db.removeQuestion(question);
                 },
-            }
+            },
         );
     }
 
@@ -124,7 +128,7 @@ export class StateYourBidnessController {
                 onYes: async () => {
                     await this._db.resetState();
                 },
-            }
+            },
         );
     }
 }

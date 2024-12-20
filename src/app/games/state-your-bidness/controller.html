@@ -97,13 +97,17 @@
     @if (selectedQuestion() !== undefined) {
         <mat-card>
             <mat-card-header>
-                <mat-card-title>{{ selectedQuestion()?.name }}</mat-card-title>
-                <mat-card-subtitle>{{
-                    selectedQuestion()?.description
-                }}</mat-card-subtitle>
+                <mat-card-title
+                    >{{ selectedQuestion()?.name }} ({{
+                        guessedAnswerCount()
+                    }})</mat-card-title
+                >
+                <mat-card-subtitle>
+                    <span>{{ selectedQuestion()?.description }}</span>
+                </mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
-                <div class="button-grid">
+                <div class="button-grid p-y">
                     @for (
                         answer of selectedQuestion()!.items | sort;
                         track $index
