@@ -13,6 +13,8 @@ import { SortPipe } from '../common/pipes/sort.pipe';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { NumberArrayPipe } from '../common/pipes/number-array.pipe';
+import { FitTextDirective } from '../common/directives/fit-text.directive';
 
 const CONTROLLER_MODULES: Type<unknown>[] = [
     CommonModule,
@@ -30,6 +32,13 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     SortPipe,
 ];
 
+const GAME_MODULES: Type<unknown>[] = [
+    CommonModule,
+    SortPipe,
+    NumberArrayPipe,
+    FitTextDirective,
+];
+
 /**
  * A module that collects common dependencies to make importing/exporting easier
  * for game controllers.
@@ -37,6 +46,12 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
 @NgModule({
     imports: CONTROLLER_MODULES,
     exports: CONTROLLER_MODULES,
-    providers: [SimpleDialogService, SortPipe],
+    providers: [SimpleDialogService],
 })
 export class CommonControllerModule {}
+
+@NgModule({
+    imports: GAME_MODULES,
+    exports: GAME_MODULES,
+})
+export class CommonGameModule {}
