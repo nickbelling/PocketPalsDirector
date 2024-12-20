@@ -9,7 +9,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { GAMES } from '../games/games';
 
 @Component({
-    templateUrl: './dashboard.html',
     imports: [
         CommonModule,
         RouterModule,
@@ -19,6 +18,8 @@ import { GAMES } from '../games/games';
         MatMenuModule,
         MatToolbarModule,
     ],
+    templateUrl: './dashboard.html',
+    styleUrl: './dashboard.scss',
 })
 export class Dashboard {
     public games = GAMES;

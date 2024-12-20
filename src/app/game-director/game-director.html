@@ -3,8 +3,8 @@
 <h3>{{gameDef.name || 'ERROR'}}</h3>
 
 @if (gameDef) {
-<div class="layout-row g">
-    <div class="layout-column layout-basis-2/5">
+<div class="layout-row layout-fill g">
+    <div class="layout-scroll-y layout-basis-2/5 p-bottom">
         <ng-container *ngComponentOutlet="gameDef.controller" />
     </div>
 

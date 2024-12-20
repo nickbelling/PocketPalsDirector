@@ -11,7 +11,6 @@ import { injectRouteData } from '../common/utils';
 import { GameDefinition } from '../games/games';
 
 @Component({
-    templateUrl: './game-director.html',
     imports: [
         CommonModule,
         GamePreview,
@@ -22,6 +21,8 @@ import { GameDefinition } from '../games/games';
         MatFormFieldModule,
         MatTooltipModule,
     ],
+    templateUrl: './game-director.html',
+    styleUrl: './game-director.scss',
 })
 export class GameDirector {
     protected gameDefinition = injectRouteData<GameDefinition>();
