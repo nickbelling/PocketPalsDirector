@@ -15,6 +15,7 @@ export class StateYourBidnessQuestionEditDialog {
     private _data = inject<Entity<StateYourBidnessQuestion>>(MAT_DIALOG_DATA);
 
     protected questionName = signal<string>('');
+    protected questionDescription = signal<string>('');
     protected questionAnswers = signal<string>('');
     protected loading = signal<boolean>(false);
     protected editing: boolean = false;
@@ -22,7 +23,8 @@ export class StateYourBidnessQuestionEditDialog {
     constructor() {
         if (this._data) {
             this.editing = true;
-            this.questionName.set(this._data.name);
+            this.questionName.set(this._data.name || '');
+            this.questionDescription.set(this._data.description || '');
             this.questionAnswers.set(this._data.items.join('\n'));
         }
     }
@@ -30,6 +32,7 @@ export class StateYourBidnessQuestionEditDialog {
     protected isValid = computed(() => {
         return (
             this.questionName().trim().length > 0 &&
+            this.questionDescription().trim().length > 0 &&
             this.questionAnswers().trim().length > 0
         );
     });
@@ -39,6 +42,7 @@ export class StateYourBidnessQuestionEditDialog {
         const answers = this.questionAnswers().trim().split('\n');
         const question: StateYourBidnessQuestion = {
             name: this.questionName(),
+            description: this.questionDescription(),
             items: answers,
         };
 

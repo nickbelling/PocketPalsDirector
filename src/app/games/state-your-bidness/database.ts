@@ -6,6 +6,7 @@ export interface StateYourBidnessState {
     committedTo: number;
     guessedAnswers: string[];
     showRemainingAnswers: boolean;
+    questionsDone: string[];
 }
 
 const STATE_YOUR_BUSINESS_STATE_DEFAULT: StateYourBidnessState = {
@@ -13,10 +14,12 @@ const STATE_YOUR_BUSINESS_STATE_DEFAULT: StateYourBidnessState = {
     committedTo: 0,
     guessedAnswers: [],
     showRemainingAnswers: false,
+    questionsDone: [],
 };
 
 export interface StateYourBidnessQuestion {
     name: string;
+    description: string;
     items: string[];
 }
 

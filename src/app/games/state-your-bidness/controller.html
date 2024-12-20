@@ -1,30 +1,120 @@
-<button mat-flat-button class="error" (click)="reset()">Reset</button>
-<button mat-flat-button (click)="editQuestion()">Add Question</button>
-
 @let state = gameState(); @let questions = gameQuestions();
 
-<p>committed to: {{ state.committedTo }}</p>
-<ul>
-    @for (answer of state.guessedAnswers; track $index) {
-    <li>{{ answer }}</li>
-    }
-</ul>
+<div class="layout-column g">
+    <button mat-flat-button class="error" (click)="reset()">Reset Game</button>
 
-<p>Questions:</p>
-<ul>
-    @for (question of questions; track question.firebaseId) {
-    <li>
-        {{ question.name }}
-        <button (click)="editQuestion(question)">Edit</button>
-        <button (click)="deleteQuestion(question)">Delete</button>
-    </li>
-    <ul>
-        <li>Created at: {{question.createdAt}}</li>
-        @for (item of question.items; track item) {
-        <li>{{ item }}</li>
-        }
-    </ul>
-    } @empty {
-    <li>No questions.</li>
+    <mat-form-field class="layout-fill">
+        <mat-label>Current question</mat-label>
+        <mat-select
+            [value]="selectedQuestionId()"
+            (valueChange)="setQuestion($event)"
+        >
+            <mat-option [value]="null">None</mat-option>
+            @for (question of questions; track question.firebaseId) {
+            <mat-option [value]="question.firebaseId">
+                <span>{{question.name}} ({{question.items.length}})</span>
+            </mat-option>
+            }
+        </mat-select>
+        <mat-hint
+            >Select the question to play. Select "None" to go back to the
+            list.</mat-hint
+        >
+    </mat-form-field>
+
+    <div class="layout-row layout-items-fill g">
+        <button mat-flat-button (click)="addQuestion()">
+            <span>Add question</span>
+        </button>
+        <button
+            mat-flat-button
+            (click)="editQuestion(selectedQuestion())"
+            [disabled]="selectedQuestion() === undefined"
+        >
+            <span>Edit question</span>
+        </button>
+        <button
+            mat-flat-button
+            class="error"
+            (click)="deleteQuestion(selectedQuestion()!)"
+            [disabled]="selectedQuestion() === undefined"
+        >
+            <span>Delete question</span>
+        </button>
+    </div>
+
+    <mat-form-field>
+        <mat-label>Committed to</mat-label>
+        <input
+            matInput
+            type="number"
+            [(ngModel)]="committedTo"
+            [min]="0"
+            [max]="possibleItems()"
+            [disabled]="selectedQuestion() === undefined"
+        />
+        <button
+            mat-icon-button
+            matSuffix
+            matTooltip="Increment + 1"
+            (click)="committedTo.set(committedTo() + 1)"
+            [disabled]="selectedQuestion() === undefined || committedTo() >= possibleItems()"
+        >
+            <mat-icon>arrow_circle_up</mat-icon>
+        </button>
+        <button
+            mat-icon-button
+            matSuffix
+            matTooltip="Decrement - 1"
+            (click)="committedTo.set(committedTo() - 1)"
+            [disabled]="selectedQuestion() === undefined || committedTo() === 0"
+        >
+            <mat-icon>arrow_circle_down</mat-icon>
+        </button>
+        <button
+            mat-icon-button
+            matSuffix
+            matTooltip="Save"
+            (click)="setCommittedTo(committedTo())"
+            [disabled]="selectedQuestion() === undefined || state.committedTo === committedTo()"
+        >
+            <mat-icon>save</mat-icon>
+        </button>
+        <mat-hint
+            >Update the amount of items the players are committing to, then
+            click Save.</mat-hint
+        >
+    </mat-form-field>
+
+    @if (selectedQuestion() !== undefined) {
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>{{selectedQuestion()?.name}}</mat-card-title>
+            <mat-card-subtitle
+                >{{selectedQuestion()?.description}}</mat-card-subtitle
+            >
+        </mat-card-header>
+        <mat-card-content>
+            <div class="button-grid">
+                @for (answer of selectedQuestion()!.items | sort; track $index)
+                {
+                <button
+                    mat-raised-button
+                    [disabled]="state.guessedAnswers.includes(answer)"
+                    (click)="setGuess(answer)"
+                >
+                    <span>{{answer}}</span>
+                </button>
+                }
+            </div>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <mat-slide-toggle
+                [checked]="showingRemainingAnswers()"
+                (toggleChange)="toggleShowRemainingAnswers()"
+                >Show remaining answers</mat-slide-toggle
+            >
+        </mat-card-actions>
+    </mat-card>
     }
-</ul>
+</div>

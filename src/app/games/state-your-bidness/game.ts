@@ -3,6 +3,6 @@ import { Component } from '@angular/core';
 @Component({
     selector: 'state-your-bidness',
     templateUrl: './game.html',
-    styleUrl: './game.scss',
+    host: { class: 'pocket-pals-game' },
 })
 export class StateYourBidnessGame {}
