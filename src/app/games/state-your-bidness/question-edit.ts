@@ -1,8 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { StateYourBidnessQuestion, StateYourBidnessService } from './database';
-import { CommonControllerModule } from '../common-game.module';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Entity } from '../base-database.service';
+import { CommonControllerModule } from '../common-game.module';
+import { Entity } from '../database/base-database.service';
+import { StateYourBidnessQuestion, StateYourBidnessService } from './database';
 
 @Component({
     templateUrl: './question-edit.html',

@@ -1,11 +1,10 @@
 import { Component, computed, inject, linkedSignal } from '@angular/core';
-import { StateYourBidnessQuestion, StateYourBidnessService } from './database';
-import { CommonControllerModule } from '../common-game.module';
 import { MatDialog } from '@angular/material/dialog';
+import { SimpleDialogService, SimpleDialogType } from '../../common';
+import { CommonControllerModule } from '../common-game.module';
+import { Entity } from '../database';
+import { StateYourBidnessQuestion, StateYourBidnessService } from './database';
 import { StateYourBidnessQuestionEditDialog } from './question-edit';
-import { Entity } from '../base-database.service';
-import { SimpleDialogService } from '../../common/dialog/simple-dialog.service';
-import { SimpleDialogType } from '../../common/dialog/model';
 
 @Component({
     imports: [CommonControllerModule],

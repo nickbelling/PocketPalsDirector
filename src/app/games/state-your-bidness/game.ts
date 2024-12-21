@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
+import { CommonGameModule } from '..';
+import { fadeInOutAnimation } from '../../common';
 import { StateYourBidnessService } from './database';
-import { CommonGameModule } from '../common-game.module';
-import { fadeInOutAnimation } from '../../common/animations/fade-in-out';
 
 @Component({
     imports: [CommonGameModule],

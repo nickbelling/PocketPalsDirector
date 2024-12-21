@@ -1,5 +1,5 @@
 import { computed, Injectable } from '@angular/core';
-import { BaseGameDatabaseService } from '../base-database.service';
+import { BaseGameDatabaseService } from '../database';
 
 export interface StateYourBidnessState {
     currentQuestion: string | null;

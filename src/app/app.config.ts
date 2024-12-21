@@ -3,11 +3,11 @@ import {
     InjectionToken,
     provideExperimentalZonelessChangeDetection,
 } from '@angular/core';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
 import { FirebaseOptions, initializeApp } from 'firebase/app';
 import { Firestore, getFirestore } from 'firebase/firestore';
 import { routes } from './app.routes';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 const FIREBASE_CONFIG: FirebaseOptions = {
     projectId: 'pocket-pals-director',
@@ -25,7 +25,7 @@ export const FIRESTORE: InjectionToken<Firestore> = new InjectionToken(
     {
         providedIn: 'root',
         factory: () => getFirestore(app),
-    }
+    },
 );
 
 export const appConfig: ApplicationConfig = {

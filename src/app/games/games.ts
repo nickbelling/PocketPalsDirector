@@ -1,6 +1,6 @@
 import { Type } from '@angular/core';
-import { StateYourBidnessGame } from './state-your-bidness/game';
 import { StateYourBidnessController } from './state-your-bidness/controller';
+import { StateYourBidnessGame } from './state-your-bidness/game';
 
 export interface GameDefinition {
     name: string;

@@ -1,8 +1,7 @@
 import { Routes } from '@angular/router';
-import { Dashboard } from './dashboard/dashboard';
-import { DashboardHome } from './dashboard/home/dashboard-home';
-import { GameDirector } from './game-director/game-director';
-import { GAMES } from './games/games';
+import { Dashboard, DashboardHome } from './dashboard';
+import { GameDirector } from './game-director';
+import { GAMES } from './games';
 
 export const routes: Routes = [
     {

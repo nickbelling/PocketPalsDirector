@@ -17,7 +17,7 @@ import {
     Timestamp,
     Unsubscribe,
 } from 'firebase/firestore';
-import { FIRESTORE } from '../app.config';
+import { FIRESTORE } from '../../app.config';
 
 function getConverter<T extends object>(): FirestoreDataConverter<Entity<T>> {
     return {

@@ -19,7 +19,7 @@ export class FitTextDirective implements OnChanges, AfterViewInit {
         this._originalFontSize = parseFloat(
             window
                 .getComputedStyle(this._el.nativeElement, null)
-                .getPropertyValue('font-size')
+                .getPropertyValue('font-size'),
         );
 
         this.adjustFontSize();

@@ -1,12 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { firstValueFrom } from 'rxjs';
 import {
     SimpleDialogData,
     SimpleDialogResult,
     SimpleDialogType,
 } from './model';
 import { SimpleDialog } from './simple-dialog';
-import { firstValueFrom } from 'rxjs';
 
 type Callback<T> = () => T | Promise<T>;
 
@@ -28,7 +28,7 @@ export class SimpleDialogService {
         type: SimpleDialogType,
         title: string,
         description: string,
-        options: SimpleDialogCallbacks
+        options: SimpleDialogCallbacks,
     ): Promise<void> {
         const dialogRef = this._dialog.open<
             SimpleDialog,
@@ -59,7 +59,7 @@ export class SimpleDialogService {
                 await callbacks[result]();
             } else {
                 console.debug(
-                    `Result ${SimpleDialogResult[result]} has no callback defined.`
+                    `Result ${SimpleDialogResult[result]} has no callback defined.`,
                 );
             }
         }

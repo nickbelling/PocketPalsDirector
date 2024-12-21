@@ -94,7 +94,7 @@ export class GamePreview {
 
     /** The scale transform as a CSS string. */
     public readonly scaleTransform = computed<string>(
-        () => `scale(${this._scaleFactor()})`
+        () => `scale(${this._scaleFactor()})`,
     );
 
     constructor() {
