@@ -2,18 +2,16 @@
 
 @if (currentQuestion() === undefined) {
     <div @fadeInOut class="game-panel">
-        <div class="categories">
+        <categories>
             @for (question of gameQuestions(); track question.firebaseId) {
-                <div
-                    class="category"
-                    [class.selected]="
+                <category
+                    [selected]="
                         state.questionsDone.includes(question.firebaseId)
                     "
-                >
-                    <span>{{ question.name }}</span>
-                </div>
+                    >{{ question.name }}
+                </category>
             }
-        </div>
+        </categories>
     </div>
 } @else {
     <div @fadeInOut class="game-panel">
