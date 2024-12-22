@@ -1,3 +1,4 @@
+export * from './alert';
 export * from './animations';
 export * from './card';
 export * from './dialog';

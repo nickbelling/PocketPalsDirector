@@ -16,6 +16,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {
+    Alert,
     CardModule,
     FirebaseUploadedFileUrlPipe,
     FitTextDirective,
@@ -44,6 +45,7 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     NgOptimizedImage,
     SortPipe,
     FirebaseUploadedFileUrlPipe,
+    Alert,
 ];
 
 const GAME_MODULES: Type<unknown>[] = [

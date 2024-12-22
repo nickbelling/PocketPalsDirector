@@ -1,0 +1,8 @@
+:host {
+    display: flex;
+    flex-direction: row;
+    box-shadow: var(--mat-sys-level1);
+    background-color: var(--mat-sys-error-container);
+    color: var(--mat-sys-on-error-container);
+    border-radius: var(--rounding);
+}
