@@ -1,48 +1,69 @@
 @let state = gameState();
+@let questions = gameQuestions();
 @let cardBackUrl = 'games/ranky-panky/card-back' | uploadedFileUrl | async;
 
-@if (selectedQuestion()) {
-    <div class="game-panel">
-        <div slideGroup class="layout-row g">
-            @for (item of currentGuessedItems(); track item.index) {
-                @let path = item.uploadedFilePath;
-                <card
-                    slideItem
-                    [showingFront]="$index + 1 <= state.revealedCards"
-                >
-                    <card-back>
-                        <img src="{{ cardBackUrl }}" />
-                    </card-back>
-                    <card-front class="layout-column">
-                        <img src="{{ path | uploadedFileUrl | async }}" />
-                        <div class="label" [fitText]="item.name">
-                            <span>{{ item.name }}</span>
-                        </div>
-                    </card-front>
-                </card>
-            }
-        </div>
-        <div class="scale"></div>
-        <div slideGroup class="layout-row g">
-            @for (item of answers(); track item.index) {
-                @let path = item.uploadedFilePath;
-                <card
-                    slideItem
-                    [showingFront]="
-                        answers().length - state.revealedAnswers <= $index
+@if (!selectedQuestion()) {
+    <div @fadeInOut class="game-panel">
+        <categories>
+            @for (question of questions; track $index) {
+                <category
+                    [selected]="
+                        state.questionsDone.includes(question.firebaseId)
                     "
+                    >{{ question.name }}</category
                 >
-                    <card-back>
-                        <img src="{{ cardBackUrl }}" />
-                    </card-back>
-                    <card-front class="layout-column">
-                        <img src="{{ path | uploadedFileUrl | async }}" />
-                        <div class="label" [fitText]="item.name">
-                            <span>{{ item.value }}</span>
-                        </div>
-                    </card-front>
-                </card>
             }
+        </categories>
+    </div>
+} @else {
+    <div @fadeInOut class="game-panel">
+        <h1>{{ selectedQuestion()?.name }}</h1>
+        <div class="layout-column g">
+            <div slideGroup class="layout-row g">
+                @for (item of currentGuessedItems(); track item.index) {
+                    @let path = item.uploadedFilePath;
+                    <card
+                        slideItem
+                        [showingFront]="$index + 1 <= state.revealedCards"
+                    >
+                        <card-back>
+                            <img src="{{ cardBackUrl }}" />
+                        </card-back>
+                        <card-front class="layout-column">
+                            <img src="{{ path | uploadedFileUrl | async }}" />
+                            <div class="label" [fitText]="item.name">
+                                <span>{{ item.name }}</span>
+                            </div>
+                        </card-front>
+                    </card>
+                }
+            </div>
+            <div class="scale layout-row">
+                <span>Hot</span>
+                <span class="layout-fill"></span>
+                <span>Not</span>
+            </div>
+            <div slideGroup class="layout-row g">
+                @for (item of answers(); track item.index) {
+                    @let path = item.uploadedFilePath;
+                    <card
+                        slideItem
+                        [showingFront]="
+                            answers().length - state.revealedAnswers <= $index
+                        "
+                    >
+                        <card-back>
+                            <img src="{{ cardBackUrl }}" />
+                        </card-back>
+                        <card-front class="layout-column">
+                            <img src="{{ path | uploadedFileUrl | async }}" />
+                            <div class="label" [fitText]="item.name">
+                                <span>{{ item.value }}</span>
+                            </div>
+                        </card-front>
+                    </card>
+                }
+            </div>
         </div>
     </div>
 }

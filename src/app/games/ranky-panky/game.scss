@@ -25,3 +25,16 @@ card-front {
         align-content: center;
     }
 }
+
+.scale {
+    padding: var(--padding-amount);
+    border-radius: var(--rounding);
+    background-image: linear-gradient(
+        90deg,
+        hsla(355, 85%, 63%, 1) 0%,
+        hsla(192, 80%, 51%, 1) 100%
+    );
+    font-size: 50px;
+    text-transform: uppercase;
+    box-shadow: var(--mat-sys-level3);
+}

@@ -1,4 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
+import { fadeInOutAnimation } from '../../common';
 import { CommonGameModule } from '../common-game.module';
 import { RankyPankyDatabase } from './database';
 
@@ -7,6 +8,7 @@ import { RankyPankyDatabase } from './database';
     templateUrl: './game.html',
     styleUrl: './game.scss',
     host: { class: 'pocket-pals-game size-1920x1080' },
+    animations: [fadeInOutAnimation(1000)],
 })
 export class RankyPankyGame {
     protected _db = inject(RankyPankyDatabase);
