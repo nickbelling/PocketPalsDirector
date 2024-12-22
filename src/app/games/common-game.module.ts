@@ -20,6 +20,7 @@ import {
     FirebaseUploadedFileUrlPipe,
     FitTextDirective,
     NumberArrayPipe,
+    SlideModule,
     SortPipe,
 } from '../common';
 
@@ -52,6 +53,7 @@ const GAME_MODULES: Type<unknown>[] = [
     SortPipe,
     NumberArrayPipe,
     FitTextDirective,
+    SlideModule,
     CardModule,
 ];
 
