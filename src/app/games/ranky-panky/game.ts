@@ -22,4 +22,27 @@ export class RankyPankyGame {
         const questions = this.gameQuestions();
         return questions.find((q) => q.firebaseId === id);
     });
+
+    protected currentGuessedItems = computed(() => {
+        const question = this.selectedQuestion();
+        const state = this.gameState();
+
+        if (question) {
+            const itemsOriginalOrder = question.items;
+            if (
+                state.currentGuessedOrder.length === itemsOriginalOrder.length
+            ) {
+                return state.currentGuessedOrder.map(
+                    (index) =>
+                        itemsOriginalOrder.find(
+                            (item) => item.index === index,
+                        )!,
+                );
+            } else {
+                return itemsOriginalOrder;
+            }
+        } else {
+            return [];
+        }
+    });
 }

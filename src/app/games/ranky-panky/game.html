@@ -1,20 +1,21 @@
 @let state = gameState();
+@let cardBackUrl = 'games/ranky-panky/card-back' | uploadedFileUrl | async;
 
 <div class="game-panel">
     @if (selectedQuestion()) {
-        @let question = selectedQuestion()!;
-
-        <div class="layout-row g">
-            @for (item of question.items; track $index) {
-                <card [isFlipped]="$index + 1 <= state.revealedCards">
+        <div slideGroup class="layout-row g">
+            @for (item of currentGuessedItems(); track item.index) {
+                @let path = item.uploadedFilePath;
+                <card
+                    slideItem
+                    [showingFront]="$index + 1 <= state.revealedCards"
+                >
                     <card-front>
-                        <img
-                            src="{{
-                                item.uploadedFilePath | uploadedFileUrl | async
-                            }}"
-                        />
+                        <img src="{{ path | uploadedFileUrl | async }}" />
                     </card-front>
-                    <card-back> back </card-back>
+                    <card-back>
+                        <img src="{{ cardBackUrl }}" />
+                    </card-back>
                 </card>
             }
         </div>

@@ -1,9 +1,18 @@
-import { Component, computed, inject } from '@angular/core';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Component, computed, inject, linkedSignal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { SimpleDialogService, SimpleDialogType } from '../../common';
+import {
+    resizeImage,
+    SimpleDialogService,
+    SimpleDialogType,
+} from '../../common';
 import { CommonControllerModule } from '../common-game.module';
 import { Entity } from '../database';
-import { RankyPankyDatabase, RankyPankyQuestion } from './database';
+import {
+    RankyPankyDatabase,
+    RankyPankyQuestion,
+    RankyPankyQuestionItem,
+} from './database';
 import { RankyPankyQuestionEditDialog } from './question-edit';
 import { RankyPankyQuestionItemsEditDialog } from './question-items-edit';
 
@@ -29,6 +38,15 @@ export class RankyPankyController {
         return questions.find((q) => q.firebaseId === id);
     });
 
+    protected guessedItemOrder = linkedSignal<RankyPankyQuestionItem[]>(() => {
+        const question = this.selectedQuestion();
+        if (question) {
+            return question.items;
+        } else {
+            return [];
+        }
+    });
+
     public async reset(): Promise<void> {
         await this._confirm.open(
             SimpleDialogType.YesNo,
@@ -41,6 +59,16 @@ export class RankyPankyController {
                 },
             },
         );
+    }
+
+    public async uploadCardBack(event: Event): Promise<void> {
+        const input = event.target as HTMLInputElement;
+        const file = input.files ? input.files[0] : undefined;
+
+        if (file) {
+            const resized = await resizeImage(file, 240, 336);
+            await this._db.uploadFile(resized, 'card-back');
+        }
     }
 
     public async setQuestion(questionId: string | null): Promise<void> {
@@ -106,6 +134,21 @@ export class RankyPankyController {
         const revealed = this.gameState().revealedCards;
         await this._db.setState({
             revealedCards: revealed + 1,
+        });
+    }
+
+    public async reorder(
+        event: CdkDragDrop<RankyPankyQuestionItem>,
+    ): Promise<void> {
+        this.guessedItemOrder.update((items) => {
+            moveItemInArray(items, event.previousIndex, event.currentIndex);
+            return [...items];
+        });
+
+        const newGuessedOrder = this.guessedItemOrder().map((i) => i.index);
+
+        await this._db.setState({
+            currentGuessedOrder: newGuessedOrder,
         });
     }
 }

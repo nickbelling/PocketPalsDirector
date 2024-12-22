@@ -4,6 +4,16 @@
 <div class="layout-column g">
     <button mat-flat-button class="error" (click)="reset()">Reset Game</button>
 
+    <button mat-flat-button (click)="cardBackUpload.click()">
+        Upload new card back
+    </button>
+    <input
+        type="file"
+        hidden
+        #cardBackUpload
+        (change)="uploadCardBack($event)"
+    />
+
     <mat-form-field class="layout-fill">
         <mat-label>Current question</mat-label>
         <mat-select
@@ -69,6 +79,33 @@
                 >
                     Reveal one card
                 </button>
+
+                <mat-list cdkDropList>
+                    @for (
+                        item of guessedItemOrder();
+                        track item.index;
+                        let last = $last
+                    ) {
+                        <mat-list-item
+                            cdkDrag
+                            (cdkDragDropped)="reorder($event)"
+                        >
+                            <mat-icon matListItemIcon cdkDragHandle
+                                >drag_indicator</mat-icon
+                            >
+                            <span>{{ item.name }} ({{ item.value }})</span>
+                            <mat-list-item
+                                *cdkDragPlaceholder
+                                class="cdk-placeholder"
+                            />
+                        </mat-list-item>
+                        @if (!last) {
+                            <mat-divider />
+                        }
+                    } @empty {
+                        <mat-list-item>No items.</mat-list-item>
+                    }
+                </mat-list>
             </mat-card-content>
         </mat-card>
     }

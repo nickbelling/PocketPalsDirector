@@ -24,9 +24,10 @@ export interface RankyPankyQuestion {
 }
 
 export interface RankyPankyQuestionItem {
-    uploadedFilePath: string;
+    index: number;
     name: string;
     value: number;
+    uploadedFilePath: string;
 }
 
 @Injectable({

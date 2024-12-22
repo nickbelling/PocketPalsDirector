@@ -74,6 +74,7 @@ export class RankyPankyQuestionItemsEditDialog {
         const newItem: RankyPankyQuestionItem = {
             name: this.itemName(),
             value: this.itemValue(),
+            index: this.questionItems().length + 1,
             uploadedFilePath: path,
         };
 
