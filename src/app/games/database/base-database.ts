@@ -17,7 +17,13 @@ import {
     Timestamp,
     Unsubscribe,
 } from 'firebase/firestore';
-import { FIRESTORE } from '../../app.config';
+import {
+    deleteObject,
+    getDownloadURL,
+    ref,
+    uploadBytesResumable,
+} from 'firebase/storage';
+import { FIRESTORE, STORAGE } from '../../app.config';
 
 function getConverter<T extends object>(): FirestoreDataConverter<Entity<T>> {
     return {
@@ -55,12 +61,15 @@ export type Entity<TEntity extends object> = TEntity & {
     createdAt: number;
 };
 
-export abstract class BaseGameDatabaseService<
+export abstract class BaseGameDatabase<
     TState extends object,
     TQuestion extends object,
 > {
     /** Reference to the configured Firestore instance. */
     private _firestore = inject(FIRESTORE);
+
+    /** Reference to the configured Storage instance. */
+    private _storage = inject(STORAGE);
 
     /** DestroyRef used for unsubscribing from snapshots. */
     private _destroyRef = inject(DestroyRef);
@@ -74,6 +83,12 @@ export abstract class BaseGameDatabaseService<
     /** Default state, used when resetting state */
     private _defaultState: TState;
 
+    /**
+     * The path used for all items associated with this service, both in the
+     * database and in file storage.
+     */
+    private _path: string;
+
     /** The current state of this game's state. */
     public state: Signal<TState>;
 
@@ -82,7 +97,7 @@ export abstract class BaseGameDatabaseService<
 
     /** @constructor */
     constructor(path: string, defaultState: TState) {
-        console.log('Initializing database service...');
+        this._path = path;
         this._defaultState = defaultState;
 
         // Create the typed converters for use with this game
@@ -184,7 +199,7 @@ export abstract class BaseGameDatabaseService<
      */
     public async editQuestion(
         firebaseId: string,
-        question: TQuestion,
+        question: TQuestion | Partial<TQuestion>,
     ): Promise<void> {
         const questionDocRef = doc(
             this._firestore,
@@ -219,11 +234,84 @@ export abstract class BaseGameDatabaseService<
     /**
      * Removes the given question from the question collection for this game.
      */
-    public async removeQuestion(question: Entity<TQuestion>): Promise<void> {
+    public async deleteQuestion(question: Entity<TQuestion>): Promise<void> {
         const questionDocRef = doc(
             this._firestore,
             `${this._questionsRef.path}/${question.firebaseId}`,
         );
         await deleteDoc(questionDocRef);
+    }
+
+    /**
+     * Uploads a file to storage for this service.
+     * @param file The file to upload.
+     * @param subPath The path (within this service's path) to upload the file to.
+     * @param onProgress Optional callback for reporting upload progress.
+     * @returns The full internal storage path of the file. NOTE: this must be
+     * converted to a download URL using the "getDownloadUrl" function.
+     */
+    public async uploadFile(
+        file: File,
+        subPath: string,
+        onProgress?: (progress: number) => void,
+    ): Promise<string> {
+        const uploadPath = `${this._path}/${subPath}`;
+        const storageRef = ref(this._storage, uploadPath);
+
+        // Upload the file
+        const uploadTask = uploadBytesResumable(storageRef, file, {
+            cacheControl: 'public, max-age=31536000',
+        });
+
+        return new Promise((resolve, reject) => {
+            uploadTask.on(
+                'state_changed',
+                (snapshot) => {
+                    const progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+                    // If the onProgress callback is defined, fire it
+                    if (onProgress) {
+                        onProgress(progress);
+                    }
+                },
+                (error) => reject(error),
+                async () => {
+                    resolve(uploadPath);
+                },
+            );
+        });
+    }
+
+    /**
+     * Deletes an uploaded file from storage for this service.
+     * @param path The Firebase path to the file to delete (not the download URL).
+     * @param isFullPath True if the path is a full path; false if it is only a
+     * subpath.
+     */
+    public async deleteFile(
+        path: string,
+        isFullPath: boolean = true,
+    ): Promise<void> {
+        if (!isFullPath) {
+            // Path is not a full path, append it to this database's main path
+            path = `${this._path}/${path}`;
+        }
+
+        const fileRef = ref(this._storage, path);
+        await deleteObject(fileRef);
+    }
+
+    public async getDownloadUrl(
+        path: string,
+        isFullPath: boolean = true,
+    ): Promise<string> {
+        if (!isFullPath) {
+            // Path is not a full path, append it to this database's main path
+            path = `${this._path}/${path}`;
+        }
+
+        const fileRef = ref(this._storage, path);
+        return await getDownloadURL(fileRef);
     }
 }

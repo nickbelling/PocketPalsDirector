@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { CommonGameModule } from '..';
 import { fadeInOutAnimation } from '../../common';
-import { StateYourBidnessService } from './database';
+import { StateYourBidnessDatabase } from './database';
 
 @Component({
     imports: [CommonGameModule],
@@ -11,7 +11,7 @@ import { StateYourBidnessService } from './database';
     animations: [fadeInOutAnimation(1000)],
 })
 export class StateYourBidnessGame {
-    private _db = inject(StateYourBidnessService);
+    private _db = inject(StateYourBidnessDatabase);
 
     protected gameState = this._db.state;
     protected gameQuestions = this._db.questions;

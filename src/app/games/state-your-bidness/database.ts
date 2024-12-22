@@ -1,5 +1,5 @@
 import { computed, Injectable } from '@angular/core';
-import { BaseGameDatabaseService } from '../database';
+import { BaseGameDatabase } from '../database';
 
 export interface StateYourBidnessState {
     currentQuestion: string | null;
@@ -26,7 +26,7 @@ export interface StateYourBidnessQuestion {
 @Injectable({
     providedIn: 'root',
 })
-export class StateYourBidnessService extends BaseGameDatabaseService<
+export class StateYourBidnessDatabase extends BaseGameDatabase<
     StateYourBidnessState,
     StateYourBidnessQuestion
 > {

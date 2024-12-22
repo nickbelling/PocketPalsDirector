@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SimpleDialogService, SimpleDialogType } from '../../common';
 import { CommonControllerModule } from '../common-game.module';
 import { Entity } from '../database';
-import { StateYourBidnessQuestion, StateYourBidnessService } from './database';
+import { StateYourBidnessDatabase, StateYourBidnessQuestion } from './database';
 import { StateYourBidnessQuestionEditDialog } from './question-edit';
 
 @Component({
@@ -11,7 +11,7 @@ import { StateYourBidnessQuestionEditDialog } from './question-edit';
     templateUrl: './controller.html',
 })
 export class StateYourBidnessController {
-    private _db = inject(StateYourBidnessService);
+    private _db = inject(StateYourBidnessDatabase);
     private _dialog = inject(MatDialog);
     private _confirm = inject(SimpleDialogService);
 
@@ -64,7 +64,7 @@ export class StateYourBidnessController {
             `Are you sure you want to delete "${question.name}"?`,
             {
                 onDelete: async () => {
-                    await this._db.removeQuestion(question);
+                    await this._db.deleteQuestion(question);
                 },
             },
         );
@@ -73,12 +73,13 @@ export class StateYourBidnessController {
     public async setQuestion(questionId: string | null): Promise<void> {
         const state = this.gameState();
         if (state.currentQuestion !== questionId) {
-            const questionsDone = [...state.questionsDone];
             if (
                 questionId !== null &&
                 !state.questionsDone.includes(questionId)
             ) {
-                questionsDone.push(questionId);
+                await this._db.setState({
+                    questionsDone: [...state.questionsDone, questionId],
+                });
             }
 
             await this._db.setState({
@@ -86,7 +87,6 @@ export class StateYourBidnessController {
                 committedTo: 0,
                 guessedAnswers: [],
                 showRemainingAnswers: false,
-                questionsDone: questionsDone,
             });
         }
     }

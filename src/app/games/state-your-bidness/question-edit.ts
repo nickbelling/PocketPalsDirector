@@ -1,15 +1,15 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CommonControllerModule } from '../common-game.module';
-import { Entity } from '../database/base-database.service';
-import { StateYourBidnessQuestion, StateYourBidnessService } from './database';
+import { Entity } from '../database/base-database';
+import { StateYourBidnessDatabase, StateYourBidnessQuestion } from './database';
 
 @Component({
     templateUrl: './question-edit.html',
     imports: [CommonControllerModule],
 })
 export class StateYourBidnessQuestionEditDialog {
-    private _db = inject(StateYourBidnessService);
+    private _db = inject(StateYourBidnessDatabase);
     private _dialog = inject(MatDialogRef<StateYourBidnessQuestionEditDialog>);
     private _data = inject<Entity<StateYourBidnessQuestion>>(MAT_DIALOG_DATA);
 
