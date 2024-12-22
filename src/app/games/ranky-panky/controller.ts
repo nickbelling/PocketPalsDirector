@@ -105,7 +105,8 @@ export class RankyPankyController {
     public editQuestionItems(question?: Entity<RankyPankyQuestion>): void {
         this._dialog.open(RankyPankyQuestionItemsEditDialog, {
             data: question,
-            minWidth: '800px',
+            width: '800px',
+            maxWidth: '800px',
         });
     }
 
@@ -134,6 +135,13 @@ export class RankyPankyController {
         const revealed = this.gameState().revealedCards;
         await this._db.setState({
             revealedCards: revealed + 1,
+        });
+    }
+
+    public async revealAnswer(): Promise<void> {
+        const revealed = this.gameState().revealedAnswers;
+        await this._db.setState({
+            revealedAnswers: revealed + 1,
         });
     }
 

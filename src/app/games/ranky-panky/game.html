@@ -1,8 +1,8 @@
 @let state = gameState();
 @let cardBackUrl = 'games/ranky-panky/card-back' | uploadedFileUrl | async;
 
-<div class="game-panel">
-    @if (selectedQuestion()) {
+@if (selectedQuestion()) {
+    <div class="game-panel">
         <div slideGroup class="layout-row g">
             @for (item of currentGuessedItems(); track item.index) {
                 @let path = item.uploadedFilePath;
@@ -10,14 +10,39 @@
                     slideItem
                     [showingFront]="$index + 1 <= state.revealedCards"
                 >
-                    <card-front>
-                        <img src="{{ path | uploadedFileUrl | async }}" />
-                    </card-front>
                     <card-back>
                         <img src="{{ cardBackUrl }}" />
                     </card-back>
+                    <card-front class="layout-column">
+                        <img src="{{ path | uploadedFileUrl | async }}" />
+                        <div class="label" [fitText]="item.name">
+                            <span>{{ item.name }}</span>
+                        </div>
+                    </card-front>
                 </card>
             }
         </div>
-    }
-</div>
+        <div class="scale"></div>
+        <div slideGroup class="layout-row g">
+            @for (item of answers(); track item.index) {
+                @let path = item.uploadedFilePath;
+                <card
+                    slideItem
+                    [showingFront]="
+                        answers().length - state.revealedAnswers <= $index
+                    "
+                >
+                    <card-back>
+                        <img src="{{ cardBackUrl }}" />
+                    </card-back>
+                    <card-front class="layout-column">
+                        <img src="{{ path | uploadedFileUrl | async }}" />
+                        <div class="label" [fitText]="item.name">
+                            <span>{{ item.value }}</span>
+                        </div>
+                    </card-front>
+                </card>
+            }
+        </div>
+    </div>
+}

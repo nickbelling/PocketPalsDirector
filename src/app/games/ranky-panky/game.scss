@@ -1,0 +1,27 @@
+card-back {
+    img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+}
+
+card-front {
+    img {
+        flex-grow: 1;
+        width: 100%;
+        object-fit: cover;
+        // This might seem weird, but it corrects an issue where if the img
+        // is taller than it is wide, it pushes the label below beyond the edge
+        // of the card.
+        height: 0;
+    }
+
+    .label {
+        height: 100px;
+        background: var(--bg-blue);
+        font-size: 42px;
+        text-wrap: balance;
+        align-content: center;
+    }
+}

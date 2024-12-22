@@ -70,42 +70,68 @@
         <mat-card class="g">
             <mat-card-header>
                 <mat-card-title>{{ question.name }}</mat-card-title>
+                <mat-card-subtitle>{{
+                    question.description
+                }}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
-                <button
-                    mat-flat-button
-                    (click)="revealItem()"
-                    [disabled]="state.revealedCards >= question.items.length"
-                >
-                    Reveal one card
-                </button>
-
-                <mat-list cdkDropList>
-                    @for (
-                        item of guessedItemOrder();
-                        track item.index;
-                        let last = $last
-                    ) {
-                        <mat-list-item
-                            cdkDrag
-                            (cdkDragDropped)="reorder($event)"
+                @if (question.items.length >= 2) {
+                    <div class="layout-row layout-items-fill g">
+                        <button
+                            mat-flat-button
+                            (click)="revealItem()"
+                            [disabled]="
+                                state.revealedCards >= question.items.length
+                            "
                         >
-                            <mat-icon matListItemIcon cdkDragHandle
-                                >drag_indicator</mat-icon
-                            >
-                            <span>{{ item.name }} ({{ item.value }})</span>
+                            Reveal next card
+                        </button>
+
+                        <button
+                            mat-flat-button
+                            (click)="revealAnswer()"
+                            [disabled]="
+                                state.revealedCards < question.items.length ||
+                                state.revealedAnswers >= question.items.length
+                            "
+                        >
+                            Reveal next answer
+                        </button>
+                    </div>
+
+                    <mat-list cdkDropList>
+                        @for (
+                            item of guessedItemOrder();
+                            track item.index;
+                            let last = $last
+                        ) {
                             <mat-list-item
-                                *cdkDragPlaceholder
-                                class="cdk-placeholder"
-                            />
-                        </mat-list-item>
-                        @if (!last) {
-                            <mat-divider />
+                                cdkDrag
+                                (cdkDragDropped)="reorder($event)"
+                            >
+                                <mat-icon matListItemIcon cdkDragHandle
+                                    >drag_indicator</mat-icon
+                                >
+                                <span>{{ item.name }} ({{ item.value }})</span>
+                                <mat-list-item
+                                    *cdkDragPlaceholder
+                                    class="cdk-placeholder"
+                                />
+                            </mat-list-item>
+                            @if (!last) {
+                                <mat-divider />
+                            }
+                        } @empty {
+                            <mat-list-item>No items.</mat-list-item>
                         }
-                    } @empty {
-                        <mat-list-item>No items.</mat-list-item>
-                    }
-                </mat-list>
+                    </mat-list>
+                } @else {
+                    <alert>
+                        This question is invalid until it has at least two
+                        items. Click the <strong>Edit items</strong> button
+                        above to add items to this question.
+                    </alert>
+                }
             </mat-card-content>
         </mat-card>
     }

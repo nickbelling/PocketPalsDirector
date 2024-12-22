@@ -5,6 +5,7 @@ import { RankyPankyDatabase } from './database';
 @Component({
     imports: [CommonGameModule],
     templateUrl: './game.html',
+    styleUrl: './game.scss',
     host: { class: 'pocket-pals-game size-1920x1080' },
 })
 export class RankyPankyGame {
@@ -41,6 +42,19 @@ export class RankyPankyGame {
             } else {
                 return itemsOriginalOrder;
             }
+        } else {
+            return [];
+        }
+    });
+
+    protected answers = computed(() => {
+        const question = this.selectedQuestion();
+
+        if (question) {
+            const sorted = [...question.items].sort(
+                (a, b) => b.value - a.value,
+            );
+            return sorted;
         } else {
             return [];
         }
