@@ -1,0 +1,75 @@
+@let state = gameState();
+@let questions = gameQuestions();
+
+<div class="layout-column g">
+    <button mat-flat-button class="error" (click)="reset()">Reset Game</button>
+
+    <mat-form-field class="layout-fill">
+        <mat-label>Current question</mat-label>
+        <mat-select
+            [value]="selectedQuestionId()"
+            (valueChange)="setQuestion($event)"
+        >
+            <mat-option [value]="null">None</mat-option>
+            @for (question of questions; track question.firebaseId) {
+                <mat-option [value]="question.firebaseId">
+                    <span>{{ question.name }}</span>
+                    @if (question.items.length < 2) {
+                        <mat-icon class="error">error</mat-icon>
+                    }
+                </mat-option>
+            }
+        </mat-select>
+        <mat-hint
+            >Select the question to play. Select "None" to go back to the
+            list.</mat-hint
+        >
+    </mat-form-field>
+
+    <div class="layout-row layout-items-fill g">
+        <button mat-flat-button (click)="addQuestion()">
+            <span>Add question</span>
+        </button>
+        <button
+            mat-flat-button
+            (click)="editQuestion(selectedQuestion())"
+            [disabled]="selectedQuestion() === undefined"
+        >
+            <span>Edit question</span>
+        </button>
+        <button
+            mat-flat-button
+            (click)="editQuestionItems(selectedQuestion())"
+            [disabled]="selectedQuestion() === undefined"
+        >
+            <span>Edit items</span>
+        </button>
+        <button
+            mat-flat-button
+            class="error"
+            (click)="deleteQuestion(selectedQuestion()!)"
+            [disabled]="selectedQuestion() === undefined"
+        >
+            <span>Delete question</span>
+        </button>
+    </div>
+
+    @if (selectedQuestion()) {
+        @let question = selectedQuestion()!;
+
+        <mat-card class="g">
+            <mat-card-header>
+                <mat-card-title>{{ question.name }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <button
+                    mat-flat-button
+                    (click)="revealItem()"
+                    [disabled]="state.revealedCards >= question.items.length"
+                >
+                    Reveal one card
+                </button>
+            </mat-card-content>
+        </mat-card>
+    }
+</div>

@@ -1,0 +1,105 @@
+<mat-toolbar>
+    <span>Edit items: {{ questionName }}</span>
+</mat-toolbar>
+
+<mat-dialog-content class="layout-row g visible">
+    <mat-card class="layout-basis-1/2">
+        <mat-card-header>
+            <mat-card-title>Items</mat-card-title>
+        </mat-card-header>
+        <mat-list cdkDropList>
+            @for (
+                item of questionItems();
+                track item.name;
+                let index = $index;
+                let last = $last
+            ) {
+                <mat-list-item cdkDrag (cdkDragDropped)="reorder($event)">
+                    <mat-icon matListItemIcon cdkDragHandle
+                        >drag_indicator</mat-icon
+                    >
+                    <span>{{ item.name }} ({{ item.value }})</span>
+                    <div matListItemMeta>
+                        <button mat-icon-button (click)="deleteItem(index)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                    <mat-list-item
+                        *cdkDragPlaceholder
+                        class="cdk-placeholder"
+                    />
+                </mat-list-item>
+                @if (!last) {
+                    <mat-divider />
+                }
+            } @empty {
+                <mat-list-item>No items.</mat-list-item>
+            }
+        </mat-list>
+    </mat-card>
+    <mat-card class="layout-basis-1/2">
+        <mat-card-header>
+            <mat-card-title>Add an item</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="layout-column g">
+            <mat-form-field>
+                <mat-label>Item name</mat-label>
+                <input matInput [(ngModel)]="itemName" />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Item value</mat-label>
+                <input matInput type="number" [(ngModel)]="itemValue" />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Image</mat-label>
+                <input
+                    matInput
+                    disabled
+                    [value]="
+                        fileInput.files![0]
+                            ? fileInput.files![0].name
+                            : 'Upload a file'
+                    "
+                />
+                <button
+                    matSuffix
+                    mat-button
+                    (click)="fileInput.click()"
+                    [disabled]="fileInput.files![0]"
+                >
+                    Choose file
+                </button>
+            </mat-form-field>
+            <input
+                type="file"
+                #fileInput
+                hidden
+                (change)="uploadFile.set(fileInput.files![0])"
+            />
+        </mat-card-content>
+        <mat-card-actions class="g">
+            <mat-progress-bar
+                class="layout-fill"
+                mode="determinate"
+                [value]="uploadProgress()"
+            />
+            <button
+                mat-flat-button
+                (click)="addItem()"
+                [disabled]="!addItemValid() || loading()"
+            >
+                Add
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button
+        mat-flat-button
+        [disabled]="!isValid() || loading()"
+        (click)="submit()"
+    >
+        <span>Save and close</span>
+    </button>
+</mat-dialog-actions>

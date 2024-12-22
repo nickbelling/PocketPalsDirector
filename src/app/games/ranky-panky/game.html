@@ -1,0 +1,22 @@
+@let state = gameState();
+
+<div class="game-panel">
+    @if (selectedQuestion()) {
+        @let question = selectedQuestion()!;
+
+        <div class="layout-row g">
+            @for (item of question.items; track $index) {
+                <card [isFlipped]="$index + 1 <= state.revealedCards">
+                    <card-front>
+                        <img
+                            src="{{
+                                item.uploadedFilePath | uploadedFileUrl | async
+                            }}"
+                        />
+                    </card-front>
+                    <card-back> back </card-back>
+                </card>
+            }
+        </div>
+    }
+</div>
