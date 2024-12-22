@@ -36,6 +36,8 @@ export class Card {
     styles: `
         :host {
             display: contents;
+            height: inherit;
+            width: inherit;
         }
     `,
 })
@@ -47,6 +49,8 @@ export class CardFront {}
     styles: `
         :host {
             display: contents;
+            height: inherit;
+            width: inherit;
         }
     `,
 })

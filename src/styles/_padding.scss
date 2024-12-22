@@ -1,18 +1,18 @@
 @mixin all-padding() {
     .p-top {
-        padding-top: var(--padding-amount);
+        padding-top: var(--padding-amount) !important;
     }
 
     .p-bottom {
-        padding-bottom: var(--padding-amount);
+        padding-bottom: var(--padding-amount) !important;
     }
 
     .p-left {
-        padding-left: var(--padding-amount);
+        padding-left: var(--padding-amount) !important;
     }
 
     .p-right {
-        padding-right: var(--padding-amount);
+        padding-right: var(--padding-amount) !important;
     }
 
     .p-x {
