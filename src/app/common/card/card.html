@@ -1,8 +1,14 @@
-<div class="flip-card" [class.flipped]="isFlipped()">
-    <mat-card class="flip-card-front">
+<div class="flip-card" [class.show-front]="showingFront()">
+    <mat-card
+        class="flip-card-front"
+        [@flipFront]="showingFront() ? 'front' : 'back'"
+    >
         <ng-content select="card-front"></ng-content>
     </mat-card>
-    <mat-card class="flip-card-back">
+    <mat-card
+        class="flip-card-back"
+        [@flipBack]="showingFront() ? 'front' : 'back'"
+    >
         <ng-content select="card-back"></ng-content>
     </mat-card>
 </div>
