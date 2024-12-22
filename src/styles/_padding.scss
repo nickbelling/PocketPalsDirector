@@ -41,4 +41,8 @@
     .g {
         gap: var(--padding-amount);
     }
+
+    .visible {
+        overflow: visible !important;
+    }
 }

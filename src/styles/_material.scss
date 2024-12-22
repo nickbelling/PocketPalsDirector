@@ -13,9 +13,34 @@
             )
         );
 
+        @include _cdk();
+
         @include _button();
+        @include _card();
         @include _dialog();
+        @include _icon();
+        @include _list();
         @include _toolbar();
+    }
+}
+
+@mixin _cdk() {
+    .cdk-drag-preview {
+        outline-color: var(--mat-sys-outline);
+        outline-width: 1px;
+        outline-style: solid;
+    }
+
+    .cdk-drag-handle {
+        cursor: move;
+    }
+
+    .cdk-placeholder {
+        background-color: var(--mat-sys-surface-dim);
+        border-style: dotted;
+        border-width: 3px;
+        border-color: var(--mat-sys-outline-variant);
+        transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
     }
 }
 
@@ -39,6 +64,9 @@
     }
 }
 
+@mixin _card() {
+}
+
 @mixin _dialog() {
     @include mat.dialog-overrides(
         (
@@ -49,6 +77,29 @@
     mat-dialog-content {
         min-width: 400px;
     }
+}
+
+@mixin _icon() {
+    .error {
+        @include mat.icon-overrides(
+            (
+                color: var(--mat-sys-error),
+            )
+        );
+    }
+}
+
+@mixin _list() {
+    .mat-mdc-list-item-meta {
+        height: 100%;
+        align-content: center;
+    }
+
+    @include mat.list-overrides(
+        (
+            list-item-container-color: var(--mat-sys-surface),
+        )
+    );
 }
 
 @mixin _toolbar() {
