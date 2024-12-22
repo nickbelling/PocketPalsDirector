@@ -7,6 +7,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideRouter } from '@angular/router';
 import { FirebaseOptions, initializeApp } from 'firebase/app';
 import { Firestore, getFirestore } from 'firebase/firestore';
+import { FirebaseStorage, getStorage } from 'firebase/storage';
 import { routes } from './app.routes';
 
 const FIREBASE_CONFIG: FirebaseOptions = {
@@ -18,13 +19,21 @@ const FIREBASE_CONFIG: FirebaseOptions = {
     messagingSenderId: '421698142516',
 };
 
-const app = initializeApp(FIREBASE_CONFIG);
+const firebaseApp = initializeApp(FIREBASE_CONFIG);
 
 export const FIRESTORE: InjectionToken<Firestore> = new InjectionToken(
     'FIRESTORE',
     {
         providedIn: 'root',
-        factory: () => getFirestore(app),
+        factory: () => getFirestore(firebaseApp),
+    },
+);
+
+export const STORAGE: InjectionToken<FirebaseStorage> = new InjectionToken(
+    'STORAGE',
+    {
+        providedIn: 'root',
+        factory: () => getStorage(firebaseApp),
     },
 );
 
