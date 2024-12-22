@@ -24,6 +24,7 @@ import {
     SlideModule,
     SortPipe,
 } from '../common';
+import { CategoriesModule } from '../common/categories';
 
 const CONTROLLER_MODULES: Type<unknown>[] = [
     CommonModule,
@@ -57,6 +58,7 @@ const GAME_MODULES: Type<unknown>[] = [
     FitTextDirective,
     SlideModule,
     CardModule,
+    CategoriesModule,
 ];
 
 /**

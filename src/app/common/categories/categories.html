@@ -1,0 +1,5 @@
+@for (category of categories(); track $index) {
+    <div class="category" [class.selected]="category.selected()">
+        <ng-container *ngTemplateOutlet="category.template()!" />
+    </div>
+}
