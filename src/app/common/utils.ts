@@ -22,6 +22,7 @@ export function resizeImage(
     file: File,
     maxWidth: number,
     maxHeight: number,
+    compression: number = 0.5,
 ): Promise<File> {
     return new Promise((resolve, reject) => {
         const img = new Image();
@@ -70,7 +71,7 @@ export function resizeImage(
                     }
                 },
                 file.type, // Preserve the original file type
-                0.5, // Compression quality (0.1 - 1, optional)
+                compression, // Compression quality (0.1 - 1, optional)
             );
         };
 
