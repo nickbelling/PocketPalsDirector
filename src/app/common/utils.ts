@@ -2,6 +2,11 @@ import { assertInInjectionContext, inject, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 
+/**
+ * Injects any provided route data directly into the component and makes it
+ * available as a Signal. A shortcut to skip getting the `Observable` from
+ * `ActivatedRoute` and subscribing to it.
+ */
 export function injectRouteData<T>(): Signal<T> {
     assertInInjectionContext(injectRouteData);
     const route = inject(ActivatedRoute);
@@ -9,6 +14,10 @@ export function injectRouteData<T>(): Signal<T> {
     return toSignal(data) as Signal<T>;
 }
 
+/**
+ * Given a `File` representing an image, resizes it to fit within the given
+ * boundaries and returns a new `File` object.
+ */
 export function resizeImage(
     file: File,
     maxWidth: number,
@@ -61,7 +70,7 @@ export function resizeImage(
                     }
                 },
                 file.type, // Preserve the original file type
-                0.8, // Compression quality (0.1 - 1, optional)
+                0.5, // Compression quality (0.1 - 1, optional)
             );
         };
 

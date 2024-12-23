@@ -6,7 +6,7 @@ import {
     SimpleDialogService,
     SimpleDialogType,
 } from '../../common';
-import { CommonControllerModule } from '../common-game.module';
+import { CommonControllerModule } from '../../common/common.module';
 import { Entity } from '../database';
 import {
     RankyPankyDatabase,

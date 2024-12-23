@@ -1,2 +1,2 @@
-export * from './common-game.module';
+export * from '../common/common.module';
 export * from './games';

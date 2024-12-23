@@ -22,20 +22,20 @@
             <div slideGroup class="layout-row g">
                 @for (item of currentGuessedItems(); track item.index) {
                     @let path = item.uploadedFilePath;
-                    <card
+                    <playing-card
                         slideItem
                         [showingFront]="$index + 1 <= state.revealedCards"
                     >
-                        <card-back>
+                        <playing-card-back>
                             <img src="{{ cardBackUrl }}" />
-                        </card-back>
-                        <card-front class="layout-column">
+                        </playing-card-back>
+                        <playing-card-front class="layout-column">
                             <img src="{{ path | uploadedFileUrl | async }}" />
                             <div class="label" [fitText]="item.name">
                                 <span>{{ item.name }}</span>
                             </div>
-                        </card-front>
-                    </card>
+                        </playing-card-front>
+                    </playing-card>
                 }
             </div>
             <div class="scale layout-row">
@@ -46,22 +46,22 @@
             <div slideGroup class="layout-row g">
                 @for (item of answers(); track item.index) {
                     @let path = item.uploadedFilePath;
-                    <card
+                    <playing-card
                         slideItem
                         [showingFront]="
                             answers().length - state.revealedAnswers <= $index
                         "
                     >
-                        <card-back>
+                        <playing-card-back>
                             <img src="{{ cardBackUrl }}" />
-                        </card-back>
-                        <card-front class="layout-column">
+                        </playing-card-back>
+                        <playing-card-front class="layout-column">
                             <img src="{{ path | uploadedFileUrl | async }}" />
                             <div class="label" [fitText]="item.name">
                                 <span>{{ item.value }}</span>
                             </div>
-                        </card-front>
-                    </card>
+                        </playing-card-front>
+                    </playing-card>
                 }
             </div>
         </div>

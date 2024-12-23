@@ -1,5 +1,5 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { NgModule, Type } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,14 +17,12 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {
     Alert,
-    CardModule,
-    FirebaseUploadedFileUrlPipe,
+    CategoriesModule,
     FitTextDirective,
-    NumberArrayPipe,
+    PlayingCardModule,
     SlideModule,
-    SortPipe,
-} from '../common';
-import { CategoriesModule } from '../common/categories';
+} from '.';
+import { CommonPipesModule } from './pipes/pipes.module';
 
 const CONTROLLER_MODULES: Type<unknown>[] = [
     CommonModule,
@@ -43,27 +41,22 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     MatSlideToggleModule,
     MatToolbarModule,
     MatTooltipModule,
-    NgOptimizedImage,
-    SortPipe,
-    FirebaseUploadedFileUrlPipe,
     Alert,
+    CommonPipesModule,
 ];
 
 const GAME_MODULES: Type<unknown>[] = [
     CommonModule,
-    NgOptimizedImage,
-    FirebaseUploadedFileUrlPipe,
-    SortPipe,
-    NumberArrayPipe,
+    CommonPipesModule,
     FitTextDirective,
     SlideModule,
-    CardModule,
+    PlayingCardModule,
     CategoriesModule,
 ];
 
 /**
  * A module that collects common dependencies to make importing/exporting easier
- * for game controllers.
+ * for game controller components.
  */
 @NgModule({
     imports: CONTROLLER_MODULES,
@@ -71,6 +64,10 @@ const GAME_MODULES: Type<unknown>[] = [
 })
 export class CommonControllerModule {}
 
+/**
+ * A module that collects common dependencies to make importing/exporting easier
+ * for game components.
+ */
 @NgModule({
     imports: GAME_MODULES,
     exports: GAME_MODULES,

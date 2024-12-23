@@ -1,7 +1,7 @@
 import { Component, computed, inject, linkedSignal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SimpleDialogService, SimpleDialogType } from '../../common';
-import { CommonControllerModule } from '../common-game.module';
+import { CommonControllerModule } from '../../common/common.module';
 import { Entity } from '../database';
 import { StateYourBidnessDatabase, StateYourBidnessQuestion } from './database';
 import { StateYourBidnessQuestionEditDialog } from './question-edit';

@@ -8,6 +8,10 @@ import {
     SimpleDialogType,
 } from './model';
 
+/**
+ * A simple dialog that offers a prompt with some buttons (e.g. yes/no,
+ * OK/cancel, etc). Don't use directly - use the SimpleDialogService instead.
+ */
 @Component({
     templateUrl: './simple-dialog.html',
     imports: [MatButtonModule, MatDialogModule, MatToolbarModule],

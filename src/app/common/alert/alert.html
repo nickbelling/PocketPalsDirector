@@ -1,4 +1,29 @@
-<div class="p">
-    <mat-icon>error</mat-icon>
+<div
+    class="alert"
+    [class.info]="type() === 'info'"
+    [class.warn]="type() === 'warning'"
+    [class.error]="type() === 'error'"
+>
+    <div class="p">
+        @switch (type()) {
+            @case ('info') {
+                <mat-icon>info</mat-icon>
+            }
+            @case ('warning') {
+                <mat-icon>warning</mat-icon>
+            }
+            @case ('error') {
+                <mat-icon>error</mat-icon>
+            }
+            @default {
+                <mat-icon>help</mat-icon>
+            }
+        }
+    </div>
+    <div class="content p-y">
+        @if (title()) {
+            <h1>{{ title() }}</h1>
+        }
+        <ng-content />
+    </div>
 </div>
-<p><ng-content /></p>

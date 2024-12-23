@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CommonControllerModule } from '../common-game.module';
+import { CommonControllerModule } from '../../common/common.module';
 import { Entity } from '../database';
 import { RankyPankyDatabase, RankyPankyQuestion } from './database';
 

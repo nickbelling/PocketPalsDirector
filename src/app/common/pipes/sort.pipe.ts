@@ -1,5 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+/**
+ * Sorts an array of string or number items based on their values.
+ */
 @Pipe({
     name: 'sort',
     pure: true,

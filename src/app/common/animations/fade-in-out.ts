@@ -1,5 +1,9 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 
+/**
+ * An Angular animation that can be used to fade in an item when it is added to
+ * the DOM, or fade it out when it leaves.
+ */
 export function fadeInOutAnimation(duration: number = 300) {
     const params = {
         duration: duration,

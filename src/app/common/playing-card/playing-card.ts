@@ -8,11 +8,16 @@ import {
 import { Component, model } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 
+/**
+ * A component representing a "playing card" with two sides. By default, it's
+ * showing the "back". Set `showingFront` to `true` to flip it over with an
+ * animation.
+ */
 @Component({
-    selector: 'card',
+    selector: 'playing-card',
     imports: [MatCardModule],
-    templateUrl: './card.html',
-    styleUrl: './card.scss',
+    templateUrl: './playing-card.html',
+    styleUrl: './playing-card.scss',
     animations: [
         trigger('flipFront', [
             state('front', style({ transform: 'rotateY(0deg)', zIndex: 2 })),
@@ -26,12 +31,12 @@ import { MatCardModule } from '@angular/material/card';
         ]),
     ],
 })
-export class Card {
+export class PlayingCard {
     public readonly showingFront = model<boolean>(false);
 }
 
 @Component({
-    selector: 'card-front',
+    selector: 'playing-card-front',
     template: '<ng-content />',
     styles: `
         :host {
@@ -41,10 +46,10 @@ export class Card {
         }
     `,
 })
-export class CardFront {}
+export class PlayingCardFront {}
 
 @Component({
-    selector: 'card-back',
+    selector: 'playing-card-back',
     template: '<ng-content />',
     styles: `
         :host {
@@ -54,4 +59,4 @@ export class CardFront {}
         }
     `,
 })
-export class CardBack {}
+export class PlayingCardBack {}

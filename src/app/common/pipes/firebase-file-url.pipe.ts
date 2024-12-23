@@ -2,6 +2,10 @@ import { inject, Pipe, PipeTransform } from '@angular/core';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { STORAGE } from '../../app.config';
 
+/**
+ * Given an internal Firebase storage path, produces the publicly available
+ * download URL.
+ */
 @Pipe({
     name: 'uploadedFileUrl',
     pure: true,

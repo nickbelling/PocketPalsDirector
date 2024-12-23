@@ -7,6 +7,13 @@ import {
     inject,
 } from '@angular/core';
 
+/**
+ * Add this directive to a parent element and then add the `[slideItem]`
+ * directive to any children inside of a `@for`-loop. Whenever their order
+ * changes, the directive will animate the elements so that they slide from
+ * their old position to their new position, rather than immediately popping
+ * into place.
+ */
 @Directive({
     selector: '[slideGroup]',
 })

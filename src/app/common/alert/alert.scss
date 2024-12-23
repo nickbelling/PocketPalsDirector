@@ -1,8 +1,34 @@
 :host {
+    display: contents;
+}
+
+.alert {
     display: flex;
     flex-direction: row;
     box-shadow: var(--mat-sys-level1);
+    border-radius: var(--rounding);
+}
+
+.info {
+    background-color: var(--mat-sys-primary-container);
+    color: var(--mat-sys-on-primary-container);
+}
+
+.warn {
+    background-color: var(--mat-sys-tertiary-container);
+    color: var(--mat-sys-on-tertiary-container);
+}
+
+.error {
     background-color: var(--mat-sys-error-container);
     color: var(--mat-sys-on-error-container);
-    border-radius: var(--rounding);
+}
+
+.content {
+    display: block;
+
+    h1 {
+        font: var(--mat-sys-title-medium);
+        margin: unset;
+    }
 }
