@@ -1,5 +1,5 @@
-import { computed, Injectable } from '@angular/core';
-import { BaseGameDatabase } from '../database';
+import { Injectable } from '@angular/core';
+import { BaseGameDatabase } from '../base';
 
 export interface RankyPankyState {
     currentQuestion: string | null;
@@ -40,17 +40,4 @@ export class RankyPankyDatabase extends BaseGameDatabase<
     constructor() {
         super('games/ranky-panky', RANKY_PANKY_STATE_DEFAULT);
     }
-
-    protected currentQuestion = computed(() => {
-        const state = this.state();
-        const questions = this.questions();
-
-        if (state.currentQuestion) {
-            return questions.find(
-                (q) => q.firebaseId === state.currentQuestion,
-            );
-        } else {
-            return undefined;
-        }
-    });
 }

@@ -1,12 +1,15 @@
 @let state = gameState(); @let questions = gameQuestions();
 
 <div class="layout-column g">
-    <button mat-flat-button class="error" (click)="reset()">Reset Game</button>
+    <button mat-flat-button class="error" (click)="reset()">
+        <mat-icon>refresh</mat-icon>
+        <span>Reset game</span>
+    </button>
 
     <mat-form-field class="layout-fill">
         <mat-label>Current question</mat-label>
         <mat-select
-            [value]="selectedQuestionId()"
+            [value]="currentQuestionId()"
             (valueChange)="setQuestion($event)"
         >
             <mat-option [value]="null">None</mat-option>
@@ -26,21 +29,24 @@
 
     <div class="layout-row layout-items-fill g">
         <button mat-flat-button (click)="addQuestion()">
+            <mat-icon>add_circle</mat-icon>
             <span>Add question</span>
         </button>
         <button
             mat-flat-button
-            (click)="editQuestion(selectedQuestion())"
-            [disabled]="selectedQuestion() === undefined"
+            (click)="editQuestion(currentQuestion())"
+            [disabled]="currentQuestion() === undefined"
         >
+            <mat-icon>edit</mat-icon>
             <span>Edit question</span>
         </button>
         <button
             mat-flat-button
             class="error"
-            (click)="deleteQuestion(selectedQuestion()!)"
-            [disabled]="selectedQuestion() === undefined"
+            (click)="deleteQuestion(currentQuestion()!)"
+            [disabled]="currentQuestion() === undefined"
         >
+            <mat-icon>delete</mat-icon>
             <span>Delete question</span>
         </button>
     </div>
@@ -53,7 +59,7 @@
             [(ngModel)]="committedTo"
             [min]="0"
             [max]="possibleItems()"
-            [disabled]="selectedQuestion() === undefined"
+            [disabled]="currentQuestion() === undefined"
         />
         <button
             mat-icon-button
@@ -61,7 +67,7 @@
             matTooltip="Increment + 1"
             (click)="committedTo.set(committedTo() + 1)"
             [disabled]="
-                selectedQuestion() === undefined ||
+                currentQuestion() === undefined ||
                 committedTo() >= possibleItems()
             "
         >
@@ -72,7 +78,7 @@
             matSuffix
             matTooltip="Decrement - 1"
             (click)="committedTo.set(committedTo() - 1)"
-            [disabled]="selectedQuestion() === undefined || committedTo() === 0"
+            [disabled]="currentQuestion() === undefined || committedTo() === 0"
         >
             <mat-icon>arrow_circle_down</mat-icon>
         </button>
@@ -82,7 +88,7 @@
             matTooltip="Save"
             (click)="setCommittedTo(committedTo())"
             [disabled]="
-                selectedQuestion() === undefined ||
+                currentQuestion() === undefined ||
                 state.committedTo === committedTo()
             "
         >
@@ -94,22 +100,22 @@
         >
     </mat-form-field>
 
-    @if (selectedQuestion() !== undefined) {
+    @if (currentQuestion() !== undefined) {
         <mat-card>
             <mat-card-header>
                 <mat-card-title
-                    >{{ selectedQuestion()?.name }} ({{
+                    >{{ currentQuestion()?.name }} ({{
                         guessedAnswerCount()
                     }})</mat-card-title
                 >
                 <mat-card-subtitle>
-                    <span>{{ selectedQuestion()?.description }}</span>
+                    <span>{{ currentQuestion()?.description }}</span>
                 </mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
                 <div class="button-grid p-y">
                     @for (
-                        answer of selectedQuestion()!.items | sort;
+                        answer of currentQuestion()!.items | sort;
                         track $index
                     ) {
                         <button

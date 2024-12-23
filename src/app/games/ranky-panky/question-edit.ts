@@ -1,29 +1,22 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CommonControllerModule } from '../../common/common.module';
-import { Entity } from '../database';
+import { BaseQuestionEditDialog } from '../base/base-question-edit';
 import { RankyPankyDatabase, RankyPankyQuestion } from './database';
 
 @Component({
     imports: [CommonControllerModule],
     templateUrl: './question-edit.html',
 })
-export class RankyPankyQuestionEditDialog {
-    private _db = inject(RankyPankyDatabase);
-    private _dialog = inject(MatDialogRef<RankyPankyQuestionEditDialog>);
-    private _data = inject<Entity<RankyPankyQuestion>>(MAT_DIALOG_DATA);
-
-    protected loading = signal<boolean>(false);
-    protected editing: boolean = false;
-
+export class RankyPankyQuestionEditDialog extends BaseQuestionEditDialog<RankyPankyQuestion> {
     protected questionName = signal<string>('');
     protected questionDescription = signal<string>('');
 
     constructor() {
-        if (this._data) {
-            this.editing = true;
-            this.questionName.set(this._data.name || '');
-            this.questionDescription.set(this._data.description || '');
+        super(inject(RankyPankyDatabase));
+
+        if (this.question) {
+            this.questionName.set(this.question.name || '');
+            this.questionDescription.set(this.question.description || '');
         }
     }
 
@@ -39,12 +32,12 @@ export class RankyPankyQuestionEditDialog {
 
         try {
             if (this.editing) {
-                await this._db.editQuestion(this._data.firebaseId, {
+                await this.editQuestion({
                     name: this.questionName(),
                     description: this.questionDescription(),
                 });
             } else {
-                await this._db.addQuestion({
+                await this.addQuestion({
                     name: this.questionName(),
                     description: this.questionDescription(),
                     items: [],
@@ -53,7 +46,5 @@ export class RankyPankyQuestionEditDialog {
         } finally {
             this.loading.set(false);
         }
-
-        this._dialog.close();
     }
 }

@@ -1,17 +1,14 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, computed, inject, linkedSignal } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import {
-    resizeImage,
-    SimpleDialogService,
-    SimpleDialogType,
-} from '../../common';
+import { Component, inject, linkedSignal } from '@angular/core';
+import { resizeImage, SimpleDialogType } from '../../common';
 import { CommonControllerModule } from '../../common/common.module';
-import { Entity } from '../database';
+import { Entity } from '../base';
+import { BaseController } from '../base/base-controller';
 import {
     RankyPankyDatabase,
     RankyPankyQuestion,
     RankyPankyQuestionItem,
+    RankyPankyState,
 } from './database';
 import { RankyPankyQuestionEditDialog } from './question-edit';
 import { RankyPankyQuestionItemsEditDialog } from './question-items-edit';
@@ -20,26 +17,16 @@ import { RankyPankyQuestionItemsEditDialog } from './question-items-edit';
     imports: [CommonControllerModule],
     templateUrl: './controller.html',
 })
-export class RankyPankyController {
-    private _db = inject(RankyPankyDatabase);
-    private _dialog = inject(MatDialog);
-    private _confirm = inject(SimpleDialogService);
-
-    protected gameState = this._db.state;
-    protected gameQuestions = this._db.questions;
-
-    protected selectedQuestionId = computed(
-        () => this.gameState().currentQuestion,
-    );
-
-    protected selectedQuestion = computed(() => {
-        const id = this.selectedQuestionId();
-        const questions = this.gameQuestions();
-        return questions.find((q) => q.firebaseId === id);
-    });
+export class RankyPankyController extends BaseController<
+    RankyPankyState,
+    RankyPankyQuestion
+> {
+    constructor() {
+        super(inject(RankyPankyDatabase));
+    }
 
     protected guessedItemOrder = linkedSignal<RankyPankyQuestionItem[]>(() => {
-        const question = this.selectedQuestion();
+        const question = this.currentQuestion();
         if (question) {
             return question.items;
         } else {
@@ -47,27 +34,13 @@ export class RankyPankyController {
         }
     });
 
-    public async reset(): Promise<void> {
-        await this._confirm.open(
-            SimpleDialogType.YesNo,
-            'Reset game',
-            `Are you sure you want to reset this game? This will return the
-            game to a fresh state, but won't delete any questions.`,
-            {
-                onYes: async () => {
-                    await this._db.resetState();
-                },
-            },
-        );
-    }
-
     public async uploadCardBack(event: Event): Promise<void> {
         const input = event.target as HTMLInputElement;
         const file = input.files ? input.files[0] : undefined;
 
         if (file) {
             const resized = await resizeImage(file, 240, 336);
-            await this._db.uploadFile(resized, 'card-back');
+            await this.uploadFile(resized, 'card-back');
         }
     }
 
@@ -78,12 +51,12 @@ export class RankyPankyController {
                 questionId !== null &&
                 !state.questionsDone.includes(questionId)
             ) {
-                await this._db.setState({
+                await this.setState({
                     questionsDone: [...state.questionsDone, questionId],
                 });
             }
 
-            await this._db.setState({
+            await this.setState({
                 currentQuestion: questionId,
                 revealedCards: 0,
                 currentGuessedOrder: [],
@@ -110,7 +83,7 @@ export class RankyPankyController {
         });
     }
 
-    public async deleteQuestion(
+    public async deleteQuestionAndFiles(
         question: Entity<RankyPankyQuestion>,
     ): Promise<void> {
         this._confirm.open(
@@ -121,11 +94,11 @@ export class RankyPankyController {
                 onDelete: async () => {
                     // Delete all uploaded files for this question
                     question.items.forEach(async (item) => {
-                        await this._db.deleteFile(item.uploadedFilePath, true);
+                        await this.deleteFile(item.uploadedFilePath, true);
                     });
 
                     // Delete the question
-                    await this._db.deleteQuestion(question);
+                    await this.deleteQuestion(question);
                 },
             },
         );
@@ -133,14 +106,14 @@ export class RankyPankyController {
 
     public async revealItem(): Promise<void> {
         const revealed = this.gameState().revealedCards;
-        await this._db.setState({
+        await this.setState({
             revealedCards: revealed + 1,
         });
     }
 
     public async revealAnswer(): Promise<void> {
         const revealed = this.gameState().revealedAnswers;
-        await this._db.setState({
+        await this.setState({
             revealedAnswers: revealed + 1,
         });
     }
@@ -155,7 +128,7 @@ export class RankyPankyController {
 
         const newGuessedOrder = this.guessedItemOrder().map((i) => i.index);
 
-        await this._db.setState({
+        await this.setState({
             currentGuessedOrder: newGuessedOrder,
         });
     }

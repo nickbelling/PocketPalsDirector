@@ -1,4 +1,4 @@
-import { DestroyRef, inject, signal, Signal } from '@angular/core';
+import { computed, DestroyRef, inject, signal, Signal } from '@angular/core';
 import {
     addDoc,
     collection,
@@ -17,12 +17,7 @@ import {
     Timestamp,
     Unsubscribe,
 } from 'firebase/firestore';
-import {
-    deleteObject,
-    getDownloadURL,
-    ref,
-    uploadBytesResumable,
-} from 'firebase/storage';
+import { deleteObject, ref, uploadBytesResumable } from 'firebase/storage';
 import { FIRESTORE, STORAGE } from '../../app.config';
 
 function getConverter<T extends object>(): FirestoreDataConverter<Entity<T>> {
@@ -61,9 +56,12 @@ export type Entity<TEntity extends object> = TEntity & {
     createdAt: number;
 };
 
+export type GameStateLike = object & { currentQuestion: string | null };
+export type GameQuestionLike = object;
+
 export abstract class BaseGameDatabase<
-    TState extends object,
-    TQuestion extends object,
+    TState extends GameStateLike,
+    TQuestion extends GameQuestionLike,
 > {
     /** Reference to the configured Firestore instance. */
     private _firestore = inject(FIRESTORE);
@@ -90,10 +88,29 @@ export abstract class BaseGameDatabase<
     private _path: string;
 
     /** The current state of this game's state. */
-    public state: Signal<TState>;
+    public readonly state: Signal<TState>;
 
     /** The current set of questions for this game. */
-    public questions: Signal<Entity<TQuestion>[]>;
+    public readonly questions: Signal<Entity<TQuestion>[]>;
+
+    /** The Firebase ID of the current question. */
+    public readonly currentQuestionId = computed<string | null>(
+        () => this.state().currentQuestion,
+    );
+
+    /** The current question entity. */
+    public readonly currentQuestion = computed<Entity<TQuestion> | undefined>(
+        () => {
+            const currentQuestion = this.currentQuestionId();
+            const questions = this.questions();
+
+            if (currentQuestion) {
+                return questions.find((q) => q.firebaseId === currentQuestion);
+            } else {
+                return undefined;
+            }
+        },
+    );
 
     /** @constructor */
     constructor(path: string, defaultState: TState) {
@@ -302,16 +319,16 @@ export abstract class BaseGameDatabase<
         await deleteObject(fileRef);
     }
 
-    public async getDownloadUrl(
-        path: string,
-        isFullPath: boolean = true,
-    ): Promise<string> {
-        if (!isFullPath) {
-            // Path is not a full path, append it to this database's main path
-            path = `${this._path}/${path}`;
-        }
+    // public async getDownloadUrl(
+    //     path: string,
+    //     isFullPath: boolean = true,
+    // ): Promise<string> {
+    //     if (!isFullPath) {
+    //         // Path is not a full path, append it to this database's main path
+    //         path = `${this._path}/${path}`;
+    //     }
 
-        const fileRef = ref(this._storage, path);
-        return await getDownloadURL(fileRef);
-    }
+    //     const fileRef = ref(this._storage, path);
+    //     return await getDownloadURL(fileRef);
+    // }
 }

@@ -1,26 +1,26 @@
 import { Component, computed, inject, linkedSignal } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { SimpleDialogService, SimpleDialogType } from '../../common';
+import { SimpleDialogType } from '../../common';
 import { CommonControllerModule } from '../../common/common.module';
-import { Entity } from '../database';
-import { StateYourBidnessDatabase, StateYourBidnessQuestion } from './database';
+import { Entity } from '../base';
+import { BaseController } from '../base/base-controller';
+import {
+    StateYourBidnessDatabase,
+    StateYourBidnessQuestion,
+    StateYourBidnessState,
+} from './database';
 import { StateYourBidnessQuestionEditDialog } from './question-edit';
 
 @Component({
     imports: [CommonControllerModule],
     templateUrl: './controller.html',
 })
-export class StateYourBidnessController {
-    private _db = inject(StateYourBidnessDatabase);
-    private _dialog = inject(MatDialog);
-    private _confirm = inject(SimpleDialogService);
-
-    protected gameState = this._db.state;
-    protected gameQuestions = this._db.questions;
-
-    protected selectedQuestionId = computed(
-        () => this.gameState().currentQuestion,
-    );
+export class StateYourBidnessController extends BaseController<
+    StateYourBidnessState,
+    StateYourBidnessQuestion
+> {
+    constructor() {
+        super(inject(StateYourBidnessDatabase));
+    }
 
     protected committedTo = linkedSignal<number>(
         () => this.gameState().committedTo,
@@ -30,14 +30,8 @@ export class StateYourBidnessController {
         () => this.gameState().showRemainingAnswers,
     );
 
-    protected selectedQuestion = computed(() => {
-        const id = this.selectedQuestionId();
-        const questions = this.gameQuestions();
-        return questions.find((q) => q.firebaseId === id);
-    });
-
     protected possibleItems = computed(() => {
-        const selectedQuestion = this.selectedQuestion();
+        const selectedQuestion = this.currentQuestion();
         return selectedQuestion?.items.length || 0;
     });
 
@@ -55,7 +49,7 @@ export class StateYourBidnessController {
         });
     }
 
-    public async deleteQuestion(
+    public async confirmDeleteQuestion(
         question: Entity<StateYourBidnessQuestion>,
     ): Promise<void> {
         await this._confirm.open(
@@ -64,7 +58,7 @@ export class StateYourBidnessController {
             `Are you sure you want to delete "${question.name}"?`,
             {
                 onDelete: async () => {
-                    await this._db.deleteQuestion(question);
+                    await this.deleteQuestion(question);
                 },
             },
         );
@@ -77,12 +71,12 @@ export class StateYourBidnessController {
                 questionId !== null &&
                 !state.questionsDone.includes(questionId)
             ) {
-                await this._db.setState({
+                await this.setState({
                     questionsDone: [...state.questionsDone, questionId],
                 });
             }
 
-            await this._db.setState({
+            await this.setState({
                 currentQuestion: questionId,
                 committedTo: 0,
                 guessedAnswers: [],
@@ -94,7 +88,7 @@ export class StateYourBidnessController {
     public async setCommittedTo(committedTo: number): Promise<void> {
         const state = this.gameState();
         if (state.committedTo !== committedTo) {
-            await this._db.setState({
+            await this.setState({
                 committedTo: committedTo,
             });
         }
@@ -103,7 +97,7 @@ export class StateYourBidnessController {
     public async setGuess(answer: string): Promise<void> {
         const state = this.gameState();
         if (!state.guessedAnswers.includes(answer)) {
-            await this._db.setState({
+            await this.setState({
                 guessedAnswers: [...state.guessedAnswers, answer],
             });
         }
@@ -111,22 +105,8 @@ export class StateYourBidnessController {
 
     public async toggleShowRemainingAnswers(): Promise<void> {
         const state = this.gameState();
-        await this._db.setState({
+        await this.setState({
             showRemainingAnswers: !state.showRemainingAnswers,
         });
-    }
-
-    public async reset(): Promise<void> {
-        await this._confirm.open(
-            SimpleDialogType.YesNo,
-            'Reset game',
-            `Are you sure you want to reset this game? This will return the
-            game to a fresh state, but won't delete any questions.`,
-            {
-                onYes: async () => {
-                    await this._db.resetState();
-                },
-            },
-        );
     }
 }

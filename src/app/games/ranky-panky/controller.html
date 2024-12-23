@@ -21,7 +21,7 @@
     <mat-form-field class="layout-fill">
         <mat-label>Current question</mat-label>
         <mat-select
-            [value]="selectedQuestionId()"
+            [value]="currentQuestionId()"
             (valueChange)="setQuestion($event)"
         >
             <mat-option [value]="null">None</mat-option>
@@ -47,16 +47,16 @@
         </button>
         <button
             mat-flat-button
-            (click)="editQuestion(selectedQuestion())"
-            [disabled]="selectedQuestion() === undefined"
+            (click)="editQuestion(currentQuestion())"
+            [disabled]="currentQuestion() === undefined"
         >
             <mat-icon>edit</mat-icon>
             <span>Edit question</span>
         </button>
         <button
             mat-flat-button
-            (click)="editQuestionItems(selectedQuestion())"
-            [disabled]="selectedQuestion() === undefined"
+            (click)="editQuestionItems(currentQuestion())"
+            [disabled]="currentQuestion() === undefined"
         >
             <mat-icon>playing_cards</mat-icon>
             <span>Edit items</span>
@@ -64,16 +64,16 @@
         <button
             mat-flat-button
             class="error"
-            (click)="deleteQuestion(selectedQuestion()!)"
-            [disabled]="selectedQuestion() === undefined"
+            (click)="deleteQuestionAndFiles(currentQuestion()!)"
+            [disabled]="currentQuestion() === undefined"
         >
             <mat-icon>delete</mat-icon>
             <span>Delete question</span>
         </button>
     </div>
 
-    @if (selectedQuestion()) {
-        @let question = selectedQuestion()!;
+    @if (currentQuestion()) {
+        @let question = currentQuestion()!;
 
         <mat-card class="g">
             <mat-card-header>
@@ -84,30 +84,16 @@
             </mat-card-header>
             <mat-card-content class="layout-column g">
                 @if (question.items.length >= 2) {
-                    <div class="layout-row layout-items-fill g">
-                        <button
-                            mat-flat-button
-                            (click)="revealItem()"
-                            [disabled]="
-                                state.revealedCards >= question.items.length
-                            "
-                        >
-                            <mat-icon>arrow_forward</mat-icon>
-                            <span> Reveal next card </span>
-                        </button>
-
-                        <button
-                            mat-flat-button
-                            (click)="revealAnswer()"
-                            [disabled]="
-                                state.revealedCards < question.items.length ||
-                                state.revealedAnswers >= question.items.length
-                            "
-                        >
-                            <mat-icon>check_circle</mat-icon>
-                            <span>Reveal next answer</span>
-                        </button>
-                    </div>
+                    <button
+                        mat-flat-button
+                        (click)="revealItem()"
+                        [disabled]="
+                            state.revealedCards >= question.items.length
+                        "
+                    >
+                        <mat-icon>arrow_forward</mat-icon>
+                        <span> Reveal next card </span>
+                    </button>
 
                     <mat-list cdkDropList>
                         @for (
@@ -135,6 +121,18 @@
                             <mat-list-item>No items.</mat-list-item>
                         }
                     </mat-list>
+
+                    <button
+                        mat-flat-button
+                        (click)="revealAnswer()"
+                        [disabled]="
+                            state.revealedCards < question.items.length ||
+                            state.revealedAnswers >= question.items.length
+                        "
+                    >
+                        <mat-icon>check_circle</mat-icon>
+                        <span>Reveal next answer</span>
+                    </button>
                 } @else {
                     <alert type="warning">
                         This question is invalid until it has at least two
