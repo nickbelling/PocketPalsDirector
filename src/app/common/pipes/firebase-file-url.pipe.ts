@@ -1,6 +1,6 @@
 import { inject, Pipe, PipeTransform } from '@angular/core';
-import { getDownloadURL, ref } from 'firebase/storage';
 import { STORAGE } from '../../app.config';
+import { getCachedDownloadUrl } from '../firestore';
 
 /**
  * Given an internal Firebase storage path, produces the publicly available
@@ -18,7 +18,6 @@ export class FirebaseUploadedFileUrlPipe implements PipeTransform {
             return '';
         }
 
-        const fileRef = ref(this._storage, path);
-        return await getDownloadURL(fileRef);
+        return await getCachedDownloadUrl(this._storage, path);
     }
 }

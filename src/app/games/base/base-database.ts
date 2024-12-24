@@ -276,17 +276,4 @@ export abstract class BaseGameDatabase<
         const fileRef = ref(this._storage, path);
         await deleteObject(fileRef);
     }
-
-    // public async getDownloadUrl(
-    //     path: string,
-    //     isFullPath: boolean = true,
-    // ): Promise<string> {
-    //     if (!isFullPath) {
-    //         // Path is not a full path, append it to this database's main path
-    //         path = `${this._path}/${path}`;
-    //     }
-
-    //     const fileRef = ref(this._storage, path);
-    //     return await getDownloadURL(fileRef);
-    // }
 }

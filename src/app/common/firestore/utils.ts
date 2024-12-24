@@ -11,6 +11,7 @@ import {
     QueryConstraint,
     QueryDocumentSnapshot,
 } from 'firebase/firestore';
+import { FirebaseStorage, getDownloadURL, ref } from 'firebase/storage';
 import { FIRESTORE } from '../../app.config';
 import { Entity } from './model';
 
@@ -133,4 +134,26 @@ export function subscribeToCollection<TDocType extends object>(
     });
 
     return collectionRef;
+}
+
+const downloadUrlCache: Record<string, Promise<string>> = {};
+
+export async function getCachedDownloadUrl(
+    storage: FirebaseStorage,
+    path: string,
+): Promise<string> {
+    if (!downloadUrlCache[path]) {
+        const fileRef = ref(storage, path);
+        downloadUrlCache[path] = getDownloadURL(fileRef);
+    }
+
+    return downloadUrlCache[path];
+}
+
+export async function getCachedDownloadUrls(
+    storage: FirebaseStorage,
+    paths: string[],
+): Promise<string[]> {
+    const urlPromises = paths.map((p) => getCachedDownloadUrl(storage, p));
+    return Promise.all(urlPromises);
 }

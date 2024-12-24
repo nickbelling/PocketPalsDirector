@@ -81,3 +81,30 @@ export function resizeImage(
         reader.readAsDataURL(file);
     });
 }
+
+export function arraysAreEqual<T>(a: T[], b: T[]): boolean {
+    if (a.length !== b.length) return false;
+
+    for (let i = 0; i < a.length; i++) {
+        if (a[i] !== b[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Preloads all of the given image URLs.
+ */
+export async function preloadImages(imageUrls: string[]): Promise<void> {
+    const preloadImage = (src: string) =>
+        new Promise((resolve, reject) => {
+            const image = new Image();
+            image.onload = resolve;
+            image.onerror = reject;
+            image.src = src;
+        });
+
+    await Promise.all(imageUrls.map((url) => preloadImage(url)));
+}
