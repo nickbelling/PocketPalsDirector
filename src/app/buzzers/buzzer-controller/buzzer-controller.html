@@ -21,7 +21,7 @@
             <span>Unlock all</span>
         </button>
     </div>
-    <div class="layout-row g">
+    <div class="layout-row layout-items-fill g">
         <mat-card>
             <mat-card-header>
                 <mat-card-title>Buzzed in players</mat-card-title>
@@ -29,12 +29,18 @@
             <mat-list>
                 @for (player of buzzedInPlayers(); track player.firebaseId) {
                     <ng-container
-                        [ngTemplateOutlet]="playerListItem"
-                        [ngTemplateOutletContext]="{ $implicit: player }"
+                        *ngTemplateOutlet="
+                            playerListItem;
+                            context: { $implicit: player }
+                        "
                     />
-                    @if (!$last) {
-                        <mat-divider />
-                    }
+                }
+                @for (
+                    number of players().length - buzzedInPlayers().length
+                        | numberArray;
+                    track number
+                ) {
+                    <mat-list-item></mat-list-item>
                 }
             </mat-list>
         </mat-card>
@@ -45,12 +51,11 @@
             <mat-list>
                 @for (player of buzzedOutPlayers(); track player.firebaseId) {
                     <ng-container
-                        [ngTemplateOutlet]="playerListItem"
-                        [ngTemplateOutletContext]="{ $implicit: player }"
+                        *ngTemplateOutlet="
+                            playerListItem;
+                            context: { $implicit: player }
+                        "
                     />
-                    @if (!$last) {
-                        <mat-divider />
-                    }
                 }
             </mat-list>
         </mat-card>
@@ -58,13 +63,12 @@
     <buzzer-display />
 </div>
 
-<ng-template #playerListItem let-player>
+<ng-template #playerListItem let-untypedPlayer>
+    @let player = toPlayer(untypedPlayer);
+
     <mat-list-item>
         <span>{{ player.name }}</span>
         <div matListItemMeta class="g">
-            <button mat-icon-button (click)="resetBuzzer(player.firebaseId)">
-                <mat-icon>refresh</mat-icon>
-            </button>
             @if (player.lockedOut) {
                 <button
                     mat-mini-fab
@@ -79,6 +83,22 @@
                     (click)="toggleLock(player.firebaseId, false)"
                 >
                     <mat-icon>lock_open</mat-icon>
+                </button>
+            }
+
+            @if (player.buzzTimestamp !== null) {
+                <button
+                    mat-icon-button
+                    (click)="resetBuzzer(player.firebaseId)"
+                >
+                    <mat-icon>refresh</mat-icon>
+                </button>
+            } @else {
+                <button mat-icon-button (click)="buzzIn(player.firebaseId)">
+                    <mat-icon>highlight_mouse_cursor</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deletePlayer(player)">
+                    <mat-icon>Delete</mat-icon>
                 </button>
             }
         </div>

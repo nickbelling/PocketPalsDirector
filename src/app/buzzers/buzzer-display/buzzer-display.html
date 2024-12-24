@@ -1,10 +1,22 @@
-<div
-    class="layout-row g"
-    style="width: 800px; height: 100px; border: 1px solid black"
->
+<div class="row g">
     @for (player of buzzedInPlayers(); track player.firebaseId) {
-        <mat-card class="bg-blue">
-            <h1>{{ player.name }}</h1>
-        </mat-card>
+        <div @fadeOut class="player">
+            <img
+                @fadeIn
+                class="player-image"
+                src="{{
+                    BUZZERS_STORAGE_IMAGES_PATH + '/' + player.image
+                        | uploadedFileUrl
+                        | async
+                }}"
+            />
+            <mat-card
+                @fadeIn
+                class="player-name bg-blue"
+                [fitText]="player.name"
+            >
+                {{ player.name }}
+            </mat-card>
+        </div>
     }
 </div>

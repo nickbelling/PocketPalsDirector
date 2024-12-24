@@ -2,6 +2,8 @@ import { Timestamp } from 'firebase/firestore';
 
 export const BUZZERS_STATE_DOC_PATH = 'buzzer/state';
 export const BUZZERS_PLAYERS_COLLECTION_PATH = 'buzzer/state/players';
+export const BUZZERS_STORAGE_IMAGES_PATH = 'buzzer/images';
+export const BUZZERS_STORAGE_SOUNDS_PATH = 'buzzer/sounds';
 
 export interface BuzzerState {
     buzzersEnabled: boolean;
@@ -12,6 +14,7 @@ export interface BuzzerPlayer {
     createdAt: Timestamp;
     buzzTimestamp: Timestamp | null;
     lockedOut: boolean;
+    image: string | null;
     soundEffect: string | null;
 }
 
@@ -24,5 +27,6 @@ export const DEFAULT_BUZZER_PLAYER: BuzzerPlayer = {
     createdAt: Timestamp.now(),
     buzzTimestamp: null,
     lockedOut: false,
+    image: null,
     soundEffect: null,
 };

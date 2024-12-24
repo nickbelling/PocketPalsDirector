@@ -1,8 +1,14 @@
 import { Component, computed, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { CommonControllerModule } from '../../common';
+import {
+    CommonControllerModule,
+    Entity,
+    SimpleDialogService,
+    SimpleDialogType,
+} from '../../common';
 import { BuzzerDisplay } from '../buzzer-display/buzzer-display';
 import { BuzzerDirectorDataStore } from '../data/director-data';
+import { BuzzerPlayer } from '../model';
 import { BuzzerPlayerAddDialog } from './buzzer-player-add-dialog';
 
 @Component({
@@ -13,6 +19,7 @@ import { BuzzerPlayerAddDialog } from './buzzer-player-add-dialog';
 export class BuzzerController {
     private _data = inject(BuzzerDirectorDataStore);
     private _dialog = inject(MatDialog);
+    private _confirm = inject(SimpleDialogService);
 
     protected state = this._data.state;
     protected players = this._data.players;
@@ -46,6 +53,23 @@ export class BuzzerController {
         this._dialog.open(BuzzerPlayerAddDialog);
     }
 
+    public deletePlayer(player: Entity<BuzzerPlayer>): void {
+        this._confirm.open(
+            SimpleDialogType.DeleteCancel,
+            'Delete player',
+            `Are you sure you want to delete ${player.name}?`,
+            {
+                onDelete: async () => {
+                    await this._data.deletePlayer(player);
+                },
+            },
+        );
+    }
+
+    public async buzzIn(playerId: string): Promise<void> {
+        await this._data.buzzInPlayer(playerId);
+    }
+
     public async resetBuzzer(playerId: string): Promise<void> {
         await this._data.resetPlayerBuzzer(playerId);
     }
@@ -64,5 +88,9 @@ export class BuzzerController {
 
     public async unlockAll(): Promise<void> {
         await this._data.unlockAllPlayers();
+    }
+
+    public toPlayer(player: Entity<BuzzerPlayer>): Entity<BuzzerPlayer> {
+        return player;
     }
 }

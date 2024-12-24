@@ -14,12 +14,16 @@ import {
     DocumentReference,
     serverTimestamp,
     setDoc,
+    Timestamp,
     writeBatch,
 } from 'firebase/firestore';
-import { FIRESTORE } from '../../app.config';
+import { deleteObject, ref, uploadBytesResumable } from 'firebase/storage';
+import { v4 } from 'uuid';
+import { FIRESTORE, STORAGE } from '../../app.config';
 import {
     Entity,
     getConverter,
+    resizeImage,
     subscribeToCollection,
     subscribeToDocument,
 } from '../../common';
@@ -27,6 +31,8 @@ import {
     BuzzerPlayer,
     BUZZERS_PLAYERS_COLLECTION_PATH,
     BUZZERS_STATE_DOC_PATH,
+    BUZZERS_STORAGE_IMAGES_PATH,
+    BUZZERS_STORAGE_SOUNDS_PATH,
     BuzzerState,
     DEFAULT_BUZZER_STATE,
 } from '../model';
@@ -36,6 +42,7 @@ import {
 })
 export class BuzzerDirectorDataStore {
     private _firestore = inject(FIRESTORE);
+    private _storage = inject(STORAGE);
     private _destroyRef = inject(DestroyRef);
     private _stateRef: DocumentReference<BuzzerState, DocumentData>;
     private _playersRef: CollectionReference<BuzzerPlayer, DocumentData>;
@@ -104,12 +111,26 @@ export class BuzzerDirectorDataStore {
         await setDoc(playerRef, player, { merge: true });
     }
 
-    public async deletePlayer(playerId: string): Promise<void> {
+    public async deletePlayer(player: Entity<BuzzerPlayer>): Promise<void> {
+        if (player.image) {
+            const fileRef = ref(
+                this._storage,
+                `${BUZZERS_STORAGE_IMAGES_PATH}/${player.image}`,
+            );
+            await deleteObject(fileRef);
+        }
+
         const playerRef = doc(
             this._firestore,
-            `${this._playersRef.path}/${playerId}`,
+            `${this._playersRef.path}/${player.firebaseId}`,
         );
         await deleteDoc(playerRef);
+    }
+
+    public async buzzInPlayer(playerId: string): Promise<void> {
+        await this.editPlayer(playerId, {
+            buzzTimestamp: serverTimestamp() as Timestamp,
+        });
     }
 
     public async resetPlayerBuzzer(playerId: string): Promise<void> {
@@ -153,6 +174,57 @@ export class BuzzerDirectorDataStore {
         });
 
         await batch.commit();
+    }
+
+    public async uploadImage(imageFile: File): Promise<string> {
+        const imageId = v4();
+        const resized = await resizeImage(imageFile, 300, 300, 0.5);
+        await this._uploadFile(
+            resized,
+            `${BUZZERS_STORAGE_IMAGES_PATH}/${imageId}`,
+        );
+        return imageId;
+    }
+
+    public async uploadSound(soundFile: File): Promise<string> {
+        const soundId = v4();
+        await this._uploadFile(
+            soundFile,
+            `${BUZZERS_STORAGE_SOUNDS_PATH}/${soundId}`,
+        );
+        return soundId;
+    }
+
+    private async _uploadFile(
+        file: File,
+        path: string,
+        onProgress?: (progress: number) => void,
+    ): Promise<void> {
+        const storageRef = ref(this._storage, path);
+
+        // Upload the file
+        const uploadTask = uploadBytesResumable(storageRef, file, {
+            cacheControl: 'public, max-age=31536000',
+        });
+
+        return new Promise((resolve, reject) => {
+            uploadTask.on(
+                'state_changed',
+                (snapshot) => {
+                    const progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+                    // If the onProgress callback is defined, fire it
+                    if (onProgress) {
+                        onProgress(progress);
+                    }
+                },
+                (error) => reject(error),
+                async () => {
+                    resolve();
+                },
+            );
+        });
     }
 
     private _getPlayerRef(

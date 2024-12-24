@@ -1,0 +1,50 @@
+:host {
+    display: flex;
+    font-family: bebas-neue-pro-expanded, sans-serif;
+    color: white;
+    text-align: center;
+    width: 800px;
+    height: 150px;
+    border: 1px solid black;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.player {
+    position: relative;
+    height: 100%;
+    width: 100px;
+    overflow: visible;
+}
+
+.player-image {
+    position: absolute;
+    bottom: 30%;
+    left: 0px;
+    height: 70px;
+    width: 100%;
+    object-fit: contain;
+}
+
+.player-name {
+    position: absolute;
+    bottom: 0px;
+    height: 60px;
+    width: 100px;
+    display: flex;
+    padding: var(--padding-amount) calc(var(--padding-amount) / 2);
+    border-radius: var(--rounding);
+    box-shadow: var(--mat-sys-level5);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    text-wrap: balance;
+    font-size: 30px;
+    overflow: hidden;
+}
