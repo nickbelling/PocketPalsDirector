@@ -56,6 +56,10 @@
     );
 
     .error {
+        mat-icon {
+            color: var(--mat-sys-on-error);
+        }
+
         @include mat.button-overrides(
             (
                 filled-container-color: var(--mat-sys-error),
@@ -64,9 +68,13 @@
             )
         );
 
-        mat-icon {
-            color: var(--mat-sys-on-error);
-        }
+        @include mat.fab-overrides(
+            (
+                container-color: var(--mat-sys-error),
+                small-container-color: var(--mat-sys-error),
+                foreground-color: var(--mat-sys-on-error),
+            )
+        );
     }
 }
 

@@ -1,0 +1,21 @@
+<mat-toolbar>
+    <span>Add buzzer player</span>
+</mat-toolbar>
+
+<mat-dialog-content class="layout-column g">
+    <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput required cdkFocus [(ngModel)]="name" />
+    </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button
+        mat-flat-button
+        [disabled]="!isValid() || loading()"
+        (click)="submit()"
+    >
+        <span>Add</span>
+    </button>
+</mat-dialog-actions>

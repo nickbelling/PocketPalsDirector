@@ -1,8 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, inject, linkedSignal } from '@angular/core';
-import { resizeImage, SimpleDialogType } from '../../common';
+import { Entity, resizeImage, SimpleDialogType } from '../../common';
 import { CommonControllerModule } from '../../common/common.module';
-import { Entity } from '../base';
 import { BaseController } from '../base/base-controller';
 import {
     RankyPankyDatabase,

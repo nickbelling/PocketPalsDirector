@@ -4,6 +4,7 @@ export * from './categories';
 export * from './common.module';
 export * from './dialog';
 export * from './directives';
+export * from './firestore';
 export * from './pipes';
 export * from './playing-card';
 export * from './preview';

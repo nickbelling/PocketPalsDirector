@@ -1,0 +1,10 @@
+<div
+    class="layout-row g"
+    style="width: 800px; height: 100px; border: 1px solid black"
+>
+    @for (player of buzzedInPlayers(); track player.firebaseId) {
+        <mat-card class="bg-blue">
+            <h1>{{ player.name }}</h1>
+        </mat-card>
+    }
+</div>

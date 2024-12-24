@@ -1,9 +1,8 @@
 import { computed, inject, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { SimpleDialogService } from '../../common';
+import { Entity, SimpleDialogService } from '../../common';
 import {
     BaseGameDatabase,
-    Entity,
     GameQuestionLike,
     GameStateLike,
 } from './base-database';

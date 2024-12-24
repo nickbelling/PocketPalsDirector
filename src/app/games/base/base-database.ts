@@ -7,11 +7,9 @@ import {
     doc,
     DocumentData,
     DocumentReference,
-    FirestoreDataConverter,
     onSnapshot,
     orderBy,
     query,
-    QueryDocumentSnapshot,
     serverTimestamp,
     setDoc,
     Timestamp,
@@ -19,42 +17,7 @@ import {
 } from 'firebase/firestore';
 import { deleteObject, ref, uploadBytesResumable } from 'firebase/storage';
 import { FIRESTORE, STORAGE } from '../../app.config';
-
-function getConverter<T extends object>(): FirestoreDataConverter<Entity<T>> {
-    return {
-        toFirestore: (data: Entity<T>): T => {
-            // Strip out firebaseId before saving if it's in the passed-in
-            // object, since that's a meta-field we use client-side only.
-            const { firebaseId, ...rest } = data;
-            return rest as T;
-        },
-        fromFirestore: (snapshot: QueryDocumentSnapshot): Entity<T> => {
-            // "createdAt" is stored as a Timestamp object in Firebase, but we
-            // want to interpret it as a number on this side.
-            const data = snapshot.data() as T & {
-                createdAt?: { toMillis: () => number } | number;
-            };
-
-            // Convert the createdAt timestamp to a number.
-            const createdAt =
-                typeof data.createdAt === 'number'
-                    ? data.createdAt
-                    : (data.createdAt?.toMillis() ?? 0);
-
-            const entity: Entity<T> = {
-                firebaseId: snapshot.id,
-                ...data,
-                createdAt,
-            };
-            return entity;
-        },
-    };
-}
-
-export type Entity<TEntity extends object> = TEntity & {
-    firebaseId: string;
-    createdAt: number;
-};
+import { Entity, getConverter } from '../../common/firestore';
 
 export type GameStateLike = object & { currentQuestion: string | null };
 export type GameQuestionLike = object;
@@ -234,18 +197,13 @@ export abstract class BaseGameDatabase<
      */
     public async setQuestionTimestamp(
         firebaseId: string,
-        timestamp: number,
+        timestamp: Timestamp,
     ): Promise<void> {
-        const newCreatedAt = Timestamp.fromMillis(timestamp);
         const questionDocRef = doc(
             this._firestore,
             `${this._questionsRef.path}/${firebaseId}`,
         );
-        await setDoc(
-            questionDocRef,
-            { createdAt: newCreatedAt },
-            { merge: true },
-        );
+        await setDoc(questionDocRef, { createdAt: timestamp }, { merge: true });
     }
 
     /**

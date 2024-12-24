@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { BuzzerDisplay, BuzzerPlayerButton } from './buzzers';
 import { Dashboard, DashboardHome } from './dashboard';
 import { GameDirector } from './game-director';
 import { GAMES } from './games';
@@ -39,4 +40,12 @@ export const routes: Routes = [
             component: gameDef.game,
         },
     ]),
+    {
+        path: 'buzzer/:playerId',
+        component: BuzzerPlayerButton,
+    },
+    {
+        path: 'buzzer-display',
+        component: BuzzerDisplay,
+    },
 ];

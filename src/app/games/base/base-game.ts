@@ -1,7 +1,7 @@
 import { Signal } from '@angular/core';
+import { Entity } from '../../common';
 import {
     BaseGameDatabase,
-    Entity,
     GameQuestionLike,
     GameStateLike,
 } from './base-database';

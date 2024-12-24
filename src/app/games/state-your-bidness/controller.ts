@@ -1,7 +1,6 @@
 import { Component, computed, inject, linkedSignal } from '@angular/core';
-import { SimpleDialogType } from '../../common';
+import { Entity, SimpleDialogType } from '../../common';
 import { CommonControllerModule } from '../../common/common.module';
-import { Entity } from '../base';
 import { BaseController } from '../base/base-controller';
 import {
     StateYourBidnessDatabase,

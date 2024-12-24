@@ -1,9 +1,8 @@
 import { inject, Signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { SimpleDialogService, SimpleDialogType } from '../../common';
+import { Entity, SimpleDialogService, SimpleDialogType } from '../../common';
 import {
     BaseGameDatabase,
-    Entity,
     GameQuestionLike,
     GameStateLike,
 } from './base-database';
