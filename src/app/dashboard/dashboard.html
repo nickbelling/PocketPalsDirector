@@ -1,8 +1,11 @@
 <mat-toolbar>
-    <button mat-icon-button [matMenuTriggerFor]="gameSelectMenu">
-        <mat-icon>menu</mat-icon>
-    </button>
+    <img src="pockety.png" />
     <span>Pocket Pals Director</span>
+    <button mat-button [routerLink]="'/'">Home</button>
+    <button mat-button [mat-menu-trigger-for]="gameSelectMenu">
+        <span>Games</span>
+    </button>
+    <button mat-button>Buzzers</button>
 </mat-toolbar>
 
 <div class="layout-scroll-y p-x">
@@ -10,13 +13,9 @@
 </div>
 
 <mat-menu #gameSelectMenu>
-    <button mat-menu-item [routerLink]="'home'">
-        <span>Home</span>
-    </button>
-    <mat-divider />
     @for (game of games; track $index) {
-    <button mat-menu-item [routerLink]="['director', game.slug]">
-        <span>{{game.name}}</span>
-    </button>
+        <button mat-menu-item [routerLink]="['director', game.slug]">
+            <span>{{ game.name }}</span>
+        </button>
     }
 </mat-menu>
