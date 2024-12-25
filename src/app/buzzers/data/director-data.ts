@@ -120,6 +120,14 @@ export class BuzzerDirectorDataStore {
             await deleteObject(fileRef);
         }
 
+        if (player.soundEffect) {
+            const fileRef = ref(
+                this._storage,
+                `${BUZZERS_STORAGE_SOUNDS_PATH}/${player.soundEffect}`,
+            );
+            await deleteObject(fileRef);
+        }
+
         const playerRef = doc(
             this._firestore,
             `${this._playersRef.path}/${player.firebaseId}`,
