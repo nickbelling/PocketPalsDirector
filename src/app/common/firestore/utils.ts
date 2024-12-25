@@ -12,8 +12,8 @@ import {
     QueryDocumentSnapshot,
 } from 'firebase/firestore';
 import { FirebaseStorage, getDownloadURL, ref } from 'firebase/storage';
-import { FIRESTORE } from '../../app.config';
 import { Entity } from './model';
+import { FIRESTORE } from './tokens';
 
 export function getConverter<TDocType extends object>(): FirestoreDataConverter<
     Entity<TDocType>

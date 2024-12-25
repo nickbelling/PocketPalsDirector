@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { BuzzerDisplay, BuzzerPlayerButton } from './buzzers';
-import { Dashboard, DashboardHome } from './dashboard';
+import { AdminAuthGuard } from './common';
+import { Dashboard, DashboardHome, DashboardSignIn } from './dashboard';
 import { GameDirector } from './game-director';
 import { GAMES } from './games';
 
@@ -22,6 +23,11 @@ export const routes: Routes = [
             {
                 path: 'home',
                 component: DashboardHome,
+                canActivate: [AdminAuthGuard],
+            },
+            {
+                path: '403',
+                component: DashboardSignIn,
             },
             // Create a "Director" for each game
             ...GAMES.flatMap((gameDef) => [
@@ -29,6 +35,7 @@ export const routes: Routes = [
                     path: `director/${gameDef.slug}`,
                     component: GameDirector,
                     data: gameDef,
+                    canActivate: [AdminAuthGuard],
                 },
             ]),
         ],

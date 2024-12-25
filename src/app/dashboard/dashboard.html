@@ -2,13 +2,27 @@
     <img src="pockety.png" />
     <span>Pocket Pals Director</span>
     <button mat-button [routerLink]="'/'">Home</button>
-    <button mat-button [mat-menu-trigger-for]="gameSelectMenu">
-        <span>Games</span>
-    </button>
-    <button mat-button>Buzzers</button>
+    @if (auth.isAdmin()) {
+        <button mat-button [mat-menu-trigger-for]="gameSelectMenu">
+            <span>Games</span>
+            <mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
+        </button>
+        <button mat-button>Buzzers</button>
+    }
+    <span class="layout-fill"></span>
+    @if (auth.user()) {
+        <button mat-button (click)="auth.signOut()">
+            <span>Sign out {{ auth.user()?.displayName }}</span>
+            @if (auth.isAdmin()) {
+                <span> (Administrator)</span>
+            }
+        </button>
+    } @else {
+        <button mat-button (click)="auth.signIn()">Sign in</button>
+    }
 </mat-toolbar>
 
-<div class="layout-scroll-y p-x">
+<div class="layout-fill layout-scroll-y p-x">
     <router-outlet></router-outlet>
 </div>
 

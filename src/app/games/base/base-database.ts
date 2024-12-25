@@ -16,8 +16,12 @@ import {
     Unsubscribe,
 } from 'firebase/firestore';
 import { deleteObject, ref, uploadBytesResumable } from 'firebase/storage';
-import { FIRESTORE, STORAGE } from '../../app.config';
-import { Entity, getConverter } from '../../common/firestore';
+import {
+    Entity,
+    FIRESTORE,
+    getConverter,
+    STORAGE,
+} from '../../common/firestore';
 
 export type GameStateLike = object & { currentQuestion: string | null };
 export type GameQuestionLike = object;

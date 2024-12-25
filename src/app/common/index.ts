@@ -1,5 +1,6 @@
 export * from './alert';
 export * from './animations';
+export * from './auth';
 export * from './categories';
 export * from './common.module';
 export * from './dialog';

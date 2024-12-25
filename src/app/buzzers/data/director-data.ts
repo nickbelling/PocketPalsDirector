@@ -19,11 +19,12 @@ import {
 } from 'firebase/firestore';
 import { deleteObject, ref, uploadBytesResumable } from 'firebase/storage';
 import { v4 } from 'uuid';
-import { FIRESTORE, STORAGE } from '../../app.config';
 import {
     Entity,
+    FIRESTORE,
     getConverter,
     resizeImage,
+    STORAGE,
     subscribeToCollection,
     subscribeToDocument,
 } from '../../common';

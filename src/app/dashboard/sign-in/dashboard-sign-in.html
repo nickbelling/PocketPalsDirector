@@ -1,0 +1,9 @@
+@if (!auth.user()) {
+    <p>You must sign in to view this page.</p>
+} @else if (!auth.isAdmin()) {
+    <p>
+        You've signed in and created an account. Please contact an administrator
+        to be granted permission to continue.
+    </p>
+    <p>After permission is granted, sign out and then sign back in again.</p>
+}

@@ -2,7 +2,6 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { STORAGE } from '../../app.config';
 import {
     arraysAreEqual,
     fadeInAnimation,
@@ -13,6 +12,7 @@ import {
     preloadAudio,
     preloadImages,
     SlideModule,
+    STORAGE,
 } from '../../common';
 import { CommonPipesModule } from '../../common/pipes/pipes.module';
 import { BuzzerDisplayDataStore } from '../data/display-data';
