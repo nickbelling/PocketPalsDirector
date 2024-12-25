@@ -1,9 +1,8 @@
-<div class="row g">
+<div class="row">
     @for (player of buzzedInPlayers(); track player.firebaseId) {
-        <div @fadeOut class="player">
+        <div @growIn @growOut @fadeOut class="player">
             <img
-                @fadeIn
-                class="player-image"
+                class="player-image animate__animated animate__bounceInUp"
                 src="{{
                     BUZZERS_STORAGE_IMAGES_PATH + '/' + player.image
                         | uploadedFileUrl
@@ -11,8 +10,7 @@
                 }}"
             />
             <mat-card
-                @fadeIn
-                class="player-name bg-blue"
+                class="player-name bg-blue animate__animated animate__bounceInUp"
                 [fitText]="player.name"
             >
                 {{ player.name }}

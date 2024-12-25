@@ -17,30 +17,29 @@
 }
 
 .player {
-    position: relative;
+    display: flex;
+    flex-direction: column;
     height: 100%;
-    width: 100px;
     overflow: visible;
+    padding: var(--padding-amount);
 }
 
 .player-image {
-    position: absolute;
-    bottom: 30%;
-    left: 0px;
-    height: 70px;
-    width: 100%;
+    height: 80px;
+    width: 100px;
     object-fit: contain;
+    animation-delay: 100ms;
 }
 
 .player-name {
-    position: absolute;
-    bottom: 0px;
     height: 60px;
     width: 100px;
+    margin-top: -20px;
+
     display: flex;
-    padding: var(--padding-amount) calc(var(--padding-amount) / 2);
     border-radius: var(--rounding);
     box-shadow: var(--mat-sys-level5);
+    padding: var(--padding-amount) calc(var(--padding-amount) / 2);
     justify-content: center;
     align-items: center;
     text-align: center;

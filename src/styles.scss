@@ -10,6 +10,8 @@
 @include layout.all-layout();
 @include padding.all-padding();
 
+@import 'animate.css';
+
 :root {
     --rounding: 10px;
     --padding-amount: 1rem;

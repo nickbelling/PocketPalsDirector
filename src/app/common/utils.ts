@@ -106,5 +106,21 @@ export async function preloadImages(imageUrls: string[]): Promise<void> {
             image.src = src;
         });
 
-    await Promise.all(imageUrls.map((url) => preloadImage(url)));
+    await Promise.all(imageUrls.map(preloadImage));
+}
+
+/**
+ * Preloads all of the given audio URLs.
+ */
+export async function preloadAudio(audioUrls: string[]): Promise<void> {
+    const preloadAudio = (src: string) =>
+        new Promise((resolve, reject) => {
+            const audio = new Audio();
+            audio.onload = resolve;
+            audio.onerror = reject;
+            audio.src = src;
+            audio.load();
+        });
+
+    await Promise.all(audioUrls.map(preloadAudio));
 }
