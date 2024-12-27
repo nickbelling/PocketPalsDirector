@@ -1,11 +1,26 @@
 <mat-toolbar>
-    <span>Add buzzer player</span>
+    @if (editing) {
+        <span>Edit buzzer player</span>
+    } @else {
+        <span>Add buzzer player</span>
+    }
 </mat-toolbar>
 
 <mat-dialog-content class="layout-column g">
     <mat-form-field>
         <mat-label>Name</mat-label>
         <input matInput required cdkFocus [(ngModel)]="name" />
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Team</mat-label>
+        <mat-select [(ngModel)]="teamId">
+            <mat-option [value]="null">None</mat-option>
+            @for (team of teams(); track team.firebaseId) {
+                <mat-option [value]="team.firebaseId">
+                    {{ team.name }}
+                </mat-option>
+            }
+        </mat-select>
     </mat-form-field>
     <mat-form-field>
         <mat-label>Image</mat-label>
@@ -61,6 +76,10 @@
         [disabled]="!isValid() || loading()"
         (click)="submit()"
     >
-        <span>Add</span>
+        @if (editing) {
+            <span>Edit</span>
+        } @else {
+            <span>Add</span>
+        }
     </button>
 </mat-dialog-actions>

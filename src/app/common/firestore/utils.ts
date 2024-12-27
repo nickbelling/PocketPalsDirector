@@ -5,6 +5,7 @@ import {
     doc,
     DocumentReference,
     FirestoreDataConverter,
+    getDoc,
     onSnapshot,
     orderBy,
     query,
@@ -37,6 +38,22 @@ export function getConverter<TDocType extends object>(): FirestoreDataConverter<
             return entity;
         },
     };
+}
+
+export async function getDocument<TDocType extends object>(
+    path: string,
+): Promise<Entity<TDocType> | undefined> {
+    const firestore = inject(FIRESTORE);
+    const converter = getConverter<TDocType>();
+
+    const docRef = doc(firestore, path).withConverter(converter);
+    const docSnapshot = await getDoc(docRef);
+
+    if (docSnapshot.exists()) {
+        return docSnapshot.data();
+    } else {
+        return undefined;
+    }
 }
 
 /**

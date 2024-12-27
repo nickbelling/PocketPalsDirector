@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { BuzzerDisplay, BuzzerPlayerButton } from './buzzers';
 import { AdminAuthGuard } from './common';
 import { Dashboard, DashboardHome, DashboardSignIn } from './dashboard';
+import { DashboardPlayers } from './dashboard/players/dashboard-players';
 import { GameDirector } from './game-director';
 import { GAMES } from './games';
 
@@ -41,6 +42,12 @@ export const routes: Routes = [
                     data: gameDef,
                 },
             ]),
+            {
+                path: 'players',
+                title: 'Pocket Pals Director | Players',
+                component: DashboardPlayers,
+                canActivate: [AdminAuthGuard],
+            },
         ],
     },
     // The raw game routes

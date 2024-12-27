@@ -1,0 +1,17 @@
+:host {
+    height: 100%;
+    align-content: center;
+}
+
+button {
+    height: 30vh;
+    width: 30vh;
+    border-radius: 1000px;
+    box-shadow: var(--mat-sys-level5);
+}
+
+h1,
+h2,
+h3 {
+    margin: 0;
+}

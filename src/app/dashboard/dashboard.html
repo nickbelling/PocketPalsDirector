@@ -1,13 +1,13 @@
 <mat-toolbar>
     <img src="pockety.png" />
     <span>Pocket Pals Director</span>
-    <button mat-button [routerLink]="'/'">Home</button>
+    <button mat-button [routerLink]="'home'">Home</button>
     @if (auth.isAdmin()) {
         <button mat-button [mat-menu-trigger-for]="gameSelectMenu">
             <span>Games</span>
             <mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
         </button>
-        <button mat-button>Buzzers</button>
+        <button mat-button [routerLink]="'players'">Players</button>
     }
     <span class="layout-fill"></span>
     @if (auth.user()) {

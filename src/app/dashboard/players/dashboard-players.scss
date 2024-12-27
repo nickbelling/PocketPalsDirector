@@ -1,0 +1,11 @@
+.team-color {
+    aspect-ratio: 1/1;
+    height: 20px;
+    border-radius: 1000px;
+}
+
+preview {
+    border-radius: var(--rounding);
+    box-shadow: var(--mat-sys-level1);
+    overflow: hidden;
+}

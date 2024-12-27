@@ -1,9 +1,11 @@
 <div class="layout-column g">
-    <div class="layout-row g">
-        <button mat-flat-button (click)="addPlayer()">
-            <mat-icon>add_circle</mat-icon>
-            <span>Add player</span>
-        </button>
+    <div class="layout-row layout-items-middle g">
+        <mat-slide-toggle
+            [checked]="state().buzzersEnabled"
+            (change)="setBuzzersEnabled($event.checked)"
+        >
+            <span>Buzzers enabled</span>
+        </mat-slide-toggle>
         <button
             mat-flat-button
             (click)="resetAllBuzzers()"
@@ -60,13 +62,17 @@
             </mat-list>
         </mat-card>
     </div>
-    <buzzer-display class="bg-preview" />
 </div>
 
 <ng-template #playerListItem let-untypedPlayer>
     @let player = toPlayer(untypedPlayer);
+    @let team = player.teamId | team: teams();
 
     <mat-list-item>
+        <img
+            matListItemAvatar
+            src="{{ team?.color || 'rgb(59, 149, 237)' | imageColorSrc }}"
+        />
         <span>{{ player.name }}</span>
         <div matListItemMeta class="g">
             @if (player.lockedOut) {
@@ -96,9 +102,6 @@
             } @else {
                 <button mat-icon-button (click)="buzzIn(player.firebaseId)">
                     <mat-icon>highlight_mouse_cursor</mat-icon>
-                </button>
-                <button mat-icon-button (click)="deletePlayer(player)">
-                    <mat-icon>Delete</mat-icon>
                 </button>
             }
         </div>

@@ -1,3 +1,5 @@
-<h1>{{ player().name }}</h1>
-
-<button mat-raised-button (click)="buzz()" [disabled]="!canBuzz()">Buzz</button>
+<div class="layout-column layout-items-center g">
+    <h1>{{ player().name }}'s Buzzer</h1>
+    <h2>{{ team()?.name || 'No team' }}</h2>
+    <button (click)="buzz()" [disabled]="!canBuzz()">Buzz</button>
+</div>

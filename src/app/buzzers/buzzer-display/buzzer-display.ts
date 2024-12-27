@@ -6,15 +6,16 @@ import {
     arraysAreEqual,
     fadeInAnimation,
     fadeOutAnimation,
-    FitTextDirective,
     getCachedDownloadUrl,
     getCachedDownloadUrls,
+    Player,
     preloadAudio,
     preloadImages,
     SlideModule,
     STORAGE,
 } from '../../common';
 import { CommonPipesModule } from '../../common/pipes/pipes.module';
+import { BuzzerTeamPipe } from '../buzzer-team.pipe';
 import { BuzzerDisplayDataStore } from '../data/display-data';
 import {
     BUZZERS_STORAGE_IMAGES_PATH,
@@ -28,7 +29,8 @@ import {
         MatCardModule,
         CommonPipesModule,
         SlideModule,
-        FitTextDirective,
+        Player,
+        BuzzerTeamPipe,
     ],
     templateUrl: './buzzer-display.html',
     styleUrl: './buzzer-display.scss',
@@ -54,6 +56,7 @@ export class BuzzerDisplay {
 
     protected BUZZERS_STORAGE_IMAGES_PATH = BUZZERS_STORAGE_IMAGES_PATH;
     protected players = this._data.players;
+    protected teams = this._data.teams;
 
     protected buzzedInPlayers = computed(() => {
         const players = this.players();

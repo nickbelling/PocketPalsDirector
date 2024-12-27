@@ -1,11 +1,12 @@
 :host {
     display: flex;
-    font-family: bebas-neue-pro, sans-serif;
+    font-family: var(--game-font-family);
     color: white;
     text-align: center;
     width: 800px;
     height: 200px;
     padding-top: 50px;
+    overflow: hidden;
 }
 
 .row {
@@ -14,37 +15,4 @@
     align-items: center;
     justify-content: center;
     flex-grow: 1;
-}
-
-.player {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: visible;
-    padding: var(--padding-amount);
-}
-
-.player-image {
-    height: 80px;
-    width: 100px;
-    object-fit: contain;
-    animation-delay: 100ms;
-}
-
-.player-name {
-    height: 60px;
-    width: 100px;
-    margin-top: -20px;
-
-    display: flex;
-    border-radius: var(--rounding);
-    box-shadow: var(--mat-sys-level5);
-    padding: var(--padding-amount) calc(var(--padding-amount) / 2);
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    text-wrap: balance;
-    font-size: 30px;
-    overflow: hidden;
-    text-transform: uppercase;
 }

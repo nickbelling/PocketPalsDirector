@@ -1,0 +1,20 @@
+<img
+    class="player-image"
+    [class.animate__animated]="animated()"
+    [class.animate__bounceInUp]="animated()"
+    src="{{
+        hasImage()
+            ? (imageSrc() | uploadedFileUrl | async)
+            : 'player_default.png'
+    }}"
+/>
+<mat-card
+    class="player-name"
+    [class.bg-blue]="team() === undefined"
+    [class.animate__animated]="animated()"
+    [class.animate__bounceInUp]="animated()"
+    [style.--base-color]="teamColor()"
+    [fitText]="player().name"
+>
+    <span>{{ player().name }}</span>
+</mat-card>

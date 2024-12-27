@@ -1,10 +1,4 @@
-import {
-    computed,
-    DestroyRef,
-    inject,
-    Injectable,
-    signal,
-} from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import {
     addDoc,
     CollectionReference,
@@ -34,7 +28,9 @@ import {
     BUZZERS_STATE_DOC_PATH,
     BUZZERS_STORAGE_IMAGES_PATH,
     BUZZERS_STORAGE_SOUNDS_PATH,
+    BUZZERS_TEAMS_COLLECTION_PATH,
     BuzzerState,
+    BuzzerTeam,
     DEFAULT_BUZZER_STATE,
 } from '../model';
 
@@ -44,24 +40,19 @@ import {
 export class BuzzerDirectorDataStore {
     private _firestore = inject(FIRESTORE);
     private _storage = inject(STORAGE);
-    private _destroyRef = inject(DestroyRef);
     private _stateRef: DocumentReference<BuzzerState, DocumentData>;
     private _playersRef: CollectionReference<BuzzerPlayer, DocumentData>;
-    private _connectedState = signal<boolean>(false);
-    private _connectedPlayers = signal<boolean>(false);
+    private _teamsRef: CollectionReference<BuzzerTeam, DocumentData>;
     private _playerConverter = getConverter<BuzzerPlayer>();
 
     public readonly state = signal<BuzzerState>(DEFAULT_BUZZER_STATE);
     public readonly players = signal<Entity<BuzzerPlayer>[]>([]);
-    public connected = computed(() => {
-        return this._connectedState() && this._connectedPlayers();
-    });
+    public readonly teams = signal<Entity<BuzzerTeam>[]>([]);
 
     constructor() {
         this._stateRef = subscribeToDocument<BuzzerState>(
             BUZZERS_STATE_DOC_PATH,
             (data) => {
-                this._connectedState.set(true);
                 this.state.set(data || DEFAULT_BUZZER_STATE);
             },
         );
@@ -69,15 +60,16 @@ export class BuzzerDirectorDataStore {
         this._playersRef = subscribeToCollection(
             BUZZERS_PLAYERS_COLLECTION_PATH,
             (data) => {
-                this._connectedPlayers.set(true);
                 this.players.set(data);
             },
         );
 
-        this._destroyRef.onDestroy(() => {
-            this._connectedState.set(false);
-            this._connectedPlayers.set(false);
-        });
+        this._teamsRef = subscribeToCollection(
+            BUZZERS_TEAMS_COLLECTION_PATH,
+            (data) => {
+                this.teams.set(data);
+            },
+        );
     }
 
     public async setState(
@@ -92,6 +84,32 @@ export class BuzzerDirectorDataStore {
 
     public async disableBuzzers(): Promise<void> {
         await this.setState({ buzzersEnabled: false });
+    }
+
+    public async addTeam(team: BuzzerTeam): Promise<void> {
+        await addDoc(this._teamsRef, {
+            ...team,
+            createdAt: serverTimestamp(),
+        });
+    }
+
+    public async editTeam(
+        teamId: string,
+        team: BuzzerTeam | Partial<BuzzerTeam>,
+    ): Promise<void> {
+        const teamRef = doc(
+            this._firestore,
+            `${this._teamsRef.path}/${teamId}`,
+        );
+        await setDoc(teamRef, team, { merge: true });
+    }
+
+    public async deleteTeam(team: Entity<BuzzerTeam>): Promise<void> {
+        const teamRef = doc(
+            this._firestore,
+            `${this._teamsRef.path}/${team.firebaseId}`,
+        );
+        await deleteDoc(teamRef);
     }
 
     public async addPlayer(player: BuzzerPlayer): Promise<void> {
@@ -195,6 +213,10 @@ export class BuzzerDirectorDataStore {
         return imageId;
     }
 
+    public async deleteImage(subPath: string): Promise<void> {
+        await this._deleteFile(`${BUZZERS_STORAGE_IMAGES_PATH}/${subPath}`);
+    }
+
     public async uploadSound(soundFile: File): Promise<string> {
         const soundId = v4();
         await this._uploadFile(
@@ -202,6 +224,10 @@ export class BuzzerDirectorDataStore {
             `${BUZZERS_STORAGE_SOUNDS_PATH}/${soundId}`,
         );
         return soundId;
+    }
+
+    public async deleteSound(subPath: string): Promise<void> {
+        await this._deleteFile(`${BUZZERS_STORAGE_IMAGES_PATH}/${subPath}`);
     }
 
     private async _uploadFile(
@@ -234,6 +260,11 @@ export class BuzzerDirectorDataStore {
                 },
             );
         });
+    }
+
+    private async _deleteFile(path: string): Promise<void> {
+        const storageRef = ref(this._storage, path);
+        await deleteObject(storageRef);
     }
 
     private _getPlayerRef(

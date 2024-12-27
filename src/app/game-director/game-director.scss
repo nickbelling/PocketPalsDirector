@@ -5,8 +5,8 @@
 }
 
 preview {
-    outline: 1px solid black;
-    outline-offset: -1px;
+    border-radius: var(--rounding);
+    box-shadow: var(--mat-sys-level1);
 }
 
 .preview-transparent {

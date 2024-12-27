@@ -5,5 +5,12 @@
     "editor.codeActionsOnSave": {
         "source.organizeImports": "always"
     },
-    "cSpell.words": ["Bidness", "Millis", "Panky", "Ranky", "unguessed"]
+    "cSpell.words": [
+        "Bidness",
+        "Millis",
+        "Panky",
+        "Pockety",
+        "Ranky",
+        "unguessed"
+    ]
 }

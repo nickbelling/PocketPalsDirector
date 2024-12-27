@@ -1,3 +1,4 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule, Type } from '@angular/core';
@@ -19,6 +20,7 @@ import {
     Alert,
     CategoriesModule,
     FitTextDirective,
+    Player,
     PlayingCardModule,
     SlideModule,
 } from '.';
@@ -27,6 +29,7 @@ import { CommonPipesModule } from './pipes/pipes.module';
 const CONTROLLER_MODULES: Type<unknown>[] = [
     CommonModule,
     FormsModule,
+    ClipboardModule,
     DragDropModule,
     MatButtonModule,
     MatCardModule,
@@ -43,6 +46,8 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     MatTooltipModule,
     Alert,
     CommonPipesModule,
+    FitTextDirective,
+    Player,
 ];
 
 const GAME_MODULES: Type<unknown>[] = [

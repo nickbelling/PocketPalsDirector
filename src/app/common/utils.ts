@@ -124,3 +124,11 @@ export async function preloadAudio(audioUrls: string[]): Promise<void> {
 
     await Promise.all(audioUrls.map(preloadAudio));
 }
+
+export function isValidColor(strColor: string) {
+    const style: CSSStyleDeclaration = new Option().style;
+    style.color = strColor;
+
+    // style.color is '' by default, if not '' then successfully set.
+    return style.color !== '';
+}

@@ -1,0 +1,37 @@
+<mat-toolbar>
+    @if (editing) {
+        <span>Edit team</span>
+    } @else {
+        <span>Add team</span>
+    }
+</mat-toolbar>
+
+<mat-dialog-content class="layout-row g">
+    <div class="layout-column g">
+        <mat-form-field>
+            <mat-label>Team name</mat-label>
+            <input matInput required cdkFocus [(ngModel)]="name" />
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Team color</mat-label>
+            <input type="color" matInput required [(ngModel)]="color" />
+        </mat-form-field>
+    </div>
+    <player [player]="fakePlayer" [animated]="false" [team]="fakeTeam()" />
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button
+        mat-flat-button
+        [disabled]="!isValid() || loading()"
+        (click)="submit()"
+    >
+        @if (editing) {
+            <span>Edit</span>
+        } @else {
+            <span>Add</span>
+        }
+    </button>
+</mat-dialog-actions>

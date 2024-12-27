@@ -23,13 +23,17 @@ export class FitTextDirective implements OnChanges, AfterViewInit {
     private _el = inject(ElementRef);
 
     public ngAfterViewInit(): void {
-        this._originalFontSize = parseFloat(
-            window
-                .getComputedStyle(this._el.nativeElement, null)
-                .getPropertyValue('font-size'),
-        );
+        // This has to occur after an animation frame, otherwise a font style
+        // applied to the element's class may not yet be loaded.
+        requestAnimationFrame(() => {
+            this._originalFontSize = parseFloat(
+                window
+                    .getComputedStyle(this._el.nativeElement, null)
+                    .getPropertyValue('font-size'),
+            );
 
-        this.adjustFontSize();
+            this.adjustFontSize();
+        });
     }
 
     public ngOnChanges(): void {
@@ -42,18 +46,21 @@ export class FitTextDirective implements OnChanges, AfterViewInit {
     private adjustFontSize(): void {
         if (this._originalFontSize !== undefined) {
             const element = this._el.nativeElement;
-            let fontSize = this._originalFontSize;
-            element.style.fontSize = `${fontSize}px`;
-            element.style.lineHeight = `${fontSize}px`;
 
-            // Keep shrinking the text until it fits
-            while (
-                element.scrollHeight > element.clientHeight ||
-                element.scrollWidth > element.clientWidth
-            ) {
-                fontSize--;
+            if (element.clientHeight > 0 && element.clientWidth > 0) {
+                let fontSize = this._originalFontSize;
                 element.style.fontSize = `${fontSize}px`;
                 element.style.lineHeight = `${fontSize}px`;
+
+                // Keep shrinking the text until it fits
+                while (
+                    element.scrollHeight > element.clientHeight ||
+                    element.scrollWidth > element.clientWidth
+                ) {
+                    fontSize--;
+                    element.style.fontSize = `${fontSize}px`;
+                    element.style.lineHeight = `${fontSize}px`;
+                }
             }
         }
     }

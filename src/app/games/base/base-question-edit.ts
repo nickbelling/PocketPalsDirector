@@ -1,23 +1,18 @@
-import { computed, inject, signal } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Entity, SimpleDialogService } from '../../common';
 import {
     BaseGameDatabase,
     GameQuestionLike,
     GameStateLike,
 } from './base-database';
+import { BaseEntityEditDialog } from './base-entity-edit';
 
-export class BaseQuestionEditDialog<TQuestion extends GameQuestionLike> {
+export class BaseQuestionEditDialog<
+    TQuestion extends GameQuestionLike,
+> extends BaseEntityEditDialog<TQuestion> {
     protected db: BaseGameDatabase<GameStateLike, TQuestion>;
-    protected dialog = inject(MatDialogRef<BaseQuestionEditDialog<TQuestion>>);
-    protected question = inject<Entity<TQuestion> | undefined>(MAT_DIALOG_DATA);
-    protected confirm = inject(SimpleDialogService);
-
-    protected loading = signal<boolean>(false);
-    protected editing: boolean = this.question !== undefined;
-    protected firebaseId = computed(() => this.question?.firebaseId);
+    protected question = this.entity;
 
     constructor(db: BaseGameDatabase<GameStateLike, TQuestion>) {
+        super();
         this.db = db;
     }
 

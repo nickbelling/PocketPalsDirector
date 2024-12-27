@@ -1,28 +1,21 @@
 import { Component, computed, inject } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import {
-    CommonControllerModule,
-    Entity,
-    SimpleDialogService,
-    SimpleDialogType,
-} from '../../common';
-import { BuzzerDisplay } from '../buzzer-display/buzzer-display';
+import { CommonControllerModule, Entity } from '../../common';
+import { BuzzerTeamPipe } from '../buzzer-team.pipe';
 import { BuzzerDirectorDataStore } from '../data/director-data';
 import { BuzzerPlayer } from '../model';
-import { BuzzerPlayerAddDialog } from './buzzer-player-add-dialog';
 
 @Component({
-    selector: 'buzzer-controller',
-    imports: [CommonControllerModule, BuzzerDisplay],
-    templateUrl: './buzzer-controller.html',
+    selector: 'buzzer-mini-controller',
+    imports: [CommonControllerModule, BuzzerTeamPipe],
+    templateUrl: './buzzer-mini-controller.html',
+    styleUrl: './buzzer-mini-controller.scss',
 })
-export class BuzzerController {
+export class BuzzerMiniController {
     private _data = inject(BuzzerDirectorDataStore);
-    private _dialog = inject(MatDialog);
-    private _confirm = inject(SimpleDialogService);
 
     protected state = this._data.state;
     protected players = this._data.players;
+    protected teams = this._data.teams;
 
     protected buzzerBaseUrl = `${window.location.origin}/buzzer/`;
 
@@ -49,21 +42,14 @@ export class BuzzerController {
         return players.filter((p) => p.buzzTimestamp === null);
     });
 
-    public addPlayer(): void {
-        this._dialog.open(BuzzerPlayerAddDialog);
-    }
-
-    public deletePlayer(player: Entity<BuzzerPlayer>): void {
-        this._confirm.open(
-            SimpleDialogType.DeleteCancel,
-            'Delete player',
-            `Are you sure you want to delete ${player.name}?`,
-            {
-                onDelete: async () => {
-                    await this._data.deletePlayer(player);
-                },
-            },
-        );
+    public async setBuzzersEnabled(value: boolean): Promise<void> {
+        if (this.state().buzzersEnabled !== value) {
+            if (value) {
+                await this._data.enableBuzzers();
+            } else {
+                await this._data.disableBuzzers();
+            }
+        }
     }
 
     public async buzzIn(playerId: string): Promise<void> {
