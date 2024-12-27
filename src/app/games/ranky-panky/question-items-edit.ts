@@ -8,7 +8,7 @@ import {
     viewChild,
 } from '@angular/core';
 import { v4 as uuid } from 'uuid';
-import { resizeImage, SimpleDialogType } from '../../common';
+import { resizeImage } from '../../common';
 import { CommonControllerModule } from '../../common/common.module';
 import { BaseQuestionEditDialog } from '../base/base-question-edit';
 import {
@@ -85,11 +85,11 @@ export class RankyPankyQuestionItemsEditDialog extends BaseQuestionEditDialog<Ra
         const item = this.questionItems()[index];
 
         this.confirm.open(
-            SimpleDialogType.YesNo,
+            'deleteCancel',
             'Delete item',
             `Are you sure you want to delete ${item.name}?`,
             {
-                onYes: async () => {
+                onDelete: async () => {
                     this.loading.set(true);
                     if (item.uploadedFilePath) {
                         await this.deleteFile(item.uploadedFilePath, true);

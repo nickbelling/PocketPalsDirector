@@ -1,23 +1,27 @@
 <mat-toolbar>
-    <span>{{title}}</span>
+    <span>{{ title }}</span>
 </mat-toolbar>
 
 <mat-dialog-content class="layout-column g">
-    <p>{{description}}</p>
+    <p>{{ description }}</p>
 </mat-dialog-content>
 
 <mat-dialog-actions>
     @if (hasCancel) {
-    <button mat-button [mat-dialog-close]="Result.Cancel">Cancel</button>
-    } @if (hasNo) {
-    <button mat-button [mat-dialog-close]="Result.No">No</button>
-    } @if (hasYes) {
-    <button mat-flat-button [mat-dialog-close]="Result.Yes">Yes</button>
-    } @if (hasOk) {
-    <button mat-flat-button [mat-dialog-close]="Result.Ok">OK</button>
-    } @if (hasDelete) {
-    <button mat-flat-button class="error" [mat-dialog-close]="Result.Delete">
-        Delete
-    </button>
+        <button mat-button [mat-dialog-close]="'cancel'">Cancel</button>
+    }
+    @if (hasNo) {
+        <button mat-button [mat-dialog-close]="'no'">No</button>
+    }
+    @if (hasYes) {
+        <button mat-flat-button [mat-dialog-close]="'yes'">Yes</button>
+    }
+    @if (hasOk) {
+        <button mat-flat-button [mat-dialog-close]="'ok'">OK</button>
+    }
+    @if (hasDelete) {
+        <button mat-flat-button class="error" [mat-dialog-close]="'delete'">
+            Delete
+        </button>
     }
 </mat-dialog-actions>

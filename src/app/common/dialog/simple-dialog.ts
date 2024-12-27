@@ -2,11 +2,7 @@ import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import {
-    SimpleDialogData,
-    SimpleDialogResult,
-    SimpleDialogType,
-} from './model';
+import { SimpleDialogData, SimpleDialogType } from './model';
 
 /**
  * A simple dialog that offers a prompt with some buttons (e.g. yes/no,
@@ -24,17 +20,11 @@ export class SimpleDialog {
     protected description: string = this._data.description;
 
     protected hasCancel =
-        this.type === SimpleDialogType.OkCancel ||
-        this.type === SimpleDialogType.YesNoCancel ||
-        this.type === SimpleDialogType.DeleteCancel;
-    protected hasNo =
-        this.type === SimpleDialogType.YesNo ||
-        this.type === SimpleDialogType.YesNoCancel;
-    protected hasYes =
-        this.type === SimpleDialogType.YesNo ||
-        this.type === SimpleDialogType.YesNoCancel;
-    protected hasOk = this.type === SimpleDialogType.OkCancel;
-    protected hasDelete = this.type === SimpleDialogType.DeleteCancel;
-
-    protected Result = SimpleDialogResult;
+        this.type === 'okCancel' ||
+        this.type === 'yesNoCancel' ||
+        this.type === 'deleteCancel';
+    protected hasNo = this.type === 'yesNo' || this.type === 'yesNoCancel';
+    protected hasYes = this.type === 'yesNo' || this.type === 'yesNoCancel';
+    protected hasOk = this.type === 'okCancel';
+    protected hasDelete = this.type === 'deleteCancel';
 }

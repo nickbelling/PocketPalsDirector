@@ -1,17 +1,10 @@
-export enum SimpleDialogResult {
-    Cancel = 0,
-    Yes = 1,
-    No = 2,
-    Ok = 3,
-    Delete = 4,
-}
+export type SimpleDialogResult = 'cancel' | 'yes' | 'no' | 'ok' | 'delete';
 
-export enum SimpleDialogType {
-    OkCancel = 0,
-    YesNo = 1,
-    YesNoCancel = 2,
-    DeleteCancel = 3,
-}
+export type SimpleDialogType =
+    | 'okCancel'
+    | 'yesNo'
+    | 'yesNoCancel'
+    | 'deleteCancel';
 
 export interface SimpleDialogData {
     title: string;

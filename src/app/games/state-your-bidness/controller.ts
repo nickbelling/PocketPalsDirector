@@ -1,5 +1,5 @@
 import { Component, computed, inject, linkedSignal } from '@angular/core';
-import { Entity, SimpleDialogType } from '../../common';
+import { Entity } from '../../common';
 import { CommonControllerModule } from '../../common/common.module';
 import { BaseController } from '../base/base-controller';
 import {
@@ -52,7 +52,7 @@ export class StateYourBidnessController extends BaseController<
         question: Entity<StateYourBidnessQuestion>,
     ): Promise<void> {
         await this._confirm.open(
-            SimpleDialogType.DeleteCancel,
+            'deleteCancel',
             'Delete question',
             `Are you sure you want to delete "${question.name}"?`,
             {

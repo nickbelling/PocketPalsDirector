@@ -1,6 +1,6 @@
 import { inject, Signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Entity, SimpleDialogService, SimpleDialogType } from '../../common';
+import { Entity, SimpleDialogService } from '../../common';
 import {
     BaseGameDatabase,
     GameQuestionLike,
@@ -30,7 +30,7 @@ export abstract class BaseController<
 
     public async reset(): Promise<void> {
         await this._confirm.open(
-            SimpleDialogType.YesNo,
+            'yesNo',
             'Reset game',
             `Are you sure you want to reset this game? This will return the
             game to a fresh state, but won't delete any questions.`,

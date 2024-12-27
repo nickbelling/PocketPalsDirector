@@ -57,11 +57,11 @@ export class SimpleDialogService {
         const callbacks: {
             [key in SimpleDialogResult]: Callback<void> | undefined;
         } = {
-            [SimpleDialogResult.Cancel]: options.onCancel,
-            [SimpleDialogResult.Yes]: options.onYes,
-            [SimpleDialogResult.No]: options.onNo,
-            [SimpleDialogResult.Ok]: options.onOk,
-            [SimpleDialogResult.Delete]: options.onDelete,
+            ['cancel']: options.onCancel,
+            ['yes']: options.onYes,
+            ['no']: options.onNo,
+            ['ok']: options.onOk,
+            ['delete']: options.onDelete,
         };
 
         // Match the result of the dialog against the provided callbacks, and
@@ -70,9 +70,7 @@ export class SimpleDialogService {
             if (callbacks[result] !== undefined) {
                 await callbacks[result]();
             } else {
-                console.debug(
-                    `Result ${SimpleDialogResult[result]} has no callback defined.`,
-                );
+                console.debug(`Result '${result}' has no callback defined.`);
             }
         }
     }

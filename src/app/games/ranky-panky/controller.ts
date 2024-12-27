@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, inject, linkedSignal } from '@angular/core';
-import { Entity, resizeImage, SimpleDialogType } from '../../common';
+import { Entity, resizeImage } from '../../common';
 import { CommonControllerModule } from '../../common/common.module';
 import { BaseController } from '../base/base-controller';
 import {
@@ -86,7 +86,7 @@ export class RankyPankyController extends BaseController<
         question: Entity<RankyPankyQuestion>,
     ): Promise<void> {
         this._confirm.open(
-            SimpleDialogType.DeleteCancel,
+            'deleteCancel',
             'Delete question',
             `Are you sure you want to delete the question '${question.name}'?`,
             {
