@@ -18,10 +18,17 @@
     font-size: 60px;
     border-radius: var(--rounding);
     box-shadow: var(--mat-sys-level5);
-    background: var(--bg-blue);
-    transition: filter 1s;
+
+    --bg-base: var(--base-blue);
+    background-image: radial-gradient(
+        circle at 10% 20%,
+        var(--bg-base) 0%,
+        hsl(from var(--bg-base) h s calc(l - 20)) 90%
+    );
+    transition: --bg-base opacity 1s linear;
 
     &.selected {
-        filter: grayscale(1);
+        --bg-base: var(--base-grey);
+        opacity: 0.8;
     }
 }

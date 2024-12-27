@@ -1,63 +1,41 @@
+$colors: (
+    ('red', rgb(253, 44, 56)),
+    ('yellow', rgb(255, 158, 27)),
+    ('green', rgb(19, 170, 82)),
+    ('blue', rgb(59, 149, 237)),
+    ('purple', rgb(150, 93, 233)),
+    ('grey', rgb(105, 105, 105))
+);
+
+@each $color-name, $color-value in $colors {
+    @property --base-#{$color-name} {
+        syntax: '<color>';
+        initial-value: #{$color-value};
+        inherits: false;
+    }
+}
+
+@property --bg-base {
+    syntax: '<color>';
+    initial-value: rgb(59, 149, 237);
+    inherits: false;
+}
+
 :root {
-    --bg-red: linear-gradient(
-        108.4deg,
-        rgb(253, 44, 56) 3.3%,
-        rgb(176, 2, 12) 98.4%
-    );
-
-    --bg-blue: radial-gradient(
-        circle at 10% 20%,
-        rgb(59, 149, 237) 0%,
-        rgb(7, 91, 173) 90%
-    );
-
-    --bg-green: radial-gradient(
-        circle at -1% 57.5%,
-        rgb(19, 170, 82) 0%,
-        rgb(0, 102, 43) 90%
-    );
-
-    --bg-yellow: linear-gradient(
-        109.6deg,
-        rgb(255, 207, 84) 11.2%,
-        rgb(255, 158, 27) 91.1%
-    );
-
-    --bg-purple: linear-gradient(
-        83.2deg,
-        rgba(150, 93, 233, 1) 10.8%,
-        rgba(99, 88, 238, 1) 94.3%
-    );
-
-    --bg-grey: linear-gradient(
-        110.3deg,
-        rgba(73, 93, 109, 1) 4.3%,
-        rgba(49, 55, 82, 1) 96.7%
-    );
+    // Set
+    @each $color-name, $color-value in $colors {
+        --bg-#{$color-name}: radial-gradient(
+            circle at 10% 20%,
+            var(--base-#{$color-name}) 0%,
+            hsl(from var(--base-#{$color-name}) h s calc(l - 10)) 90%
+        );
+    }
 }
 
-.bg-red {
-    background: var(--bg-red);
-}
-
-.bg-blue {
-    background: var(--bg-blue);
-}
-
-.bg-green {
-    background: var(--bg-green);
-}
-
-.bg-yellow {
-    background: var(--bg-yellow);
-}
-
-.bg-purple {
-    background: var(--bg-purple);
-}
-
-.bg-grey {
-    background: var(--bg-grey);
+@each $color-name, $color-value in $colors {
+    .bg-#{$color-name} {
+        background-image: var(--bg-#{$color-name});
+    }
 }
 
 .bg-preview {

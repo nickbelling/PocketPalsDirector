@@ -15,7 +15,6 @@
         border-radius: var(--rounding);
         box-sizing: border-box;
         box-shadow: var(--mat-sys-level5);
-        background: var(--bg-grey);
         justify-content: center;
         align-items: center;
         text-align: center;
@@ -23,12 +22,17 @@
         font-size: 50px;
         overflow: hidden;
 
+        &.uncommitted {
+            opacity: 0.7;
+            background-image: var(--bg-grey);
+        }
+
         &.committed {
-            background: var(--bg-yellow);
+            background-image: var(--bg-yellow);
         }
 
         &.correct {
-            background: var(--bg-blue);
+            background-image: var(--bg-blue);
         }
     }
 }

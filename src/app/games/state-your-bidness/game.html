@@ -26,7 +26,10 @@
 
         <div class="guesses">
             @for (answer of guessedAnswers(); track answer) {
-                <div class="box correct" [fitText]="answer">
+                <div
+                    class="box correct animate__animated animate__pulse"
+                    [fitText]="answer"
+                >
                     <span>{{ answer }}</span>
                 </div>
             }
@@ -44,12 +47,12 @@
                     number of unguessedAnswerCount() | numberArray;
                     track number
                 ) {
-                    <div class="box"></div>
+                    <div class="box uncommitted"></div>
                 }
             } @else {
                 @for (answer of answers(); track answer) {
                     @if (!guessedAnswers().includes(answer)) {
-                        <div class="box" [fitText]="answer">
+                        <div class="box uncommitted" [fitText]="answer">
                             <span>{{ answer }}</span>
                         </div>
                     }
