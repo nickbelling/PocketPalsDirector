@@ -23,10 +23,12 @@ export const routes: Routes = [
             {
                 path: 'home',
                 component: DashboardHome,
+                title: 'Pocket Pals Director | Home',
                 canActivate: [AdminAuthGuard],
             },
             {
                 path: '403',
+                title: 'Pocket Pals Director | Sign in',
                 component: DashboardSignIn,
             },
             // Create a "Director" for each game
@@ -34,8 +36,9 @@ export const routes: Routes = [
                 {
                     path: `director/${gameDef.slug}`,
                     component: GameDirector,
-                    data: gameDef,
+                    title: `Pocket Pals Director | ${gameDef.name}`,
                     canActivate: [AdminAuthGuard],
+                    data: gameDef,
                 },
             ]),
         ],
@@ -44,6 +47,7 @@ export const routes: Routes = [
     ...GAMES.flatMap((gameDef) => [
         {
             path: `game/${gameDef.slug}`,
+            title: `Pocket Pals: ${gameDef.name}`,
             component: gameDef.game,
         },
     ]),
@@ -53,6 +57,7 @@ export const routes: Routes = [
     },
     {
         path: 'buzzer-display',
+        title: 'Pocket Pals | Buzzer',
         component: BuzzerDisplay,
     },
 ];

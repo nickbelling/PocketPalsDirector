@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, linkedSignal } from '@angular/core';
+import { Component, effect, inject, linkedSignal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import {
     BuzzerPlayerDataStore,
     providePlayerIdToken,
@@ -12,6 +13,7 @@ import {
 })
 export class BuzzerPlayerButton {
     private _data = inject(BuzzerPlayerDataStore);
+    private _title = inject(Title);
 
     protected state = this._data.state;
     protected player = this._data.player;
@@ -26,6 +28,13 @@ export class BuzzerPlayerButton {
             !player.lockedOut
         );
     });
+
+    constructor() {
+        effect(() => {
+            const player = this.player();
+            this._title.setTitle(`Pocket Pals Buzzer: ${player.name}`);
+        });
+    }
 
     public async buzz(): Promise<void> {
         // Immediately set "canBuzz" to false, so that the user can't
