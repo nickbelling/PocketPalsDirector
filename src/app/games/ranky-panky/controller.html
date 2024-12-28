@@ -15,18 +15,16 @@
         type="file"
         hidden
         #cardBackUpload
-        (change)="uploadCardBack($event)"
-    />
+        (change)="uploadCardBack($event)" />
 
     <mat-form-field class="layout-fill">
         <mat-label>Current question</mat-label>
         <mat-select
             [value]="currentQuestionId()"
-            (valueChange)="setQuestion($event)"
-        >
+            (valueChange)="setQuestion($event)">
             <mat-option [value]="null">None</mat-option>
-            @for (question of questions; track question.firebaseId) {
-                <mat-option [value]="question.firebaseId">
+            @for (question of questions; track question.id) {
+                <mat-option [value]="question.id">
                     <span>{{ question.name }}</span>
                     @if (question.items.length < 2) {
                         <mat-icon class="error">error</mat-icon>
@@ -48,16 +46,14 @@
         <button
             mat-flat-button
             (click)="editQuestion(currentQuestion())"
-            [disabled]="currentQuestion() === undefined"
-        >
+            [disabled]="currentQuestion() === undefined">
             <mat-icon>edit</mat-icon>
             <span>Edit question</span>
         </button>
         <button
             mat-flat-button
             (click)="editQuestionItems(currentQuestion())"
-            [disabled]="currentQuestion() === undefined"
-        >
+            [disabled]="currentQuestion() === undefined">
             <mat-icon>playing_cards</mat-icon>
             <span>Edit items</span>
         </button>
@@ -65,8 +61,7 @@
             mat-flat-button
             class="error"
             (click)="deleteQuestionAndFiles(currentQuestion()!)"
-            [disabled]="currentQuestion() === undefined"
-        >
+            [disabled]="currentQuestion() === undefined">
             <mat-icon>delete</mat-icon>
             <span>Delete question</span>
         </button>
@@ -89,8 +84,7 @@
                         (click)="revealItem()"
                         [disabled]="
                             state.revealedCards >= question.items.length
-                        "
-                    >
+                        ">
                         <mat-icon>arrow_forward</mat-icon>
                         <span> Reveal next card </span>
                     </button>
@@ -103,16 +97,14 @@
                         ) {
                             <mat-list-item
                                 cdkDrag
-                                (cdkDragDropped)="reorder($event)"
-                            >
+                                (cdkDragDropped)="reorder($event)">
                                 <mat-icon matListItemIcon cdkDragHandle
                                     >drag_indicator</mat-icon
                                 >
                                 <span>{{ item.name }} ({{ item.value }})</span>
                                 <mat-list-item
                                     *cdkDragPlaceholder
-                                    class="cdk-placeholder"
-                                />
+                                    class="cdk-placeholder" />
                             </mat-list-item>
                             @if (!last) {
                                 <mat-divider />
@@ -128,8 +120,7 @@
                         [disabled]="
                             state.revealedCards < question.items.length ||
                             state.revealedAnswers >= question.items.length
-                        "
-                    >
+                        ">
                         <mat-icon>check_circle</mat-icon>
                         <span>Reveal next answer</span>
                     </button>

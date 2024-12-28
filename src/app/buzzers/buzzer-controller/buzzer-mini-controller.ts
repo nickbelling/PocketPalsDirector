@@ -93,10 +93,10 @@ export class BuzzerMiniController {
     }
 
     public async markCorrect(player: Entity<BuzzerPlayer>): Promise<void> {
-        await this._data.markCorrect(player.firebaseId);
+        await this._data.markCorrect(player.id);
     }
 
     public async markIncorrect(player: Entity<BuzzerPlayer>): Promise<void> {
-        await this._data.markIncorrect(player.firebaseId);
+        await this._data.markIncorrect(player.id);
     }
 }

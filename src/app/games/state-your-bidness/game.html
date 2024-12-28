@@ -3,11 +3,8 @@
 @if (currentQuestion() === undefined) {
     <div @fadeInOut class="game-panel">
         <categories>
-            @for (question of gameQuestions(); track question.firebaseId) {
-                <category
-                    [selected]="
-                        state.questionsDone.includes(question.firebaseId)
-                    "
+            @for (question of gameQuestions(); track question.id) {
+                <category [selected]="state.questionsDone.includes(question.id)"
                     >{{ question.name }}
                 </category>
             }
@@ -28,8 +25,7 @@
             @for (answer of guessedAnswers(); track answer) {
                 <div
                     class="box correct animate__animated animate__pulse"
-                    [fitText]="answer"
-                >
+                    [fitText]="answer">
                     <span>{{ answer }}</span>
                 </div>
             }

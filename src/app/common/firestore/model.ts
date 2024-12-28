@@ -1,6 +1,6 @@
 import { Timestamp } from 'firebase/firestore';
 
 export type Entity<TEntity extends object> = TEntity & {
-    firebaseId: string;
+    id: string;
     createdAt: Timestamp | null;
 };

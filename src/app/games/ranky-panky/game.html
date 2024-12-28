@@ -7,9 +7,7 @@
         <categories>
             @for (question of questions; track $index) {
                 <category
-                    [selected]="
-                        state.questionsDone.includes(question.firebaseId)
-                    "
+                    [selected]="state.questionsDone.includes(question.id)"
                     >{{ question.name }}</category
                 >
             }
@@ -24,8 +22,7 @@
                     @let path = item.uploadedFilePath;
                     <playing-card
                         slideItem
-                        [showingFront]="$index + 1 <= state.revealedCards"
-                    >
+                        [showingFront]="$index + 1 <= state.revealedCards">
                         <playing-card-back>
                             <img src="{{ cardBackUrl }}" />
                         </playing-card-back>
@@ -50,8 +47,7 @@
                         slideItem
                         [showingFront]="
                             answers().length - state.revealedAnswers <= $index
-                        "
-                    >
+                        ">
                         <playing-card-back>
                             <img src="{{ cardBackUrl }}" />
                         </playing-card-back>

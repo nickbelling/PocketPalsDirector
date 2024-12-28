@@ -21,16 +21,16 @@ export function getConverter<TDocType extends object>(): FirestoreDataConverter<
 > {
     return {
         toFirestore: (data: Entity<TDocType>): TDocType => {
-            // Strip out firebaseId before saving if it's in the passed-in
+            // Strip out id before saving if it's in the passed-in
             // object, since that's a meta-field we use client-side only.
-            const { firebaseId, ...rest } = data;
+            const { id, ...rest } = data;
             return rest as TDocType;
         },
         fromFirestore: (snapshot: QueryDocumentSnapshot): Entity<TDocType> => {
             const data = snapshot.data() as TDocType;
 
             const entity: Entity<TDocType> = {
-                firebaseId: snapshot.id,
+                id: snapshot.id,
                 // default to null, but it will be overridden if "...data" has it
                 createdAt: null,
                 ...data,

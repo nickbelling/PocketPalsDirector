@@ -107,7 +107,7 @@ export class BuzzerDirectorDataStore {
     public async deleteTeam(team: Entity<BuzzerTeam>): Promise<void> {
         const teamRef = doc(
             this._firestore,
-            `${this._teamsRef.path}/${team.firebaseId}`,
+            `${this._teamsRef.path}/${team.id}`,
         );
         await deleteDoc(teamRef);
     }
@@ -149,7 +149,7 @@ export class BuzzerDirectorDataStore {
 
         const playerRef = doc(
             this._firestore,
-            `${this._playersRef.path}/${player.firebaseId}`,
+            `${this._playersRef.path}/${player.id}`,
         );
         await deleteDoc(playerRef);
     }
@@ -170,7 +170,7 @@ export class BuzzerDirectorDataStore {
 
         players.forEach((player) => {
             if (player.buzzTimestamp !== null) {
-                const playerRef = this._getPlayerRef(player.firebaseId);
+                const playerRef = this._getPlayerRef(player.id);
                 batch.set(playerRef, { buzzTimestamp: null }, { merge: true });
             }
         });
@@ -195,7 +195,7 @@ export class BuzzerDirectorDataStore {
 
         players.forEach((player) => {
             if (player.lockedOut !== null) {
-                const playerRef = this._getPlayerRef(player.firebaseId);
+                const playerRef = this._getPlayerRef(player.id);
                 batch.set(playerRef, { lockedOut: false }, { merge: true });
             }
         });
@@ -211,7 +211,7 @@ export class BuzzerDirectorDataStore {
         // Unlock all players and reset their buzzers
         players.forEach((player) => {
             if (player.lockedOut || player.buzzTimestamp !== null) {
-                const playerRef = this._getPlayerRef(player.firebaseId);
+                const playerRef = this._getPlayerRef(player.id);
                 batch.set(
                     playerRef,
                     { buzzTimestamp: null, lockedOut: false },

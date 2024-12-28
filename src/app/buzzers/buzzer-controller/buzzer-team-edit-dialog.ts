@@ -55,7 +55,7 @@ export class BuzzerTeamEditDialog extends BaseEntityEditDialog<BuzzerTeam> {
         this.loading.set(true);
         try {
             if (this.editing) {
-                await this._data.editTeam(this.firebaseId()!, {
+                await this._data.editTeam(this.id()!, {
                     name: this.name(),
                     color: this.color(),
                 });

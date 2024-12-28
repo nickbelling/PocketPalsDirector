@@ -12,7 +12,7 @@
             </button>
         </div>
 
-        @for (team of teams(); track team.firebaseId) {
+        @for (team of teams(); track team.id) {
             <mat-card class="layout-row layout-items-middle p g">
                 <span class="team-color" [style.background-color]="team.color"
                     >&nbsp;</span
@@ -26,22 +26,20 @@
                 <button
                     mat-flat-button
                     class="error"
-                    (click)="deleteTeam(team)"
-                >
+                    (click)="deleteTeam(team)">
                     <mat-icon>delete</mat-icon>
                     <span>Delete</span>
                 </button>
             </mat-card>
         }
 
-        @for (player of players(); track player.firebaseId) {
+        @for (player of players(); track player.id) {
             @let playerTeam = player.teamId | team: teams();
             <mat-card class="player-card layout-row layout-items-middle p g">
                 <player
                     [player]="player"
                     [animated]="false"
-                    [team]="playerTeam"
-                />
+                    [team]="playerTeam" />
                 <div class="layout-column layout-fill g">
                     <div class="layout-row layout-items-fill g">
                         <button mat-flat-button (click)="editPlayer(player)">
@@ -51,16 +49,14 @@
                         <button
                             mat-flat-button
                             (click)="playSound(player.soundEffect)"
-                            [disabled]="player.soundEffect === null"
-                        >
+                            [disabled]="player.soundEffect === null">
                             <mat-icon>play_arrow</mat-icon>
                             <span>Play sound</span>
                         </button>
                         <button
                             mat-flat-button
                             class="error"
-                            (click)="deletePlayer(player)"
-                        >
+                            (click)="deletePlayer(player)">
                             <mat-icon>delete</mat-icon>
                             <span>Delete</span>
                         </button>
@@ -70,26 +66,23 @@
                             <mat-label>Browser source URL</mat-label>
                             <input
                                 matInput
-                                [value]="buzzerBaseUrl + player.firebaseId"
-                                readonly
-                            />
+                                [value]="buzzerBaseUrl + player.id"
+                                readonly />
                             <button
                                 mat-icon-button
                                 matSuffix
                                 matTooltip="Copy to clipboard"
                                 [cdkCopyToClipboard]="
-                                    buzzerBaseUrl + player.firebaseId
-                                "
-                            >
+                                    buzzerBaseUrl + player.id
+                                ">
                                 <mat-icon>content_copy</mat-icon>
                             </button>
                             <a
                                 mat-icon-button
                                 matSuffix
                                 matTooltip="Open in new tab"
-                                href="{{ buzzerBaseUrl + player.firebaseId }}"
-                                target="_blank"
-                            >
+                                href="{{ buzzerBaseUrl + player.id }}"
+                                target="_blank">
                                 <mat-icon>open_in_new</mat-icon>
                             </a>
                         </mat-form-field>
@@ -111,8 +104,7 @@
                 mat-icon-button
                 matSuffix
                 matTooltip="Copy to clipboard"
-                [cdkCopyToClipboard]="buzzerDisplayUrl"
-            >
+                [cdkCopyToClipboard]="buzzerDisplayUrl">
                 <mat-icon>content_copy</mat-icon>
             </button>
             <a
@@ -120,8 +112,7 @@
                 matSuffix
                 matTooltip="Open in new tab"
                 href="{{ buzzerDisplayUrl }}"
-                target="_blank"
-            >
+                target="_blank">
                 <mat-icon>open_in_new</mat-icon>
             </a>
         </mat-form-field>

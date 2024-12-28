@@ -1,12 +1,11 @@
 <div class="row">
-    @for (player of buzzedInPlayers(); track player.firebaseId) {
+    @for (player of buzzedInPlayers(); track player.id) {
         <div @growIn @growOut @fadeOut class="player">
             <player
                 class="p"
                 [player]="player"
                 [animated]="true"
-                [team]="player.teamId | team: teams()"
-            />
+                [team]="player.teamId | team: teams()" />
         </div>
     }
 </div>

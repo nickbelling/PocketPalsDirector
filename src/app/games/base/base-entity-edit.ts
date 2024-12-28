@@ -12,7 +12,7 @@ export class BaseEntityEditDialog<TEntity extends object> {
     protected loading = signal<boolean>(false);
     protected editing: boolean =
         this.entity !== undefined && this.entity !== null;
-    protected firebaseId = computed(() => this.entity?.firebaseId);
+    protected id = computed(() => this.entity?.id);
 
     constructor() {
         console.log('entity:', this.entity);

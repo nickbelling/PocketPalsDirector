@@ -80,7 +80,7 @@ export class BuzzerPlayerAddDialog extends BaseEntityEditDialog<BuzzerPlayer> {
                     partialPlayer.soundEffect = soundId;
                 }
 
-                await this._data.editPlayer(entity.firebaseId, partialPlayer);
+                await this._data.editPlayer(entity.id, partialPlayer);
 
                 this.uploadProgress.set(100);
             } else {

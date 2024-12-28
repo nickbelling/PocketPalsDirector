@@ -15,8 +15,8 @@
         <mat-label>Team</mat-label>
         <mat-select [(ngModel)]="teamId">
             <mat-option [value]="null">None</mat-option>
-            @for (team of teams(); track team.firebaseId) {
-                <mat-option [value]="team.firebaseId">
+            @for (team of teams(); track team.id) {
+                <mat-option [value]="team.id">
                     {{ team.name }}
                 </mat-option>
             }
@@ -31,8 +31,7 @@
                 imageFileInput.files![0]
                     ? imageFileInput.files![0].name
                     : 'Upload a file'
-            "
-        />
+            " />
         <button matSuffix mat-button (click)="imageFileInput.click()">
             Choose file
         </button>
@@ -46,8 +45,7 @@
                 soundFileInput.files![0]
                     ? soundFileInput.files![0].name
                     : 'Upload a file'
-            "
-        />
+            " />
         <button matSuffix mat-button (click)="soundFileInput.click()">
             Choose file
         </button>
@@ -57,15 +55,13 @@
         #imageFileInput
         hidden
         accept="image/*"
-        (change)="imageFileToUpload.set(imageFileInput.files![0])"
-    />
+        (change)="imageFileToUpload.set(imageFileInput.files![0])" />
     <input
         type="file"
         #soundFileInput
         hidden
         accept="audio/*"
-        (change)="soundFileToUpload.set(soundFileInput.files![0])"
-    />
+        (change)="soundFileToUpload.set(soundFileInput.files![0])" />
     <mat-progress-bar value="{{ uploadProgress() }}" />
 </mat-dialog-content>
 
@@ -74,8 +70,7 @@
     <button
         mat-flat-button
         [disabled]="!isValid() || loading()"
-        (click)="submit()"
-    >
+        (click)="submit()">
         @if (editing) {
             <span>Edit</span>
         } @else {

@@ -10,11 +10,10 @@
         <mat-label>Current question</mat-label>
         <mat-select
             [value]="currentQuestionId()"
-            (valueChange)="setQuestion($event)"
-        >
+            (valueChange)="setQuestion($event)">
             <mat-option [value]="null">None</mat-option>
-            @for (question of questions; track question.firebaseId) {
-                <mat-option [value]="question.firebaseId">
+            @for (question of questions; track question.id) {
+                <mat-option [value]="question.id">
                     <span
                         >{{ question.name }} ({{ question.items.length }})</span
                     >
@@ -35,8 +34,7 @@
         <button
             mat-flat-button
             (click)="editQuestion(currentQuestion())"
-            [disabled]="currentQuestion() === undefined"
-        >
+            [disabled]="currentQuestion() === undefined">
             <mat-icon>edit</mat-icon>
             <span>Edit question</span>
         </button>
@@ -44,8 +42,7 @@
             mat-flat-button
             class="error"
             (click)="deleteQuestion(currentQuestion()!)"
-            [disabled]="currentQuestion() === undefined"
-        >
+            [disabled]="currentQuestion() === undefined">
             <mat-icon>delete</mat-icon>
             <span>Delete question</span>
         </button>
@@ -59,8 +56,7 @@
             [(ngModel)]="committedTo"
             [min]="0"
             [max]="possibleItems()"
-            [disabled]="currentQuestion() === undefined"
-        />
+            [disabled]="currentQuestion() === undefined" />
         <button
             mat-icon-button
             matSuffix
@@ -69,8 +65,7 @@
             [disabled]="
                 currentQuestion() === undefined ||
                 committedTo() >= possibleItems()
-            "
-        >
+            ">
             <mat-icon>arrow_circle_up</mat-icon>
         </button>
         <button
@@ -78,8 +73,7 @@
             matSuffix
             matTooltip="Decrement - 1"
             (click)="committedTo.set(committedTo() - 1)"
-            [disabled]="currentQuestion() === undefined || committedTo() === 0"
-        >
+            [disabled]="currentQuestion() === undefined || committedTo() === 0">
             <mat-icon>arrow_circle_down</mat-icon>
         </button>
         <button
@@ -90,8 +84,7 @@
             [disabled]="
                 currentQuestion() === undefined ||
                 state.committedTo === committedTo()
-            "
-        >
+            ">
             <mat-icon>save</mat-icon>
         </button>
         <mat-hint
@@ -121,8 +114,7 @@
                         <button
                             mat-raised-button
                             [disabled]="state.guessedAnswers.includes(answer)"
-                            (click)="setGuess(answer)"
-                        >
+                            (click)="setGuess(answer)">
                             <span>{{ answer }}</span>
                         </button>
                     }

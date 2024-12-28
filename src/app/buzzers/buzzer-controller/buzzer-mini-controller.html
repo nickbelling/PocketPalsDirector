@@ -38,7 +38,7 @@
                 <mat-card-title>Buzzed in players</mat-card-title>
             </mat-card-header>
             <mat-list>
-                @for (player of buzzedInPlayers(); track player.firebaseId) {
+                @for (player of buzzedInPlayers(); track player.id) {
                     @let team = player.teamId | team: teams();
                     <mat-list-item>
                         <img
@@ -66,7 +66,7 @@
 
                             <button
                                 mat-icon-button
-                                (click)="resetBuzzer(player.firebaseId)">
+                                (click)="resetBuzzer(player.id)">
                                 <mat-icon>refresh</mat-icon>
                             </button>
                         </div>
@@ -89,7 +89,7 @@
                 <mat-card-title>Buzzed out players</mat-card-title>
             </mat-card-header>
             <mat-list>
-                @for (player of buzzedOutPlayers(); track player.firebaseId) {
+                @for (player of buzzedOutPlayers(); track player.id) {
                     @let team = player.teamId | team: teams();
                     <mat-list-item>
                         <img
@@ -100,9 +100,7 @@
                             }}" />
                         <span>{{ player.name }}</span>
                         <div matListItemMeta class="g">
-                            <button
-                                mat-icon-button
-                                (click)="buzzIn(player.firebaseId)">
+                            <button mat-icon-button (click)="buzzIn(player.id)">
                                 <mat-icon>highlight_mouse_cursor</mat-icon>
                             </button>
 
@@ -110,17 +108,13 @@
                                 <button
                                     mat-mini-fab
                                     class="error"
-                                    (click)="
-                                        toggleLock(player.firebaseId, true)
-                                    ">
+                                    (click)="toggleLock(player.id, true)">
                                     <mat-icon>lock</mat-icon>
                                 </button>
                             } @else {
                                 <button
                                     mat-icon-button
-                                    (click)="
-                                        toggleLock(player.firebaseId, false)
-                                    ">
+                                    (click)="toggleLock(player.id, false)">
                                     <mat-icon>lock_open</mat-icon>
                                 </button>
                             }

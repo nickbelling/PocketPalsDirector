@@ -72,7 +72,7 @@ export abstract class BaseGameDatabase<
             const questions = this.questions();
 
             if (currentQuestion) {
-                return questions.find((q) => q.firebaseId === currentQuestion);
+                return questions.find((q) => q.id === currentQuestion);
             } else {
                 return undefined;
             }
@@ -178,16 +178,16 @@ export abstract class BaseGameDatabase<
 
     /**
      * Edits a question.
-     * @param firebaseId The Firebase ID of the question to edit.
+     * @param id The Firebase ID of the question to edit.
      * @param question The updated question.
      */
     public async editQuestion(
-        firebaseId: string,
+        id: string,
         question: TQuestion | Partial<TQuestion>,
     ): Promise<void> {
         const questionDocRef = doc(
             this._firestore,
-            `${this._questionsRef.path}/${firebaseId}`,
+            `${this._questionsRef.path}/${id}`,
         );
         await setDoc(questionDocRef, question, { merge: true });
     }
@@ -196,16 +196,16 @@ export abstract class BaseGameDatabase<
      * Explicitly sets the `createdAt` value of the given question to a specific
      * point in time. Because questions are ordered by their `createdAt` value,
      * this allows you to reorder them by swapping their `createdAt` values.
-     * @param firebaseId The Firebase ID of the question to set the timestamp of.
+     * @param id The Firebase ID of the question to set the timestamp of.
      * @param timestamp The timestamp to set, in milliseconds since epoch.
      */
     public async setQuestionTimestamp(
-        firebaseId: string,
+        id: string,
         timestamp: Timestamp,
     ): Promise<void> {
         const questionDocRef = doc(
             this._firestore,
-            `${this._questionsRef.path}/${firebaseId}`,
+            `${this._questionsRef.path}/${id}`,
         );
         await setDoc(questionDocRef, { createdAt: timestamp }, { merge: true });
     }
@@ -216,7 +216,7 @@ export abstract class BaseGameDatabase<
     public async deleteQuestion(question: Entity<TQuestion>): Promise<void> {
         const questionDocRef = doc(
             this._firestore,
-            `${this._questionsRef.path}/${question.firebaseId}`,
+            `${this._questionsRef.path}/${question.id}`,
         );
         await deleteDoc(questionDocRef);
     }

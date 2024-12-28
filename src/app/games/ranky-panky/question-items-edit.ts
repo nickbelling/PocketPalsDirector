@@ -57,7 +57,7 @@ export class RankyPankyQuestionItemsEditDialog extends BaseQuestionEditDialog<Ra
 
         const path = await this.uploadFile(
             resizedImage,
-            `${this.firebaseId}/${uuid()}`,
+            `${this.id}/${uuid()}`,
             (progress) => this.uploadProgress.set(progress),
         );
         const newItem: RankyPankyQuestionItem = {

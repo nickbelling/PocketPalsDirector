@@ -14,7 +14,7 @@ export class BuzzerTeamPipe implements PipeTransform {
         if (!teamId) {
             return undefined;
         } else {
-            return teams.find((t) => t.firebaseId === teamId);
+            return teams.find((t) => t.id === teamId);
         }
     }
 }

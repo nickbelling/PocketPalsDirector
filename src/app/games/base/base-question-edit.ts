@@ -23,9 +23,9 @@ export class BaseQuestionEditDialog<
     protected async editQuestion(
         question: TQuestion | Partial<TQuestion>,
     ): Promise<void> {
-        const firebaseId = this.firebaseId();
-        if (firebaseId) {
-            await this.db.editQuestion(firebaseId, question);
+        const id = this.id();
+        if (id) {
+            await this.db.editQuestion(id, question);
         } else {
             throw new Error('Dialog not in edit mode.');
         }

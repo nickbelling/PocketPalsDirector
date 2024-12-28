@@ -122,7 +122,7 @@ export class BuzzerDisplay {
             const buzzedInPlayers = this.buzzedInPlayers();
 
             buzzedInPlayers.forEach(async (player) => {
-                if (!this._previousBuzzedInPlayerIds.has(player.firebaseId)) {
+                if (!this._previousBuzzedInPlayerIds.has(player.id)) {
                     await this._sound.playStorageSound(
                         `${BUZZERS_STORAGE_SOUNDS_PATH}/${player.soundEffect}`,
                     );
@@ -130,7 +130,7 @@ export class BuzzerDisplay {
             });
 
             this._previousBuzzedInPlayerIds = new Set(
-                buzzedInPlayers.map((p) => p.firebaseId),
+                buzzedInPlayers.map((p) => p.id),
             );
         });
     }
