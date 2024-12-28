@@ -1,11 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, linkedSignal } from '@angular/core';
+import {
+    Component,
+    computed,
+    effect,
+    inject,
+    linkedSignal,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Title } from '@angular/platform-browser';
 import {
     BuzzerPlayerDataStore,
     providePlayerIdToken,
 } from '../data/player-data';
+
+export type BuzzerButtonState = 'disabled' | 'locked' | 'buzzed' | 'active';
 
 @Component({
     imports: [CommonModule, MatButtonModule],
@@ -30,6 +38,21 @@ export class BuzzerPlayerButton {
             player.buzzTimestamp === null &&
             !player.lockedOut
         );
+    });
+
+    protected buzzerState = computed<BuzzerButtonState>(() => {
+        const state = this.state();
+        const player = this.player();
+
+        if (!state.buzzersEnabled) {
+            return 'disabled';
+        } else if (player.lockedOut) {
+            return 'locked';
+        } else if (player.buzzTimestamp !== null) {
+            return 'buzzed';
+        } else {
+            return 'active';
+        }
     });
 
     constructor() {

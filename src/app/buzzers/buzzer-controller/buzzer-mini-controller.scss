@@ -1,5 +1,25 @@
+@use '@angular/material' as mat;
+
 .team-color {
     aspect-ratio: 1/1;
     height: 20px;
     border-radius: 1000px;
+}
+
+.correct {
+    @include mat.icon-button-overrides(
+        (
+            icon-color: 'green',
+            state-layer-color: 'green',
+        )
+    );
+}
+
+.incorrect {
+    @include mat.icon-button-overrides(
+        (
+            icon-color: var(--mat-sys-error),
+            state-layer-color: var(--mat-sys-error),
+        )
+    );
 }

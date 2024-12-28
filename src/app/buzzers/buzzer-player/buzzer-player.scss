@@ -1,13 +1,34 @@
 :host {
     height: 100%;
     align-content: center;
+    font-family: var(--game-font-family);
 }
 
 button {
-    height: 30vh;
-    width: 30vh;
+    height: 300px;
+    width: 300px;
     border-radius: 1000px;
     box-shadow: var(--mat-sys-level5);
+
+    font-family: var(--game-font-family);
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 50px;
+    background-color: var(--mat-sys-primary);
+    color: var(--mat-sys-on-primary);
+
+    &:disabled {
+        background-color: color-mix(
+            in srgb,
+            var(--mat-sys-on-surface) 12%,
+            transparent
+        );
+        color: color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent);
+    }
+
+    &:active {
+        background-color: var(--mat-sys-on-surface);
+    }
 }
 
 h1,

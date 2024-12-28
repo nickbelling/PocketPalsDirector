@@ -8,6 +8,8 @@ export const BUZZERS_STORAGE_SOUNDS_PATH = 'buzzer/sounds';
 
 export interface BuzzerState {
     buzzersEnabled: boolean;
+    correctLocksNextQuestion: boolean;
+    incorrectLocksThisQuestion: boolean;
 }
 
 export interface BuzzerPlayer {
@@ -27,7 +29,9 @@ export interface BuzzerTeam {
 }
 
 export const DEFAULT_BUZZER_STATE: BuzzerState = {
-    buzzersEnabled: true,
+    buzzersEnabled: false,
+    correctLocksNextQuestion: true,
+    incorrectLocksThisQuestion: true,
 };
 
 export const DEFAULT_BUZZER_PLAYER: BuzzerPlayer = {

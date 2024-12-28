@@ -6,12 +6,12 @@ import {
     arraysAreEqual,
     fadeInAnimation,
     fadeOutAnimation,
-    getCachedDownloadUrl,
     getCachedDownloadUrls,
     Player,
     preloadAudio,
     preloadImages,
     SlideModule,
+    SoundService,
     STORAGE,
 } from '../../common';
 import { CommonPipesModule } from '../../common/pipes/pipes.module';
@@ -52,6 +52,7 @@ import {
 })
 export class BuzzerDisplay {
     private _data = inject(BuzzerDisplayDataStore);
+    private _sound = inject(SoundService);
     private _previousBuzzedInPlayerIds: Set<string> = new Set<string>();
 
     protected BUZZERS_STORAGE_IMAGES_PATH = BUZZERS_STORAGE_IMAGES_PATH;
@@ -117,18 +118,14 @@ export class BuzzerDisplay {
         });
 
         // Play sound effect whenever a new player buzzes in
-        effect(() => {
+        effect(async () => {
             const buzzedInPlayers = this.buzzedInPlayers();
 
-            buzzedInPlayers.forEach((player) => {
+            buzzedInPlayers.forEach(async (player) => {
                 if (!this._previousBuzzedInPlayerIds.has(player.firebaseId)) {
-                    getCachedDownloadUrl(
-                        storage,
+                    await this._sound.playStorageSound(
                         `${BUZZERS_STORAGE_SOUNDS_PATH}/${player.soundEffect}`,
-                    ).then((url: string) => {
-                        const audio = new Audio(url);
-                        audio.play();
-                    });
+                    );
                 }
             });
 

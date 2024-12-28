@@ -1,5 +1,34 @@
 <div class="layout-column layout-items-center g">
     <h1>{{ player().name }}'s Buzzer</h1>
     <h2>{{ team()?.name || 'No team' }}</h2>
-    <button (click)="buzz()" [disabled]="!canBuzz()">Buzz</button>
+    <button (click)="buzz()" [disabled]="!canBuzz()">
+        @switch (buzzerState()) {
+            @case ('disabled') {
+                <span>Disabled</span>
+            }
+            @case ('locked') {
+                <span>Locked</span>
+            }
+            @case ('buzzed') {
+                <span>Buzzed in</span>
+            }
+            @case ('active') {
+                <span>Buzz</span>
+            }
+        }
+    </button>
+    @switch (buzzerState()) {
+        @case ('disabled') {
+            <p>Buzzers are not currently enabled.</p>
+        }
+        @case ('locked') {
+            <p>Your buzzer is locked until the next question.</p>
+        }
+        @case ('buzzed') {
+            <p>You have successfully buzzed in.</p>
+        }
+        @case ('active') {
+            <p>You may buzz in when you are ready to answer.</p>
+        }
+    }
 </div>

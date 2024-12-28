@@ -52,6 +52,22 @@ export class BuzzerMiniController {
         }
     }
 
+    public async setCorrectLocksNextQuestion(value: boolean): Promise<void> {
+        if (this.state().correctLocksNextQuestion !== value) {
+            await this._data.setState({
+                correctLocksNextQuestion: value,
+            });
+        }
+    }
+
+    public async setIncorrectLocksThisQuestion(value: boolean): Promise<void> {
+        if (this.state().incorrectLocksThisQuestion !== value) {
+            await this._data.setState({
+                incorrectLocksThisQuestion: value,
+            });
+        }
+    }
+
     public async buzzIn(playerId: string): Promise<void> {
         await this._data.buzzInPlayer(playerId);
     }
@@ -76,7 +92,11 @@ export class BuzzerMiniController {
         await this._data.unlockAllPlayers();
     }
 
-    public toPlayer(player: Entity<BuzzerPlayer>): Entity<BuzzerPlayer> {
-        return player;
+    public async markCorrect(player: Entity<BuzzerPlayer>): Promise<void> {
+        await this._data.markCorrect(player.firebaseId);
+    }
+
+    public async markIncorrect(player: Entity<BuzzerPlayer>): Promise<void> {
+        await this._data.markIncorrect(player.firebaseId);
     }
 }

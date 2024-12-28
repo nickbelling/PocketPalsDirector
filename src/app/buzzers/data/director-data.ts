@@ -203,6 +203,43 @@ export class BuzzerDirectorDataStore {
         await batch.commit();
     }
 
+    public async markCorrect(playerId: string): Promise<void> {
+        const players = this.players();
+        const state = this.state();
+        const batch = writeBatch(this._firestore);
+
+        // Unlock all players and reset their buzzers
+        players.forEach((player) => {
+            if (player.lockedOut || player.buzzTimestamp !== null) {
+                const playerRef = this._getPlayerRef(player.firebaseId);
+                batch.set(
+                    playerRef,
+                    { buzzTimestamp: null, lockedOut: false },
+                    { merge: true },
+                );
+            }
+        });
+
+        if (state.correctLocksNextQuestion) {
+            // Specifically lock the player who correctly answered
+            const playerRef = this._getPlayerRef(playerId);
+            batch.set(playerRef, { lockedOut: true }, { merge: true });
+        }
+
+        await batch.commit();
+    }
+
+    public async markIncorrect(playerId: string): Promise<void> {
+        const state = this.state();
+
+        if (state.incorrectLocksThisQuestion) {
+            // Lock this player (this also implicitly resets their buzzer)
+            await this.lockPlayer(playerId);
+        } else {
+            await this.resetPlayerBuzzer(playerId);
+        }
+    }
+
     public async uploadImage(imageFile: File): Promise<string> {
         const imageId = v4();
         const resized = await resizeImage(imageFile, 300, 300, 0.5);

@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { BuzzerMiniController } from '../buzzers/buzzer-controller/buzzer-mini-controller';
 import { GamePreview, injectRouteData } from '../common';
 import { GameDefinition } from '../games/games';
 
@@ -24,6 +25,7 @@ import { GameDefinition } from '../games/games';
         MatInputModule,
         MatFormFieldModule,
         MatTooltipModule,
+        BuzzerMiniController,
     ],
     templateUrl: './game-director.html',
     styleUrl: './game-director.scss',

@@ -1,24 +1,33 @@
+@let _state = state();
+
 <div class="layout-column g">
     <div class="layout-row layout-items-middle g">
         <mat-slide-toggle
-            [checked]="state().buzzersEnabled"
-            (change)="setBuzzersEnabled($event.checked)"
-        >
+            [checked]="_state.buzzersEnabled"
+            (change)="setBuzzersEnabled($event.checked)">
             <span>Buzzers enabled</span>
+        </mat-slide-toggle>
+        <mat-slide-toggle
+            [checked]="_state.correctLocksNextQuestion"
+            (change)="setCorrectLocksNextQuestion($event.checked)">
+            Lock on correct
+        </mat-slide-toggle>
+        <mat-slide-toggle
+            [checked]="_state.incorrectLocksThisQuestion"
+            (change)="setIncorrectLocksThisQuestion($event.checked)">
+            Lock on incorrect
         </mat-slide-toggle>
         <button
             mat-flat-button
             (click)="resetAllBuzzers()"
-            [disabled]="!anyPlayersBuzzed()"
-        >
+            [disabled]="!anyPlayersBuzzed()">
             <mat-icon>refresh</mat-icon>
             <span>Reset all</span>
         </button>
         <button
             mat-flat-button
             (click)="unlockAll()"
-            [disabled]="!anyPlayersLocked()"
-        >
+            [disabled]="!anyPlayersLocked()">
             <mat-icon>lock_open</mat-icon>
             <span>Unlock all</span>
         </button>
@@ -30,19 +39,48 @@
             </mat-card-header>
             <mat-list>
                 @for (player of buzzedInPlayers(); track player.firebaseId) {
-                    <ng-container
-                        *ngTemplateOutlet="
-                            playerListItem;
-                            context: { $implicit: player }
-                        "
-                    />
+                    @let team = player.teamId | team: teams();
+                    <mat-list-item>
+                        <img
+                            matListItemAvatar
+                            src="{{
+                                team?.color || 'rgb(59, 149, 237)'
+                                    | imageColorSrc
+                            }}" />
+                        <span>{{ player.name }}</span>
+                        <div matListItemMeta class="g">
+                            @if ($first) {
+                                <button
+                                    mat-icon-button
+                                    class="correct"
+                                    (click)="markCorrect(player)">
+                                    <mat-icon>check_circle</mat-icon>
+                                </button>
+                                <button
+                                    mat-icon-button
+                                    class="incorrect"
+                                    (click)="markIncorrect(player)">
+                                    <mat-icon>cancel</mat-icon>
+                                </button>
+                            }
+
+                            <button
+                                mat-icon-button
+                                (click)="resetBuzzer(player.firebaseId)">
+                                <mat-icon>refresh</mat-icon>
+                            </button>
+                        </div>
+                    </mat-list-item>
                 }
                 @for (
                     number of players().length - buzzedInPlayers().length
                         | numberArray;
                     track number
                 ) {
-                    <mat-list-item></mat-list-item>
+                    <mat-list-item disabled
+                        >Player
+                        {{ number + buzzedInPlayers().length }}</mat-list-item
+                    >
                 }
             </mat-list>
         </mat-card>
@@ -52,58 +90,44 @@
             </mat-card-header>
             <mat-list>
                 @for (player of buzzedOutPlayers(); track player.firebaseId) {
-                    <ng-container
-                        *ngTemplateOutlet="
-                            playerListItem;
-                            context: { $implicit: player }
-                        "
-                    />
+                    @let team = player.teamId | team: teams();
+                    <mat-list-item>
+                        <img
+                            matListItemAvatar
+                            src="{{
+                                team?.color || 'rgb(59, 149, 237)'
+                                    | imageColorSrc
+                            }}" />
+                        <span>{{ player.name }}</span>
+                        <div matListItemMeta class="g">
+                            <button
+                                mat-icon-button
+                                (click)="buzzIn(player.firebaseId)">
+                                <mat-icon>highlight_mouse_cursor</mat-icon>
+                            </button>
+
+                            @if (player.lockedOut) {
+                                <button
+                                    mat-mini-fab
+                                    class="error"
+                                    (click)="
+                                        toggleLock(player.firebaseId, true)
+                                    ">
+                                    <mat-icon>lock</mat-icon>
+                                </button>
+                            } @else {
+                                <button
+                                    mat-icon-button
+                                    (click)="
+                                        toggleLock(player.firebaseId, false)
+                                    ">
+                                    <mat-icon>lock_open</mat-icon>
+                                </button>
+                            }
+                        </div>
+                    </mat-list-item>
                 }
             </mat-list>
         </mat-card>
     </div>
 </div>
-
-<ng-template #playerListItem let-untypedPlayer>
-    @let player = toPlayer(untypedPlayer);
-    @let team = player.teamId | team: teams();
-
-    <mat-list-item>
-        <img
-            matListItemAvatar
-            src="{{ team?.color || 'rgb(59, 149, 237)' | imageColorSrc }}"
-        />
-        <span>{{ player.name }}</span>
-        <div matListItemMeta class="g">
-            @if (player.lockedOut) {
-                <button
-                    mat-mini-fab
-                    class="error"
-                    (click)="toggleLock(player.firebaseId, true)"
-                >
-                    <mat-icon>lock</mat-icon>
-                </button>
-            } @else {
-                <button
-                    mat-icon-button
-                    (click)="toggleLock(player.firebaseId, false)"
-                >
-                    <mat-icon>lock_open</mat-icon>
-                </button>
-            }
-
-            @if (player.buzzTimestamp !== null) {
-                <button
-                    mat-icon-button
-                    (click)="resetBuzzer(player.firebaseId)"
-                >
-                    <mat-icon>refresh</mat-icon>
-                </button>
-            } @else {
-                <button mat-icon-button (click)="buzzIn(player.firebaseId)">
-                    <mat-icon>highlight_mouse_cursor</mat-icon>
-                </button>
-            }
-        </div>
-    </mat-list-item>
-</ng-template>

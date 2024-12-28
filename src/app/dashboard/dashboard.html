@@ -9,6 +9,9 @@
         </button>
         <button mat-button [routerLink]="'players'">Players</button>
     }
+    <mat-slide-toggle [(ngModel)]="soundEnabled">
+        <span>Sound enabled</span>
+    </mat-slide-toggle>
     <span class="layout-fill"></span>
     @if (auth.user()) {
         <button mat-button (click)="auth.signOut()">
