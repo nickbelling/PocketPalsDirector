@@ -17,6 +17,8 @@ button {
     background-color: var(--mat-sys-primary);
     color: var(--mat-sys-on-primary);
 
+    cursor: pointer;
+
     &:disabled {
         background-color: color-mix(
             in srgb,
@@ -24,6 +26,7 @@ button {
             transparent
         );
         color: color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent);
+        cursor: not-allowed;
     }
 
     &:active {
@@ -35,4 +38,9 @@ h1,
 h2,
 h3 {
     margin: 0;
+}
+
+h1 {
+    text-transform: uppercase;
+    font-size: 50px;
 }

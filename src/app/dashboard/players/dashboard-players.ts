@@ -96,6 +96,7 @@ export class DashboardPlayers {
         if (soundEffectPath != null) {
             await this._sound.playStorageSound(
                 this.soundsBasePath + '/' + soundEffectPath,
+                true,
             );
         }
     }

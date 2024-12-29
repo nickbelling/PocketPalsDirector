@@ -8,10 +8,8 @@
             <mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
         </button>
         <button mat-button [routerLink]="'players'">Players</button>
+        <button mat-button [matMenuTriggerFor]="optionsMenu">Options</button>
     }
-    <mat-slide-toggle [(ngModel)]="soundEnabled">
-        <span>Sound enabled</span>
-    </mat-slide-toggle>
     <span class="layout-fill"></span>
     @if (auth.user()) {
         <button mat-button (click)="auth.signOut()">
@@ -29,10 +27,22 @@
     <router-outlet></router-outlet>
 </div>
 
-<mat-menu #gameSelectMenu>
+<mat-menu #gameSelectMenu="matMenu">
     @for (game of games; track $index) {
         <button mat-menu-item [routerLink]="['director', game.slug]">
             <span>{{ game.name }}</span>
         </button>
     }
+</mat-menu>
+
+<mat-menu #optionsMenu="matMenu">
+    <button mat-menu-item (click)="soundEnabled.set(!soundEnabled())">
+        <mat-icon>{{ soundEnabled() ? 'volume_off' : 'volume_up' }}</mat-icon>
+        @if (soundEnabled()) {
+            <span>Mute sounds for director</span>
+        } @else {
+            <span>Enable sounds for director</span>
+        }
+    </button>
+    <mat-divider />
 </mat-menu>

@@ -9,17 +9,23 @@ export class SoundService {
 
     public readonly soundEnabled = signal<boolean>(true);
 
-    public async playStorageSound(firebasePath: string): Promise<void> {
+    public async playStorageSound(
+        firebasePath: string,
+        forcePlay: boolean = false,
+    ): Promise<void> {
         const downloadUrl = await getCachedDownloadUrl(
             this._storage,
             firebasePath,
         );
 
-        await this.playSound(downloadUrl);
+        await this.playSound(downloadUrl, forcePlay);
     }
 
-    public async playSound(src: string): Promise<void> {
-        if (!this.soundEnabled()) {
+    public async playSound(
+        src: string,
+        forcePlay: boolean = false,
+    ): Promise<void> {
+        if (!this.soundEnabled() && !forcePlay) {
             return;
         }
 

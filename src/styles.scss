@@ -28,3 +28,12 @@ body {
     margin: 0;
     font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
+
+.dot {
+    height: 1.2em;
+    width: 1.2em;
+    background-color: var(--base-blue);
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: text-bottom;
+}

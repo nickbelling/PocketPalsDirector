@@ -1,4 +1,12 @@
 @let _state = state();
+@let markCorrectTooltip =
+    _state.correctLocksNextQuestion
+        ? 'Mark this player as correct. This will reset all buzzers and lock this player from answering the next question. Any locked players will be unlocked.'
+        : 'Mark this player as correct. This will reset all buzzers. Any locked players will be unlocked.';
+@let markIncorrectTooltip =
+    _state.incorrectLocksThisQuestion
+        ? 'Mark this player as incorrect. This will reset their buzzer and lock them until another player is marked correct.'
+        : 'Mark this player as incorrect. This will reset their buzzer and they will immediately be able to buzz in again.';
 
 <div class="layout-column g">
     <div class="layout-row layout-items-middle g">
@@ -6,16 +14,6 @@
             [checked]="_state.buzzersEnabled"
             (change)="setBuzzersEnabled($event.checked)">
             <span>Buzzers enabled</span>
-        </mat-slide-toggle>
-        <mat-slide-toggle
-            [checked]="_state.correctLocksNextQuestion"
-            (change)="setCorrectLocksNextQuestion($event.checked)">
-            Lock on correct
-        </mat-slide-toggle>
-        <mat-slide-toggle
-            [checked]="_state.incorrectLocksThisQuestion"
-            (change)="setIncorrectLocksThisQuestion($event.checked)">
-            Lock on incorrect
         </mat-slide-toggle>
         <button
             mat-flat-button
@@ -31,6 +29,16 @@
             <mat-icon>lock_open</mat-icon>
             <span>Unlock all</span>
         </button>
+        <span class="layout-fill"></span>
+        <button
+            mat-flat-button
+            #optionsButton="cdkOverlayOrigin"
+            cdkOverlayOrigin
+            (click)="optionsOpen.set(!optionsOpen())">
+            <mat-icon>settings</mat-icon>
+            <span>Options</span>
+            <mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
+        </button>
     </div>
     <div class="layout-row layout-items-fill g">
         <mat-card>
@@ -41,24 +49,25 @@
                 @for (player of buzzedInPlayers(); track player.id) {
                     @let team = player.teamId | team: teams();
                     <mat-list-item>
-                        <img
-                            matListItemAvatar
-                            src="{{
+                        <span
+                            class="dot"
+                            [style.background-color]="
                                 team?.color || 'rgb(59, 149, 237)'
-                                    | imageColorSrc
-                            }}" />
-                        <span>{{ player.name }}</span>
+                            "></span>
+                        <span> {{ player.name }}</span>
                         <div matListItemMeta class="g">
                             @if ($first) {
                                 <button
                                     mat-icon-button
                                     class="correct"
+                                    [matTooltip]="markCorrectTooltip"
                                     (click)="markCorrect(player)">
                                     <mat-icon>check_circle</mat-icon>
                                 </button>
                                 <button
                                     mat-icon-button
                                     class="incorrect"
+                                    [matTooltip]="markIncorrectTooltip"
                                     (click)="markIncorrect(player)">
                                     <mat-icon>cancel</mat-icon>
                                 </button>
@@ -66,6 +75,7 @@
 
                             <button
                                 mat-icon-button
+                                matTooltip="Reset this player's buzzer. They will be able to immediately buzz in again."
                                 (click)="resetBuzzer(player.id)">
                                 <mat-icon>refresh</mat-icon>
                             </button>
@@ -92,13 +102,12 @@
                 @for (player of buzzedOutPlayers(); track player.id) {
                     @let team = player.teamId | team: teams();
                     <mat-list-item>
-                        <img
-                            matListItemAvatar
-                            src="{{
+                        <span
+                            class="dot"
+                            [style.background-color]="
                                 team?.color || 'rgb(59, 149, 237)'
-                                    | imageColorSrc
-                            }}" />
-                        <span>{{ player.name }}</span>
+                            "></span>
+                        <span> {{ player.name }}</span>
                         <div matListItemMeta class="g">
                             <button mat-icon-button (click)="buzzIn(player.id)">
                                 <mat-icon>highlight_mouse_cursor</mat-icon>
@@ -125,3 +134,37 @@
         </mat-card>
     </div>
 </div>
+
+<ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="optionsButton"
+    [cdkConnectedOverlayOpen]="optionsOpen()"
+    [cdkConnectedOverlayPositions]="[
+        {
+            originX: 'end',
+            originY: 'bottom',
+            overlayX: 'end',
+            overlayY: 'top',
+        },
+    ]"
+    [cdkConnectedOverlayHasBackdrop]="true"
+    (backdropClick)="optionsOpen.set(false)">
+    <mat-card class="layout-column p g">
+        <mat-slide-toggle
+            [checked]="_state.correctLocksNextQuestion"
+            (change)="setCorrectLocksNextQuestion($event.checked)">
+            <span
+                >When correct, lock player for
+                <strong>next</strong> question</span
+            >
+        </mat-slide-toggle>
+        <mat-slide-toggle
+            [checked]="_state.incorrectLocksThisQuestion"
+            (change)="setIncorrectLocksThisQuestion($event.checked)">
+            <span
+                >When incorrect, lock player for
+                <strong>this</strong> question</span
+            >
+        </mat-slide-toggle>
+    </mat-card>
+</ng-template>

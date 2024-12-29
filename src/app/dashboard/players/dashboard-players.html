@@ -14,9 +14,11 @@
 
         @for (team of teams(); track team.id) {
             <mat-card class="layout-row layout-items-middle p g">
-                <span class="team-color" [style.background-color]="team.color"
-                    >&nbsp;</span
-                >
+                <span
+                    class="dot"
+                    [style.background-color]="
+                        team?.color || 'rgb(59, 149, 237)'
+                    "></span>
                 <span>{{ team.name }}</span>
                 <span class="layout-fill"></span>
                 <button mat-flat-button (click)="editTeam(team)">
@@ -93,7 +95,7 @@
     </div>
 
     <div class="layout-column layout-basis-2/3 g">
-        <buzzer-mini-controller />
+        <buzzer-controller />
         <preview>
             <buzzer-display class="bg-preview" />
         </preview>

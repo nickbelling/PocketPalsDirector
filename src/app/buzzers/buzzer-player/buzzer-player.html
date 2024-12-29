@@ -31,4 +31,9 @@
             <p>You may buzz in when you are ready to answer.</p>
         }
     }
+    <mat-slide-toggle
+        [checked]="playSounds()"
+        (change)="playSounds.set($event.checked)">
+        <span>Play a sound when my buzzer becomes ready</span>
+    </mat-slide-toggle>
 </div>

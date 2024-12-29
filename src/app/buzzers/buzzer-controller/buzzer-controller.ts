@@ -1,16 +1,16 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonControllerModule, Entity } from '../../common';
 import { BuzzerTeamPipe } from '../buzzer-team.pipe';
 import { BuzzerDirectorDataStore } from '../data/director-data';
 import { BuzzerPlayer } from '../model';
 
 @Component({
-    selector: 'buzzer-mini-controller',
+    selector: 'buzzer-controller',
     imports: [CommonControllerModule, BuzzerTeamPipe],
-    templateUrl: './buzzer-mini-controller.html',
-    styleUrl: './buzzer-mini-controller.scss',
+    templateUrl: './buzzer-controller.html',
+    styleUrl: './buzzer-controller.scss',
 })
-export class BuzzerMiniController {
+export class BuzzerController {
     private _data = inject(BuzzerDirectorDataStore);
 
     protected state = this._data.state;
@@ -18,6 +18,7 @@ export class BuzzerMiniController {
     protected teams = this._data.teams;
 
     protected buzzerBaseUrl = `${window.location.origin}/buzzer/`;
+    protected optionsOpen = signal<boolean>(false);
 
     protected anyPlayersBuzzed = computed(() =>
         this.players().some((p) => p.buzzTimestamp !== null),

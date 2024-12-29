@@ -5,11 +5,10 @@
         @for (game of games; track $index) {
             <button
                 mat-flat-button
-                [routerLink]="['..', 'director', game.slug]"
-            >
+                [routerLink]="['..', 'director', game.slug]">
                 {{ game.name }}
             </button>
         }
     </div>
-    <buzzer-mini-controller />
+    <buzzer-controller />
 </div>

@@ -1,36 +1,33 @@
 import {
     computed,
-    effect,
     inject,
     Injectable,
     InjectionToken,
     Provider,
+    Signal,
     signal,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {
-    doc,
-    DocumentReference,
-    getDoc,
-    serverTimestamp,
-    setDoc,
-} from 'firebase/firestore';
-import { FIRESTORE, getConverter, subscribeToDocument } from '../../common';
+import { DocumentReference, serverTimestamp, setDoc } from 'firebase/firestore';
+import { BaseFirestoreDataStore, subscribeToDocument } from '../../common';
 import {
     BuzzerPlayer,
     BUZZERS_PLAYERS_COLLECTION_PATH,
-    BUZZERS_STATE_DOC_PATH,
-    BUZZERS_TEAMS_COLLECTION_PATH,
     BuzzerState,
-    BuzzerTeam,
     DEFAULT_BUZZER_PLAYER,
-    DEFAULT_BUZZER_STATE,
 } from '../model';
+import { BuzzerStateDataStore } from './state-data';
+import { BuzzerTeamsDataStore } from './teams-data';
 
+/** The injection token for the current player's ID. */
 export const BUZZER_PLAYER_ID_TOKEN = new InjectionToken<string>(
     'BUZZER_PLAYER_ID_TOKEN',
 );
 
+/**
+ * Gets the player ID from the route's ':playerId' property and sets it as the
+ * BUZZER_PLAYER_ID_TOKEN, for injection.
+ */
 export function providePlayerIdToken(): Provider {
     return {
         provide: BUZZER_PLAYER_ID_TOKEN,
@@ -42,33 +39,25 @@ export function providePlayerIdToken(): Provider {
 }
 
 @Injectable()
-export class BuzzerPlayerDataStore {
+export class BuzzerPlayerDataStore extends BaseFirestoreDataStore {
     private _playerId = inject<string>(BUZZER_PLAYER_ID_TOKEN);
+    private _stateData = inject(BuzzerStateDataStore);
+    private _teamsData = inject(BuzzerTeamsDataStore);
 
-    public readonly state = signal<BuzzerState>(DEFAULT_BUZZER_STATE);
+    public readonly state: Signal<BuzzerState> = this._stateData.state;
     public readonly player = signal<BuzzerPlayer>(DEFAULT_BUZZER_PLAYER);
-    public readonly team = signal<BuzzerTeam | undefined>(undefined);
+    public readonly playerTeamId = computed(() => this.player().teamId);
+    public readonly team = computed(() => {
+        const teamId = this.playerTeamId();
+        const teams = this._teamsData.teams();
 
-    private _stateRef: DocumentReference<BuzzerState>;
-    private _playerRef: DocumentReference<BuzzerPlayer>;
-
-    public readonly playerTeamId = computed(() => {
-        const player = this.player();
-
-        if (player) {
-            return player.teamId;
-        } else {
-            return null;
-        }
+        return teams.find((t) => t.id === teamId);
     });
 
+    private _playerRef: DocumentReference<BuzzerPlayer>;
+
     constructor() {
-        this._stateRef = subscribeToDocument<BuzzerState>(
-            BUZZERS_STATE_DOC_PATH,
-            (data) => {
-                this.state.set(data || DEFAULT_BUZZER_STATE);
-            },
-        );
+        super();
 
         this._playerRef = subscribeToDocument<BuzzerPlayer>(
             `${BUZZERS_PLAYERS_COLLECTION_PATH}/${this._playerId}`,
@@ -76,24 +65,6 @@ export class BuzzerPlayerDataStore {
                 this.player.set(data || DEFAULT_BUZZER_PLAYER);
             },
         );
-
-        const firestore = inject(FIRESTORE);
-        effect(async () => {
-            const teamId = this.playerTeamId();
-
-            if (teamId) {
-                const teamRef = doc(
-                    firestore,
-                    `${BUZZERS_TEAMS_COLLECTION_PATH}/${teamId}`,
-                ).withConverter(getConverter<BuzzerTeam>());
-
-                const teamSnapshot = await getDoc(teamRef);
-
-                if (teamSnapshot.exists()) {
-                    this.team.set(teamSnapshot.data());
-                }
-            }
-        });
     }
 
     public async buzz(): Promise<void> {

@@ -1,5 +1,5 @@
 import { Component, computed } from '@angular/core';
-import { BuzzerMiniController } from '../../buzzers/buzzer-controller/buzzer-mini-controller';
+import { BuzzerModule } from '../../buzzers';
 import {
     CommonControllerModule,
     GamePreview,
@@ -13,7 +13,7 @@ import { GameDefinition } from '../../games/games';
  * browser source URL underneath.
  */
 @Component({
-    imports: [CommonControllerModule, GamePreview, BuzzerMiniController],
+    imports: [CommonControllerModule, GamePreview, BuzzerModule],
     templateUrl: './dashboard-games.html',
     styleUrl: './dashboard-games.scss',
 })

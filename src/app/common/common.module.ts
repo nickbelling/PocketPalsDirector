@@ -1,5 +1,6 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule, Type } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -31,6 +32,7 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     FormsModule,
     ClipboardModule,
     DragDropModule,
+    OverlayModule,
     MatButtonModule,
     MatCardModule,
     MatChipsModule,
