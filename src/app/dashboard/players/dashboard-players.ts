@@ -1,29 +1,32 @@
 import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
-    BuzzerDirectorDataStore,
-    BuzzerModule,
-    BuzzerPlayer,
+    BuzzerController,
     BuzzerPlayerAddDialog,
+    BuzzerTeamEditDialog,
+} from '../../buzzers/buzzer-controller';
+import { BuzzerDisplay } from '../../buzzers/buzzer-display/buzzer-display';
+import { BuzzerDirectorDataStore } from '../../buzzers/data';
+import {
+    BuzzerPlayer,
     BUZZERS_STORAGE_IMAGES_PATH,
     BUZZERS_STORAGE_SOUNDS_PATH,
     BuzzerTeam,
-    BuzzerTeamEditDialog,
-    BuzzerTeamPipe,
-} from '../../buzzers';
-import { CommonControllerModule } from '../../common';
-import { GamePreview, Player } from '../../common/components';
+} from '../../buzzers/data/model';
+import { Player } from '../../common/components/player';
+import { GamePreview } from '../../common/components/preview';
 import { ConfirmDialog } from '../../common/dialog';
 import { SoundService } from '../../common/files';
 import { Entity } from '../../common/firestore';
+import { CommonControllerModule } from '../../games/base/controller';
 
 @Component({
     imports: [
         CommonControllerModule,
         Player,
         GamePreview,
-        BuzzerTeamPipe,
-        BuzzerModule,
+        BuzzerController,
+        BuzzerDisplay,
     ],
     templateUrl: './dashboard-players.html',
     styleUrl: './dashboard-players.scss',
@@ -96,5 +99,12 @@ export class DashboardPlayers {
                 true,
             );
         }
+    }
+
+    public getTeam(
+        player: BuzzerPlayer,
+        teams: Entity<BuzzerTeam>[],
+    ): Entity<BuzzerTeam> | undefined {
+        return teams.find((t) => t.id === player.teamId);
     }
 }

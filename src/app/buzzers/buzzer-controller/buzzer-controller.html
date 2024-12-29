@@ -47,7 +47,7 @@
             </mat-card-header>
             <mat-list>
                 @for (player of buzzedInPlayers(); track player.id) {
-                    @let team = player.teamId | team: teams();
+                    @let team = getTeam | call: player : teams();
                     <mat-list-item>
                         <span
                             class="dot"
@@ -100,7 +100,7 @@
             </mat-card-header>
             <mat-list>
                 @for (player of buzzedOutPlayers(); track player.id) {
-                    @let team = player.teamId | team: teams();
+                    @let team = getTeam | call: player : teams();
                     <mat-list-item>
                         <span
                             class="dot"

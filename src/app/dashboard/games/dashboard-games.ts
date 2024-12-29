@@ -1,7 +1,7 @@
 import { Component, computed } from '@angular/core';
-import { BuzzerModule } from '../../buzzers';
-import { CommonControllerModule, injectRouteData } from '../../common';
-import { GamePreview } from '../../common/components';
+import { GamePreview } from '../../common/components/preview';
+import { injectRouteData } from '../../common/utils';
+import { CommonControllerModule } from '../../games/base/controller';
 import { GameDefinition } from '../../games/games';
 
 /**
@@ -10,7 +10,7 @@ import { GameDefinition } from '../../games/games';
  * browser source URL underneath.
  */
 @Component({
-    imports: [CommonControllerModule, GamePreview, BuzzerModule],
+    imports: [CommonControllerModule, GamePreview],
     templateUrl: './dashboard-games.html',
     styleUrl: './dashboard-games.scss',
 })

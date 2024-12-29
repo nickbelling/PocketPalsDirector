@@ -1,14 +1,4 @@
 import { Routes } from '@angular/router';
-import { BuzzerDisplay, BuzzerPlayerButton } from './buzzers';
-import { AdminAuthGuard } from './common/auth';
-import {
-    Dashboard,
-    DashboardGames,
-    DashboardHome,
-    DashboardSignIn,
-} from './dashboard';
-import { DashboardPlayers } from './dashboard/players/dashboard-players';
-import { GAMES } from './games';
 
 export const routes: Routes = [
     {
@@ -18,57 +8,31 @@ export const routes: Routes = [
     },
     {
         path: 'admin',
-        component: Dashboard,
-        children: [
-            {
-                path: '',
-                redirectTo: 'home',
-                pathMatch: 'full',
-            },
-            {
-                path: 'home',
-                component: DashboardHome,
-                title: 'Pocket Pals Director | Home',
-                canActivate: [AdminAuthGuard],
-            },
-            {
-                path: '403',
-                title: 'Pocket Pals Director | Sign in',
-                component: DashboardSignIn,
-            },
-            // Create a "Director" for each game
-            ...GAMES.flatMap((gameDef) => [
-                {
-                    path: `director/${gameDef.slug}`,
-                    component: DashboardGames,
-                    title: `Pocket Pals Director | ${gameDef.name}`,
-                    canActivate: [AdminAuthGuard],
-                    data: gameDef,
-                },
-            ]),
-            {
-                path: 'players',
-                title: 'Pocket Pals Director | Players',
-                component: DashboardPlayers,
-                canActivate: [AdminAuthGuard],
-            },
-        ],
+        loadComponent: () =>
+            import('./dashboard/dashboard').then((x) => x.Dashboard),
+        loadChildren: () =>
+            import('./dashboard/dashboard.routes').then(
+                (x) => x.dashboardChildRoutes,
+            ),
     },
-    // The raw game routes
-    ...GAMES.flatMap((gameDef) => [
-        {
-            path: `game/${gameDef.slug}`,
-            title: `Pocket Pals: ${gameDef.name}`,
-            component: gameDef.game,
-        },
-    ]),
+    {
+        path: 'game',
+        loadChildren: () =>
+            import('./games/games.routes').then((x) => x.gameRoutes),
+    },
     {
         path: 'buzzer/:playerId',
-        component: BuzzerPlayerButton,
+        loadComponent: () =>
+            import('./buzzers/buzzer-player/buzzer-player').then(
+                (x) => x.BuzzerPlayerButton,
+            ),
     },
     {
         path: 'buzzer-display',
         title: 'Pocket Pals | Buzzer',
-        component: BuzzerDisplay,
+        loadComponent: () =>
+            import('./buzzers/buzzer-display/buzzer-display').then(
+                (x) => x.BuzzerDisplay,
+            ),
     },
 ];

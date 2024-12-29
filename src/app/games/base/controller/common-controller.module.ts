@@ -8,7 +8,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import {
+    MAT_FORM_FIELD_DEFAULT_OPTIONS,
+    MatFormFieldModule,
+} from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
@@ -17,15 +20,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {
-    Alert,
-    CategoriesModule,
-    Player,
-    PlayingCardModule,
-} from './components';
-import { FitTextDirective } from './directives';
-import { CommonPipesModule } from './pipes/pipes.module';
-import { SlideModule } from './slide';
+import { Alert } from '../../../common/components/alert';
+import { Player } from '../../../common/components/player';
+import { FitTextDirective } from '../../../common/directives';
+import { CommonPipesModule } from '../../../common/pipes/pipes.module';
 
 const CONTROLLER_MODULES: Type<unknown>[] = [
     CommonModule,
@@ -52,15 +50,6 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     Player,
 ];
 
-const GAME_MODULES: Type<unknown>[] = [
-    CommonModule,
-    CommonPipesModule,
-    FitTextDirective,
-    SlideModule,
-    PlayingCardModule,
-    CategoriesModule,
-];
-
 /**
  * A module that collects common dependencies to make importing/exporting easier
  * for game controller components.
@@ -68,15 +57,13 @@ const GAME_MODULES: Type<unknown>[] = [
 @NgModule({
     imports: CONTROLLER_MODULES,
     exports: CONTROLLER_MODULES,
+    providers: [
+        {
+            provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+            useValue: {
+                subscriptSizing: 'dynamic',
+            },
+        },
+    ],
 })
 export class CommonControllerModule {}
-
-/**
- * A module that collects common dependencies to make importing/exporting easier
- * for game components.
- */
-@NgModule({
-    imports: GAME_MODULES,
-    exports: GAME_MODULES,
-})
-export class CommonGameModule {}

@@ -1,10 +1,10 @@
 import { Signal } from '@angular/core';
-import { Entity } from '../../common/firestore';
+import { Entity } from '../../../common/firestore';
 import {
     BaseGameDatabase,
     GameQuestionLike,
     GameStateLike,
-} from './base-database';
+} from '../database/base-database';
 
 export abstract class BaseGame<
     TState extends GameStateLike,

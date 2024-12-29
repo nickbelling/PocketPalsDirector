@@ -1,5 +1,5 @@
 import { inject, Pipe, PipeTransform } from '@angular/core';
-import { getCachedDownloadUrl, STORAGE } from '../firestore';
+import { getCachedDownloadUrl, STORAGE } from '.';
 
 /**
  * Given an internal Firebase storage path, produces the publicly available

@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
-import { BuzzerModule } from '../../buzzers';
+import { BuzzerController } from '../../buzzers/buzzer-controller';
 import { GAMES } from '../../games/games';
 
 @Component({
     templateUrl: './dashboard-home.html',
-    imports: [RouterModule, MatButtonModule, BuzzerModule],
+    imports: [RouterModule, MatButtonModule, BuzzerController],
 })
 export class DashboardHome {
     public games = GAMES;

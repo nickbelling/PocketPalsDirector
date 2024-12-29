@@ -2,19 +2,12 @@
     class="player-image"
     [class.animate__animated]="animated()"
     [class.animate__bounceInUp]="animated()"
-    src="{{
-        hasImage()
-            ? (imageSrc() | uploadedFileUrl | async)
-            : 'player_default.png'
-    }}"
-/>
+    src="{{ image() ? image() : 'player_default.png' }}" />
 <mat-card
     class="player-name"
-    [class.bg-blue]="team() === undefined"
     [class.animate__animated]="animated()"
     [class.animate__bounceInUp]="animated()"
-    [style.--base-color]="teamColor()"
-    [fitText]="player().name"
->
-    <span>{{ player().name }}</span>
+    [style.--base-color]="color() ? color() : 'var(--base-blue)'"
+    [fitText]="name()">
+    <span>{{ name() }}</span>
 </mat-card>

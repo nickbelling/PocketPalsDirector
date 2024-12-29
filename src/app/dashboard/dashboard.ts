@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -10,7 +10,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../common/auth';
 import { SoundService } from '../common/files';
-import { GAMES } from '../games/games';
+import { GAMES } from '../games';
 
 @Component({
     imports: [
@@ -26,6 +26,7 @@ import { GAMES } from '../games/games';
     ],
     templateUrl: './dashboard.html',
     styleUrl: './dashboard.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Dashboard {
     public games = GAMES;

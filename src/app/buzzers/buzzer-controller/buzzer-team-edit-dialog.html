@@ -18,7 +18,7 @@
             <input type="color" matInput required [(ngModel)]="color" />
         </mat-form-field>
     </div>
-    <player [player]="fakePlayer" [animated]="false" [team]="fakeTeam()" />
+    <player name="Pockety" [animated]="false" [color]="color()" />
 </mat-dialog-content>
 
 <mat-dialog-actions>
@@ -26,8 +26,7 @@
     <button
         mat-flat-button
         [disabled]="!isValid() || loading()"
-        (click)="submit()"
-    >
+        (click)="submit()">
         @if (editing) {
             <span>Edit</span>
         } @else {

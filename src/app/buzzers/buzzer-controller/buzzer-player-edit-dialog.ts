@@ -1,10 +1,12 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
-import { CommonControllerModule } from '../../common';
-import { BaseEntityEditDialog } from '../../games/base/base-entity-edit';
+import {
+    BaseEntityEditDialog,
+    CommonControllerModule,
+} from '../../games/base/controller';
 import { BuzzerDirectorDataStore } from '../data/director-data';
-import { BuzzerPlayer } from '../model';
+import { BuzzerPlayer } from '../data/model';
 
 @Component({
     imports: [CommonControllerModule],

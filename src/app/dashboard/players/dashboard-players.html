@@ -36,12 +36,12 @@
         }
 
         @for (player of players(); track player.id) {
-            @let playerTeam = player.teamId | team: teams();
+            @let team = getTeam | call: player : teams();
             <mat-card class="player-card layout-row layout-items-middle p g">
                 <player
-                    [player]="player"
-                    [animated]="false"
-                    [team]="playerTeam" />
+                    [name]="player.name"
+                    [color]="team?.color"
+                    [animated]="false" />
                 <div class="layout-column layout-fill g">
                     <div class="layout-row layout-items-fill g">
                         <button mat-flat-button (click)="editPlayer(player)">

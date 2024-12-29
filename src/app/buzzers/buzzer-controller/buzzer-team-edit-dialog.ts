@@ -1,10 +1,13 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
-import { CommonControllerModule, isValidColor } from '../../common';
-import { BaseEntityEditDialog } from '../../games/base/base-entity-edit';
+import { isValidColor } from '../../common/utils';
+import {
+    BaseEntityEditDialog,
+    CommonControllerModule,
+} from '../../games/base/controller';
 import { BuzzerDirectorDataStore } from '../data/director-data';
-import { BuzzerPlayer, BuzzerTeam } from '../model';
+import { BuzzerTeam } from '../data/model';
 
 @Component({
     imports: [CommonControllerModule],
@@ -19,29 +22,6 @@ export class BuzzerTeamEditDialog extends BaseEntityEditDialog<BuzzerTeam> {
     protected isValid = computed(
         () => this.name().trim().length > 0 && isValidColor(this.color()),
     );
-
-    protected fakePlayer: BuzzerPlayer = {
-        name: 'SAMPLE',
-        image: null,
-        soundEffect: null,
-        createdAt: Timestamp.now(),
-        buzzTimestamp: null,
-        lockedOut: false,
-        teamId: null,
-    };
-
-    protected fakeTeam = computed<BuzzerTeam | undefined>(() => {
-        const color = this.color();
-        if (color) {
-            return {
-                name: '',
-                color: color,
-                createdAt: Timestamp.now(),
-            };
-        } else {
-            return undefined;
-        }
-    });
 
     constructor() {
         super();

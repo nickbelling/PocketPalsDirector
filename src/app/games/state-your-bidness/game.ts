@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
-import { CommonGameModule } from '..';
 import { fadeInOutAnimation } from '../../common/animations';
-import { BaseGame } from '../base/base-game';
+import { BaseGame } from '../base/game/base-game';
+import { CommonGameModule } from '../common/common-game.module';
 import { StateYourBidnessDatabase } from './database';
 import { StateYourBidnessQuestion, StateYourBidnessState } from './model';
 

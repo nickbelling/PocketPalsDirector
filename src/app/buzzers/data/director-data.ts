@@ -1,14 +1,14 @@
 import { inject, Injectable, Signal } from '@angular/core';
 import { v4 } from 'uuid';
-import { resizeImage } from '../../common';
 import { BaseFirestoreDataStore, Entity } from '../../common/firestore';
+import { resizeImage } from '../../common/utils';
 import {
     BuzzerPlayer,
     BUZZERS_STORAGE_IMAGES_PATH,
     BUZZERS_STORAGE_SOUNDS_PATH,
     BuzzerState,
     BuzzerTeam,
-} from '../model';
+} from './model';
 import { BuzzerPlayersDataStore } from './players-data';
 import { BuzzerStateDataStore } from './state-data';
 import { BuzzerTeamsDataStore } from './teams-data';

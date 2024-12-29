@@ -1,11 +1,11 @@
 import { NgModule, Type } from '@angular/core';
-import { FirebaseUploadedFileUrlPipe } from './firebase-file-url.pipe';
+import { CallFunctionPipe } from './call-function.pipe';
 import { ImageColorSourcePipe } from './image-color-source.pipe';
 import { NumberArrayPipe } from './number-array.pipe';
 import { SortPipe } from './sort.pipe';
 
 const PIPES: Type<unknown>[] = [
-    FirebaseUploadedFileUrlPipe,
+    CallFunctionPipe,
     ImageColorSourcePipe,
     NumberArrayPipe,
     SortPipe,

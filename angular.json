@@ -25,6 +25,7 @@
                         "browser": "src/main.ts",
                         "polyfills": [],
                         "tsConfig": "tsconfig.app.json",
+                        "namedChunks": true,
                         "inlineStyleLanguage": "scss",
                         "assets": [
                             {

@@ -22,7 +22,7 @@ import {
     BUZZERS_PLAYERS_COLLECTION_PATH,
     BUZZERS_STORAGE_IMAGES_PATH,
     BUZZERS_STORAGE_SOUNDS_PATH,
-} from '../model';
+} from './model';
 
 @Injectable({
     providedIn: 'root',

@@ -1,12 +1,8 @@
 import { inject, Signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialog } from '../../common/dialog';
-import { Entity } from '../../common/firestore';
-import {
-    BaseGameDatabase,
-    GameQuestionLike,
-    GameStateLike,
-} from './base-database';
+import { ConfirmDialog } from '../../../common/dialog';
+import { Entity } from '../../../common/firestore';
+import { BaseGameDatabase, GameQuestionLike, GameStateLike } from '../database';
 
 export abstract class BaseController<
     TState extends GameStateLike,

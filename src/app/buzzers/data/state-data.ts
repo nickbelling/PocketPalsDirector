@@ -5,7 +5,7 @@ import {
     BUZZERS_STATE_DOC_PATH,
     BuzzerState,
     DEFAULT_BUZZER_STATE,
-} from '../model';
+} from './model';
 
 @Injectable({
     providedIn: 'root',

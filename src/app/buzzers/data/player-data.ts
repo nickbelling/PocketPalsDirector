@@ -18,7 +18,7 @@ import {
     BUZZERS_PLAYERS_COLLECTION_PATH,
     BuzzerState,
     DEFAULT_BUZZER_PLAYER,
-} from '../model';
+} from './model';
 import { BuzzerStateDataStore } from './state-data';
 import { BuzzerTeamsDataStore } from './teams-data';
 

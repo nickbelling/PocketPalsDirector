@@ -1,13 +1,12 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { CommonControllerModule } from '../../common';
 import { Entity } from '../../common/firestore';
-import { BuzzerTeamPipe } from '../buzzer-team.pipe';
+import { CommonControllerModule } from '../../games/base/controller';
 import { BuzzerDirectorDataStore } from '../data/director-data';
-import { BuzzerPlayer } from '../model';
+import { BuzzerPlayer, BuzzerTeam } from '../data/model';
 
 @Component({
     selector: 'buzzer-controller',
-    imports: [CommonControllerModule, BuzzerTeamPipe],
+    imports: [CommonControllerModule],
     templateUrl: './buzzer-controller.html',
     styleUrl: './buzzer-controller.scss',
 })
@@ -100,5 +99,12 @@ export class BuzzerController {
 
     public async markIncorrect(player: Entity<BuzzerPlayer>): Promise<void> {
         await this._data.markIncorrect(player.id);
+    }
+
+    public getTeam(
+        player: BuzzerPlayer,
+        teams: Entity<BuzzerTeam>[],
+    ): Entity<BuzzerTeam> | undefined {
+        return teams.find((t) => t.id === player.teamId);
     }
 }

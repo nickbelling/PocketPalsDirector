@@ -21,7 +21,7 @@ import {
     FIRESTORE,
     getConverter,
     STORAGE,
-} from '../../common/firestore';
+} from '../../../common/firestore';
 
 export type GameStateLike = object & { currentQuestion: string | null };
 export type GameQuestionLike = object;

@@ -1,8 +1,4 @@
-import {
-    BaseGameDatabase,
-    GameQuestionLike,
-    GameStateLike,
-} from './base-database';
+import { BaseGameDatabase, GameQuestionLike, GameStateLike } from '../database';
 import { BaseEntityEditDialog } from './base-entity-edit';
 
 export class BaseQuestionEditDialog<

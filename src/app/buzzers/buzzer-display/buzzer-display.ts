@@ -2,19 +2,25 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { arraysAreEqual, preloadAudio, preloadImages } from '../../common';
 import { fadeInAnimation, fadeOutAnimation } from '../../common/animations';
-import { Player } from '../../common/components';
+import { Player } from '../../common/components/player';
 import { SoundService } from '../../common/files';
-import { getCachedDownloadUrls, STORAGE } from '../../common/firestore';
+import { Entity, getCachedDownloadUrls, STORAGE } from '../../common/firestore';
+import { FirebaseUploadedFileUrlPipe } from '../../common/firestore/firebase-file-url.pipe';
 import { CommonPipesModule } from '../../common/pipes/pipes.module';
 import { SlideModule } from '../../common/slide';
-import { BuzzerTeamPipe } from '../buzzer-team.pipe';
+import {
+    arraysAreEqual,
+    preloadAudio,
+    preloadImages,
+} from '../../common/utils';
 import { BuzzerDisplayDataStore } from '../data/display-data';
 import {
+    BuzzerPlayer,
     BUZZERS_STORAGE_IMAGES_PATH,
     BUZZERS_STORAGE_SOUNDS_PATH,
-} from '../model';
+    BuzzerTeam,
+} from '../data/model';
 
 @Component({
     selector: 'buzzer-display',
@@ -24,7 +30,7 @@ import {
         CommonPipesModule,
         SlideModule,
         Player,
-        BuzzerTeamPipe,
+        FirebaseUploadedFileUrlPipe,
     ],
     templateUrl: './buzzer-display.html',
     styleUrl: './buzzer-display.scss',
@@ -127,5 +133,12 @@ export class BuzzerDisplay {
                 buzzedInPlayers.map((p) => p.id),
             );
         });
+    }
+
+    public getTeamColor(
+        player: BuzzerPlayer,
+        teams: Entity<BuzzerTeam>[],
+    ): string | undefined {
+        return teams.find((t) => t.id === player.teamId)?.color;
     }
 }

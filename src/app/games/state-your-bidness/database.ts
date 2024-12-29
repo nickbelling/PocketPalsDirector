@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BaseGameDatabase } from '../base';
+import { BaseGameDatabase } from '../base/database';
 import {
     STATE_YOUR_BUSINESS_STATE_DEFAULT,
     StateYourBidnessQuestion,
