@@ -16,7 +16,7 @@ import {
     Entity,
     getConverter,
     subscribeToCollection,
-} from '../../common';
+} from '../../common/firestore';
 import {
     BuzzerPlayer,
     BUZZERS_PLAYERS_COLLECTION_PATH,

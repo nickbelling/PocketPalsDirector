@@ -1,10 +1,7 @@
 import { Component, computed } from '@angular/core';
 import { BuzzerModule } from '../../buzzers';
-import {
-    CommonControllerModule,
-    GamePreview,
-    injectRouteData,
-} from '../../common';
+import { CommonControllerModule, injectRouteData } from '../../common';
+import { GamePreview } from '../../common/components';
 import { GameDefinition } from '../../games/games';
 
 /**

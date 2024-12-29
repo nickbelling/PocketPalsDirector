@@ -1,13 +1,13 @@
-export type SimpleDialogResult = 'cancel' | 'yes' | 'no' | 'ok' | 'delete';
+export type ConfirmDialogResult = 'cancel' | 'yes' | 'no' | 'ok' | 'delete';
 
-export type SimpleDialogType =
+export type ConfirmDialogType =
     | 'okCancel'
     | 'yesNo'
     | 'yesNoCancel'
     | 'deleteCancel';
 
-export interface SimpleDialogData {
+export interface ConfirmDialogData {
     title: string;
     description: string;
-    type: SimpleDialogType;
+    type: ConfirmDialogType;
 }

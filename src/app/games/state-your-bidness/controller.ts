@@ -1,6 +1,6 @@
 import { Component, computed, inject, linkedSignal } from '@angular/core';
-import { Entity } from '../../common';
 import { CommonControllerModule } from '../../common/common.module';
+import { Entity } from '../../common/firestore';
 import { BaseController } from '../base/base-controller';
 import { StateYourBidnessDatabase } from './database';
 import { StateYourBidnessQuestion, StateYourBidnessState } from './model';

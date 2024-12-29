@@ -1,5 +1,5 @@
 import { inject, Injectable, Signal } from '@angular/core';
-import { Entity } from '../../common';
+import { Entity } from '../../common/firestore';
 import { BuzzerPlayer, BuzzerState, BuzzerTeam } from '../model';
 import { BuzzerPlayersDataStore } from './players-data';
 import { BuzzerStateDataStore } from './state-data';

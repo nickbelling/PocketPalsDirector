@@ -2,19 +2,13 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import {
-    arraysAreEqual,
-    fadeInAnimation,
-    fadeOutAnimation,
-    getCachedDownloadUrls,
-    Player,
-    preloadAudio,
-    preloadImages,
-    SlideModule,
-    SoundService,
-    STORAGE,
-} from '../../common';
+import { arraysAreEqual, preloadAudio, preloadImages } from '../../common';
+import { fadeInAnimation, fadeOutAnimation } from '../../common/animations';
+import { Player } from '../../common/components';
+import { SoundService } from '../../common/files';
+import { getCachedDownloadUrls, STORAGE } from '../../common/firestore';
 import { CommonPipesModule } from '../../common/pipes/pipes.module';
+import { SlideModule } from '../../common/slide';
 import { BuzzerTeamPipe } from '../buzzer-team.pipe';
 import { BuzzerDisplayDataStore } from '../data/display-data';
 import {

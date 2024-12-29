@@ -1,16 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { firstValueFrom } from 'rxjs';
+import { ConfirmDialogComponent } from './confirm-dialog-component';
 import {
-    SimpleDialogData,
-    SimpleDialogResult,
-    SimpleDialogType,
+    ConfirmDialogData,
+    ConfirmDialogResult,
+    ConfirmDialogType,
 } from './model';
-import { SimpleDialog } from './simple-dialog';
 
 type Callback<T> = () => T | Promise<T>;
 
-export interface SimpleDialogCallbacks {
+export interface ConfirmDialogCallbacks {
     /** Fired when the user clicks "Cancel" in the dialog. */
     onCancel?: Callback<void>;
     /** Fired when the user clicks "Yes" in the dialog. */
@@ -27,22 +27,22 @@ export interface SimpleDialogCallbacks {
 @Injectable({
     providedIn: 'root',
 })
-export class SimpleDialogService {
+export class ConfirmDialog {
     private _dialog = inject(MatDialog);
 
     /** Opens a prompt of the given type to ask the user a question. */
     public async open(
-        type: SimpleDialogType,
+        type: ConfirmDialogType,
         title: string,
         description: string,
-        options: SimpleDialogCallbacks,
+        options: ConfirmDialogCallbacks,
     ): Promise<void> {
         // Open the dialog with the data
         const dialogRef = this._dialog.open<
-            SimpleDialog,
-            SimpleDialogData,
-            SimpleDialogResult
-        >(SimpleDialog, {
+            ConfirmDialogComponent,
+            ConfirmDialogData,
+            ConfirmDialogResult
+        >(ConfirmDialogComponent, {
             data: {
                 title: title,
                 description: description,
@@ -55,7 +55,7 @@ export class SimpleDialogService {
         const result = await firstValueFrom(dialogRef.afterClosed());
 
         const callbacks: {
-            [key in SimpleDialogResult]: Callback<void> | undefined;
+            [key in ConfirmDialogResult]: Callback<void> | undefined;
         } = {
             ['cancel']: options.onCancel,
             ['yes']: options.onYes,

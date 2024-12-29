@@ -1,5 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { fadeInOutAnimation } from '../../common';
+import { fadeInOutAnimation } from '../../common/animations';
 import { CommonGameModule } from '../../common/common.module';
 import { BaseGame } from '../base/base-game';
 import { RankyPankyDatabase } from './database';

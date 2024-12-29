@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Entity } from '../common';
+import { Entity } from '../common/firestore';
 import { BuzzerTeam } from './model';
 
 @Pipe({

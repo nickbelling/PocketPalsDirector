@@ -2,20 +2,20 @@ import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { SimpleDialogData, SimpleDialogType } from './model';
+import { ConfirmDialogData, ConfirmDialogType } from './model';
 
 /**
  * A simple dialog that offers a prompt with some buttons (e.g. yes/no,
- * OK/cancel, etc). Don't use directly - use the SimpleDialogService instead.
+ * OK/cancel, etc). Don't use directly - use the ConfirmDialog service instead.
  */
 @Component({
-    templateUrl: './simple-dialog.html',
+    templateUrl: './confirm-dialog-component.html',
     imports: [MatButtonModule, MatDialogModule, MatToolbarModule],
 })
-export class SimpleDialog {
-    private _data: SimpleDialogData = inject(MAT_DIALOG_DATA);
+export class ConfirmDialogComponent {
+    private _data: ConfirmDialogData = inject(MAT_DIALOG_DATA);
 
-    protected type: SimpleDialogType = this._data.type;
+    protected type: ConfirmDialogType = this._data.type;
     protected title: string = this._data.title;
     protected description: string = this._data.description;
 

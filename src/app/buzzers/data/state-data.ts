@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { DocumentData, DocumentReference, setDoc } from 'firebase/firestore';
-import { subscribeToDocument } from '../../common';
+import { subscribeToDocument } from '../../common/firestore';
 import {
     BUZZERS_STATE_DOC_PATH,
     BuzzerState,

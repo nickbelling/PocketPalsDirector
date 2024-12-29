@@ -1,5 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { CommonControllerModule, Entity } from '../../common';
+import { CommonControllerModule } from '../../common';
+import { Entity } from '../../common/firestore';
 import { BuzzerTeamPipe } from '../buzzer-team.pipe';
 import { BuzzerDirectorDataStore } from '../data/director-data';
 import { BuzzerPlayer } from '../model';

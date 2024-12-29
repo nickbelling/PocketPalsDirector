@@ -8,11 +8,12 @@ import {
     serverTimestamp,
     setDoc,
 } from 'firebase/firestore';
+import {} from '../../common';
 import {
     BaseFirestoreDataStore,
     Entity,
     subscribeToCollection,
-} from '../../common';
+} from '../../common/firestore';
 import { BUZZERS_TEAMS_COLLECTION_PATH, BuzzerTeam } from '../model';
 
 @Injectable({

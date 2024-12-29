@@ -1,6 +1,7 @@
 import { inject, Injectable, Signal } from '@angular/core';
 import { v4 } from 'uuid';
-import { BaseFirestoreDataStore, Entity, resizeImage } from '../../common';
+import { resizeImage } from '../../common';
+import { BaseFirestoreDataStore, Entity } from '../../common/firestore';
 import {
     BuzzerPlayer,
     BUZZERS_STORAGE_IMAGES_PATH,

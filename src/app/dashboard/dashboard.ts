@@ -8,7 +8,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
-import { AuthService, SoundService } from '../common';
+import { AuthService } from '../common/auth';
+import { SoundService } from '../common/files';
 import { GAMES } from '../games/games';
 
 @Component({

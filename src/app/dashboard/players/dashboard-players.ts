@@ -11,14 +11,11 @@ import {
     BuzzerTeamEditDialog,
     BuzzerTeamPipe,
 } from '../../buzzers';
-import {
-    CommonControllerModule,
-    Entity,
-    GamePreview,
-    Player,
-    SimpleDialogService,
-    SoundService,
-} from '../../common';
+import { CommonControllerModule } from '../../common';
+import { GamePreview, Player } from '../../common/components';
+import { ConfirmDialog } from '../../common/dialog';
+import { SoundService } from '../../common/files';
+import { Entity } from '../../common/firestore';
 
 @Component({
     imports: [
@@ -34,7 +31,7 @@ import {
 export class DashboardPlayers {
     private _data = inject(BuzzerDirectorDataStore);
     private _dialog = inject(MatDialog);
-    private _confirm = inject(SimpleDialogService);
+    private _confirm = inject(ConfirmDialog);
     private _sound = inject(SoundService);
 
     protected imagesBasePath = BUZZERS_STORAGE_IMAGES_PATH;

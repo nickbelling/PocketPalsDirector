@@ -5,9 +5,9 @@ import {
     BuzzerPlayer,
     BUZZERS_STORAGE_IMAGES_PATH,
     BuzzerTeam,
-} from '../../buzzers';
-import { FitTextDirective } from '../directives';
-import { CommonPipesModule } from '../pipes/pipes.module';
+} from '../../../buzzers';
+import { FitTextDirective } from '../../directives';
+import { CommonPipesModule } from '../../pipes/pipes.module';
 
 @Component({
     imports: [CommonModule, CommonPipesModule, MatCardModule, FitTextDirective],

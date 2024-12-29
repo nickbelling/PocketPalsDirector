@@ -20,12 +20,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import {
     Alert,
     CategoriesModule,
-    FitTextDirective,
     Player,
     PlayingCardModule,
-    SlideModule,
-} from '.';
+} from './components';
+import { FitTextDirective } from './directives';
 import { CommonPipesModule } from './pipes/pipes.module';
+import { SlideModule } from './slide';
 
 const CONTROLLER_MODULES: Type<unknown>[] = [
     CommonModule,

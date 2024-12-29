@@ -9,7 +9,10 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DocumentReference, serverTimestamp, setDoc } from 'firebase/firestore';
-import { BaseFirestoreDataStore, subscribeToDocument } from '../../common';
+import {
+    BaseFirestoreDataStore,
+    subscribeToDocument,
+} from '../../common/firestore';
 import {
     BuzzerPlayer,
     BUZZERS_PLAYERS_COLLECTION_PATH,

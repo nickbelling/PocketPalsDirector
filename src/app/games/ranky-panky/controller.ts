@@ -1,7 +1,8 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, inject, linkedSignal } from '@angular/core';
-import { Entity, resizeImage } from '../../common';
+import { resizeImage } from '../../common';
 import { CommonControllerModule } from '../../common/common.module';
+import { Entity } from '../../common/firestore';
 import { BaseController } from '../base/base-controller';
 import { RankyPankyDatabase } from './database';
 import {

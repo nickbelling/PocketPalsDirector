@@ -1,5 +1,5 @@
 import { Signal } from '@angular/core';
-import { Entity } from '../../common';
+import { Entity } from '../../common/firestore';
 import {
     BaseGameDatabase,
     GameQuestionLike,

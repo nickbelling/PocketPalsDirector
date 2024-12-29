@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { BuzzerDisplay, BuzzerPlayerButton } from './buzzers';
-import { AdminAuthGuard } from './common';
+import { AdminAuthGuard } from './common/auth';
 import {
     Dashboard,
     DashboardGames,

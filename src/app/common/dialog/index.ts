@@ -1,2 +1,2 @@
+export * from './confirm-dialog-service';
 export * from './model';
-export * from './simple-dialog.service';

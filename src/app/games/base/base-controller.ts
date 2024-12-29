@@ -1,6 +1,7 @@
 import { inject, Signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Entity, SimpleDialogService } from '../../common';
+import { ConfirmDialog } from '../../common/dialog';
+import { Entity } from '../../common/firestore';
 import {
     BaseGameDatabase,
     GameQuestionLike,
@@ -12,7 +13,7 @@ export abstract class BaseController<
     TQuestion extends GameQuestionLike,
 > {
     protected _dialog = inject(MatDialog);
-    protected _confirm = inject(SimpleDialogService);
+    protected _confirm = inject(ConfirmDialog);
     private _db: BaseGameDatabase<TState, TQuestion>;
 
     public readonly gameState: Signal<TState>;

@@ -10,7 +10,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { Title } from '@angular/platform-browser';
-import { SoundService } from '../../common';
+import { SoundService } from '../../common/files';
 import {
     BuzzerPlayerDataStore,
     providePlayerIdToken,
