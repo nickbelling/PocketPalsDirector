@@ -1,14 +1,25 @@
 <mat-toolbar>
     <img src="pockety.png" />
     <span>Pocket Pals Director</span>
-    <button mat-button [routerLink]="'home'">Home</button>
+    <button mat-button [routerLink]="'home'">
+        <mat-icon>Home</mat-icon>
+        <span>Home</span>
+    </button>
     @if (auth.isAdmin()) {
         <button mat-button [mat-menu-trigger-for]="gameSelectMenu">
+            <mat-icon>playing_cards</mat-icon>
             <span>Games</span>
             <mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
         </button>
-        <button mat-button [routerLink]="'players'">Players</button>
-        <button mat-button [matMenuTriggerFor]="optionsMenu">Options</button>
+        <button mat-button [routerLink]="'players'">
+            <mat-icon>groups</mat-icon>
+            <span>Players</span>
+        </button>
+        <button mat-button [matMenuTriggerFor]="optionsMenu">
+            <mat-icon>Settings</mat-icon>
+            <span>Options</span>
+            <mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
+        </button>
     }
     <span class="layout-fill"></span>
     @if (auth.user()) {
@@ -44,5 +55,4 @@
             <span>Enable sounds for director</span>
         }
     </button>
-    <mat-divider />
 </mat-menu>
