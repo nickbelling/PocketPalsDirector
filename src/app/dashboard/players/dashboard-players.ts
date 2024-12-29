@@ -17,7 +17,7 @@ import { Player } from '../../common/components/player';
 import { GamePreview } from '../../common/components/preview';
 import { ConfirmDialog } from '../../common/dialog';
 import { SoundService } from '../../common/files';
-import { Entity } from '../../common/firestore';
+import { Entity, FirebaseUploadedFileUrlPipe } from '../../common/firestore';
 import { CommonControllerModule } from '../../games/base/controller';
 
 @Component({
@@ -27,6 +27,7 @@ import { CommonControllerModule } from '../../games/base/controller';
         GamePreview,
         BuzzerController,
         BuzzerDisplay,
+        FirebaseUploadedFileUrlPipe,
     ],
     templateUrl: './dashboard-players.html',
     styleUrl: './dashboard-players.scss',

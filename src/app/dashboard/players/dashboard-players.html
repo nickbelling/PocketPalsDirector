@@ -41,6 +41,11 @@
                 <player
                     [name]="player.name"
                     [color]="team?.color"
+                    [image]="
+                        imagesBasePath + '/' + player.image
+                            | uploadedFileUrl
+                            | async
+                    "
                     [animated]="false" />
                 <div class="layout-column layout-fill g">
                     <div class="layout-row layout-items-fill g">
