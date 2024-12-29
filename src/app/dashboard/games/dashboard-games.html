@@ -20,8 +20,7 @@
                     mat-icon-button
                     matSuffix
                     matTooltip="Copy to clipboard"
-                    [cdkCopyToClipboard]="gameUrl()"
-                >
+                    [cdkCopyToClipboard]="gameUrl()">
                     <mat-icon>content_copy</mat-icon>
                 </button>
                 <a
@@ -29,13 +28,14 @@
                     matSuffix
                     matTooltip="Open in new tab"
                     href="{{ gameUrl() }}"
-                    target="_blank"
-                >
+                    target="_blank">
                     <mat-icon>open_in_new</mat-icon>
                 </a>
             </mat-form-field>
 
-            <buzzer-mini-controller />
+            @if (gameDef.supportsBuzzers) {
+                <buzzer-mini-controller />
+            }
         </div>
     </div>
 }

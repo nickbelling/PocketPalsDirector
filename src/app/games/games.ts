@@ -9,6 +9,7 @@ export interface GameDefinition {
     slug: string;
     game: Type<unknown>;
     controller: Type<unknown>;
+    supportsBuzzers: boolean;
 }
 
 export const GAMES: GameDefinition[] = [
@@ -17,11 +18,13 @@ export const GAMES: GameDefinition[] = [
         slug: 'state-your-bidness',
         game: StateYourBidnessGame,
         controller: StateYourBidnessController,
+        supportsBuzzers: false,
     },
     {
         name: 'Ranky Panky',
         slug: 'ranky-panky',
         game: RankyPankyGame,
         controller: RankyPankyController,
+        supportsBuzzers: false,
     },
 ];
