@@ -22,8 +22,7 @@
     <button
         mat-flat-button
         [disabled]="!isValid() || loading()"
-        (click)="submit()"
-    >
+        (click)="submit()">
         <span>{{ editing ? 'Edit' : 'Add' }}</span>
     </button>
 </mat-dialog-actions>

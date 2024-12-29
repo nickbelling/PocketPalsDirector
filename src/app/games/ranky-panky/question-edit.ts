@@ -1,7 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonControllerModule } from '../../common/common.module';
 import { BaseQuestionEditDialog } from '../base/base-question-edit';
-import { RankyPankyDatabase, RankyPankyQuestion } from './database';
+import { RankyPankyDatabase } from './database';
+import { RankyPankyQuestion } from './model';
 
 @Component({
     imports: [CommonControllerModule],

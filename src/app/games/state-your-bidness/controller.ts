@@ -2,11 +2,8 @@ import { Component, computed, inject, linkedSignal } from '@angular/core';
 import { Entity } from '../../common';
 import { CommonControllerModule } from '../../common/common.module';
 import { BaseController } from '../base/base-controller';
-import {
-    StateYourBidnessDatabase,
-    StateYourBidnessQuestion,
-    StateYourBidnessState,
-} from './database';
+import { StateYourBidnessDatabase } from './database';
+import { StateYourBidnessQuestion, StateYourBidnessState } from './model';
 import { StateYourBidnessQuestionEditDialog } from './question-edit';
 
 @Component({

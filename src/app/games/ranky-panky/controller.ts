@@ -3,12 +3,12 @@ import { Component, inject, linkedSignal } from '@angular/core';
 import { Entity, resizeImage } from '../../common';
 import { CommonControllerModule } from '../../common/common.module';
 import { BaseController } from '../base/base-controller';
+import { RankyPankyDatabase } from './database';
 import {
-    RankyPankyDatabase,
     RankyPankyQuestion,
     RankyPankyQuestionItem,
     RankyPankyState,
-} from './database';
+} from './model';
 import { RankyPankyQuestionEditDialog } from './question-edit';
 import { RankyPankyQuestionItemsEditDialog } from './question-items-edit';
 

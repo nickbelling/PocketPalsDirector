@@ -1,0 +1,16 @@
+{
+    "$id": "gameSchema",
+    "title": "Game Options",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "Name of the new game",
+            "$default": {
+                "$source": "argv",
+                "index": 0
+            }
+        }
+    },
+    "required": ["name"]
+}

@@ -1,8 +1,8 @@
 <mat-toolbar>
     @if (editing) {
-    <span>Edit question</span>
+        <span>Edit question</span>
     } @else {
-    <span>Add question</span>
+        <span>Add question</span>
     }
 </mat-toolbar>
 
@@ -21,8 +21,7 @@
             matInput
             required
             [(ngModel)]="questionAnswers"
-            rows="10"
-        ></textarea>
+            rows="10"></textarea>
     </mat-form-field>
 </mat-dialog-content>
 
@@ -31,8 +30,7 @@
     <button
         mat-flat-button
         [disabled]="!isValid() || loading()"
-        (click)="submit()"
-    >
-        <span>{{editing ? 'Edit' : 'Add'}}</span>
+        (click)="submit()">
+        <span>{{ editing ? 'Edit' : 'Add' }}</span>
     </button>
 </mat-dialog-actions>

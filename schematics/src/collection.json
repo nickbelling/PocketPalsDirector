@@ -1,0 +1,10 @@
+{
+    "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+    "schematics": {
+        "game": {
+            "description": "Generate a new game",
+            "factory": "./game/index#game",
+            "schema": "./game/schema.json"
+        }
+    }
+}

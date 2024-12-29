@@ -11,11 +11,8 @@ import { v4 as uuid } from 'uuid';
 import { resizeImage } from '../../common';
 import { CommonControllerModule } from '../../common/common.module';
 import { BaseQuestionEditDialog } from '../base/base-question-edit';
-import {
-    RankyPankyDatabase,
-    RankyPankyQuestion,
-    RankyPankyQuestionItem,
-} from './database';
+import { RankyPankyDatabase } from './database';
+import { RankyPankyQuestion, RankyPankyQuestionItem } from './model';
 
 @Component({
     imports: [CommonControllerModule],

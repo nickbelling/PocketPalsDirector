@@ -18,8 +18,7 @@
                     ) {
                         <mat-list-item
                             cdkDrag
-                            (cdkDragDropped)="reorder($event)"
-                        >
+                            (cdkDragDropped)="reorder($event)">
                             <mat-icon matListItemIcon cdkDragHandle
                                 >drag_indicator</mat-icon
                             >
@@ -28,15 +27,13 @@
                                 <button
                                     mat-icon-button
                                     (click)="deleteItem(index)"
-                                    matTooltip="Delete item"
-                                >
+                                    matTooltip="Delete item">
                                     <mat-icon>delete</mat-icon>
                                 </button>
                             </div>
                             <mat-list-item
                                 *cdkDragPlaceholder
-                                class="cdk-placeholder"
-                            />
+                                class="cdk-placeholder" />
                         </mat-list-item>
                         @if (!last) {
                             <mat-divider />
@@ -69,8 +66,7 @@
                             fileInput.files![0]
                                 ? fileInput.files![0].name
                                 : 'Upload a file'
-                        "
-                    />
+                        " />
                     <button matSuffix mat-button (click)="fileInput.click()">
                         Choose file
                     </button>
@@ -79,20 +75,17 @@
                     type="file"
                     #fileInput
                     hidden
-                    (change)="fileToUpload.set(fileInput.files![0])"
-                />
+                    (change)="fileToUpload.set(fileInput.files![0])" />
             </mat-card-content>
             <mat-card-actions class="g">
                 <mat-progress-bar
                     class="layout-fill"
                     mode="determinate"
-                    [value]="uploadProgress()"
-                />
+                    [value]="uploadProgress()" />
                 <button
                     mat-flat-button
                     (click)="addItem()"
-                    [disabled]="!addItemValid() || loading()"
-                >
+                    [disabled]="!addItemValid() || loading()">
                     Add
                 </button>
             </mat-card-actions>
@@ -104,8 +97,7 @@
     <button
         mat-flat-button
         [disabled]="!isValid() || loading()"
-        (click)="submit()"
-    >
+        (click)="submit()">
         <span>Save and close</span>
     </button>
 </mat-dialog-actions>

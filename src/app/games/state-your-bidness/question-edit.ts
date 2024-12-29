@@ -1,7 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonControllerModule } from '../../common/common.module';
 import { BaseQuestionEditDialog } from '../base/base-question-edit';
-import { StateYourBidnessDatabase, StateYourBidnessQuestion } from './database';
+import { StateYourBidnessDatabase } from './database';
+import { StateYourBidnessQuestion } from './model';
 
 @Component({
     templateUrl: './question-edit.html',
