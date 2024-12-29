@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonGameModule } from '../../common';
-import { BaseGame } from '../base/base-game';
+import { BaseGame, CommonGameModule } from '../base/game';
 import { <%= classify(name) %>Database } from './database';
 import {
     <%= classify(name) %>Question,

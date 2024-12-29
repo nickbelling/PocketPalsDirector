@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonControllerModule } from '../../common';
-import { BaseController } from '../base/base-controller';
+import { BaseController, CommonControllerModule } from '../base/controller';
 import { <%= classify(name) %>Database } from './database';
 import {
     <%= classify(name) %>Question,
