@@ -1,8 +1,7 @@
-import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { fadeInAnimation, fadeOutAnimation } from '../../common/animations';
+import { fadeOutAnimation, growInOutXAnimation } from '../../common/animations';
 import { Player } from '../../common/components/player';
 import { SoundService } from '../../common/files';
 import { Entity, getCachedDownloadUrls, STORAGE } from '../../common/firestore';
@@ -34,21 +33,7 @@ import {
     ],
     templateUrl: './buzzer-display.html',
     styleUrl: './buzzer-display.scss',
-    animations: [
-        fadeInAnimation(),
-        fadeOutAnimation(300),
-        trigger('growIn', [
-            transition(':enter', [
-                style({ width: '0px' }),
-                animate('300ms ease-in', style({ width: '100px' })),
-            ]),
-        ]),
-        trigger('growOut', [
-            transition(':leave', [
-                animate('300ms ease-out', style({ width: '0px' })),
-            ]),
-        ]),
-    ],
+    animations: [fadeOutAnimation(), growInOutXAnimation('100px')],
 })
 export class BuzzerDisplay {
     private _data = inject(BuzzerDisplayDataStore);

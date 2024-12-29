@@ -1,6 +1,6 @@
 <div class="row">
     @for (player of buzzedInPlayers(); track player.id) {
-        <div @growIn @growOut @fadeOut class="player">
+        <div @growInOutX @fadeOut class="player">
             <player
                 class="p"
                 [name]="player.name"
