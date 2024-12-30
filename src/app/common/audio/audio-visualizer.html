@@ -9,7 +9,7 @@
 
     <div
         class="visualizer layout-fill layout-row layout-items-fill layout-items-bottom">
-        @for (bar of bars(); track $index) {
+        @for (bar of barsCapped(); track $index) {
             <div class="bar" [style.height.%]="bar"></div>
         }
     </div>

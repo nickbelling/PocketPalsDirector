@@ -22,19 +22,62 @@ export class AudioVisualizer {
     private _dataArray: Uint8Array = new Uint8Array();
 
     public readonly src = input.required<string>();
+    public readonly barCount = input<number>(32);
     public readonly playing = signal<boolean>(false);
     public readonly frequencies = signal<number[]>([]);
 
     public readonly bars = computed(() => {
-        // Typically 0..255. You can choose another range or transformation logic.
-        const rawFrequencies = this.frequencies();
-        return rawFrequencies.map((value) => {
-            // A simple "log-ish" formula. Tweak as desired.
-            // E.g. scale from 0..255 into 0..1, then apply log10, then scale 0..100
-            const fraction = value / 255; // 0..1
-            const scaled = Math.log10(1 + 9 * fraction); // ~0..1
-            return scaled * 100; // 0..100
-        });
+        const rawBars = this.frequencies();
+        const barCount = this.barCount();
+        const totalBins = rawBars.length;
+        const chunkSize = Math.floor(totalBins / barCount);
+
+        const barsOut: number[] = [];
+
+        for (let i = 0; i < barCount; i++) {
+            let sum = 0;
+            for (let j = 0; j < chunkSize; j++) {
+                const binIndex = i * chunkSize + j;
+                sum += rawBars[binIndex];
+            }
+            const avg = sum / chunkSize; // average across that chunk
+            // Now apply a log or other scale to `avg` if you want
+            barsOut.push(Math.log10(1 + 9 * (avg / 255)) * 100);
+        }
+
+        return barsOut;
+    });
+
+    public readonly barsCapped = computed(() => {
+        // Get your original log-frequency bars
+        const originalBars = this.bars();
+        const cappedBars = [...originalBars];
+
+        const n = cappedBars.length;
+        const CAP_COUNT = 10;
+
+        function capScale(index: number): number {
+            const fraction = index / (CAP_COUNT - 1);
+            // "ease out" polynomial fade:
+            //   fraction=0 => 0 => scaled=0.1
+            //   fraction=1 => 1 => scaled=1.0
+            // (uses sqrt instead of squaring)
+            const scaled = 0.1 + 0.9 * Math.sqrt(fraction);
+            return scaled;
+        }
+
+        // Curve off first CAP_COUNT bars
+        for (let i = 0; i < CAP_COUNT && i < n; i++) {
+            cappedBars[i] *= capScale(i);
+        }
+
+        // Curve off last CAP_COUNT bars
+        for (let i = 0; i < CAP_COUNT && i < n; i++) {
+            const j = n - 1 - i;
+            cappedBars[j] *= capScale(i);
+        }
+
+        return cappedBars;
     });
 
     constructor() {
@@ -44,7 +87,8 @@ export class AudioVisualizer {
 
         this._audio.onended = () => {
             this.playing.set(false);
-            this.frequencies.set([]);
+            this._stopVisualizer();
+            this.frequencies.set(Array(this.barCount()).fill(0));
         };
 
         this._audio.onpause = () => {
