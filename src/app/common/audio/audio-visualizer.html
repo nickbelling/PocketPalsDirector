@@ -1,0 +1,16 @@
+<div class="layout-fill layout-column">
+    <button (click)="playing() ? stop() : play()">
+        @if (playing()) {
+            <span>Stop</span>
+        } @else {
+            <span>Play</span>
+        }
+    </button>
+
+    <div
+        class="visualizer layout-fill layout-row layout-items-fill layout-items-bottom">
+        @for (bar of bars(); track $index) {
+            <div class="bar" [style.height.%]="bar"></div>
+        }
+    </div>
+</div>
