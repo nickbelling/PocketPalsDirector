@@ -22,10 +22,19 @@ export class AudioVisualizer {
     private _dataArray: Uint8Array = new Uint8Array();
 
     public readonly src = input.required<string>();
-    public readonly barCount = input<number>(32);
+    public readonly barCount = input<number>(64);
     public readonly playing = signal<boolean>(false);
+
+    /**
+     * The audio frequencies for the current frame, as produced by the audio
+     * analyser
+     */
     public readonly frequencies = signal<number[]>([]);
 
+    /**
+     * Computed - a set of bars for display (as percentages), their heights
+     * calculated by averaging the frequencies.
+     */
     public readonly bars = computed(() => {
         const rawBars = this.frequencies();
         const barCount = this.barCount();
@@ -40,16 +49,21 @@ export class AudioVisualizer {
                 const binIndex = i * chunkSize + j;
                 sum += rawBars[binIndex];
             }
+
             const avg = sum / chunkSize; // average across that chunk
-            // Now apply a log or other scale to `avg` if you want
             barsOut.push(Math.log10(1 + 9 * (avg / 255)) * 100);
         }
 
         return barsOut;
     });
 
+    /**
+     * Visually, most of the bars will be "stacked" up one end, making the graph
+     * look "unbalanced". This caps the first and last CAP_COUNT bars along a
+     * parabolic curve, so the bars look more "grouped" along the middle.
+     */
     public readonly barsCapped = computed(() => {
-        // Get your original log-frequency bars
+        // Get the original log-frequency bars
         const originalBars = this.bars();
         const cappedBars = [...originalBars];
 
@@ -80,6 +94,7 @@ export class AudioVisualizer {
         return cappedBars;
     });
 
+    /** @constructor */
     constructor() {
         this._audio.onplay = () => {
             this.playing.set(true);
@@ -122,7 +137,7 @@ export class AudioVisualizer {
     }
 
     public play(): void {
-        // Only create the AudioContext + Analyser when the user explicitly clicks to play
+        // Create the audio context + analyser
         if (!this._audioContext) {
             this._audioContext = new AudioContext();
             this._analyser = this._audioContext.createAnalyser();
@@ -134,7 +149,7 @@ export class AudioVisualizer {
             source.connect(this._analyser);
             this._analyser.connect(this._audioContext.destination);
 
-            this._analyser.fftSize = 64;
+            this._analyser.fftSize = 512;
 
             // Prepare the dataArray based on the new analyser
             this._dataArray = new Uint8Array(this._analyser.frequencyBinCount);
