@@ -1,0 +1,27 @@
+<h3>Videogame database</h3>
+
+<button mat-flat-button (click)="addGame()">
+    <mat-icon>add_circle</mat-icon>
+    <span>Add game</span>
+</button>
+
+<div class="games g p-y">
+    @for (game of games(); track game.id) {
+        <mat-card class="game-card">
+            <img
+                class="game-hero"
+                src="{{
+                    VIDEOGAME_STORAGE_BASE + '/' + game.id + '_hero_thumb'
+                        | uploadedFileUrl
+                        | async
+                }}" />
+            <img
+                class="game-logo"
+                src="{{
+                    VIDEOGAME_STORAGE_BASE + '/' + game.id + '_logo_thumb'
+                        | uploadedFileUrl
+                        | async
+                }}" />
+        </mat-card>
+    }
+</div>

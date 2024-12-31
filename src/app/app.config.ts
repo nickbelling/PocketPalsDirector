@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import {
     ApplicationConfig,
     provideExperimentalZonelessChangeDetection,
@@ -11,5 +12,6 @@ export const appConfig: ApplicationConfig = {
         provideExperimentalZonelessChangeDetection(),
         provideRouter(routes),
         provideAnimationsAsync(),
+        provideHttpClient(),
     ],
 };

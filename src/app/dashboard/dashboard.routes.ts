@@ -1,6 +1,7 @@
 import { Route } from '@angular/router';
 import { AdminAuthGuard } from '../common/auth';
 import { Dashboard } from './dashboard';
+import { DashboardGamesDatabase } from './games/dashboard-games-database';
 import { DashboardHome } from './home/dashboard-home';
 import { DashboardPlayers } from './players/dashboard-players';
 import { DashboardSignIn } from './sign-in/dashboard-sign-in';
@@ -30,6 +31,12 @@ export const dashboardChildRoutes: Route[] = [
             import('./../games/controllers.routes').then(
                 (x) => x.controllerRoutes,
             ),
+    },
+    {
+        path: 'game-database',
+        title: 'Pocket Pals Director | Videogame Database',
+        component: DashboardGamesDatabase,
+        canActivate: [AdminAuthGuard],
     },
     {
         path: 'players',

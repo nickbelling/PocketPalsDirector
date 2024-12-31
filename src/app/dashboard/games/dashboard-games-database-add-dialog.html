@@ -1,0 +1,44 @@
+<mat-toolbar>
+    <span>Add game</span>
+</mat-toolbar>
+
+<mat-dialog-content class="layout-column g">
+    <mat-form-field>
+        <mat-label>Search</mat-label>
+        <input
+            matInput
+            cdkFocus
+            [disabled]="loading()"
+            [(ngModel)]="searchTerm" />
+        <button matSuffix mat-icon-button (click)="search()">
+            <mat-icon>search</mat-icon>
+        </button>
+    </mat-form-field>
+
+    <mat-card>
+        <mat-list [disabled]="loading()">
+            @if (searchResults() !== undefined) {
+                @for (result of searchResults(); track result.id) {
+                    <mat-list-item>
+                        <span>{{ result.name }}</span>
+                        <button
+                            matListItemMeta
+                            mat-flat-button
+                            [disabled]="loading()"
+                            (click)="register(result)">
+                            <span>Register</span>
+                        </button>
+                    </mat-list-item>
+                } @empty {
+                    <mat-list-item>
+                        <span>No results.</span>
+                    </mat-list-item>
+                }
+            }
+        </mat-list>
+    </mat-card>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
