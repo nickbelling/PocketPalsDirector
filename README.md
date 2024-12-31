@@ -13,3 +13,11 @@
     ```
     ng generate game MyNewGameName
     ```
+
+## Deploying custom Firebase functions
+
+Firebase functions are defined in `/functions`.
+
+```
+npx firebase deploy --only functions
+```
