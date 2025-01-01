@@ -18,6 +18,7 @@ import {
 export class FitTextDirective implements OnChanges, AfterViewInit {
     /** The text being fit into this element. Used to monitor for changes. */
     public fitText = input.required<string>();
+    public minSize = input<number>(10);
 
     private _originalFontSize?: number = undefined;
     private _el = inject(ElementRef);
@@ -54,8 +55,9 @@ export class FitTextDirective implements OnChanges, AfterViewInit {
 
                 // Keep shrinking the text until it fits
                 while (
-                    element.scrollHeight > element.clientHeight ||
-                    element.scrollWidth > element.clientWidth
+                    (element.scrollHeight > element.clientHeight ||
+                        element.scrollWidth > element.clientWidth) &&
+                    fontSize > this.minSize()
                 ) {
                     fontSize--;
                     element.style.fontSize = `${fontSize}px`;
