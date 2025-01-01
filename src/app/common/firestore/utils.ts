@@ -153,15 +153,19 @@ export function subscribeToCollection<TDocType extends object>(
     return collectionRef;
 }
 
-const downloadUrlCache: Record<string, Promise<string>> = {};
+const downloadUrlCache: Record<string, string | null> = {};
 
 export async function getCachedDownloadUrl(
     storage: FirebaseStorage,
     path: string,
-): Promise<string> {
+): Promise<string | null> {
     if (!downloadUrlCache[path]) {
         const fileRef = ref(storage, path);
-        downloadUrlCache[path] = getDownloadURL(fileRef);
+        try {
+            downloadUrlCache[path] = await getDownloadURL(fileRef);
+        } catch {
+            downloadUrlCache[path] = null;
+        }
     }
 
     return downloadUrlCache[path];
@@ -172,5 +176,7 @@ export async function getCachedDownloadUrls(
     paths: string[],
 ): Promise<string[]> {
     const urlPromises = paths.map((p) => getCachedDownloadUrl(storage, p));
-    return Promise.all(urlPromises);
+    const urls = await Promise.all(urlPromises);
+
+    return urls.filter((url) => url !== null);
 }

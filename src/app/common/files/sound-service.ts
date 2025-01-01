@@ -18,7 +18,9 @@ export class SoundService {
             firebasePath,
         );
 
-        await this.playSound(downloadUrl, forcePlay);
+        if (downloadUrl) {
+            await this.playSound(downloadUrl, forcePlay);
+        }
     }
 
     public async playSound(

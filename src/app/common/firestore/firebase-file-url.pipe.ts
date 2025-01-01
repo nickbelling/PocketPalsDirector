@@ -12,7 +12,7 @@ import { getCachedDownloadUrl, STORAGE } from '.';
 export class FirebaseUploadedFileUrlPipe implements PipeTransform {
     private _storage = inject(STORAGE);
 
-    public async transform(path: string | null): Promise<string> {
+    public async transform(path: string | null): Promise<string | null> {
         if (path === null) {
             return '';
         }
