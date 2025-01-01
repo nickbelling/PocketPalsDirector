@@ -1,0 +1,54 @@
+<mat-toolbar>
+    <span>Add question</span>
+</mat-toolbar>
+
+<mat-dialog-content class="layout-column g">
+    <mat-form-field>
+        <mat-label>Game</mat-label>
+        <mat-select required [(ngModel)]="gameId">
+            @for (game of games(); track game.id) {
+                <mat-option [value]="game.id">
+                    <span>{{ game.name }}</span>
+                </mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Audio</mat-label>
+        <input
+            matInput
+            readonly
+            [value]="
+                fileInput.files![0] ? fileInput.files![0].name : 'Upload a file'
+            " />
+        <button matSuffix mat-button (click)="fileInput.click()">
+            Choose file
+        </button>
+    </mat-form-field>
+    <input
+        type="file"
+        #fileInput
+        hidden
+        (change)="fileToUpload.set(fileInput.files![0])" />
+    <div class="layout-row layout-items-middle g">
+        <mat-slider
+            class="layout-fill visible"
+            [disabled]="audioLengthSeconds() === 0"
+            [max]="audioLengthSeconds()">
+            <input matSliderThumb [(ngModel)]="audioStartPoint" />
+        </mat-slider>
+        <span>{{ audioStartPoint() | secondsToDuration }}</span>
+    </div>
+
+    <mat-progress-bar class="layout-fill" [value]="progress()" />
+</mat-dialog-content>
+
+<mat-dialog-actions class="layout-row layout-items-middle g">
+    <button mat-button [disabled]="loading()" mat-dialog-close>Cancel</button>
+    <button
+        mat-flat-button
+        [disabled]="!isValid() || loading()"
+        (click)="submit()">
+        <span>{{ editing ? 'Edit' : 'Add' }}</span>
+    </button>
+</mat-dialog-actions>

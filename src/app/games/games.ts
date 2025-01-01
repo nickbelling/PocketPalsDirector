@@ -1,4 +1,6 @@
 import { Type } from '@angular/core';
+import { AvoidingTheDmcaController } from './avoiding-the-dmca/controller';
+import { AvoidingTheDmcaGame } from './avoiding-the-dmca/game';
 import { RankyPankyController } from './ranky-panky/controller';
 import { RankyPankyGame } from './ranky-panky/game';
 import { StateYourBidnessController } from './state-your-bidness/controller';
@@ -26,5 +28,12 @@ export const GAMES: GameDefinition[] = [
         game: RankyPankyGame,
         controller: RankyPankyController,
         supportsBuzzers: false,
+    },
+    {
+        name: 'Avoiding the DMCA',
+        slug: 'avoiding-the-dmca',
+        game: AvoidingTheDmcaGame,
+        controller: AvoidingTheDmcaController,
+        supportsBuzzers: true,
     },
 ];

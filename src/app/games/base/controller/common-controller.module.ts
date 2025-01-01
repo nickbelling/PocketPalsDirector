@@ -18,6 +18,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSliderModule } from '@angular/material/slider';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Alert } from '../../../common/components/alert';
@@ -44,6 +45,7 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     MatProgressBarModule,
     MatSelectModule,
     MatSlideToggleModule,
+    MatSliderModule,
     MatToolbarModule,
     MatTooltipModule,
     Alert,

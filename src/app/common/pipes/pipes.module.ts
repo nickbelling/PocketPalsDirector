@@ -2,6 +2,7 @@ import { NgModule, Type } from '@angular/core';
 import { CallFunctionPipe } from './call-function.pipe';
 import { ImageColorSourcePipe } from './image-color-source.pipe';
 import { NumberArrayPipe } from './number-array.pipe';
+import { SecondsToDurationPipe } from './seconds-to-duration.pipe';
 import { SortPipe } from './sort.pipe';
 
 const PIPES: Type<unknown>[] = [
@@ -9,6 +10,7 @@ const PIPES: Type<unknown>[] = [
     ImageColorSourcePipe,
     NumberArrayPipe,
     SortPipe,
+    SecondsToDurationPipe,
 ];
 
 @NgModule({
