@@ -1,6 +1,7 @@
 import { assertInInjectionContext, inject, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
+import { default as Pica } from 'pica';
 
 /**
  * Injects any provided route data directly into the component and makes it
@@ -22,9 +23,9 @@ export function resizeImage(
     file: File,
     maxWidth: number,
     maxHeight: number,
-    compression: number = 0.5,
 ): Promise<File> {
     return new Promise((resolve, reject) => {
+        const pica = new Pica();
         const img = new Image();
         const reader = new FileReader();
 
@@ -32,14 +33,9 @@ export function resizeImage(
             img.src = event.target.result;
         };
 
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-
-            let width = img.width;
-            let height = img.height;
-
-            // Calculate the new dimensions
+        img.onload = async () => {
+            // Calculate the new dimensions while maintaining aspect ratio
+            let { width, height } = img;
             if (width > height) {
                 if (width > maxWidth) {
                     height = Math.floor((height * maxWidth) / width);
@@ -52,27 +48,26 @@ export function resizeImage(
                 }
             }
 
-            // Set canvas dimensions
-            canvas.width = width;
-            canvas.height = height;
+            // Create source and destination canvases
+            const srcCanvas = document.createElement('canvas');
+            srcCanvas.width = img.width;
+            srcCanvas.height = img.height;
+            const srcCtx = srcCanvas.getContext('2d');
+            srcCtx?.drawImage(img, 0, 0);
 
-            // Draw the resized image
-            ctx?.drawImage(img, 0, 0, width, height);
+            const destCanvas = document.createElement('canvas');
+            destCanvas.width = width;
+            destCanvas.height = height;
 
-            // Convert the canvas back to a blob
-            canvas.toBlob(
-                (blob) => {
-                    if (blob) {
-                        resolve(
-                            new File([blob], file.name, { type: file.type }),
-                        );
-                    } else {
-                        reject(new Error('Image resizing failed.'));
-                    }
-                },
-                file.type, // Preserve the original file type
-                compression, // Compression quality (0.1 - 1, optional)
-            );
+            // Use Pica to resize the image
+            await pica.resize(srcCanvas, destCanvas, {
+                quality: 3, // 1 (fast) to 3 (high quality)
+            });
+
+            // Convert the canvas to a Blob
+            const blob = await pica.toBlob(destCanvas, 'image/webp', 0.9);
+
+            resolve(new File([blob], file.name, { type: 'image/webp' }));
         };
 
         img.onerror = (error) => reject(error);

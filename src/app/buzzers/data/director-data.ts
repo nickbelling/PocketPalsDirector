@@ -74,7 +74,7 @@ export class BuzzerDirectorDataStore extends BaseFirestoreDataStore {
 
     public async uploadImage(imageFile: File): Promise<string> {
         const imageId = v4();
-        const resized = await resizeImage(imageFile, 300, 300, 0.5);
+        const resized = await resizeImage(imageFile, 300, 300);
         await this.uploadFile(
             resized,
             `${BUZZERS_STORAGE_IMAGES_PATH}/${imageId}`,
