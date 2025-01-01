@@ -9,34 +9,34 @@
             matInput
             cdkFocus
             [disabled]="loading()"
+            (keyup.enter)="search()"
             [(ngModel)]="searchTerm" />
         <button matSuffix mat-icon-button (click)="search()">
             <mat-icon>search</mat-icon>
         </button>
+        <button matSuffix mat-icon-button (click)="searchTerm.set('')">
+            <mat-icon>close</mat-icon>
+        </button>
     </mat-form-field>
 
-    <mat-card>
-        <mat-list [disabled]="loading()">
-            @if (searchResults() !== undefined) {
-                @for (result of searchResults(); track result.id) {
-                    <mat-list-item>
-                        <span>{{ result.name }}</span>
-                        <button
-                            matListItemMeta
-                            mat-flat-button
-                            [disabled]="loading()"
-                            (click)="register(result)">
-                            <span>Register</span>
-                        </button>
-                    </mat-list-item>
-                } @empty {
-                    <mat-list-item>
-                        <span>No results.</span>
-                    </mat-list-item>
-                }
+    <mat-action-list [disabled]="loading()">
+        @if (searchResults() !== undefined) {
+            @for (result of searchResults(); track result.game.id) {
+                <button
+                    mat-list-item
+                    class="search-result"
+                    (click)="register(result)"
+                    [disabled]="result.progress() !== 0">
+                    <span>{{ result.game.name }}</span>
+                    <mat-progress-bar [value]="result.progress()" />
+                </button>
+            } @empty {
+                <mat-list-item>
+                    <span>No results.</span>
+                </mat-list-item>
             }
-        </mat-list>
-    </mat-card>
+        }
+    </mat-action-list>
 </mat-dialog-content>
 
 <mat-dialog-actions>

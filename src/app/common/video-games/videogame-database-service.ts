@@ -16,8 +16,6 @@ interface VideogameDatabaseItem {
     name: string;
 }
 
-type VideogameSlugToNameMap = { [slug: string]: string };
-
 @Injectable({
     providedIn: 'root',
 })
@@ -46,19 +44,21 @@ export class VideogameDatabaseService extends BaseFirestoreDataStore {
         );
     }
 
+    public getGameSlug(name: string): string {
+        return slugify(name, { lower: true });
+    }
+
     public getGameName(slug: string): string {
         return this.games().find((g) => g.id === slug)?.name || slug;
     }
 
     public async registerGame(
+        gameSlug: string,
         gameName: string,
-        logoImage: File,
-        heroImage: File,
     ): Promise<void> {
-        const slug = slugify(gameName, { lower: true });
         const gameDocRef = doc(
             this._firestore,
-            `${this._gamesCollectionRef.path}/${slug}`,
+            `${this._gamesCollectionRef.path}/${gameSlug}`,
         ).withConverter(this._converter);
 
         await setDoc(
@@ -68,9 +68,6 @@ export class VideogameDatabaseService extends BaseFirestoreDataStore {
             },
             { merge: true },
         );
-
-        await this.uploadLogo(slug, logoImage);
-        await this.uploadHero(slug, heroImage);
     }
 
     public async uploadLogo(gameSlug: string, image: File): Promise<void> {

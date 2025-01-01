@@ -1,9 +1,21 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, WritableSignal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { default as SGDB, SGDBGame, SGDBImage } from 'steamgriddb';
+import { default as SGDB, SGDBGame } from 'steamgriddb';
 import { CORS_PROXY_FUNCTION_URL, SGDB_PROXY_FUNCTION_URL } from '../firestore';
 import { VideogameDatabaseService } from './videogame-database-service';
+
+interface SGDBImage {
+    style: string;
+    height: number;
+    width: number;
+    url: string;
+}
+
+const stylePriority: Record<string, number> = {
+    official: 1,
+    white: 2,
+};
 
 @Injectable()
 export class SteamGridDbService {
@@ -21,39 +33,50 @@ export class SteamGridDbService {
         return results || [];
     }
 
-    public async registerGame(game: SGDBGame): Promise<void> {
+    public async registerGame(
+        game: SGDBGame,
+        progress?: WritableSignal<number>,
+    ): Promise<void> {
+        progress?.set(10);
         const logos = await this._client!.getLogosById(game.id, [
             'official',
             'white',
         ]);
 
-        if (logos.length === 0) {
-            throw new Error('No logos found');
-        }
-
+        progress?.set(20);
         const heroes = await this._client!.getHeroesById(game.id);
 
-        if (heroes.length === 0) {
-            throw new Error('No heroes found');
+        const logo: SGDBImage = (logos as unknown[] as SGDBImage[])[0];
+        const hero: SGDBImage = (heroes as unknown[] as SGDBImage[])[0];
+
+        const slug = this._videogameDatabaseService.getGameSlug(game.name);
+
+        progress?.set(30);
+        if (logo) {
+            const logoFile = await this._downloadImageAsFile(
+                logo.url.toString(),
+                'logo',
+            );
+
+            progress?.set(40);
+            await this._videogameDatabaseService.uploadLogo(slug, logoFile);
         }
 
-        const logo: SGDBImage = logos[0];
-        const hero: SGDBImage = heroes[0];
+        progress?.set(60);
+        if (hero) {
+            const heroFile = await this._downloadImageAsFile(
+                hero.url.toString(),
+                'hero',
+            );
 
-        const logoFile = await this._downloadImageAsFile(
-            logo.url.toString(),
-            'logo',
-        );
-        const heroFile = await this._downloadImageAsFile(
-            hero.url.toString(),
-            'hero',
-        );
+            progress?.set(70);
+            await this._videogameDatabaseService.uploadHero(slug, heroFile);
+        }
 
-        await this._videogameDatabaseService.registerGame(
-            game.name,
-            logoFile,
-            heroFile,
-        );
+        progress?.set(90);
+        await this._videogameDatabaseService.registerGame(slug, game.name);
+
+        progress?.set(100);
     }
 
     private async _downloadImageAsFile(

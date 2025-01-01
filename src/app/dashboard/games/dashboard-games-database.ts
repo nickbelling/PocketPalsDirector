@@ -22,8 +22,8 @@ export class DashboardGamesDatabase {
 
     public addGame(): void {
         this._dialog.open(DashboardGamesDatabaseAddDialog, {
-            width: '400px',
-            maxWidth: '400px',
+            width: '600px',
+            maxWidth: '600px',
         });
     }
 }

@@ -7,21 +7,23 @@
 
 <div class="games g p-y">
     @for (game of games(); track game.id) {
-        <mat-card class="game-card">
-            <img
-                class="game-hero"
-                src="{{
-                    VIDEOGAME_STORAGE_BASE + '/' + game.id + '_hero_thumb'
-                        | uploadedFileUrl
-                        | async
-                }}" />
-            <img
-                class="game-logo"
-                src="{{
-                    VIDEOGAME_STORAGE_BASE + '/' + game.id + '_logo_thumb'
-                        | uploadedFileUrl
-                        | async
-                }}" />
+        @let heroUrl =
+            VIDEOGAME_STORAGE_BASE + '/' + game.id + '_hero_thumb'
+                | uploadedFileUrl
+                | async;
+        @let logoUrl =
+            VIDEOGAME_STORAGE_BASE + '/' + game.id + '_logo_thumb'
+                | uploadedFileUrl
+                | async;
+        <mat-card class="game-card p bg-purple" [fitText]="game.name">
+            @if (heroUrl) {
+                <img class="game-hero" src="{{ heroUrl }}" />
+            }
+            @if (logoUrl) {
+                <img class="game-logo" src="{{ logoUrl }}" />
+            } @else {
+                <span>{{ game.name }}</span>
+            }
         </mat-card>
     }
 </div>

@@ -11,6 +11,11 @@
     overflow: hidden;
     align-items: center;
     justify-content: center;
+
+    // Fallback text when images don't exist
+    color: white;
+    text-align: center;
+    font-size: 30px;
 }
 
 .game-hero {
@@ -20,11 +25,11 @@
     width: 110%;
     height: 110%;
     object-fit: cover;
-    filter: blur(10px);
+    filter: blur(7px);
 }
 
 .game-logo {
     z-index: 2;
-    width: 80%;
-    filter: drop-shadow(5px, 5px, 5px, 5px);
+    width: 100%;
+    filter: drop-shadow(4px 4px 5px #000000bb);
 }

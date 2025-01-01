@@ -1,4 +1,17 @@
-mat-card {
+mat-action-list {
     height: 400px;
     overflow-y: scroll;
+    border: 1px solid var(--mat-sys-outline);
+    box-sizing: border-box;
+}
+
+.search-result {
+    position: relative;
+
+    mat-progress-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
 }
