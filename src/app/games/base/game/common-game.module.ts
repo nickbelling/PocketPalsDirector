@@ -6,6 +6,7 @@ import { FitTextDirective } from '../../../common/directives';
 import { FirebaseUploadedFileUrlPipe } from '../../../common/firestore';
 import { CommonPipesModule } from '../../../common/pipes/pipes.module';
 import { SlideModule } from '../../../common/slide';
+import { GameHeroSrcPipe, GameLogoSrcPipe } from '../../../common/video-games';
 
 const GAME_MODULES: Type<unknown>[] = [
     CommonModule,
@@ -15,6 +16,8 @@ const GAME_MODULES: Type<unknown>[] = [
     SlideModule,
     PlayingCardModule,
     CategoriesModule,
+    GameHeroSrcPipe,
+    GameLogoSrcPipe,
 ];
 
 /**

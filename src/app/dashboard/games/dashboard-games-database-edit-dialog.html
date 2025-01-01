@@ -1,0 +1,64 @@
+@let logoUrl = game | gameLogoSrc | async;
+@let heroUrl = game | gameHeroSrc | async;
+
+<mat-toolbar>
+    <span>Edit game: {{ game.name }}</span>
+</mat-toolbar>
+
+<mat-dialog-content class="layout-column g">
+    <img class="logo" src="{{ logoUrl }}" />
+    <mat-form-field>
+        <mat-label>Logo</mat-label>
+        <input
+            matInput
+            readonly
+            [value]="
+                logoFileInput.files![0]
+                    ? logoFileInput.files![0].name
+                    : 'Upload a file'
+            " />
+        <button matSuffix mat-button (click)="logoFileInput.click()">
+            Choose file
+        </button>
+    </mat-form-field>
+    <input
+        type="file"
+        #logoFileInput
+        hidden
+        (change)="logoFileToUpload.set(logoFileInput.files![0])" />
+
+    <img src="{{ heroUrl }}" />
+    <mat-form-field>
+        <mat-label>Hero</mat-label>
+        <input
+            matInput
+            readonly
+            [value]="
+                heroFileInput.files![0]
+                    ? heroFileInput.files![0].name
+                    : 'Upload a file'
+            " />
+        <button matSuffix mat-button (click)="heroFileInput.click()">
+            Choose file
+        </button>
+    </mat-form-field>
+    <input
+        type="file"
+        #heroFileInput
+        hidden
+        (change)="heroFileToUpload.set(heroFileInput.files![0])" />
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-button [disabled]="loading()" mat-dialog-close>Close</button>
+    <button
+        mat-flat-button
+        [disabled]="
+            (logoFileToUpload() === undefined &&
+                heroFileToUpload() === undefined) ||
+            loading()
+        "
+        (click)="submit()">
+        <span>Upload new images</span>
+    </button>
+</mat-dialog-actions>

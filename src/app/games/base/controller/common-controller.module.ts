@@ -23,7 +23,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Alert } from '../../../common/components/alert';
 import { Player } from '../../../common/components/player';
 import { FitTextDirective } from '../../../common/directives';
+import { FirebaseUploadedFileUrlPipe } from '../../../common/firestore';
 import { CommonPipesModule } from '../../../common/pipes/pipes.module';
+import { GameHeroSrcPipe, GameLogoSrcPipe } from '../../../common/video-games';
 
 const CONTROLLER_MODULES: Type<unknown>[] = [
     CommonModule,
@@ -48,6 +50,9 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     CommonPipesModule,
     FitTextDirective,
     Player,
+    GameLogoSrcPipe,
+    GameHeroSrcPipe,
+    FirebaseUploadedFileUrlPipe,
 ];
 
 /**
@@ -58,6 +63,7 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     imports: CONTROLLER_MODULES,
     exports: CONTROLLER_MODULES,
     providers: [
+        FirebaseUploadedFileUrlPipe,
         {
             provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
             useValue: {

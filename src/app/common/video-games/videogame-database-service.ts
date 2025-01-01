@@ -1,5 +1,12 @@
 import { Injectable, signal } from '@angular/core';
-import { CollectionReference, doc, orderBy, setDoc } from 'firebase/firestore';
+import {
+    CollectionReference,
+    doc,
+    orderBy,
+    serverTimestamp,
+    setDoc,
+    Timestamp,
+} from 'firebase/firestore';
 import { default as slugify } from 'slugify';
 import {
     BaseFirestoreDataStore,
@@ -12,8 +19,9 @@ import { resizeImage } from '../utils';
 export const VIDEOGAME_DATABASE_BASE = 'videogame-db';
 export const VIDEOGAME_STORAGE_BASE = 'videogame-db';
 
-interface VideogameDatabaseItem {
+export interface VideogameDatabaseItem {
     name: string;
+    updatedAt: Timestamp | null;
 }
 
 @Injectable({
@@ -65,6 +73,21 @@ export class VideogameDatabaseService extends BaseFirestoreDataStore {
             gameDocRef,
             {
                 name: gameName,
+            },
+            { merge: true },
+        );
+    }
+
+    public async updateRegisteredGame(gameSlug: string): Promise<void> {
+        const gameDocRef = doc(
+            this._firestore,
+            `${this._gamesCollectionRef.path}/${gameSlug}`,
+        ).withConverter(this._converter);
+
+        await setDoc(
+            gameDocRef,
+            {
+                updatedAt: serverTimestamp(),
             },
             { merge: true },
         );
