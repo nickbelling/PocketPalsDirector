@@ -1,13 +1,25 @@
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
-import { AudioVisualizer } from '../../common/audio/audio-visualizer';
+import { BuzzerController } from '../../buzzers/buzzer-controller/buzzer-controller';
+import { BuzzerDisplay } from '../../buzzers/buzzer-display/buzzer-display';
+import { GamePreview } from '../../common/components/preview/preview';
 import { GAMES } from '../../games/games';
 
 @Component({
+    imports: [
+        RouterModule,
+        MatButtonModule,
+        MatCardModule,
+        MatIconModule,
+        BuzzerController,
+        BuzzerDisplay,
+        GamePreview,
+    ],
     templateUrl: './dashboard-home.html',
-    imports: [RouterModule, MatButtonModule, MatIconModule, AudioVisualizer],
+    styleUrl: './dashboard-home.scss',
 })
 export class DashboardHome {
     public games = GAMES;

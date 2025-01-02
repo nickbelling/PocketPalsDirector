@@ -1,7 +1,7 @@
 <h3>Select a game</h3>
 
 <div class="layout-row g">
-    <div class="layout-column layout-basis-1/5 g">
+    <div class="layout-column layout-basis-2/5 g">
         @for (game of games; track $index) {
             <button
                 mat-flat-button
@@ -11,9 +11,10 @@
             </button>
         }
     </div>
-    <audio-visualizer
-        src="timer_15sec.mp3"
-        [style.width.px]="400"
-        [style.height.px]="300"
-        [style.background-color]="'gray'" />
+    <div class="layout-column layout-basis-3/5 g">
+        <preview class="bg-preview">
+            <buzzer-display />
+        </preview>
+        <buzzer-controller />
+    </div>
 </div>
