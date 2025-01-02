@@ -1,11 +1,20 @@
-<div class="layout-fill layout-column">
-    <button (click)="playing() ? stop() : play()">
-        @if (playing()) {
-            <span>Stop</span>
-        } @else {
-            <span>Play</span>
-        }
-    </button>
+<div class="layout-fill">
+    @if (debugging()) {
+        <button (click)="playing() ? stop() : play()">
+            @if (playing()) {
+                <span>Stop</span>
+            } @else {
+                <span>Play</span>
+            }
+        </button>
+    }
+    <audio
+        #audio
+        crossorigin="anonymous"
+        [src]="src()"
+        (play)="onPlay()"
+        (pause)="onPause()"
+        (ended)="onEnded()"></audio>
 
     <div
         class="visualizer layout-fill layout-row layout-items-fill layout-items-bottom">

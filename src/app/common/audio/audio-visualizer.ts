@@ -3,9 +3,12 @@ import {
     computed,
     DestroyRef,
     effect,
+    ElementRef,
     inject,
     input,
+    output,
     signal,
+    viewChild,
 } from '@angular/core';
 
 @Component({
@@ -15,15 +18,18 @@ import {
 })
 export class AudioVisualizer {
     private _destroyRef = inject(DestroyRef);
-    private _audio = new Audio();
     private _audioContext?: AudioContext;
     private _analyser?: AnalyserNode;
     private _animationId?: number;
     private _dataArray: Uint8Array = new Uint8Array();
 
+    protected _audio = viewChild<ElementRef<HTMLAudioElement>>('audio');
+
     public readonly src = input.required<string>();
     public readonly barCount = input<number>(64);
     public readonly playing = signal<boolean>(false);
+    public readonly ended = output<void>();
+    public readonly debugging = input<boolean>(false);
 
     /**
      * The audio frequencies for the current frame, as produced by the audio
@@ -96,29 +102,6 @@ export class AudioVisualizer {
 
     /** @constructor */
     constructor() {
-        this._audio.onplay = () => {
-            this.playing.set(true);
-        };
-
-        this._audio.onended = () => {
-            this.playing.set(false);
-            this._stopVisualizer();
-            this.frequencies.set(Array(this.barCount()).fill(0));
-        };
-
-        this._audio.onpause = () => {
-            this.playing.set(false);
-        };
-
-        effect(() => {
-            const src = this.src();
-
-            if (src) {
-                this._audio.src = src;
-                this._audio.load();
-            }
-        });
-
         effect(() => {
             if (this.playing()) {
                 // Make sure we have an audioContext and analyser
@@ -136,15 +119,31 @@ export class AudioVisualizer {
         });
     }
 
+    protected onPlay(): void {
+        this.playing.set(true);
+    }
+
+    protected onPause(): void {
+        this.playing.set(false);
+    }
+
+    protected onEnded(): void {
+        this.ended.emit();
+        this.playing.set(false);
+        this._stopVisualizer();
+        this.frequencies.set(Array(this.barCount()).fill(0));
+    }
+
     public play(): void {
+        const audioElement = this._audio()!.nativeElement;
+
         // Create the audio context + analyser
         if (!this._audioContext) {
             this._audioContext = new AudioContext();
             this._analyser = this._audioContext.createAnalyser();
 
-            const source = this._audioContext.createMediaElementSource(
-                this._audio,
-            );
+            const source =
+                this._audioContext.createMediaElementSource(audioElement);
 
             source.connect(this._analyser);
             this._analyser.connect(this._audioContext.destination);
@@ -163,14 +162,13 @@ export class AudioVisualizer {
         }
 
         if (!this.playing() && this.src()) {
-            this._audio.play();
+            audioElement.play();
         }
     }
 
     public stop(): void {
-        console.log('clicked stop');
         if (this.playing()) {
-            this._audio.pause();
+            this._audio()!.nativeElement.pause();
         }
     }
 
