@@ -1,14 +1,12 @@
 <div class="playing-card" [class.show-front]="showingFront()">
     <mat-card
-        class="playing-card-front"
-        [@flipFront]="showingFront() ? 'front' : 'back'"
-    >
+        class="playing-card-front {{ frontClass() }}"
+        [@flipFront]="showingFront() ? 'front' : 'back'">
         <ng-content select="playing-card-front"></ng-content>
     </mat-card>
     <mat-card
-        class="playing-card-back"
-        [@flipBack]="showingFront() ? 'front' : 'back'"
-    >
+        class="playing-card-back {{ backClass() }}"
+        [@flipBack]="showingFront() ? 'front' : 'back'">
         <ng-content select="playing-card-back"></ng-content>
     </mat-card>
 </div>

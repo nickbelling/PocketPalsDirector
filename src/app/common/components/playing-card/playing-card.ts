@@ -5,7 +5,7 @@ import {
     transition,
     trigger,
 } from '@angular/animations';
-import { Component, model } from '@angular/core';
+import { Component, computed, contentChild, input, model } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 
 /**
@@ -33,6 +33,29 @@ import { MatCardModule } from '@angular/material/card';
 })
 export class PlayingCard {
     public readonly showingFront = model<boolean>(false);
+
+    private _playingCardBack = contentChild(PlayingCardBack);
+    private _playingCardFront = contentChild(PlayingCardFront);
+
+    protected backClass = computed(() => {
+        const cardBack = this._playingCardBack();
+
+        if (cardBack) {
+            return cardBack.class();
+        } else {
+            return '';
+        }
+    });
+
+    protected frontClass = computed(() => {
+        const cardFront = this._playingCardFront();
+
+        if (cardFront) {
+            return cardFront.class();
+        } else {
+            return '';
+        }
+    });
 }
 
 @Component({
@@ -46,7 +69,9 @@ export class PlayingCard {
         }
     `,
 })
-export class PlayingCardFront {}
+export class PlayingCardFront {
+    public readonly class = input<string | undefined>(undefined);
+}
 
 @Component({
     selector: 'playing-card-back',
@@ -59,4 +84,6 @@ export class PlayingCardFront {}
         }
     `,
 })
-export class PlayingCardBack {}
+export class PlayingCardBack {
+    public readonly class = input<string | undefined>(undefined);
+}
