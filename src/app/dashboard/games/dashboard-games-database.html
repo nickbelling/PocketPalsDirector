@@ -7,21 +7,12 @@
 
 <div class="games g p-y">
     @for (game of games(); track game.id) {
-        @let heroUrl = game | gameHeroSrc: true | async;
-        @let logoUrl = game | gameLogoSrc: true | async;
         <mat-card
-            class="game-card p bg-purple"
+            class="game-card bg-purple"
             [matTooltip]="game.name"
             [fitText]="game.name"
             (click)="editGame(game)">
-            @if (heroUrl) {
-                <img class="game-hero" src="{{ heroUrl }}" />
-            }
-            @if (logoUrl) {
-                <img class="game-logo" src="{{ logoUrl }}" />
-            } @else {
-                <span>{{ game.name }}</span>
-            }
+            <game-hero [gameId]="game.id" />
         </mat-card>
     }
 </div>

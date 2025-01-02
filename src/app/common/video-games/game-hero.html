@@ -1,0 +1,15 @@
+@let _game = game();
+
+@if (_game) {
+    @let heroUrl = _game | gameHeroSrc: true | async;
+    @let logoUrl = _game | gameLogoSrc: true | async;
+
+    @if (heroUrl) {
+        <img class="game-hero" src="{{ heroUrl }}" />
+    }
+    @if (logoUrl) {
+        <img class="game-logo" src="{{ logoUrl }}" />
+    } @else {
+        <span>{{ _game.name }}</span>
+    }
+}

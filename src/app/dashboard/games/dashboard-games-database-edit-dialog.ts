@@ -7,10 +7,14 @@ import {
     VideogameDatabaseItem,
     VideogameDatabaseService,
 } from '../../common/video-games';
+import {
+    GameHeroSrcPipe,
+    GameLogoSrcPipe,
+} from '../../common/video-games/logo-src.pipe';
 import { CommonControllerModule } from '../../games/base/controller';
 
 @Component({
-    imports: [CommonControllerModule],
+    imports: [CommonControllerModule, GameLogoSrcPipe, GameHeroSrcPipe],
     providers: [SteamGridDbService],
     templateUrl: './dashboard-games-database-edit-dialog.html',
     styleUrl: './dashboard-games-database-edit-dialog.scss',
