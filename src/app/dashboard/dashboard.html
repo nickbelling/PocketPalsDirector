@@ -40,11 +40,15 @@
 
 <mat-menu #gameSelectMenu="matMenu">
     <button mat-menu-item [routerLink]="'game-database'">
+        <mat-icon>database</mat-icon>
         <span>Videogame Database</span>
     </button>
     <mat-divider />
     @for (game of games; track $index) {
         <button mat-menu-item [routerLink]="['director', game.slug]">
+            @if (game.icon) {
+                <mat-icon>{{ game.icon }}</mat-icon>
+            }
             <span>{{ game.name }}</span>
         </button>
     }

@@ -6,7 +6,8 @@
             <button
                 mat-flat-button
                 [routerLink]="['..', 'director', game.slug]">
-                {{ game.name }}
+                <mat-icon>{{ game.icon }}</mat-icon>
+                <span>{{ game.name }}</span>
             </button>
         }
     </div>
