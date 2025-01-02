@@ -15,6 +15,33 @@
         <mat-label>Description</mat-label>
         <input matInput required [(ngModel)]="questionDescription" />
     </mat-form-field>
+    <mat-form-field>
+        <mat-label>Top label</mat-label>
+        <input matInput required [(ngModel)]="questionTopLabel" />
+        <mat-icon
+            matSuffix
+            matTooltip="The label that will appear on the left-most side of the scale (e.g. 'Highest')."
+            >help</mat-icon
+        >
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Bottom label</mat-label>
+        <input matInput required [(ngModel)]="questionBottomLabel" />
+        <mat-icon
+            matSuffix
+            matTooltip="The label that will appear on the right-most side of the scale (e.g. 'Lowest')."
+            >help</mat-icon
+        >
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Item suffix</mat-label>
+        <input matInput [(ngModel)]="questionItemSuffix" />
+        <mat-icon
+            matSuffix
+            matTooltip="Optional. This text will be added after each answer's value. For example, the text 'cm' here will add 'cm' to the values so that they display as '123 cm' rather than just '123'."
+            >help</mat-icon
+        >
+    </mat-form-field>
 </mat-dialog-content>
 
 <mat-dialog-actions>

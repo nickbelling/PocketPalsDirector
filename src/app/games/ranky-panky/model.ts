@@ -18,6 +18,9 @@ export interface RankyPankyQuestion {
     name: string;
     description: string;
     items: RankyPankyQuestionItem[];
+    topLabel: string;
+    bottomLabel: string;
+    itemSuffix: string | null;
 }
 
 export interface RankyPankyQuestionItem {

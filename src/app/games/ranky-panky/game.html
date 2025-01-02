@@ -1,8 +1,9 @@
 @let state = gameState();
 @let questions = gameQuestions();
+@let question = currentQuestion();
 @let cardBackUrl = 'games/ranky-panky/card-back' | uploadedFileUrl | async;
 
-@if (!currentQuestion()) {
+@if (!question) {
     <div @fadeInOut class="game-panel">
         <categories>
             @for (question of questions; track $index) {
@@ -15,7 +16,7 @@
     </div>
 } @else {
     <div @fadeInOut class="game-panel">
-        <h1>{{ currentQuestion()?.name }}</h1>
+        <h1>{{ question.name }}</h1>
         <div class="layout-column g">
             <div slideGroup class="layout-row g">
                 @for (item of currentGuessedItems(); track item.index) {
@@ -36,9 +37,9 @@
                 }
             </div>
             <div class="scale layout-row">
-                <span>Hot</span>
+                <span>{{ question.topLabel }}</span>
                 <span class="layout-fill"></span>
-                <span>Not</span>
+                <span>{{ question.bottomLabel }}</span>
             </div>
             <div slideGroup class="layout-row g">
                 @for (item of answers(); track item.index) {
