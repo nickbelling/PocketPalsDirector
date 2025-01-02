@@ -1,1 +1,51 @@
-<!-- @let state = gameState(); -->
+@let state = gameState();
+@let question = currentQuestion();
+
+@if (question) {
+    <div class="game-panel" @fadeInOut>
+        <playing-card class="game-card" [showingFront]="state.showingGame">
+            <playing-card-back
+                class="layout-column layout-items-middle bg-purple">
+                <span>Game</span>
+            </playing-card-back>
+            <playing-card-front>
+                <game-hero [gameId]="question.gameId" />
+            </playing-card-front>
+        </playing-card>
+
+        <playing-card class="track-card" [showingFront]="state.showingTrack">
+            <playing-card-back
+                class="layout-column layout-items-middle bg-blue">
+                <span>Track</span>
+            </playing-card-back>
+            <playing-card-front
+                class="layout-column layout-items-middle bg-blue">
+                <span>{{ question.trackName }}</span>
+            </playing-card-front>
+        </playing-card>
+
+        <mat-card class="audio-card bg-green">
+            @let backwardsUrl =
+                baseUrl + question.soundBackwards | uploadedFileUrl | async;
+            @let forwardsUrl =
+                baseUrl + question.soundForwards | uploadedFileUrl | async;
+            @if (state.showingGame || state.showingTrack) {
+                @if (forwardsUrl) {
+                    <audio-visualizer
+                        #forwards
+                        @fadeInOut
+                        [src]="forwardsUrl"
+                        (ended)="onForwardsEnded()" />
+                }
+            } @else {
+                @if (backwardsUrl) {
+                    <audio-visualizer
+                        #backwards
+                        @fadeInOut
+                        [src]="backwardsUrl"
+                        (ended)="onBackwardsEnded()" />
+                }
+            }
+        </mat-card>
+    </div>
+}

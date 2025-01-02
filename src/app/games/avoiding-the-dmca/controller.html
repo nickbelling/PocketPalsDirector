@@ -1,13 +1,123 @@
-<!-- @let state = gameState();
-@let questions = gameQuestions(); -->
+@let state = gameState();
+@let questions = gameQuestions();
+@let question = currentQuestion();
 
 <div class="layout-column g">
     <button mat-flat-button class="error" (click)="reset()">
         <mat-icon>refresh</mat-icon>
         <span>Reset game</span>
     </button>
-    <button mat-flat-button (click)="addQuestion()">
-        <mat-icon>add_circle</mat-icon>
-        <span>Add question</span>
-    </button>
+
+    <mat-card class="p g">
+        <mat-form-field>
+            <mat-label>Current question</mat-label>
+            <mat-select
+                [value]="currentQuestionId()"
+                (valueChange)="setQuestion($event)">
+                <mat-option [value]="null">None</mat-option>
+                @for (question of questions; track question.id) {
+                    <mat-option [value]="question.id">
+                        <span
+                            >{{ (question.gameId | gameName)() }} -
+                            {{ question.trackName }}</span
+                        >
+                    </mat-option>
+                }
+            </mat-select>
+            <mat-hint>Select the question to play.</mat-hint>
+        </mat-form-field>
+
+        <div class="layout-row layout-items-fill g">
+            <button mat-flat-button (click)="addQuestion()">
+                <mat-icon>add_circle</mat-icon>
+                <span>Add question</span>
+            </button>
+            <button
+                mat-flat-button
+                class="error"
+                [disabled]="currentQuestion() === undefined"
+                (click)="confirmDeleteQuestion(currentQuestion()!)">
+                <mat-icon>delete</mat-icon>
+                <span>Delete question</span>
+            </button>
+        </div>
+    </mat-card>
+
+    @if (question) {
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>{{
+                    (question.gameId | gameName)()
+                }}</mat-card-title>
+                <mat-card-subtitle>{{ question.trackName }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="layout-column g p-y">
+                <button
+                    mat-flat-button
+                    [disabled]="state.showingGame || state.showingTrack"
+                    (click)="togglePlayBackwards(!state.playingBackwards)">
+                    <mat-icon>{{
+                        state.playingBackwards ? 'pause' : 'arrow_back_2'
+                    }}</mat-icon>
+                    @if (state.playingBackwards) {
+                        <span>Pause backwards</span>
+                    } @else {
+                        <span>Play backwards</span>
+                    }
+                </button>
+
+                <button
+                    mat-flat-button
+                    (click)="toggleShowGame(!state.showingGame)">
+                    <mat-icon>{{
+                        state.showingGame ? 'visibility_off' : 'visibility'
+                    }}</mat-icon>
+                    @if (state.showingGame) {
+                        <span>Hide game</span>
+                    } @else {
+                        <span
+                            >Show game:
+                            {{ (question.gameId | gameName)() }}</span
+                        >
+                    }
+                </button>
+
+                <button
+                    mat-flat-button
+                    (click)="toggleShowTrack(!state.showingTrack)">
+                    <mat-icon>{{
+                        state.showingTrack ? 'visibility_off' : 'visibility'
+                    }}</mat-icon>
+                    @if (state.showingTrack) {
+                        <span>Hide track</span>
+                    } @else {
+                        <span>Show track {{ question.trackName }}</span>
+                    }
+                </button>
+
+                <button
+                    mat-flat-button
+                    [disabled]="!state.showingGame && !state.showingTrack"
+                    (click)="togglePlayForwards(!state.playingForwards)">
+                    <mat-icon>{{
+                        state.playingForwards ? 'pause' : 'play_arrow'
+                    }}</mat-icon>
+                    @if (state.playingForwards) {
+                        <span>Pause forwards</span>
+                    } @else {
+                        <span>Play forwards</span>
+                    }
+                </button>
+
+                <button
+                    class="error"
+                    mat-flat-button
+                    matTooltip="Reset the question prior to selecting another question, or the game/track will be visible."
+                    (click)="resetQuestion()">
+                    <mat-icon>refresh</mat-icon>
+                    <span>Reset question</span>
+                </button>
+            </mat-card-content>
+        </mat-card>
+    }
 </div>

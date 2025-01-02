@@ -16,11 +16,11 @@ export interface GameDefinition {
 
 export const GAMES: GameDefinition[] = [
     {
-        name: 'State Your Bidness',
-        slug: 'state-your-bidness',
-        game: StateYourBidnessGame,
-        controller: StateYourBidnessController,
-        supportsBuzzers: false,
+        name: 'Avoiding the DMCA',
+        slug: 'avoiding-the-dmca',
+        game: AvoidingTheDmcaGame,
+        controller: AvoidingTheDmcaController,
+        supportsBuzzers: true,
     },
     {
         name: 'Ranky Panky',
@@ -30,10 +30,10 @@ export const GAMES: GameDefinition[] = [
         supportsBuzzers: false,
     },
     {
-        name: 'Avoiding the DMCA',
-        slug: 'avoiding-the-dmca',
-        game: AvoidingTheDmcaGame,
-        controller: AvoidingTheDmcaController,
-        supportsBuzzers: true,
+        name: 'State Your Bidness',
+        slug: 'state-your-bidness',
+        game: StateYourBidnessGame,
+        controller: StateYourBidnessController,
+        supportsBuzzers: false,
     },
 ];

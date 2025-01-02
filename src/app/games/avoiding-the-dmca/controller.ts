@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { Entity } from '../../common/firestore';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { AvoidingTheDmcaDatabase } from './database';
 import { AvoidingTheDmcaQuestion, AvoidingTheDmcaState } from './model';
@@ -18,5 +19,55 @@ export class AvoidingTheDmcaController extends BaseController<
 
     public addQuestion(): void {
         this._dialog.open(AvoidingTheDmcaQuestionEditDialog);
+    }
+
+    public async confirmDeleteQuestion(
+        question: Entity<AvoidingTheDmcaQuestion>,
+    ): Promise<void> {
+        await this._confirm.open(
+            'deleteCancel',
+            'Delete question',
+            `Are you sure you want to delete "${question.trackName}"?`,
+            {
+                onDelete: async () => {
+                    await this.deleteQuestion(question);
+                },
+            },
+        );
+    }
+
+    public async setQuestion(questionId: string): Promise<void> {
+        await this.setState({
+            currentQuestion: questionId,
+            playingBackwards: false,
+            showingGame: false,
+            showingTrack: false,
+            playingForwards: false,
+        });
+    }
+
+    public async togglePlayBackwards(playingBackwards: boolean): Promise<void> {
+        await this.setState({ playingBackwards });
+    }
+
+    public async togglePlayForwards(playingForwards: boolean): Promise<void> {
+        await this.setState({ playingForwards });
+    }
+
+    public async toggleShowGame(showingGame: boolean): Promise<void> {
+        await this.setState({ showingGame });
+    }
+
+    public async toggleShowTrack(showingTrack: boolean): Promise<void> {
+        await this.setState({ showingTrack });
+    }
+
+    public async resetQuestion(): Promise<void> {
+        await this.setState({
+            showingGame: false,
+            showingTrack: false,
+            playingBackwards: false,
+            playingForwards: false,
+        });
     }
 }

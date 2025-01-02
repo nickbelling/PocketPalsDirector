@@ -1,0 +1,26 @@
+.game-card {
+    width: 80%;
+    height: 40%;
+
+    playing-card-back {
+        font-size: 100px;
+        text-transform: none;
+    }
+}
+
+.track-card {
+    width: 80%;
+    height: 20%;
+
+    playing-card-back,
+    playing-card-front {
+        font-size: 70px;
+        text-transform: none;
+    }
+}
+
+.audio-card {
+    width: 80%;
+    height: 30%;
+    overflow: hidden;
+}

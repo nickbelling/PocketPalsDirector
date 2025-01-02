@@ -17,6 +17,7 @@ export class AvoidingTheDmcaQuestionEditDialog extends BaseQuestionEditDialog<Av
     private _db: AvoidingTheDmcaDatabase = this.db as AvoidingTheDmcaDatabase;
 
     protected gameId = signal<string | null>(null);
+    protected trackName = signal<string>('');
     protected fileToUpload = signal<File | null>(null);
     protected audioStartPoint = signal<number>(0);
     protected audioLengthSeconds = signal<number>(0);
@@ -39,11 +40,17 @@ export class AvoidingTheDmcaQuestionEditDialog extends BaseQuestionEditDialog<Av
     }
 
     protected isValid = computed(() => {
-        return this.gameId() !== null && this.fileToUpload() !== null;
+        return (
+            this.gameId() !== null &&
+            this.trackName().trim().length > 0 &&
+            this.fileToUpload() !== null
+        );
     });
 
     public async submit(): Promise<void> {
         this.loading.set(true);
+        const gameId = this.gameId()!;
+        const trackName = this.trackName();
         const audioId = uuid();
         const forwardId = audioId + '_forward';
         const backwardId = audioId + '_backward';
@@ -67,7 +74,8 @@ export class AvoidingTheDmcaQuestionEditDialog extends BaseQuestionEditDialog<Av
 
             this.progress.set(80);
             await this.addQuestion({
-                gameId: this.gameId()!,
+                gameId: gameId,
+                trackName: trackName,
                 soundForwards: forwardId,
                 soundBackwards: backwardId,
             });
