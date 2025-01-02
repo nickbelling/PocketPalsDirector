@@ -1,7 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialog } from '../../common/dialog';
 import { Entity } from '../../common/firestore';
 import {
+    SteamGridDbService,
     VIDEOGAME_STORAGE_BASE,
     VideogameDatabaseItem,
     VideogameDatabaseService,
@@ -12,12 +14,14 @@ import { DashboardGamesDatabaseEditDialog } from './dashboard-games-database-edi
 
 @Component({
     imports: [CommonControllerModule],
+    providers: [SteamGridDbService],
     templateUrl: './dashboard-games-database.html',
     styleUrl: './dashboard-games-database.scss',
 })
 export class DashboardGamesDatabase {
     private _db = inject(VideogameDatabaseService);
     private _dialog = inject(MatDialog);
+    private _confirm = inject(ConfirmDialog);
 
     public VIDEOGAME_STORAGE_BASE = VIDEOGAME_STORAGE_BASE;
     public games = this._db.games;
@@ -32,5 +36,18 @@ export class DashboardGamesDatabase {
         this._dialog.open(DashboardGamesDatabaseEditDialog, {
             data: game,
         });
+    }
+
+    public deleteGame(game: Entity<VideogameDatabaseItem>): void {
+        this._confirm.open(
+            'deleteCancel',
+            'Delete game',
+            `Are you sure you want to delete ${game.name}?`,
+            {
+                onDelete: () => {
+                    this._db.deleteGame(game.id);
+                },
+            },
+        );
     }
 }

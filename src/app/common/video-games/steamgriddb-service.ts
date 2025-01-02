@@ -74,7 +74,11 @@ export class SteamGridDbService {
         }
 
         progress?.set(90);
-        await this._videogameDatabaseService.registerGame(slug, game.name);
+        await this._videogameDatabaseService.registerGame(
+            slug,
+            game.name,
+            game.id,
+        );
 
         progress?.set(100);
     }

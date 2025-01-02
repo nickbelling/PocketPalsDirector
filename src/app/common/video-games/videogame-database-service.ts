@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import {
     CollectionReference,
+    deleteDoc,
     doc,
     orderBy,
     serverTimestamp,
@@ -21,6 +22,7 @@ export const VIDEOGAME_STORAGE_BASE = 'videogame-db';
 
 export interface VideogameDatabaseItem {
     name: string;
+    steamGridDbId: number;
     updatedAt: Timestamp | null;
 }
 
@@ -63,6 +65,7 @@ export class VideogameDatabaseService extends BaseFirestoreDataStore {
     public async registerGame(
         gameSlug: string,
         gameName: string,
+        steamGridDbId: number,
     ): Promise<void> {
         const gameDocRef = doc(
             this._firestore,
@@ -73,6 +76,7 @@ export class VideogameDatabaseService extends BaseFirestoreDataStore {
             gameDocRef,
             {
                 name: gameName,
+                steamGridDbId: steamGridDbId,
             },
             { merge: true },
         );
@@ -101,6 +105,31 @@ export class VideogameDatabaseService extends BaseFirestoreDataStore {
     public async uploadHero(gameSlug: string, image: File): Promise<void> {
         const basePath = `${VIDEOGAME_STORAGE_BASE}/${gameSlug}_hero`;
         await this._uploadImageAndThumb(basePath, image);
+    }
+
+    public async deleteGame(gameSlug: string): Promise<void> {
+        try {
+            await this.deleteFile(`${VIDEOGAME_STORAGE_BASE}/${gameSlug}_logo`);
+        } catch {}
+        try {
+            await this.deleteFile(`${VIDEOGAME_STORAGE_BASE}/${gameSlug}_hero`);
+        } catch {}
+        try {
+            await this.deleteFile(
+                `${VIDEOGAME_STORAGE_BASE}/${gameSlug}_logo_thumb`,
+            );
+        } catch {}
+        try {
+            await this.deleteFile(
+                `${VIDEOGAME_STORAGE_BASE}/${gameSlug}_hero_thumb`,
+            );
+        } catch {}
+
+        const gameDocRef = doc(
+            this._firestore,
+            `${this._gamesCollectionRef.path}/${gameSlug}`,
+        ).withConverter(this._converter);
+        await deleteDoc(gameDocRef);
     }
 
     private async _uploadImageAndThumb(
