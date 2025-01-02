@@ -26,7 +26,7 @@ import { Player } from '../../../common/components/player';
 import { FitTextDirective } from '../../../common/directives';
 import { FirebaseUploadedFileUrlPipe } from '../../../common/firestore';
 import { CommonPipesModule } from '../../../common/pipes/pipes.module';
-import { GameHeroSrcPipe, GameLogoSrcPipe } from '../../../common/video-games';
+import { GameHero, VideogameNamePipe } from '../../../common/video-games';
 
 const CONTROLLER_MODULES: Type<unknown>[] = [
     CommonModule,
@@ -52,9 +52,9 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     CommonPipesModule,
     FitTextDirective,
     Player,
-    GameLogoSrcPipe,
-    GameHeroSrcPipe,
+    GameHero,
     FirebaseUploadedFileUrlPipe,
+    VideogameNamePipe,
 ];
 
 /**
