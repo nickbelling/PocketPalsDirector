@@ -11,7 +11,7 @@
             class="game-card bg-purple"
             [matTooltip]="game.name"
             (click)="editGame(game)">
-            <game-hero [gameId]="game.id" />
+            <game-hero [gameId]="game.id" [useThumbnails]="true" />
         </mat-card>
     }
 </div>

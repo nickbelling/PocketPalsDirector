@@ -6,9 +6,17 @@
 </mat-toolbar>
 
 <mat-dialog-content class="layout-column g">
-    <img class="logo" src="{{ logoUrl }}" />
+    @if (logoUrl) {
+        <div class="logo">
+            <img src="{{ logoUrl }}" />
+        </div>
+    } @else {
+        <div class="placeholder logo">
+            <h3>No logo found</h3>
+        </div>
+    }
     <mat-form-field>
-        <mat-label>Logo</mat-label>
+        <mat-label>Replace logo</mat-label>
         <input
             matInput
             readonly
@@ -27,9 +35,15 @@
         hidden
         (change)="logoFileToUpload.set(logoFileInput.files![0])" />
 
-    <img src="{{ heroUrl }}" />
+    @if (heroUrl) {
+        <img class="hero" src="{{ heroUrl }}" />
+    } @else {
+        <div class="placeholder hero">
+            <h3>No hero found</h3>
+        </div>
+    }
     <mat-form-field>
-        <mat-label>Hero</mat-label>
+        <mat-label>Replace hero</mat-label>
         <input
             matInput
             readonly
