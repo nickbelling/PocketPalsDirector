@@ -13,6 +13,7 @@ export class GameHero {
     private _vgDb = inject(VideogameDatabaseService);
 
     public gameId = input.required<string>();
+    public useThumbnails = input<boolean>(false);
 
     public game = computed(() => {
         const games = this._vgDb.games();

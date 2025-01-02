@@ -1,8 +1,8 @@
 @let _game = game();
 
 @if (_game) {
-    @let heroUrl = _game | gameHeroSrc: true | async;
-    @let logoUrl = _game | gameLogoSrc: true | async;
+    @let heroUrl = _game | gameHeroSrc: useThumbnails() | async;
+    @let logoUrl = _game | gameLogoSrc: useThumbnails() | async;
 
     @if (heroUrl) {
         <img class="game-hero" src="{{ heroUrl }}" />
