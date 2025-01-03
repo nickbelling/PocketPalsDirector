@@ -1,5 +1,5 @@
 <mat-toolbar>
-    <img src="pockety.png" />
+    <img src="img/pockety.png" />
     <span>Pocket Pals Director</span>
     <button mat-button [routerLink]="'home'">
         <mat-icon>Home</mat-icon>
@@ -40,7 +40,8 @@
 
 <mat-menu #gameSelectMenu="matMenu">
     <button mat-menu-item [routerLink]="'game-database'">
-        <mat-icon>database</mat-icon>
+        <!-- lol, Material Symbols only has this icon as a "controller" -->
+        <mat-icon>stadia_controller</mat-icon>
         <span>Videogame Database</span>
     </button>
     <mat-divider />
