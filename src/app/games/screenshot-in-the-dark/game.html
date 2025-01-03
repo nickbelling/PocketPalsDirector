@@ -3,7 +3,6 @@
 
 <audio
     #audio
-    controls
     src="audio/music_screenshot_in_the_dark.webm"
     (play)="onPlay()"
     (pause)="onPause()"
@@ -12,13 +11,17 @@
 <mat-card class="screenshot-panel">
     @if (resources && currentQuestion) {
         @let screenshot = currentScreenshot();
-        <div @fadeInOut class="screenshot">
+        <div @fadeInOut class="screenshot bg-purple">
             <game-hero [gameId]="this.gameId()!" />
         </div>
         <div class="screenshot" [class.hidden]="screenshot > 6">
             <h1>1 point</h1>
             @if (currentQuestion.finalIsVideo) {
-                <video autoplay muted loop [src]="resources.src6"></video>
+                <video
+                    autoplay
+                    [muted]="'muted'"
+                    loop
+                    [src]="resources.src6"></video>
             } @else {
                 <img [src]="resources.src6" />
             }

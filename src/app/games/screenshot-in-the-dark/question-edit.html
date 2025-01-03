@@ -3,10 +3,15 @@
 </mat-toolbar>
 
 <mat-dialog-content class="layout-column g">
-    <game-selector [(gameId)]="gameId" />
+    <game-selector [(gameId)]="gameId" [disabled]="loading()" />
     <mat-form-field>
         <mat-label>GuessThe.Game ID</mat-label>
-        <input type="number" matInput required [(ngModel)]="guessTheGameId" />
+        <input
+            type="number"
+            matInput
+            required
+            [disabled]="loading()"
+            [(ngModel)]="guessTheGameId" />
     </mat-form-field>
 
     <mat-progress-bar [value]="progress()" />
