@@ -4,6 +4,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule, Type } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -27,7 +28,11 @@ import { Player } from '../../../common/components/player';
 import { FitTextDirective } from '../../../common/directives';
 import { FirebaseUploadedFileUrlPipe } from '../../../common/firestore';
 import { CommonPipesModule } from '../../../common/pipes/pipes.module';
-import { GameHero, VideogameNamePipe } from '../../../common/video-games';
+import {
+    GameHero,
+    GameSelector,
+    VideogameNamePipe,
+} from '../../../common/video-games';
 
 const CONTROLLER_MODULES: Type<unknown>[] = [
     CommonModule,
@@ -35,6 +40,7 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     ClipboardModule,
     DragDropModule,
     OverlayModule,
+    MatAutocompleteModule,
     MatButtonModule,
     MatCardModule,
     MatChipsModule,
@@ -55,6 +61,7 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     FitTextDirective,
     Player,
     GameHero,
+    GameSelector,
     FirebaseUploadedFileUrlPipe,
     VideogameNamePipe,
 ];

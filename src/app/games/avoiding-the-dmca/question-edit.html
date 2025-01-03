@@ -3,16 +3,7 @@
 </mat-toolbar>
 
 <mat-dialog-content class="layout-column g">
-    <mat-form-field>
-        <mat-label>Game</mat-label>
-        <mat-select required [(ngModel)]="gameId">
-            @for (game of games(); track game.id) {
-                <mat-option [value]="game.id">
-                    <span>{{ game.name }}</span>
-                </mat-option>
-            }
-        </mat-select>
-    </mat-form-field>
+    <game-selector [(gameId)]="gameId" />
     <mat-form-field>
         <mat-label>Track name</mat-label>
         <input matInput required [(ngModel)]="trackName" />

@@ -13,7 +13,7 @@ import { AvoidingTheDmcaQuestion } from './model';
     imports: [CommonControllerModule],
 })
 export class AvoidingTheDmcaQuestionEditDialog extends BaseQuestionEditDialog<AvoidingTheDmcaQuestion> {
-    private _vgdb = inject(VideogameDatabaseService);
+    private _vgDb = inject(VideogameDatabaseService);
     private _db: AvoidingTheDmcaDatabase = this.db as AvoidingTheDmcaDatabase;
 
     protected gameId = signal<string | null>(null);
@@ -22,7 +22,7 @@ export class AvoidingTheDmcaQuestionEditDialog extends BaseQuestionEditDialog<Av
     protected audioStartPoint = signal<number>(0);
     protected audioLengthSeconds = signal<number>(0);
     protected progress = signal<number>(0);
-    protected games = this._vgdb.games;
+    protected games = this._vgDb.games;
 
     constructor() {
         super(inject(AvoidingTheDmcaDatabase));
