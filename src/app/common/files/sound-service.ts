@@ -31,6 +31,8 @@ export class SoundService {
 
         if (!this.soundEnabled() && !forcePlay) {
             audio.volume = 0;
+        } else {
+            audio.volume = 1;
         }
 
         await audio.play();

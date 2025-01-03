@@ -1,6 +1,7 @@
-import { Component, effect, inject, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, viewChild } from '@angular/core';
 import { fadeInOutAnimation } from '../../common/animations';
 import { AudioVisualizer } from '../../common/audio';
+import { SoundService } from '../../common/files';
 import { BaseGame, CommonGameModule } from '../base/game';
 import { AvoidingTheDmcaDatabase } from './database';
 import { AvoidingTheDmcaQuestion, AvoidingTheDmcaState } from './model';
@@ -16,11 +17,13 @@ export class AvoidingTheDmcaGame extends BaseGame<
     AvoidingTheDmcaState,
     AvoidingTheDmcaQuestion
 > {
+    private _sounds = inject(SoundService);
     private _db: AvoidingTheDmcaDatabase;
     private _backwards = viewChild<AudioVisualizer>('backwards');
     private _forwards = viewChild<AudioVisualizer>('forwards');
 
     protected baseUrl = 'games/avoiding-the-dmca/';
+    protected muted = computed(() => !this._sounds.soundEnabled());
 
     constructor() {
         const db = inject(AvoidingTheDmcaDatabase);

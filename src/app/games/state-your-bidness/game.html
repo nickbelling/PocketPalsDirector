@@ -2,13 +2,13 @@
 
 @if (currentQuestion() === undefined) {
     <div @fadeInOut class="game-panel">
-        <categories>
+        <!-- <categories>
             @for (question of gameQuestions(); track question.id) {
                 <category [selected]="state.questionsDone.includes(question.id)"
                     >{{ question.name }}
                 </category>
             }
-        </categories>
+        </categories> -->
     </div>
 } @else {
     <div @fadeInOut class="game-panel">

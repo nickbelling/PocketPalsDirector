@@ -2,70 +2,70 @@
 @let questions = gameQuestions();
 
 <div class="layout-column g">
-    <button mat-flat-button class="error" (click)="reset()">
-        <mat-icon>refresh</mat-icon>
-        <span>Reset game</span>
-    </button>
-
-    <button mat-flat-button (click)="cardBackUpload.click()">
-        <mat-icon>image</mat-icon>
-        <span>Upload new card back</span>
-    </button>
-    <input
-        type="file"
-        hidden
-        #cardBackUpload
-        (change)="uploadCardBack($event)" />
-
-    <mat-form-field class="layout-fill">
-        <mat-label>Current question</mat-label>
-        <mat-select
-            [value]="currentQuestionId()"
-            (valueChange)="setQuestion($event)">
-            <mat-option [value]="null">None</mat-option>
-            @for (question of questions; track question.id) {
-                <mat-option [value]="question.id">
-                    <span>{{ question.name }}</span>
-                    @if (question.items.length < 2) {
-                        <mat-icon class="error">error</mat-icon>
-                    }
-                </mat-option>
-            }
-        </mat-select>
-        <mat-hint
-            >Select the question to play. Select "None" to go back to the
-            list.</mat-hint
-        >
-    </mat-form-field>
-
     <div class="layout-row layout-items-fill g">
-        <button mat-flat-button (click)="addQuestion()">
-            <mat-icon>add_circle</mat-icon>
-            <span>Add question</span>
+        <button mat-flat-button class="error" (click)="reset()">
+            <mat-icon>refresh</mat-icon>
+            <span>Reset game</span>
         </button>
-        <button
-            mat-flat-button
-            (click)="editQuestion(currentQuestion())"
-            [disabled]="currentQuestion() === undefined">
-            <mat-icon>edit</mat-icon>
-            <span>Edit question</span>
+
+        <button mat-flat-button (click)="cardBackUpload.click()">
+            <mat-icon>image</mat-icon>
+            <span>Upload new card back</span>
         </button>
-        <button
-            mat-flat-button
-            (click)="editQuestionItems(currentQuestion())"
-            [disabled]="currentQuestion() === undefined">
-            <mat-icon>playing_cards</mat-icon>
-            <span>Edit items</span>
-        </button>
-        <button
-            mat-flat-button
-            class="error"
-            (click)="deleteQuestionAndFiles(currentQuestion()!)"
-            [disabled]="currentQuestion() === undefined">
-            <mat-icon>delete</mat-icon>
-            <span>Delete question</span>
-        </button>
+        <input
+            type="file"
+            hidden
+            #cardBackUpload
+            (change)="uploadCardBack($event)" />
     </div>
+
+    <mat-card class="p g">
+        <mat-form-field class="layout-fill">
+            <mat-label>Current question</mat-label>
+            <mat-select
+                [value]="currentQuestionId()"
+                (valueChange)="setQuestion($event)">
+                <mat-option [value]="null">None</mat-option>
+                @for (question of questions; track question.id) {
+                    <mat-option [value]="question.id">
+                        <span>{{ question.name }}</span>
+                        @if (question.items.length < 2) {
+                            <mat-icon class="error">error</mat-icon>
+                        }
+                    </mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <div class="layout-row layout-items-fill g">
+            <button mat-flat-button (click)="addQuestion()">
+                <mat-icon>add_circle</mat-icon>
+                <span>Add question</span>
+            </button>
+            <button
+                mat-flat-button
+                (click)="editQuestion(currentQuestion())"
+                [disabled]="currentQuestion() === undefined">
+                <mat-icon>edit</mat-icon>
+                <span>Edit question</span>
+            </button>
+            <button
+                mat-flat-button
+                (click)="editQuestionItems(currentQuestion())"
+                [disabled]="currentQuestion() === undefined">
+                <mat-icon>playing_cards</mat-icon>
+                <span>Edit items</span>
+            </button>
+            <button
+                mat-flat-button
+                class="error"
+                (click)="deleteQuestionAndFiles(currentQuestion()!)"
+                [disabled]="currentQuestion() === undefined">
+                <mat-icon>delete</mat-icon>
+                <span>Delete question</span>
+            </button>
+        </div>
+    </mat-card>
 
     @if (currentQuestion()) {
         @let question = currentQuestion()!;

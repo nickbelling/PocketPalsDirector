@@ -35,6 +35,7 @@
                         #forwards
                         @fadeInOut
                         [src]="forwardsUrl"
+                        [muted]="muted()"
                         (ended)="onForwardsEnded()" />
                 }
             } @else {
@@ -43,6 +44,7 @@
                         #backwards
                         @fadeInOut
                         [src]="backwardsUrl"
+                        [muted]="muted()"
                         (ended)="onBackwardsEnded()" />
                 }
             }

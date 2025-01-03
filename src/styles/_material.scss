@@ -19,7 +19,6 @@
         @include _button();
         @include _card();
         @include _dialog();
-        @include _icon();
         @include _list();
         @include _toolbar();
     }
@@ -56,8 +55,10 @@
     );
 
     .error {
-        mat-icon {
-            color: var(--mat-sys-on-error);
+        &:not(:disabled) {
+            mat-icon {
+                color: var(--mat-sys-on-error);
+            }
         }
 
         @include mat.button-overrides(
@@ -65,6 +66,7 @@
                 filled-container-color: var(--mat-sys-error),
                 filled-label-text-color: var(--mat-sys-on-error),
                 text-label-text-color: var(--mat-sys-on-error),
+                text-disabled-label-text-color: var(--mat-sys-on-surface),
             )
         );
 
@@ -90,16 +92,6 @@
 
     mat-dialog-content {
         min-width: 400px;
-    }
-}
-
-@mixin _icon() {
-    .error {
-        @include mat.icon-overrides(
-            (
-                color: var(--mat-sys-error),
-            )
-        );
     }
 }
 

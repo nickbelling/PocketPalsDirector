@@ -27,6 +27,7 @@ export class AudioVisualizer {
 
     public readonly src = input.required<string>();
     public readonly barCount = input<number>(64);
+    public readonly muted = input<boolean>(false);
     public readonly playing = signal<boolean>(false);
     public readonly ended = output<void>();
     public readonly debugging = input<boolean>(false);

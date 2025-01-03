@@ -9,7 +9,7 @@ import {
     viewChild,
 } from '@angular/core';
 import { fadeInOutAnimation } from '../../common/animations';
-import { ImageService, VideoService } from '../../common/files';
+import { ImageService, SoundService, VideoService } from '../../common/files';
 import { Entity } from '../../common/firestore';
 import { BaseGame, CommonGameModule } from '../base/game';
 import { ScreenshotInTheDarkDatabase } from './database';
@@ -60,16 +60,17 @@ export class ScreenshotInTheDarkGame extends BaseGame<
     private _destroyRef = inject(DestroyRef);
     private _images = inject(ImageService);
     private _videos = inject(VideoService);
+    private _sounds = inject(SoundService);
     private _audioElement = viewChild<ElementRef<HTMLAudioElement>>('audio');
     private _animationFrameId: number | null = null;
 
     protected data: ScreenshotInTheDarkDatabase;
     protected resources = signal<Resources | null>(null);
     protected gameId = signal<string | null>(null);
+    protected currentTime = signal<number>(0);
+    protected muted = computed(() => !this._sounds.soundEnabled());
 
-    public readonly currentTime = signal<number>(0);
-
-    public readonly currentScreenshot = computed<number>(() => {
+    protected currentScreenshot = computed<number>(() => {
         const currentTime = this.currentTime();
         let bestMatch = 0;
 
@@ -84,7 +85,7 @@ export class ScreenshotInTheDarkGame extends BaseGame<
         return bestMatch;
     });
 
-    public readonly screenshotProgress = computed<number>(() => {
+    protected screenshotProgress = computed<number>(() => {
         const time = this.currentTime();
         const currentId = this.currentScreenshot();
         const currentTimestamp = TIMESTAMPS[currentId] ?? 0;

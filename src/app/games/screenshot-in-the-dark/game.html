@@ -4,6 +4,7 @@
 <audio
     #audio
     src="audio/music_screenshot_in_the_dark.webm"
+    [muted]="muted()"
     (play)="onPlay()"
     (pause)="onPause()"
     (ended)="onPause()"

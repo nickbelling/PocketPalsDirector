@@ -12,6 +12,7 @@
         #audio
         crossorigin="anonymous"
         [src]="src()"
+        [muted]="muted()"
         (play)="onPlay()"
         (pause)="onPause()"
         (ended)="onEnded()"></audio>
