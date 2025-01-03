@@ -1,3 +1,5 @@
+export const <%= underscore(name) %>_BASE_PATH = 'games/<%= dasherize(name) %>';
+
 export interface <%= classify(name) %>State {
     currentQuestion: string | null;
 }

@@ -3,7 +3,8 @@ import { BaseGameDatabase } from '../base/database';
 import {
     <%= classify(name) %>State,
     <%= classify(name) %>Question,
-    <%= underscore(name) %>_STATE_DEFAULT
+    <%= underscore(name) %>_BASE_PATH,
+    <%= underscore(name) %>_STATE_DEFAULT,
 } from './model';
 
 @Injectable({
@@ -14,6 +15,8 @@ export class <%= classify(name) %>Database extends BaseGameDatabase<
     <%= classify(name) %>Question
 > {
     constructor() {
-        super('games/<%= dasherize(name) %>', <%= underscore(name) %>_STATE_DEFAULT);
+        super(
+            <%= underscore(name) %>_BASE_PATH,
+            <%= underscore(name) %>_STATE_DEFAULT);
     }
 }

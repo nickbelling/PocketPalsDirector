@@ -14,7 +14,11 @@ export class <%= classify(name) %>Controller extends BaseController<
     <%= classify(name) %>State,
     <%= classify(name) %>Question
 > {
+    protected data: <%= classify(name) %>Database;
+
     constructor() {
-        super(inject(<%= classify(name) %>Database));
+        const database = inject(<%= classify(name) %>Database);
+        super(database);
+        this.data = database;
     }
 }
