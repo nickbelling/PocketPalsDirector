@@ -5,6 +5,7 @@
         matInput
         required
         gameSelectionValidator
+        [disabled]="disabled()"
         [(ngModel)]="selectedGame"
         [matAutocomplete]="gameSelect" />
     <mat-autocomplete #gameSelect="matAutocomplete" [displayWith]="displayFn">

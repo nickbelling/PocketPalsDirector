@@ -5,6 +5,7 @@ import {
     Directive,
     effect,
     inject,
+    input,
     model,
     signal,
 } from '@angular/core';
@@ -63,6 +64,7 @@ export class GameSelector {
     private _vgDb = inject(VideogameDatabaseService);
 
     public readonly gameId = model<string | null>();
+    public readonly disabled = input<boolean>(false);
 
     protected readonly games = this._vgDb.games;
     protected selectedGame = signal<
