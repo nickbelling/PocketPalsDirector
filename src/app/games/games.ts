@@ -3,6 +3,8 @@ import { AvoidingTheDmcaController } from './avoiding-the-dmca/controller';
 import { AvoidingTheDmcaGame } from './avoiding-the-dmca/game';
 import { RankyPankyController } from './ranky-panky/controller';
 import { RankyPankyGame } from './ranky-panky/game';
+import { ScreenshotInTheDarkController } from './screenshot-in-the-dark/controller';
+import { ScreenshotInTheDarkGame } from './screenshot-in-the-dark/game';
 import { StateYourBidnessController } from './state-your-bidness/controller';
 import { StateYourBidnessGame } from './state-your-bidness/game';
 
@@ -31,6 +33,14 @@ export const GAMES: GameDefinition[] = [
         game: RankyPankyGame,
         controller: RankyPankyController,
         supportsBuzzers: false,
+    },
+    {
+        name: 'Screenshot in the Dark',
+        slug: 'screenshot-in-the-dark',
+        icon: 'photo_library',
+        game: ScreenshotInTheDarkGame,
+        controller: ScreenshotInTheDarkController,
+        supportsBuzzers: true,
     },
     {
         name: 'State Your Bidness',
