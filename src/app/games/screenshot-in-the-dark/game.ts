@@ -2,14 +2,22 @@ import {
     Component,
     computed,
     DestroyRef,
+    effect,
     ElementRef,
     inject,
     signal,
     viewChild,
 } from '@angular/core';
+import { fadeInOutAnimation } from '../../common/animations';
+import { ImageService, VideoService } from '../../common/files';
+import { Entity } from '../../common/firestore';
 import { BaseGame, CommonGameModule } from '../base/game';
 import { ScreenshotInTheDarkDatabase } from './database';
-import { ScreenshotInTheDarkQuestion, ScreenshotInTheDarkState } from './model';
+import {
+    SCREENSHOT_IN_THE_DARK_BASE_PATH,
+    ScreenshotInTheDarkQuestion,
+    ScreenshotInTheDarkState,
+} from './model';
 
 /**
  * Mapping of the points in time of the audio track where the template should
@@ -29,10 +37,20 @@ const TIMESTAMPS: Record<number, number> = {
     7: 61.5,
 };
 
+interface Resources {
+    src1: string;
+    src2: string;
+    src3: string;
+    src4: string;
+    src5: string;
+    src6: string;
+}
+
 @Component({
     imports: [CommonGameModule],
     templateUrl: './game.html',
     styleUrl: './game.scss',
+    animations: [fadeInOutAnimation()],
     host: { class: 'pocket-pals-game size-1920x1080' },
 })
 export class ScreenshotInTheDarkGame extends BaseGame<
@@ -40,12 +58,17 @@ export class ScreenshotInTheDarkGame extends BaseGame<
     ScreenshotInTheDarkQuestion
 > {
     private _destroyRef = inject(DestroyRef);
+    private _images = inject(ImageService);
+    private _videos = inject(VideoService);
     private _audioElement = viewChild<ElementRef<HTMLAudioElement>>('audio');
     private _animationFrameId: number | null = null;
 
     protected data: ScreenshotInTheDarkDatabase;
+    protected resources = signal<Resources | null>(null);
+    protected gameId = signal<string | null>(null);
 
     public readonly currentTime = signal<number>(0);
+
     public readonly currentScreenshot = computed<number>(() => {
         const currentTime = this.currentTime();
         let bestMatch = 0;
@@ -89,6 +112,47 @@ export class ScreenshotInTheDarkGame extends BaseGame<
         super(database);
         this.data = database;
 
+        effect(async () => {
+            const currentQuestion = this.currentQuestion();
+            const audioEl = this._audioElement()?.nativeElement;
+
+            // Question changed
+            this.currentTime.set(0);
+            this.resources.set(null);
+
+            if (currentQuestion && audioEl) {
+                audioEl.pause();
+                audioEl.currentTime = 0;
+
+                // Preload this question's resources, and don't display them
+                // until they have all been preloaded
+                const resources = await this._preloadResources(currentQuestion);
+
+                // Everything is loaded, now set the resources/gameId. By this
+                // point everything should be reset and hidden behind the title
+                // card.
+                this.resources.set(resources);
+                this.gameId.set(currentQuestion.gameId);
+            }
+        });
+
+        effect(() => {
+            const state = this.gameState();
+            const audioEl = this._audioElement()?.nativeElement;
+
+            if (audioEl) {
+                if (state.isPlaying) {
+                    audioEl.play();
+                } else {
+                    audioEl.pause();
+                }
+
+                if (state.isShowingAnswer) {
+                    audioEl.currentTime = 65.0;
+                }
+            }
+        });
+
         this._destroyRef.onDestroy(() => {
             this._stopAnimation();
         });
@@ -104,6 +168,25 @@ export class ScreenshotInTheDarkGame extends BaseGame<
 
     public onSeek(): void {
         this._setCurrentTime();
+    }
+
+    private async _preloadResources(
+        question: Entity<ScreenshotInTheDarkQuestion>,
+    ): Promise<Resources> {
+        const url = `${SCREENSHOT_IN_THE_DARK_BASE_PATH}/${question.guessTheGameId}_`;
+
+        const resources: Resources = {
+            src1: await this._images.preloadStorageImage(url + 1),
+            src2: await this._images.preloadStorageImage(url + 2),
+            src3: await this._images.preloadStorageImage(url + 3),
+            src4: await this._images.preloadStorageImage(url + 4),
+            src5: await this._images.preloadStorageImage(url + 5),
+            src6: question?.finalIsVideo
+                ? await this._videos.preloadStorageVideo(url + 6)
+                : await this._images.preloadStorageImage(url + 6),
+        };
+
+        return resources;
     }
 
     private _setCurrentTime(): void {

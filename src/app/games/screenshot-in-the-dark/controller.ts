@@ -1,10 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { ScreenshotInTheDarkDatabase } from './database';
-import {
-    ScreenshotInTheDarkQuestion,
-    ScreenshotInTheDarkState
-} from './model';
+import { ScreenshotInTheDarkQuestion, ScreenshotInTheDarkState } from './model';
+import { ScreenshotInTheDarkQuestionEditDialog } from './question-edit';
 
 @Component({
     imports: [CommonControllerModule],
@@ -20,5 +18,19 @@ export class ScreenshotInTheDarkController extends BaseController<
         const database = inject(ScreenshotInTheDarkDatabase);
         super(database);
         this.data = database;
+    }
+
+    public addQuestion(): void {
+        this._dialog.open(ScreenshotInTheDarkQuestionEditDialog);
+    }
+
+    public async confirmDeleteQuestion(
+        question: ScreenshotInTheDarkQuestion,
+    ): Promise<void> {}
+
+    public async setQuestion(questionId: string): Promise<void> {
+        await this.setState({
+            currentQuestion: questionId,
+        });
     }
 }

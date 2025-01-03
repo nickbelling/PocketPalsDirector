@@ -1,0 +1,23 @@
+<mat-toolbar>
+    <span>Add question</span>
+</mat-toolbar>
+
+<mat-dialog-content class="layout-column g">
+    <game-selector [(gameId)]="gameId" />
+    <mat-form-field>
+        <mat-label>GuessThe.Game ID</mat-label>
+        <input type="number" matInput required [(ngModel)]="guessTheGameId" />
+    </mat-form-field>
+
+    <mat-progress-bar [value]="progress()" />
+</mat-dialog-content>
+
+<mat-dialog-actions class="layout-row layout-items-middle g">
+    <button mat-button [disabled]="loading()" mat-dialog-close>Cancel</button>
+    <button
+        mat-flat-button
+        [disabled]="!isValid() || loading()"
+        (click)="submit()">
+        <span>{{ editing ? 'Edit' : 'Add' }}</span>
+    </button>
+</mat-dialog-actions>

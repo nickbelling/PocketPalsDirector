@@ -27,11 +27,12 @@ export class SoundService {
         src: string,
         forcePlay: boolean = false,
     ): Promise<void> {
+        const audio = new Audio(src);
+
         if (!this.soundEnabled() && !forcePlay) {
-            return;
+            audio.volume = 0;
         }
 
-        const audio = new Audio(src);
         await audio.play();
     }
 }
