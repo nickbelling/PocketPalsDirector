@@ -1,0 +1,15 @@
+<mat-form-field>
+    <mat-label>Game</mat-label>
+    <input
+        type="text"
+        matInput
+        required
+        gameSelectionValidator
+        [(ngModel)]="selectedGame"
+        [matAutocomplete]="gameSelect" />
+    <mat-autocomplete #gameSelect="matAutocomplete" [displayWith]="displayFn">
+        @for (game of filteredGames(); track game.id) {
+            <mat-option [value]="game">{{ game.name }}</mat-option>
+        }
+    </mat-autocomplete>
+</mat-form-field>
