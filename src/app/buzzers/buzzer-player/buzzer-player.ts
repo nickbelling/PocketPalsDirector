@@ -75,7 +75,7 @@ export class BuzzerPlayerButton {
             if (this._previousReadyState === false && canBuzz === true) {
                 // Went from cannot buzz to buzz, play sound
                 if (this.playSounds()) {
-                    this._sounds.playSound('ready.mp3');
+                    this._sounds.playSound('audio/ready.mp3');
                 }
             }
 
