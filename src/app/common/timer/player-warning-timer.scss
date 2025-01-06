@@ -1,0 +1,43 @@
+:host {
+    aspect-ratio: 1/1;
+    font-family: var(--game-font-family);
+    font-weight: 700;
+}
+
+.clock-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: white;
+}
+
+.clock-face {
+    position: relative;
+    container-type: size;
+    width: 100%;
+    height: 100%;
+    background-color: var(--base-blue);
+}
+
+.number {
+    position: absolute;
+    text-align: center;
+    font-size: 10cqh;
+    top: 50%;
+    left: 50%;
+    height: 100%;
+    transform-origin: center;
+    transform: translate(-50%, -50%)
+        rotate(calc(var(--index) * 1turn / var(--total-numbers)));
+}
+
+.clock-hand {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    filter: opacity(0.5);
+    transform-origin: bottom center;
+    transform: translate(-50%, -100%) rotate(var(--rotation));
+}
