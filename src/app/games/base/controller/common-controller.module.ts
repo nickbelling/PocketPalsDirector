@@ -26,7 +26,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Alert } from '../../../common/components/alert';
 import { Player } from '../../../common/components/player';
 import { FitTextDirective } from '../../../common/directives';
-import { FirebaseUploadedFileUrlPipe } from '../../../common/firestore';
+import { CommonFirebaseModule } from '../../../common/firestore';
 import { CommonPipesModule } from '../../../common/pipes/pipes.module';
 import {
     GameHero,
@@ -56,13 +56,13 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     MatSliderModule,
     MatToolbarModule,
     MatTooltipModule,
-    Alert,
+    CommonFirebaseModule,
     CommonPipesModule,
+    Alert,
     FitTextDirective,
     Player,
     GameHero,
     GameSelector,
-    FirebaseUploadedFileUrlPipe,
     VideogameNamePipe,
 ];
 
@@ -74,7 +74,6 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     imports: CONTROLLER_MODULES,
     exports: CONTROLLER_MODULES,
     providers: [
-        FirebaseUploadedFileUrlPipe,
         {
             provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
             useValue: {

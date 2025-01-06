@@ -1,4 +1,4 @@
-import { inject, Pipe, PipeTransform } from '@angular/core';
+import { inject, Injectable, Pipe, PipeTransform } from '@angular/core';
 import { getCachedDownloadUrl, STORAGE } from '.';
 
 /**
@@ -8,6 +8,9 @@ import { getCachedDownloadUrl, STORAGE } from '.';
 @Pipe({
     name: 'uploadedFileUrl',
     pure: true,
+})
+@Injectable({
+    providedIn: 'root',
 })
 export class FirebaseUploadedFileUrlPipe implements PipeTransform {
     private _storage = inject(STORAGE);

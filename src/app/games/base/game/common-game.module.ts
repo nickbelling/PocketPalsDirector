@@ -5,7 +5,7 @@ import { AudioVisualizer } from '../../../common/audio';
 import { CategoriesModule } from '../../../common/components/categories';
 import { PlayingCardModule } from '../../../common/components/playing-card';
 import { FitTextDirective } from '../../../common/directives';
-import { FirebaseUploadedFileUrlPipe } from '../../../common/firestore';
+import { CommonFirebaseModule } from '../../../common/firestore';
 import { CommonPipesModule } from '../../../common/pipes/pipes.module';
 import { SlideModule } from '../../../common/slide';
 import { GameHero } from '../../../common/video-games';
@@ -13,8 +13,8 @@ import { GameHero } from '../../../common/video-games';
 const GAME_MODULES: Type<unknown>[] = [
     CommonModule,
     MatCardModule,
+    CommonFirebaseModule,
     CommonPipesModule,
-    FirebaseUploadedFileUrlPipe,
     FitTextDirective,
     SlideModule,
     PlayingCardModule,

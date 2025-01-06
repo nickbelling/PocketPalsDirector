@@ -4,8 +4,12 @@ import { MatCardModule } from '@angular/material/card';
 import { fadeOutAnimation, growInOutXAnimation } from '../../common/animations';
 import { Player } from '../../common/components/player';
 import { SoundService } from '../../common/files';
-import { Entity, getCachedDownloadUrls, STORAGE } from '../../common/firestore';
-import { FirebaseUploadedFileUrlPipe } from '../../common/firestore/firebase-file-url.pipe';
+import {
+    CommonFirebaseModule,
+    Entity,
+    getCachedDownloadUrls,
+    STORAGE,
+} from '../../common/firestore';
 import { CommonPipesModule } from '../../common/pipes/pipes.module';
 import { SlideModule } from '../../common/slide';
 import {
@@ -26,10 +30,10 @@ import {
     imports: [
         CommonModule,
         MatCardModule,
+        CommonFirebaseModule,
         CommonPipesModule,
         SlideModule,
         Player,
-        FirebaseUploadedFileUrlPipe,
     ],
     templateUrl: './buzzer-display.html',
     styleUrl: './buzzer-display.scss',
