@@ -1,0 +1,6 @@
+@let state = gameState();
+@let currentQuestion = this.currentQuestion();
+
+@if (currentQuestion && state.showingAnswer) {
+    <h1 @fadeInOut>{{ currentQuestion.answer }}</h1>
+}

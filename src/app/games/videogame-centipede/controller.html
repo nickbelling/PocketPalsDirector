@@ -1,0 +1,55 @@
+@let state = gameState();
+@let questions = gameQuestions();
+@let currentQuestion = this.currentQuestion();
+
+<div class="layout-column g">
+    <button mat-flat-button class="error" (click)="reset()">
+        <mat-icon>refresh</mat-icon>
+        <span>Reset game</span>
+    </button>
+
+    <mat-card class="p g">
+        <mat-form-field>
+            <mat-label>Current question</mat-label>
+            <mat-select
+                [value]="currentQuestionId()"
+                (valueChange)="setQuestion($event)">
+                <mat-option [value]="null">None</mat-option>
+                @for (question of questions; track question.id) {
+                    <mat-option [value]="question.id">
+                        <span>{{ question.answer }}</span>
+                    </mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <div class="layout-row layout-items-fill g">
+            <button mat-flat-button (click)="addQuestion()">
+                <mat-icon>add_circle</mat-icon>
+                <span>Add question</span>
+            </button>
+            <button
+                mat-flat-button
+                class="error"
+                [disabled]="currentQuestion === undefined"
+                (click)="confirmDeleteQuestion(currentQuestion!)">
+                <mat-icon>delete</mat-icon>
+                <span>Delete question</span>
+            </button>
+        </div>
+    </mat-card>
+
+    @if (currentQuestion) {
+        <mat-card class="p">
+            <mat-card-title>{{ currentQuestion.answer }}</mat-card-title>
+            <p><strong>Prompt:</strong> {{ currentQuestion.prompt }}</p>
+            <button
+                mat-flat-button
+                (click)="showAnswer()"
+                [disabled]="state.showingAnswer">
+                <mat-icon>visibility</mat-icon>
+                <span>Show answer</span>
+            </button>
+        </mat-card>
+    }
+</div>

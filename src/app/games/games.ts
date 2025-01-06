@@ -7,6 +7,8 @@ import { ScreenshotInTheDarkController } from './screenshot-in-the-dark/controll
 import { ScreenshotInTheDarkGame } from './screenshot-in-the-dark/game';
 import { StateYourBidnessController } from './state-your-bidness/controller';
 import { StateYourBidnessGame } from './state-your-bidness/game';
+import { VideogameCentipedeController } from './videogame-centipede/controller';
+import { VideogameCentipedeGame } from './videogame-centipede/game';
 
 export interface GameDefinition {
     name: string;
@@ -49,5 +51,13 @@ export const GAMES: GameDefinition[] = [
         game: StateYourBidnessGame,
         controller: StateYourBidnessController,
         supportsBuzzers: false,
+    },
+    {
+        name: 'Videogame Centipede',
+        slug: 'videogame-centipede',
+        icon: 'join',
+        game: VideogameCentipedeGame,
+        controller: VideogameCentipedeController,
+        supportsBuzzers: true,
     },
 ];
