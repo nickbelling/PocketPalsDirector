@@ -74,6 +74,8 @@ export class StateYourBidnessController extends BaseController<
             await this.setState({
                 currentQuestion: questionId,
                 committedTo: 0,
+                mainTimerRunning: false,
+                secondaryTimerRunning: false,
                 guessedAnswers: [],
                 showRemainingAnswers: false,
             });
@@ -102,6 +104,20 @@ export class StateYourBidnessController extends BaseController<
         const state = this.gameState();
         await this.setState({
             showRemainingAnswers: !state.showRemainingAnswers,
+        });
+    }
+
+    public async toggleMainTimer(): Promise<void> {
+        const state = this.gameState();
+        await this.setState({
+            mainTimerRunning: !state.mainTimerRunning,
+        });
+    }
+
+    public async toggleSecondaryTimer(): Promise<void> {
+        const state = this.gameState();
+        await this.setState({
+            secondaryTimerRunning: !state.secondaryTimerRunning,
         });
     }
 }

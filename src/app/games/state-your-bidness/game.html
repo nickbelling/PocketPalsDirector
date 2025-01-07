@@ -12,6 +12,12 @@
     </div>
 } @else {
     <div @fadeInOut class="game-panel">
+        @if (state.mainTimerRunning) {
+            <countdown-timer @fadeInOut [length]="120" [muted]="muted()" />
+        } @else if (state.secondaryTimerRunning) {
+            <countdown-timer @fadeInOut [length]="30" [muted]="muted()" />
+        }
+
         <div class="layout-column">
             <h1>{{ currentQuestion()?.name }}</h1>
             <h2>

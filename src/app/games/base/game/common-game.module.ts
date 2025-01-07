@@ -8,6 +8,7 @@ import { FitTextDirective } from '../../../common/directives';
 import { CommonFirebaseModule } from '../../../common/firestore';
 import { CommonPipesModule } from '../../../common/pipes/pipes.module';
 import { SlideModule } from '../../../common/slide';
+import { CountdownTimer } from '../../../common/timers';
 import { GameHero } from '../../../common/video-games';
 
 const GAME_MODULES: Type<unknown>[] = [
@@ -21,6 +22,7 @@ const GAME_MODULES: Type<unknown>[] = [
     CategoriesModule,
     GameHero,
     AudioVisualizer,
+    CountdownTimer,
 ];
 
 /**
