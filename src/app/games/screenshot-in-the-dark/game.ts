@@ -176,16 +176,25 @@ export class ScreenshotInTheDarkGame extends BaseGame<
     ): Promise<Resources> {
         const url = `${SCREENSHOT_IN_THE_DARK_BASE_PATH}/${question.guessTheGameId}_`;
 
-        const resources: Resources = {
-            src1: await this._images.preloadStorageImage(url + 1),
-            src2: await this._images.preloadStorageImage(url + 2),
-            src3: await this._images.preloadStorageImage(url + 3),
-            src4: await this._images.preloadStorageImage(url + 4),
-            src5: await this._images.preloadStorageImage(url + 5),
+        const resourcePromises = {
+            src1: this._images.preloadStorageImage(url + 1),
+            src2: this._images.preloadStorageImage(url + 2),
+            src3: this._images.preloadStorageImage(url + 3),
+            src4: this._images.preloadStorageImage(url + 4),
+            src5: this._images.preloadStorageImage(url + 5),
             src6: question?.finalIsVideo
-                ? await this._videos.preloadStorageVideo(url + 6)
-                : await this._images.preloadStorageImage(url + 6),
+                ? this._videos.preloadStorageVideo(url + 6)
+                : this._images.preloadStorageImage(url + 6),
         };
+
+        const resourcesEntries = await Promise.all(
+            Object.entries(resourcePromises).map(async ([key, promise]) => [
+                key,
+                await promise,
+            ]),
+        );
+
+        const resources = Object.fromEntries(resourcesEntries) as Resources;
 
         return resources;
     }
