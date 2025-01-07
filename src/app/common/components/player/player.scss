@@ -1,26 +1,34 @@
 :host {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    aspect-ratio: 3/4;
+    width: 100%;
     overflow: visible;
+    box-sizing: border-box;
+    container-type: size;
 }
 
 .player-image {
-    height: 80px;
-    width: 100px;
+    width: 100%;
+    aspect-ratio: 1/1;
     object-fit: contain;
     animation-delay: 100ms;
 }
 
 .player-name {
-    height: 60px;
-    width: 100px;
-    margin-top: -20px;
+    height: 40%;
+    width: 100%;
+    margin-top: -30%;
+
+    /** Ensure the child <fit-text> element doesn't size text larger than the
+    available vertical space of the container. */
+    container-type: size;
+    --max-font-size: 100cqh;
 
     display: flex;
-    border-radius: var(--rounding);
+    border-radius: 10cqh;
     box-shadow: var(--mat-sys-level5);
-    padding: var(--padding-amount) calc(var(--padding-amount) / 2);
+    padding: 10%;
     justify-content: center;
     align-items: center;
     background-image: radial-gradient(
@@ -30,7 +38,6 @@
     );
 
     font-family: var(--game-font-family);
-    font-size: 30px;
     color: white;
     text-align: center;
     text-wrap: balance;

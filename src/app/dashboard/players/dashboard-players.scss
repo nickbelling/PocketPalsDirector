@@ -1,5 +1,13 @@
+player {
+    width: 100px;
+}
+
 preview {
     border-radius: var(--rounding);
     box-shadow: var(--mat-sys-level1);
     overflow: hidden;
+}
+
+buzzer-display {
+    width: 1920px;
 }

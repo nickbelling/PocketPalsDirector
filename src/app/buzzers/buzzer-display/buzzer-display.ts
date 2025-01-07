@@ -74,7 +74,7 @@ export class BuzzerDisplay {
         () => {
             const players = this.players();
             return players
-                .filter((p) => p.soundEffect)
+                .filter((p) => p.soundEffect !== null)
                 .map((p) => `${BUZZERS_STORAGE_SOUNDS_PATH}/${p.soundEffect}`);
         },
         {
@@ -112,9 +112,11 @@ export class BuzzerDisplay {
 
             buzzedInPlayers.forEach(async (player) => {
                 if (!this._previousBuzzedInPlayerIds.has(player.id)) {
-                    await this._sound.playStorageSound(
-                        `${BUZZERS_STORAGE_SOUNDS_PATH}/${player.soundEffect}`,
-                    );
+                    if (player.soundEffect) {
+                        await this._sound.playStorageSound(
+                            `${BUZZERS_STORAGE_SOUNDS_PATH}/${player.soundEffect}`,
+                        );
+                    }
                 }
             });
 

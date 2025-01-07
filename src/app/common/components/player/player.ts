@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { FitTextDirective } from '../../directives';
 import { CommonPipesModule } from '../../pipes/pipes.module';
+import { FitText } from '../fit-text/fit-text';
 
 @Component({
-    imports: [CommonModule, CommonPipesModule, MatCardModule, FitTextDirective],
+    imports: [CommonModule, CommonPipesModule, MatCardModule, FitText],
     selector: 'player',
     templateUrl: './player.html',
     styleUrl: './player.scss',

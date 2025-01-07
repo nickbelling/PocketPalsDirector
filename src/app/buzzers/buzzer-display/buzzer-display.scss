@@ -3,10 +3,9 @@
     font-family: var(--game-font-family);
     color: white;
     text-align: center;
-    width: 800px;
-    height: 200px;
-    padding-top: 50px;
     overflow: hidden;
+    max-width: 1920px;
+    max-height: 1080px;
 }
 
 .row {

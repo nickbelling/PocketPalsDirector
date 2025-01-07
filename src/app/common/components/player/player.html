@@ -7,7 +7,6 @@
     class="player-name"
     [class.animate__animated]="animated()"
     [class.animate__bounceInUp]="animated()"
-    [style.--base-color]="color() ? color() : 'var(--base-blue)'"
-    [fitText]="name()">
-    <span>{{ name() }}</span>
+    [style.--base-color]="color() ? color() : 'var(--base-blue)'">
+    <fit-text [text]="name()" />
 </mat-card>
