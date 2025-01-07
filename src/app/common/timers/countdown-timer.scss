@@ -1,0 +1,23 @@
+:host {
+    font-family: var(--game-font-family);
+    font-variant: tabular-nums;
+    color: white;
+    container-type: size;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    background-image: var(--bg-blue);
+    border-color: var(--base-pink);
+    border-width: 5cqh;
+    border-style: solid;
+
+    h1 {
+        font-size: 80cqh;
+        margin: 0;
+        text-align: center;
+        text-shadow: 3cqh 3cqh 3cqh #000000aa;
+    }
+}

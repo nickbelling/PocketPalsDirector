@@ -1,0 +1,8 @@
+<audio
+    autoplay
+    [src]="timerDefinition().srcFile"
+    (timeupdate)="onTimeUpdate($event)"></audio>
+
+<div class="container">
+    <h1>{{ displayTime() | secondsToDuration }}</h1>
+</div>
