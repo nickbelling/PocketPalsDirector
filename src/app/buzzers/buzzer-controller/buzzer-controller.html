@@ -122,14 +122,12 @@
                                 <button
                                     mat-mini-fab
                                     class="error"
-                                    [disabled]="!state().buzzersEnabled"
                                     (click)="toggleLock(player.id, true)">
                                     <mat-icon>lock</mat-icon>
                                 </button>
                             } @else {
                                 <button
                                     mat-icon-button
-                                    [disabled]="!state().buzzersEnabled"
                                     (click)="toggleLock(player.id, false)">
                                     <mat-icon>lock_open</mat-icon>
                                 </button>
