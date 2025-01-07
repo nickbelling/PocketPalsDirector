@@ -96,6 +96,6 @@ export class BuzzerDirectorDataStore extends BaseFirestoreDataStore {
     }
 
     public async deleteSound(subPath: string): Promise<void> {
-        await this.deleteFile(`${BUZZERS_STORAGE_IMAGES_PATH}/${subPath}`);
+        await this.deleteFile(`${BUZZERS_STORAGE_SOUNDS_PATH}/${subPath}`);
     }
 }
