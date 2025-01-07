@@ -1,6 +1,7 @@
 <audio
     autoplay
     [src]="timerDefinition().srcFile"
+    [muted]="muted()"
     (timeupdate)="onTimeUpdate($event)"></audio>
 
 <div class="container">

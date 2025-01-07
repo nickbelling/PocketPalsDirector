@@ -33,6 +33,7 @@ export type TimerLength = 30 | 120;
 export class CountdownTimer {
     public length = input.required<TimerLength>();
     public currentTime = signal<number>(0);
+    public muted = input<boolean>(false);
 
     public timerDefinition = computed<TimerAudioDefinition>(() => {
         const length = this.length();
