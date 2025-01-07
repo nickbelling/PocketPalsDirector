@@ -87,14 +87,20 @@ export class BuzzerPlayerAddDialog extends BaseEntityEditDialog<BuzzerPlayer> {
                 this.uploadProgress.set(100);
             } else {
                 this.uploadProgress.set(25);
-                const imageId = await this._data.uploadImage(
-                    this.imageFileToUpload()!,
-                );
+                let imageId = null;
+                if (this.imageFileToUpload()) {
+                    imageId = await this._data.uploadImage(
+                        this.imageFileToUpload()!,
+                    );
+                }
 
                 this.uploadProgress.set(50);
-                const soundId = await this._data.uploadSound(
-                    this.soundFileToUpload()!,
-                );
+                let soundId = null;
+                if (this.soundFileToUpload()) {
+                    soundId = await this._data.uploadSound(
+                        this.soundFileToUpload()!,
+                    );
+                }
 
                 this.uploadProgress.set(75);
                 await this._data.addPlayer({
