@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import {
     Component,
+    computed,
     contentChildren,
+    ElementRef,
+    inject,
     input,
-    TemplateRef,
-    viewChild,
 } from '@angular/core';
+import { FitTextDirective } from '../../directives';
 
 /**
  * A container for a set of categories. Handles any number of items and takes
@@ -13,7 +15,7 @@ import {
  */
 @Component({
     selector: 'categories',
-    imports: [CommonModule],
+    imports: [CommonModule, FitTextDirective],
     templateUrl: './categories.html',
     styleUrl: './categories.scss',
 })
@@ -28,9 +30,16 @@ export class CategoryList {
  */
 @Component({
     selector: 'category',
-    template: '<ng-template><ng-content /></ng-template>',
+    template: '<ng-content />',
 })
 export class CategoryListItem {
-    public template = viewChild(TemplateRef);
+    private _element = inject(ElementRef);
+    public readonly text = computed(() => {
+        if (this._element) {
+            return this._element.nativeElement.innerText;
+        } else {
+            return '';
+        }
+    });
     public readonly selected = input.required<boolean>();
 }
