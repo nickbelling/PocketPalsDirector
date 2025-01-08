@@ -3,6 +3,14 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { default as Pica } from 'pica';
 
+export function sleep(duration: number): Promise<void> {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, duration);
+    });
+}
+
 /**
  * Injects any provided route data directly into the component and makes it
  * available as a Signal. A shortcut to skip getting the `Observable` from
