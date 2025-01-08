@@ -28,6 +28,7 @@ export class RankyPankyQuestionItemsEditDialog extends BaseQuestionEditDialog<Ra
     protected itemValue = signal<number>(0);
     protected fileToUpload = signal<File | null>(null);
     protected uploadProgress = signal<number>(0);
+    protected clipboardHasImage = signal<boolean>(false);
     private _fileUploadControl = viewChild<ElementRef>('fileInput');
 
     constructor() {
@@ -62,7 +63,7 @@ export class RankyPankyQuestionItemsEditDialog extends BaseQuestionEditDialog<Ra
         const newItem: RankyPankyQuestionItem = {
             name: this.itemName(),
             value: this.itemValue(),
-            index: this.questionItems().length + 1,
+            index: Math.max(0, ...this.questionItems().map((i) => i.index)) + 1,
             uploadedFilePath: path,
         };
 
@@ -72,6 +73,7 @@ export class RankyPankyQuestionItemsEditDialog extends BaseQuestionEditDialog<Ra
         this.uploadProgress.set(0);
         const control = this._fileUploadControl();
         control!.nativeElement.value = null;
+        this.fileToUpload.set(null);
 
         await this.editQuestion({
             items: this.questionItems(),
@@ -123,5 +125,53 @@ export class RankyPankyQuestionItemsEditDialog extends BaseQuestionEditDialog<Ra
         });
         this.loading.set(false);
         this.dialog.close();
+    }
+
+    public async gotFocus(): Promise<void> {
+        const clipboardHasImage = await this._clipboardHasImage();
+        this.clipboardHasImage.set(clipboardHasImage);
+    }
+
+    public async pasteImage(): Promise<void> {
+        if (this.clipboardHasImage()) {
+            const clipboardItems = await navigator.clipboard.read();
+            for (const item of clipboardItems) {
+                if (
+                    item.types.includes('image/png') ||
+                    item.types.includes('image/jpeg')
+                ) {
+                    const imageBlob =
+                        (await item.getType('image/png')) ||
+                        (await item.getType('image/jpeg'));
+                    const fileName =
+                        'Pasted' +
+                        (imageBlob.type === 'image/png' ? '.png' : '.jpg');
+                    const file = new File([imageBlob], fileName, {
+                        type: imageBlob.type,
+                    });
+
+                    this.fileToUpload.set(file);
+                    break;
+                }
+            }
+        }
+    }
+
+    private async _clipboardHasImage(): Promise<boolean> {
+        try {
+            const clipboardItems = await navigator.clipboard.read();
+            for (const item of clipboardItems) {
+                if (
+                    item.types.includes('image/png') ||
+                    item.types.includes('image/jpeg')
+                ) {
+                    return true;
+                }
+            }
+        } catch {
+            console.log('No permissions granted for reading clipboard.');
+        }
+
+        return false;
     }
 }

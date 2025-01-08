@@ -26,6 +26,7 @@
         "@breezystack/lamejs": "^1.2.7",
         "animate.css": "^4.1.1",
         "firebase": "^11.0.2",
+        "html2canvas": "^1.4.1",
         "pica": "^9.0.1",
         "prettier": "^3.4.2",
         "rxjs": "~7.8.0",

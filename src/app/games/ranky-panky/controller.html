@@ -101,7 +101,10 @@
                                 <mat-icon matListItemIcon cdkDragHandle
                                     >drag_indicator</mat-icon
                                 >
-                                <span>{{ item.name }} ({{ item.value }})</span>
+                                <span
+                                    >{{ item.name }} ({{ item.value
+                                    }}{{ question.itemSuffix }})</span
+                                >
                                 <mat-list-item
                                     *cdkDragPlaceholder
                                     class="cdk-placeholder" />

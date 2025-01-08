@@ -2,7 +2,10 @@
     <span>Edit items: {{ questionName }}</span>
 </mat-toolbar>
 
-<mat-dialog-content class="visible">
+<mat-dialog-content
+    class="visible"
+    cdkMonitorSubtreeFocus
+    (cdkFocusChange)="gotFocus()">
     <div class="layout-row g">
         <mat-card class="layout-fill layout-basis-1/2">
             <mat-card-header>
@@ -22,7 +25,10 @@
                             <mat-icon matListItemIcon cdkDragHandle
                                 >drag_indicator</mat-icon
                             >
-                            <span>{{ item.name }} ({{ item.value }})</span>
+                            <span
+                                >{{ item.name }} ({{ item.value
+                                }}{{ question?.itemSuffix }})</span
+                            >
                             <div matListItemMeta>
                                 <button
                                     mat-icon-button
@@ -56,19 +62,28 @@
                 <mat-form-field>
                     <mat-label>Item value</mat-label>
                     <input matInput type="number" [(ngModel)]="itemValue" />
+                    <span matTextSuffix>{{ question?.itemSuffix }}</span>
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>Image</mat-label>
                     <input
                         matInput
                         readonly
-                        [value]="
-                            fileInput.files![0]
-                                ? fileInput.files![0].name
-                                : 'Upload a file'
-                        " />
-                    <button matSuffix mat-button (click)="fileInput.click()">
-                        Choose file
+                        [value]="fileToUpload()?.name || 'Upload a file'" />
+                    <button
+                        matSuffix
+                        mat-icon-button
+                        matTooltip="Browse for file..."
+                        (click)="fileInput.click()">
+                        <mat-icon>upload_file</mat-icon>
+                    </button>
+                    <button
+                        matSuffix
+                        mat-icon-button
+                        matTooltip="Paste from clipboard"
+                        [disabled]="!clipboardHasImage()"
+                        (click)="pasteImage()">
+                        <mat-icon>content_paste</mat-icon>
                     </button>
                 </mat-form-field>
                 <input

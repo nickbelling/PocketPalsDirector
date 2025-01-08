@@ -55,7 +55,10 @@
                         <playing-card-front class="layout-column">
                             <img src="{{ path | uploadedFileUrl | async }}" />
                             <div class="label" [fitText]="item.name">
-                                <span>{{ item.value }}</span>
+                                <span
+                                    >{{ item.value
+                                    }}{{ question.itemSuffix }}</span
+                                >
                             </div>
                         </playing-card-front>
                     </playing-card>

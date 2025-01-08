@@ -60,6 +60,8 @@ export class RankyPankyQuestionEditDialog extends BaseQuestionEditDialog<RankyPa
                     items: [],
                 });
             }
+
+            this.dialog.close();
         } finally {
             this.loading.set(false);
         }
