@@ -1,4 +1,15 @@
-h1 {
-    font-size: 100px;
+h1,
+h2 {
     text-wrap: balance;
+    text-transform: uppercase;
+    font-weight: 700;
+    max-width: 75%;
+}
+
+h1 {
+    font-size: 200px;
+}
+
+h2 {
+    font-size: 100px;
 }
