@@ -1,3 +1,4 @@
+import { A11yModule } from '@angular/cdk/a11y';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -37,6 +38,7 @@ import {
 const CONTROLLER_MODULES: Type<unknown>[] = [
     CommonModule,
     FormsModule,
+    A11yModule,
     ClipboardModule,
     DragDropModule,
     OverlayModule,
