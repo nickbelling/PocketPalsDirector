@@ -18,11 +18,11 @@ export class StateYourBidnessController extends BaseController<
     }
 
     protected committedTo = linkedSignal<number>(
-        () => this.gameState().committedTo,
+        () => this.state().committedTo,
     );
 
     protected showingRemainingAnswers = linkedSignal<boolean>(
-        () => this.gameState().showRemainingAnswers,
+        () => this.state().showRemainingAnswers,
     );
 
     protected possibleItems = computed(() => {
@@ -31,7 +31,7 @@ export class StateYourBidnessController extends BaseController<
     });
 
     protected guessedAnswerCount = computed(
-        () => this.gameState().guessedAnswers.length,
+        () => this.state().guessedAnswers.length,
     );
 
     public addQuestion(): void {
@@ -60,7 +60,7 @@ export class StateYourBidnessController extends BaseController<
     }
 
     public async setQuestion(questionId: string | null): Promise<void> {
-        const state = this.gameState();
+        const state = this.state();
         if (state.currentQuestion !== questionId) {
             if (
                 questionId !== null &&
@@ -83,7 +83,7 @@ export class StateYourBidnessController extends BaseController<
     }
 
     public async setCommittedTo(committedTo: number): Promise<void> {
-        const state = this.gameState();
+        const state = this.state();
         if (state.committedTo !== committedTo) {
             await this.setState({
                 committedTo: committedTo,
@@ -92,7 +92,7 @@ export class StateYourBidnessController extends BaseController<
     }
 
     public async setGuess(answer: string): Promise<void> {
-        const state = this.gameState();
+        const state = this.state();
         if (!state.guessedAnswers.includes(answer)) {
             await this.setState({
                 guessedAnswers: [...state.guessedAnswers, answer],
@@ -101,21 +101,21 @@ export class StateYourBidnessController extends BaseController<
     }
 
     public async toggleShowRemainingAnswers(): Promise<void> {
-        const state = this.gameState();
+        const state = this.state();
         await this.setState({
             showRemainingAnswers: !state.showRemainingAnswers,
         });
     }
 
     public async toggleMainTimer(): Promise<void> {
-        const state = this.gameState();
+        const state = this.state();
         await this.setState({
             mainTimerRunning: !state.mainTimerRunning,
         });
     }
 
     public async toggleSecondaryTimer(): Promise<void> {
-        const state = this.gameState();
+        const state = this.state();
         await this.setState({
             secondaryTimerRunning: !state.secondaryTimerRunning,
         });

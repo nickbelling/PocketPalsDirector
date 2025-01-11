@@ -138,7 +138,7 @@ export class ScreenshotInTheDarkGame extends BaseGame<
         });
 
         effect(() => {
-            const state = this.gameState();
+            const state = this.state();
             const audioEl = this._audioElement()?.nativeElement;
 
             if (audioEl) {

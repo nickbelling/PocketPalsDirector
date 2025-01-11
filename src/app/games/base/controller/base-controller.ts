@@ -12,15 +12,15 @@ export abstract class BaseController<
     protected _confirm = inject(ConfirmDialog);
     private _db: BaseGameDatabase<TState, TQuestion>;
 
-    public readonly gameState: Signal<TState>;
-    public readonly gameQuestions: Signal<Entity<TQuestion>[]>;
+    public readonly state: Signal<TState>;
+    public readonly questions: Signal<Entity<TQuestion>[]>;
     public readonly currentQuestionId: Signal<string | null>;
     public readonly currentQuestion: Signal<Entity<TQuestion> | undefined>;
 
     constructor(db: BaseGameDatabase<TState, TQuestion>) {
         this._db = db;
-        this.gameState = db.state;
-        this.gameQuestions = db.questions;
+        this.state = db.state;
+        this.questions = db.questions;
         this.currentQuestionId = db.currentQuestionId;
         this.currentQuestion = db.currentQuestion;
     }

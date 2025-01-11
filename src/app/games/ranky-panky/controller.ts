@@ -44,7 +44,7 @@ export class RankyPankyController extends BaseController<
     }
 
     public async setQuestion(questionId: string | null): Promise<void> {
-        const state = this.gameState();
+        const state = this.state();
         if (state.currentQuestion !== questionId) {
             if (
                 questionId !== null &&
@@ -104,14 +104,14 @@ export class RankyPankyController extends BaseController<
     }
 
     public async revealItem(): Promise<void> {
-        const revealed = this.gameState().revealedCards;
+        const revealed = this.state().revealedCards;
         await this.setState({
             revealedCards: revealed + 1,
         });
     }
 
     public async revealAnswer(): Promise<void> {
-        const revealed = this.gameState().revealedAnswers;
+        const revealed = this.state().revealedAnswers;
         await this.setState({
             revealedAnswers: revealed + 1,
         });

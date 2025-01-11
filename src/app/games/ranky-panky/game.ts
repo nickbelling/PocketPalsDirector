@@ -22,7 +22,7 @@ export class RankyPankyGame extends BaseGame<
 
     protected currentGuessedItems = computed(() => {
         const question = this.currentQuestion();
-        const state = this.gameState();
+        const state = this.state();
 
         if (question) {
             const itemsOriginalOrder = question.items;

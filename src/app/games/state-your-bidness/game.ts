@@ -23,10 +23,10 @@ export class StateYourBidnessGame extends BaseGame<
         super(inject(StateYourBidnessDatabase));
     }
 
-    protected committedTo = computed(() => this.gameState().committedTo);
+    protected committedTo = computed(() => this.state().committedTo);
     protected answers = computed(() => this.currentQuestion()?.items || []);
     protected possibleAnswersCount = computed(() => this.answers().length);
-    protected guessedAnswers = computed(() => this.gameState().guessedAnswers);
+    protected guessedAnswers = computed(() => this.state().guessedAnswers);
     protected guessedAnswerCount = computed(() => this.guessedAnswers().length);
     protected unguessedAnswerCount = computed(
         () =>

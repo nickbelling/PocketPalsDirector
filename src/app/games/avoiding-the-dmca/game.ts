@@ -31,7 +31,7 @@ export class AvoidingTheDmcaGame extends BaseGame<
         this._db = db;
 
         effect(() => {
-            const state = this.gameState();
+            const state = this.state();
             const currentQuestion = this.currentQuestion();
             const backwards = this._backwards();
             const forwards = this._forwards();
