@@ -1,0 +1,65 @@
+@let state = this.state();
+@let questions = this.questions() | sort: 'gameId';
+@let question = currentQuestion();
+
+@if (!question) {
+    <div @fadeInOut class="game-panel">
+        <div class="game-list" [style.--game-count]="questions.length">
+            @for (question of questions; track question.gameId) {
+                <mat-card
+                    class="game"
+                    [class.selected]="
+                        state.questionsDone.includes(question.id)
+                    ">
+                    <game-hero
+                        [gameId]="question.gameId"
+                        [useThumbnails]="true" />
+                </mat-card>
+            }
+        </div>
+    </div>
+} @else {
+    <div @fadeInOut class="game-panel g">
+        <mat-card class="game hero">
+            <game-hero [gameId]="question.gameId" />
+        </mat-card>
+        <div class="layout-row layout-items-fill g hero">
+            <playing-card [showingFront]="state.currentGuess > 0">
+                <playing-card-back
+                    class="g layout-column layout-items-middle bg-blue">
+                    <h2>Current Guess</h2>
+                    <h1>?</h1>
+                </playing-card-back>
+                <playing-card-front
+                    class="g layout-column layout-items-middle bg-blue">
+                    <h2>Current Guess</h2>
+                    <h1>{{ state.currentGuess }}</h1>
+                </playing-card-front>
+            </playing-card>
+            <playing-card [showingFront]="state.showingAnswer">
+                <playing-card-back
+                    class="g layout-column layout-items-middle bg-green">
+                    <h2>Answer</h2>
+                    <h1>?</h1>
+                </playing-card-back>
+                <playing-card-front
+                    class="g layout-column layout-items-middle bg-green">
+                    <h2>Answer</h2>
+                    <h1>{{ question.hours }}</h1>
+                </playing-card-front>
+            </playing-card>
+            <playing-card [showingFront]="state.opposingTeamGuess !== null">
+                <playing-card-back
+                    class="g layout-column layout-items-middle bg-blue">
+                    <h2>Above/Below</h2>
+                    <h1>?</h1>
+                </playing-card-back>
+                <playing-card-front
+                    class="g layout-column layout-items-middle bg-blue">
+                    <h2>Above/Below</h2>
+                    <h1>{{ state.opposingTeamGuess ? 'Above' : 'Below' }}</h1>
+                </playing-card-front>
+            </playing-card>
+        </div>
+    </div>
+}

@@ -1,0 +1,134 @@
+@let state = this.state();
+@let questions = this.questions();
+@let question = this.currentQuestion();
+
+<div class="layout-column g">
+    <button mat-flat-button class="error" (click)="reset()">
+        <mat-icon>refresh</mat-icon>
+        <span>Reset game</span>
+    </button>
+
+    <mat-card class="p g">
+        <mat-form-field class="layout-fill">
+            <mat-label>Current question</mat-label>
+            <mat-select
+                [value]="currentQuestionId()"
+                (valueChange)="setQuestion($event)">
+                <mat-option [value]="null">None</mat-option>
+                @for (
+                    question of questions | sort: 'gameId';
+                    track question.id
+                ) {
+                    <mat-option [value]="question.id">
+                        <span
+                            >{{ (question.gameId | gameName)() }} ({{
+                                question.hours
+                            }})</span
+                        >
+                    </mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <div class="layout-row layout-items-fill g">
+            <button mat-flat-button (click)="addQuestion()">
+                <mat-icon>add_circle</mat-icon>
+                <span>Add question</span>
+            </button>
+            <button
+                mat-flat-button
+                class="error"
+                (click)="deleteQuestion(currentQuestion()!)"
+                [disabled]="currentQuestion() === undefined">
+                <mat-icon>delete</mat-icon>
+                <span>Delete question</span>
+            </button>
+        </div>
+    </mat-card>
+
+    @if (question) {
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title
+                    >{{ (question.gameId | gameName)() }} ({{
+                        question.hours
+                    }}
+                    hours)</mat-card-title
+                >
+            </mat-card-header>
+            <mat-card-content class="layout-column p-y g">
+                <mat-form-field>
+                    <mat-label>Guess</mat-label>
+                    <input
+                        matInput
+                        type="number"
+                        [(ngModel)]="guess"
+                        [min]="0"
+                        [disabled]="currentQuestion() === undefined" />
+                    <button
+                        mat-icon-button
+                        matSuffix
+                        matTooltip="Increment + 1"
+                        (click)="guess.set(guess() + 1)">
+                        <mat-icon>arrow_circle_up</mat-icon>
+                    </button>
+                    <button
+                        mat-icon-button
+                        matSuffix
+                        matTooltip="Decrement - 1"
+                        (click)="guess.set(guess() - 1)"
+                        [disabled]="guess() === 0">
+                        <mat-icon>arrow_circle_down</mat-icon>
+                    </button>
+                    <button
+                        mat-icon-button
+                        matSuffix
+                        matTooltip="Save"
+                        (click)="setGuess(guess())"
+                        [disabled]="state.currentGuess === guess()">
+                        <mat-icon>save</mat-icon>
+                    </button>
+                </mat-form-field>
+
+                <div class="layout-row layout-items-fill g">
+                    <button mat-flat-button (click)="setHigherLower(true)">
+                        <mat-icon>arrow_upward</mat-icon>
+                        <span>Set "Above"</span>
+                    </button>
+                    <button mat-flat-button (click)="setHigherLower(false)">
+                        <mat-icon>arrow_downward</mat-icon>
+                        <span>Set "Below"</span>
+                    </button>
+                </div>
+
+                <button
+                    mat-flat-button
+                    (click)="showAnswer()"
+                    [disabled]="state.showingAnswer">
+                    <mat-icon>check</mat-icon>
+                    <span>Show answer</span>
+                </button>
+
+                <span><strong>Current team points:</strong> {{ score() }}</span>
+                <span>
+                    <strong>Opposing team points: </strong>
+                    @if (state.opposingTeamGuess === true) {
+                        @if (state.currentGuess > question.hours) {
+                            <span>1</span>
+                        } @else {
+                            <span>0</span>
+                        }
+                    } @else if (state.opposingTeamGuess === false) {
+                        @if (state.currentGuess < question.hours) {
+                            <span>1</span>
+                        } @else {
+                            <span>0</span>
+                        }
+                    } @else {
+                        <span>0</span>
+                    }
+                </span>
+            </mat-card-content>
+        </mat-card>
+    }
+</div>
