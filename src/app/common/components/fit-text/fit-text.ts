@@ -6,5 +6,5 @@ import { Component, input } from '@angular/core';
     styleUrl: './fit-text.scss',
 })
 export class FitText {
-    public readonly text = input.required<string>();
+    public readonly text = input.required<string | number>();
 }

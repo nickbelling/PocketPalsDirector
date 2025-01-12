@@ -3,6 +3,7 @@ import { NgModule, Type } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { AudioVisualizer } from '../../../common/audio';
 import { CategoriesModule } from '../../../common/components/categories';
+import { FitText } from '../../../common/components/fit-text';
 import { PlayingCardModule } from '../../../common/components/playing-card';
 import { FitTextDirective } from '../../../common/directives';
 import { CommonFirebaseModule } from '../../../common/firestore';
@@ -23,6 +24,7 @@ const GAME_MODULES: Type<unknown>[] = [
     GameHero,
     AudioVisualizer,
     CountdownTimer,
+    FitText,
 ];
 
 /**
