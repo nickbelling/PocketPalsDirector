@@ -19,6 +19,7 @@
         @include _button();
         @include _card();
         @include _dialog();
+        @include _expansion-panel();
         @include _list();
         @include _toolbar();
     }
@@ -92,6 +93,25 @@
 
     mat-dialog-content {
         min-width: 400px;
+    }
+}
+
+@mixin _expansion-panel() {
+    mat-expansion-panel-header {
+        text-wrap-mode: nowrap;
+
+        mat-panel-title {
+            display: block !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        mat-panel-description {
+            font-weight: 400;
+            display: block !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     }
 }
 

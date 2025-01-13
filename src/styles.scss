@@ -37,3 +37,11 @@ body {
     display: inline-block;
     vertical-align: text-bottom;
 }
+
+.pre {
+    white-space: pre-wrap;
+}
+
+.disabled-text {
+    color: color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent);
+}
