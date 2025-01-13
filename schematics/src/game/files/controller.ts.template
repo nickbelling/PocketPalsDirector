@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { <%= classify(name) %>Database } from './database';
 import {
+    <%= underscore(name) %>_STATE_DEFAULT,
     <%= classify(name) %>Question,
     <%= classify(name) %>State
 } from './model';
@@ -20,5 +21,29 @@ export class <%= classify(name) %>Controller extends BaseController<
         const database = inject(<%= classify(name) %>Database);
         super(database);
         this.data = database;
+    }
+
+    public async setQuestion(questionId: string): Promise<void> {
+        await this.setState({
+            ...<%= underscore(name) %>_STATE_DEFAULT,
+            currentQuestion: questionId,
+        });
+    }
+
+    public addQuestion(): void {
+        this._dialog.open(<%= classify(name) %>QuestionEditDialog);
+    }
+
+    public confirmDeleteQuestion(question: Entity<<%= classify(name) %>Question>): void {
+        this._confirm.open(
+            'deleteCancel',
+            'Delete question',
+            `Are you sure you want to delete '${question.id}'?`,
+            {
+                onDelete: async () => {
+                    await this.deleteQuestion(question);
+                }
+            }
+        );
     }
 }
