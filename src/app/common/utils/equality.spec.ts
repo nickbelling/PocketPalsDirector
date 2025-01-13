@@ -1,4 +1,4 @@
-import { arraysAreEqual } from './arrays';
+import { arraysAreEqual } from './equality';
 
 describe('arraysAreEqual', () => {
     it('should return true for identical arrays', () => {
