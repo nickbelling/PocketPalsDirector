@@ -8,7 +8,10 @@
         [disabled]="disabled()"
         [(ngModel)]="selectedGame"
         [matAutocomplete]="gameSelect" />
-    <mat-autocomplete #gameSelect="matAutocomplete" [displayWith]="displayFn">
+    <mat-autocomplete
+        #gameSelect="matAutocomplete"
+        autoActiveFirstOption
+        [displayWith]="displayFn">
         @for (game of filteredGames(); track game.id) {
             <mat-option [value]="game">{{ game.name }}</mat-option>
         }

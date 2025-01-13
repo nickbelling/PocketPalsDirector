@@ -85,18 +85,6 @@ export class GameSelector {
     });
 
     constructor() {
-        // When selectedGame is set to a game, output the game ID to the
-        // gameId model signal
-        effect(() => {
-            const selectedGame = this.selectedGame();
-
-            if (selectedGame !== null && typeof selectedGame !== 'string') {
-                this.gameId.set(selectedGame.id);
-            } else {
-                this.gameId.set(null);
-            }
-        });
-
         // When gameId is set (i.e. as model input) set the selected game
         effect(() => {
             const gameId = this.gameId();
@@ -111,6 +99,18 @@ export class GameSelector {
                 }
             } else {
                 this.selectedGame.set(null);
+            }
+        });
+
+        // When selectedGame is set to a game, output the game ID to the
+        // gameId model signal
+        effect(() => {
+            const selectedGame = this.selectedGame();
+
+            if (selectedGame !== null && typeof selectedGame !== 'string') {
+                this.gameId.set(selectedGame.id);
+            } else {
+                this.gameId.set(null);
             }
         });
     }
