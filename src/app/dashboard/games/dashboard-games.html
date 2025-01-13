@@ -10,7 +10,9 @@
 
         <div class="layout-column layout-scroll-y layout-basis-3/5 g">
             <preview class="bg-preview">
-                <ng-container *ngComponentOutlet="gameDef.game" />
+                <div class="size-1920x1080">
+                    <ng-container *ngComponentOutlet="gameDef.game" />
+                </div>
             </preview>
 
             <mat-form-field>
