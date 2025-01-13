@@ -51,7 +51,6 @@ export class FitTextDirective implements OnChanges, AfterViewInit {
             if (element.clientHeight > 0 && element.clientWidth > 0) {
                 let fontSize = this._originalFontSize;
                 element.style.fontSize = `${fontSize}px`;
-                element.style.lineHeight = `${fontSize}px`;
 
                 // Keep shrinking the text until it fits
                 while (
@@ -61,7 +60,6 @@ export class FitTextDirective implements OnChanges, AfterViewInit {
                 ) {
                     fontSize--;
                     element.style.fontSize = `${fontSize}px`;
-                    element.style.lineHeight = `${fontSize}px`;
                 }
             }
         }
