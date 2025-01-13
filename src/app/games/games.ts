@@ -3,6 +3,8 @@ import { AvoidingTheDmcaController } from './avoiding-the-dmca/controller';
 import { AvoidingTheDmcaGame } from './avoiding-the-dmca/game';
 import { BeatItController } from './beat-it/controller';
 import { BeatItGame } from './beat-it/game';
+import { LightlySteamedController } from './lightly-steamed/controller';
+import { LightlySteamedGame } from './lightly-steamed/game';
 import { RankyPankyController } from './ranky-panky/controller';
 import { RankyPankyGame } from './ranky-panky/game';
 import { ScreenshotInTheDarkController } from './screenshot-in-the-dark/controller';
@@ -37,6 +39,14 @@ export const GAMES: GameDefinition[] = [
         game: BeatItGame,
         controller: BeatItController,
         supportsBuzzers: false,
+    },
+    {
+        name: 'Lightly Steamed',
+        slug: 'lightly-steamed',
+        icon: 'reviews',
+        game: LightlySteamedGame,
+        controller: LightlySteamedController,
+        supportsBuzzers: true,
     },
     {
         name: 'Ranky Panky',

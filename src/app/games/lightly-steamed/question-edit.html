@@ -1,0 +1,119 @@
+<mat-toolbar>
+    @if (editing) {
+        <span>Edit question</span>
+    } @else {
+        <span>Add question</span>
+    }
+</mat-toolbar>
+
+<mat-dialog-content class="layout-column g p-bottom">
+    <game-selector [(gameId)]="gameId" />
+
+    <mat-accordion multi>
+        @for (review of reviews(); track review.username) {
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title
+                        >{{ review.username }},
+                        {{ review.hoursPlayed }}</mat-panel-title
+                    >
+                    <mat-panel-description>
+                        <span>{{ review.review }}</span>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="layout-column">
+                    <p class="pre">
+                        <span>{{
+                            review.review | splitSentence: slider.valueAsNumber
+                        }}</span>
+                        <span class="disabled-text">{{
+                            review.review
+                                | splitSentence: slider.valueAsNumber : true
+                        }}</span>
+                    </p>
+                    <mat-slider
+                        discrete
+                        showTickMarks
+                        disableRipple
+                        [step]="1"
+                        [min]="0"
+                        [max]="review.review | splitSentenceCount">
+                        <input #slider matSliderThumb />
+                    </mat-slider>
+                </div>
+                <mat-action-row>
+                    <button
+                        mat-flat-button
+                        class="error"
+                        (click)="deleteReview($index)">
+                        <mat-icon>Delete</mat-icon>
+                        <span>Delete review</span>
+                    </button>
+                </mat-action-row>
+            </mat-expansion-panel>
+        }
+    </mat-accordion>
+
+    @if (reviews().length < 5) {
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Add review</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="layout-column g p-y">
+                <div class="layout-row g layout-items-fill">
+                    <mat-form-field class="layout-fill">
+                        <mat-label>Username</mat-label>
+                        <input
+                            matInput
+                            required
+                            focus
+                            [(ngModel)]="reviewUsername"
+                            [disabled]="isValid()" />
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Hours played</mat-label>
+                        <input
+                            matInput
+                            type="number"
+                            required
+                            [(ngModel)]="reviewHours"
+                            [disabled]="isValid()" />
+                    </mat-form-field>
+                    <mat-checkbox
+                        [(ngModel)]="reviewIsPositive"
+                        [disabled]="isValid()">
+                        <span>Positive</span>
+                    </mat-checkbox>
+                </div>
+                <mat-form-field>
+                    <mat-label>Review</mat-label>
+                    <textarea
+                        matInput
+                        required
+                        rows="5"
+                        [(ngModel)]="reviewContent"
+                        [disabled]="isValid()"></textarea>
+                </mat-form-field>
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button
+                    mat-flat-button
+                    (click)="addReview()"
+                    [disabled]="!reviewIsValid()">
+                    <mat-icon>add_circle</mat-icon>
+                    <span>Add review</span>
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    }
+</mat-dialog-content>
+
+<mat-dialog-actions class="layout-row layout-items-middle g">
+    <button mat-button [disabled]="loading()" mat-dialog-close>Cancel</button>
+    <button
+        mat-flat-button
+        [disabled]="!isValid() || loading()"
+        (click)="submit()">
+        <span>{{ editing ? 'Edit' : 'Add' }}</span>
+    </button>
+</mat-dialog-actions>
