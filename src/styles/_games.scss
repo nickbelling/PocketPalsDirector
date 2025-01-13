@@ -18,8 +18,8 @@
 .pocket-pals-game {
     @include reset.reset();
 
-    // Set default size to 1920x1080
-    @extend .size-1920x1080;
+    height: 100%;
+    width: 100%;
 
     &:has(.game-panel) {
         display: grid;
