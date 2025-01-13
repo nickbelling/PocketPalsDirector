@@ -4,6 +4,10 @@ import { ImageColorSourcePipe } from './image-color-source.pipe';
 import { NumberArrayPipe } from './number-array.pipe';
 import { SecondsToDurationPipe } from './seconds-to-duration.pipe';
 import { SortPipe } from './sort.pipe';
+import {
+    SplitSentenceCountPipe,
+    SplitSentencePipe,
+} from './split-sentence.pipe';
 
 const PIPES: Type<unknown>[] = [
     CallFunctionPipe,
@@ -11,6 +15,8 @@ const PIPES: Type<unknown>[] = [
     NumberArrayPipe,
     SortPipe,
     SecondsToDurationPipe,
+    SplitSentencePipe,
+    SplitSentenceCountPipe,
 ];
 
 @NgModule({
