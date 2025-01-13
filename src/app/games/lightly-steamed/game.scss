@@ -1,17 +1,22 @@
 .answer-card {
-    width: 80%;
-    height: 80%;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    padding: inherit;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     box-shadow: var(--mat-sys-level5);
+
+    game-hero {
+        height: 100%;
+        width: 100%;
+    }
 }
 
 .steam-card {
     container-type: size;
-    height: 80%;
-    width: 80%;
+    height: 100%;
+    width: 100%;
     --gap: 3cqh;
     font-family: 'Brisa Sans', sans-serif;
     font-weight: 400;
@@ -48,6 +53,10 @@
         }
     }
 
+    .content {
+        padding: var(--gap);
+    }
+
     .profile {
         gap: var(--gap);
 
@@ -67,7 +76,7 @@
         }
     }
 
-    .content {
+    .review {
         color: #acb2b8;
         font-size: 5cqh;
         padding: 0 var(--gap);

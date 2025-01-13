@@ -6,10 +6,9 @@
 
 @if (question) {
     <div @fadeInOut class="game-panel">
-        <game-hero
-            class="answer-card"
-            [gameId]="question.gameId"
-            [class.hidden]="!state.showingAnswer" />
+        <div class="answer-card" [class.hidden]="!state.showingAnswer">
+            <game-hero [gameId]="question.gameId" />
+        </div>
         <div
             class="steam-card layout-column"
             [class.hidden]="state.showingAnswer">
@@ -28,7 +27,7 @@
                 </div>
             </div>
 
-            <div class="layout-row layout-fill p">
+            <div class="content layout-row layout-fill">
                 <div class="profile layout-column layout-basis-1/4">
                     <img
                         [src]="avatarBase + randomAvatarNum() + '.png'"
@@ -36,7 +35,7 @@
                     <span class="profile-name">{{ review.username }}</span>
                 </div>
                 <div
-                    class="content layout-column layout-basis-3/4"
+                    class="review layout-column layout-basis-3/4"
                     [fitText]="review.review">
                     <p class="pre">
                         <span>{{
