@@ -32,14 +32,28 @@
 
     .g-row {
         row-gap: var(--padding-amount);
+
+        * {
+            margin-left: 0;
+            margin-right: 0;
+        }
     }
 
     .g-column {
         column-gap: var(--padding-amount);
+
+        * {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
     }
 
     .g {
         gap: var(--padding-amount);
+
+        * {
+            margin: 0;
+        }
     }
 
     .visible {

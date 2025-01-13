@@ -82,6 +82,23 @@
 }
 
 @mixin _card() {
+    mat-card {
+        @include mat.card-overrides(
+            (
+                elevated-container-color: var(--mat-sys-surface-container-low),
+            )
+        );
+
+        mat-card {
+            @include mat.card-overrides(
+                (
+                    elevated-container-color: var(
+                            --mat-sys-surface-container-lowest
+                        ),
+                )
+            );
+        }
+    }
 }
 
 @mixin _dialog() {
