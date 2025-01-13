@@ -1,59 +1,58 @@
 @let state = this.state();
 @let question = this.currentQuestion();
-@let imgThumbsUp =
-    'https://store.fastly.steamstatic.com/public/shared/images/userreviews/icon_thumbsUp_v6.png';
-@let imgThumbsDown =
-    'https://store.fastly.steamstatic.com/public/shared/images/userreviews/icon_thumbsDown_v6.png';
+@let imgThumbsUp = 'img/lightly_steamed/thumbsUp.png';
+@let imgThumbsDown = 'img/lightly_steamed/thumbsDown.png';
+@let avatarBase = 'img/lightly_steamed/avatar';
 
 @if (question) {
     <div @fadeInOut class="game-panel">
-        <div class="steam-card layout-column">
-            @if (!state.showingAnswer) {
-                @let review = question.reviews[state.currentReview];
-                <div class="header layout-row">
-                    <img
-                        [src]="
-                            review.isPositive ? imgThumbsUp : imgThumbsDown
-                        " />
-                    <div class="layout-column layout-items-middle">
-                        @if (review.isPositive) {
-                            <span class="header-title">Recommended</span>
-                        } @else {
-                            <span class="header-title">Not Recommended</span>
-                        }
-                        <span class="header-subtitle"
-                            >{{ review.hoursPlayed }} hours on record</span
-                        >
-                    </div>
+        <game-hero
+            class="answer-card"
+            [gameId]="question.gameId"
+            [class.hidden]="!state.showingAnswer" />
+        <div
+            class="steam-card layout-column"
+            [class.hidden]="state.showingAnswer">
+            @let review = question.reviews[state.currentReview];
+            <div class="header layout-row">
+                <img [src]="review.isPositive ? imgThumbsUp : imgThumbsDown" />
+                <div class="layout-column layout-items-middle">
+                    @if (review.isPositive) {
+                        <span class="header-title">Recommended</span>
+                    } @else {
+                        <span class="header-title">Not Recommended</span>
+                    }
+                    <span class="header-subtitle"
+                        >{{ review.hoursPlayed }} hours on record</span
+                    >
                 </div>
+            </div>
 
-                <div class="layout-row layout-fill p">
-                    <div class="profile layout-column">
-                        <img [src]="imgThumbsUp" />
-                        <span class="profile-name">{{ review.username }}</span>
-                    </div>
-                    <div
-                        class="content layout-column layout-fill"
-                        [fitText]="review.review">
-                        <p class="pre">
-                            <span>{{
-                                review.review
-                                    | splitSentence: state.currentSentence
-                            }}</span>
-                            <span class="hidden">
-                                {{
-                                    review.review
-                                        | splitSentence
-                                            : state.currentSentence
-                                            : true
-                                }}
-                            </span>
-                        </p>
-                    </div>
+            <div class="layout-row layout-fill p">
+                <div class="profile layout-column layout-basis-1/4">
+                    <img
+                        [src]="avatarBase + randomAvatarNum() + '.png'"
+                        class="bg-{{ randomAvatarColor() }}" />
+                    <span class="profile-name">{{ review.username }}</span>
                 </div>
-            } @else {
-                <game-hero [gameId]="question.gameId" />
-            }
+                <div
+                    class="content layout-column layout-basis-3/4"
+                    [fitText]="review.review">
+                    <p class="pre">
+                        <span>{{
+                            review.review | splitSentence: state.currentSentence
+                        }}</span>
+                        <span class="hidden">
+                            {{
+                                review.review
+                                    | splitSentence
+                                        : state.currentSentence
+                                        : true
+                            }}
+                        </span>
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 }

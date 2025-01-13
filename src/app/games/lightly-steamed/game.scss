@@ -1,3 +1,13 @@
+.answer-card {
+    width: 80%;
+    height: 80%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: var(--mat-sys-level5);
+}
+
 .steam-card {
     container-type: size;
     height: 80%;
@@ -43,8 +53,8 @@
 
         img {
             aspect-ratio: 1;
-            height: 20cqh;
-            width: 20cqh;
+            height: 25cqh;
+            width: 25cqh;
             border-color: rgb(143, 185, 59);
             border-style: solid;
             border-width: 3px;
@@ -60,10 +70,10 @@
     .content {
         color: #acb2b8;
         font-size: 5cqh;
-        padding-left: var(--gap);
-
-        .hidden {
-            color: transparent;
-        }
+        padding: 0 var(--gap);
     }
+}
+
+.hidden {
+    opacity: 0;
 }
