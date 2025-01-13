@@ -4,12 +4,14 @@ export interface LightlySteamedState {
     currentQuestion: string | null;
     currentReview: number;
     currentSentence: number;
+    showingAnswer: boolean;
 }
 
 export const LIGHTLY_STEAMED_STATE_DEFAULT: LightlySteamedState = {
     currentQuestion: null,
     currentReview: 0,
     currentSentence: 0,
+    showingAnswer: false,
 };
 
 export interface LightlySteamedQuestion {

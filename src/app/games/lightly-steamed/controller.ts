@@ -59,4 +59,25 @@ export class LightlySteamedController extends BaseController<
             },
         );
     }
+
+    public async setReview(index: number): Promise<void> {
+        await this.setState({
+            currentReview: index,
+            currentSentence: 0,
+            showingAnswer: false,
+        });
+    }
+
+    public async revealNextSentence(): Promise<void> {
+        const state = this.state();
+        await this.setState({
+            currentSentence: state.currentSentence + 1,
+        });
+    }
+
+    public async showAnswer(): Promise<void> {
+        await this.setState({
+            showingAnswer: true,
+        });
+    }
 }

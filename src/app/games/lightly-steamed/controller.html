@@ -1,4 +1,4 @@
-<!-- @let state = this.state(); -->
+@let state = this.state();
 @let questions = this.questions();
 @let question = this.currentQuestion();
 
@@ -45,4 +45,79 @@
             </button>
         </div>
     </mat-card>
+
+    @if (question) {
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>{{
+                    (question.gameId | gameName)()
+                }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="layout-column g p-y">
+                <div class="layout-row g">
+                    @for (review of question.reviews; track $index) {
+                        <button
+                            mat-flat-button
+                            (click)="setReview($index)"
+                            [disabled]="state.currentReview === $index">
+                            <span>{{ $index + 1 }}</span>
+                        </button>
+                    }
+                </div>
+                @let review = question.reviews[state.currentReview];
+                <p>
+                    <strong>{{ review.username }}</strong>
+                    @if (review.isPositive) {
+                        <strong> recommends</strong>
+                    } @else {
+                        <strong> does not recommend</strong>
+                    }
+                    <span> this game, with </span>
+                    <strong>{{ review.hoursPlayed }} hours</strong>
+                    <span> played.</span>
+                </p>
+
+                <strong>Review:</strong>
+
+                <mat-card>
+                    <mat-card-content class="layout-column g">
+                        <p class="pre">
+                            <span>{{
+                                review.review
+                                    | splitSentence: state.currentSentence
+                            }}</span>
+                            <span class="disabled-text">{{
+                                review.review
+                                    | splitSentence
+                                        : state.currentSentence
+                                        : true
+                            }}</span>
+                        </p>
+                        <mat-progress-bar
+                            [value]="
+                                (state.currentSentence /
+                                    (review.review | splitSentenceCount)) *
+                                100
+                            " />
+                        <button
+                            mat-flat-button
+                            (click)="revealNextSentence()"
+                            [disabled]="
+                                state.currentSentence >=
+                                (review.review | splitSentenceCount)
+                            ">
+                            <span>Reveal next sentence</span>
+                        </button>
+                    </mat-card-content>
+                </mat-card>
+                <button
+                    mat-flat-button
+                    (click)="showAnswer()"
+                    [disabled]="state.showingAnswer">
+                    <mat-icon>check_circle</mat-icon>
+                    <span>Show answer</span>
+                </button>
+            </mat-card-content>
+        </mat-card>
+    }
 </div>
