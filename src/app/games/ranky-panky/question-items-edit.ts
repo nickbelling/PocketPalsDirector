@@ -1,13 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import {
-    Component,
-    computed,
-    ElementRef,
-    inject,
-    signal,
-    viewChild,
-} from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { v4 as uuid } from 'uuid';
+import { ImageField } from '../../common/components/image-field/image-field';
 import { resizeImage } from '../../common/utils';
 import {
     BaseQuestionEditDialog,
@@ -17,7 +11,7 @@ import { RankyPankyDatabase } from './database';
 import { RankyPankyQuestion, RankyPankyQuestionItem } from './model';
 
 @Component({
-    imports: [CommonControllerModule],
+    imports: [CommonControllerModule, ImageField],
     templateUrl: './question-items-edit.html',
 })
 export class RankyPankyQuestionItemsEditDialog extends BaseQuestionEditDialog<RankyPankyQuestion> {
@@ -28,8 +22,6 @@ export class RankyPankyQuestionItemsEditDialog extends BaseQuestionEditDialog<Ra
     protected itemValue = signal<number>(0);
     protected fileToUpload = signal<File | null>(null);
     protected uploadProgress = signal<number>(0);
-    protected clipboardHasImage = signal<boolean>(false);
-    private _fileUploadControl = viewChild<ElementRef>('fileInput');
 
     constructor() {
         super(inject(RankyPankyDatabase));
@@ -71,8 +63,6 @@ export class RankyPankyQuestionItemsEditDialog extends BaseQuestionEditDialog<Ra
         this.itemName.set('');
         this.itemValue.set(0);
         this.uploadProgress.set(0);
-        const control = this._fileUploadControl();
-        control!.nativeElement.value = null;
         this.fileToUpload.set(null);
 
         await this.editQuestion({
@@ -125,53 +115,5 @@ export class RankyPankyQuestionItemsEditDialog extends BaseQuestionEditDialog<Ra
         });
         this.loading.set(false);
         this.dialog.close();
-    }
-
-    public async gotFocus(): Promise<void> {
-        const clipboardHasImage = await this._clipboardHasImage();
-        this.clipboardHasImage.set(clipboardHasImage);
-    }
-
-    public async pasteImage(): Promise<void> {
-        if (this.clipboardHasImage()) {
-            const clipboardItems = await navigator.clipboard.read();
-            for (const item of clipboardItems) {
-                if (
-                    item.types.includes('image/png') ||
-                    item.types.includes('image/jpeg')
-                ) {
-                    const imageBlob =
-                        (await item.getType('image/png')) ||
-                        (await item.getType('image/jpeg'));
-                    const fileName =
-                        'Pasted' +
-                        (imageBlob.type === 'image/png' ? '.png' : '.jpg');
-                    const file = new File([imageBlob], fileName, {
-                        type: imageBlob.type,
-                    });
-
-                    this.fileToUpload.set(file);
-                    break;
-                }
-            }
-        }
-    }
-
-    private async _clipboardHasImage(): Promise<boolean> {
-        try {
-            const clipboardItems = await navigator.clipboard.read();
-            for (const item of clipboardItems) {
-                if (
-                    item.types.includes('image/png') ||
-                    item.types.includes('image/jpeg')
-                ) {
-                    return true;
-                }
-            }
-        } catch {
-            console.log('No permissions granted for reading clipboard.');
-        }
-
-        return false;
     }
 }
