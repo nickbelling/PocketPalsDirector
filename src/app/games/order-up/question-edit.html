@@ -1,0 +1,93 @@
+<mat-toolbar>
+    @if (editing) {
+        <span>Edit question</span>
+    } @else {
+        <span>Add question</span>
+    }
+</mat-toolbar>
+
+<mat-dialog-content #focus class="layout-row layout-fill g p-bottom">
+    <!-- Form -->
+    <div class="layout-basis-1/2 layout-column g">
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput required [(ngModel)]="name" />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Description</mat-label>
+            <input matInput required [(ngModel)]="description" />
+        </mat-form-field>
+
+        <!-- Add items card -->
+        <mat-card class="layout-column g">
+            <mat-card-header>
+                <mat-card-title>Add item</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="layout-column g">
+                <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input matInput required [(ngModel)]="itemName" />
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Value/answer</mat-label>
+                    <input matInput required [(ngModel)]="itemValue" />
+                </mat-form-field>
+                <image-field
+                    [(fileToUpload)]="itemImage"
+                    [focusElement]="focus" />
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button
+                    mat-flat-button
+                    (click)="addItem()"
+                    [disabled]="!itemIsValid()">
+                    Add
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+
+    <!-- Item list -->
+    <mat-card class="layout-basis-1/2">
+        <mat-card-header>
+            <mat-card-title>Items (in correct order)</mat-card-title>
+        </mat-card-header>
+        <mat-list cdkDropList>
+            @for (item of items(); track item.name) {
+                <mat-list-item cdkDrag (cdkDragDropped)="reorder($event)">
+                    <mat-icon matListItemIcon cdkDragHandle
+                        >drag_indicator</mat-icon
+                    >
+                    <span>{{ item.name }} ({{ item.value }})</span>
+                    <div matListItemMeta>
+                        <button
+                            mat-icon-button
+                            (click)="deleteItem($index)"
+                            matTooltip="Delete item">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                    <mat-list-item
+                        *cdkDragPlaceholder
+                        class="cdk-placeholder" />
+                </mat-list-item>
+                @if (!$last) {
+                    <mat-divider />
+                }
+            } @empty {
+                <mat-list-item>No items.</mat-list-item>
+            }
+        </mat-list>
+    </mat-card>
+</mat-dialog-content>
+
+<mat-dialog-actions class="layout-row layout-items-middle g">
+    <mat-progress-bar [value]="progress()" />
+    <button mat-button [disabled]="loading()" mat-dialog-close>Cancel</button>
+    <button
+        mat-flat-button
+        [disabled]="!isValid() || loading()"
+        (click)="submit()">
+        <span>{{ editing ? 'Edit' : 'Add' }}</span>
+    </button>
+</mat-dialog-actions>

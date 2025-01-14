@@ -5,6 +5,8 @@ import { BeatItController } from './beat-it/controller';
 import { BeatItGame } from './beat-it/game';
 import { LightlySteamedController } from './lightly-steamed/controller';
 import { LightlySteamedGame } from './lightly-steamed/game';
+import { OrderUpController } from './order-up/controller';
+import { OrderUpGame } from './order-up/game';
 import { RankyPankyController } from './ranky-panky/controller';
 import { RankyPankyGame } from './ranky-panky/game';
 import { ScreenshotInTheDarkController } from './screenshot-in-the-dark/controller';
@@ -47,6 +49,14 @@ export const GAMES: GameDefinition[] = [
         game: LightlySteamedGame,
         controller: LightlySteamedController,
         supportsBuzzers: true,
+    },
+    {
+        name: 'Order Up',
+        slug: 'order-up',
+        icon: 'view_carousel',
+        game: OrderUpGame,
+        controller: OrderUpController,
+        supportsBuzzers: false,
     },
     {
         name: 'Ranky Panky',
