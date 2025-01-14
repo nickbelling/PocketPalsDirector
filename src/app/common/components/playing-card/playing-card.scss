@@ -8,6 +8,10 @@
         height: 100%;
         perspective: 5000px;
 
+        &.animate {
+            animation: float 4s ease-in-out infinite;
+        }
+
         mat-card {
             height: 100%;
             width: 100%;
@@ -45,5 +49,16 @@
                 z-index: 3;
             }
         }
+    }
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: rotate3d(1, 1, 1, 10deg);
+    }
+
+    50% {
+        transform: rotate3d(-1, -1, -1, 10deg);
     }
 }

@@ -1,4 +1,7 @@
-<div class="playing-card" [class.show-front]="showingFront()">
+<div
+    class="playing-card"
+    [class.show-front]="showingFront()"
+    [class.animate]="animated()">
     <mat-card
         class="playing-card-front {{ frontClass() }}"
         [@flipFront]="showingFront() ? 'front' : 'back'">

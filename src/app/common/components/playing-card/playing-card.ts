@@ -33,6 +33,7 @@ import { MatCardModule } from '@angular/material/card';
 })
 export class PlayingCard {
     public readonly showingFront = model<boolean>(false);
+    public readonly animated = input<boolean>(false);
 
     private _playingCardBack = contentChild(PlayingCardBack);
     private _playingCardFront = contentChild(PlayingCardFront);
