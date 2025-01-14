@@ -6,3 +6,4 @@ export * from './random';
 export * from './sleep';
 export * from './sounds';
 export * from './text';
+export * from './validation';
