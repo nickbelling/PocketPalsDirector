@@ -1,0 +1,27 @@
+<mat-form-field>
+    <mat-label>Image</mat-label>
+    <input
+        matInput
+        readonly
+        [value]="fileToUpload()?.name || 'Upload a file'" />
+    <button
+        matSuffix
+        mat-icon-button
+        matTooltip="Browse for file..."
+        (click)="fileInput.click()">
+        <mat-icon>upload_file</mat-icon>
+    </button>
+    <button
+        matSuffix
+        mat-icon-button
+        matTooltip="Paste from clipboard"
+        [disabled]="!clipboardHasImage()"
+        (click)="pasteImage()">
+        <mat-icon>content_paste</mat-icon>
+    </button>
+</mat-form-field>
+<input
+    type="file"
+    #fileInput
+    hidden
+    (change)="fileToUpload.set(fileInput.files![0])" />
