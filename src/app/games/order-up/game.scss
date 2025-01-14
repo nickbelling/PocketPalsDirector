@@ -1,0 +1,60 @@
+.track {
+    --card-width: 200px;
+    width: 90%; /* Adjust to the desired container width */
+    container-type: inline-size;
+    margin-left: calc(var(--card-width) / 2);
+
+    .card {
+        /* Dynamic margin-left calculation based on --card-count */
+        margin-left: calc(
+            min(
+                0px,
+                (
+                        100cqw -
+                            (
+                                var(--card-count) *
+                                    (var(--card-width) + var(--padding-amount))
+                            )
+                    ) /
+                    (var(--card-count) - 1)
+            )
+        );
+
+        playing-card {
+            height: 300px;
+            width: var(--card-width);
+            flex-shrink: 0;
+        }
+
+        .answer {
+            --max-font-size: 65px;
+            rotate: -45deg;
+            transform-origin: center right;
+            translate: -50% 0%;
+            text-shadow: 3px 3px #00000088;
+        }
+    }
+}
+
+img {
+    flex-grow: 1;
+    width: 100%;
+    object-fit: cover;
+    // This might seem weird, but it corrects an issue where if the img
+    // is taller than it is wide, it pushes the label below beyond the edge
+    // of the card.
+    height: 0;
+}
+
+.label {
+    height: 100px;
+    padding-left: var(--padding-amount);
+    padding-right: var(--padding-amount);
+    //font-size: 50px;
+    text-wrap: balance;
+    align-content: center;
+    /** Ensure the child <fit-text> element doesn't size text larger than the
+    available vertical space of the container. */
+    container-type: size;
+    --max-font-size: 50cqh;
+}

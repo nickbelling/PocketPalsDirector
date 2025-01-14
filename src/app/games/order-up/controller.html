@@ -12,11 +12,11 @@
         <mat-form-field class="layout-fill">
             <mat-label>Current question</mat-label>
             <mat-select
-                [value]="currentQuestionId()"
+                [value]="currentQuestion()"
                 (valueChange)="setQuestion($event)">
                 <mat-option [value]="null">None</mat-option>
                 @for (question of questions; track question.id) {
-                    <mat-option [value]="question.id">
+                    <mat-option [value]="question">
                         <span>{{ question.name }}</span>
                     </mat-option>
                 }
@@ -45,4 +45,38 @@
             </button>
         </div>
     </mat-card>
+
+    @if (question) {
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>{{ question.name }}</mat-card-title>
+                <mat-card-subtitle>{{
+                    question.description
+                }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="p-y">
+                <button mat-flat-button (click)="addNextItem()">
+                    <span>Add next item</span>
+                </button>
+            </mat-card-content>
+            <mat-list cdkDropList>
+                @for (item of displayedItems(); track item.order) {
+                    @let isSorted =
+                        sortedRevealedIndexes().includes(item.order);
+                    <mat-list-item
+                        cdkDrag
+                        [cdkDragDisabled]="isSorted"
+                        (cdkDragDropped)="reorder($event)">
+                        @if (!isSorted) {
+                            <mat-icon matListItemIcon>drag_indicator</mat-icon>
+                        }
+                        <span>{{ item.name }} ({{ item.value }})</span>
+                    </mat-list-item>
+                    @if (!$last) {
+                        <mat-divider />
+                    }
+                }
+            </mat-list>
+        </mat-card>
+    }
 </div>

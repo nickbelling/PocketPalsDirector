@@ -1,8 +1,15 @@
-import { Component, inject } from '@angular/core';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { Component, inject, linkedSignal } from '@angular/core';
 import { Entity } from '../../common/firestore';
+import { randomizeItems } from '../../common/utils';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { OrderUpDatabase } from './database';
-import { ORDER_UP_STATE_DEFAULT, OrderUpQuestion, OrderUpState } from './model';
+import {
+    ORDER_UP_STATE_DEFAULT,
+    OrderUpQuestion,
+    OrderUpQuestionItem,
+    OrderUpState,
+} from './model';
 import { OrderUpQuestionEditDialog } from './question-edit';
 
 @Component({
@@ -13,7 +20,14 @@ export class OrderUpController extends BaseController<
     OrderUpState,
     OrderUpQuestion
 > {
-    protected data: OrderUpDatabase;
+    protected data = inject(OrderUpDatabase);
+
+    protected nextItemPosition = linkedSignal(() => {
+        this.sortedRevealedItems().length;
+    });
+    protected sortedRevealedItems = this.data.sortedRevealedItems;
+    protected sortedRevealedIndexes = this.data.sortedRevealedIndexes;
+    protected displayedItems = this.data.displayedItems;
 
     constructor() {
         const database = inject(OrderUpDatabase);
@@ -21,10 +35,17 @@ export class OrderUpController extends BaseController<
         this.data = database;
     }
 
-    public async setQuestion(questionId: string): Promise<void> {
+    public async setQuestion(
+        question: Entity<OrderUpQuestion> | null,
+    ): Promise<void> {
+        const sortedIndexes = question?.items.map((i) => i.order) || [];
+        const randomizedIndexes = randomizeItems(sortedIndexes);
+
         await this.setState({
             ...ORDER_UP_STATE_DEFAULT,
-            currentQuestion: questionId,
+            currentQuestion: question?.id || null,
+            currentQuestionRevealOrder: randomizedIndexes,
+            revealedCount: 1,
         });
     }
 
@@ -58,5 +79,21 @@ export class OrderUpController extends BaseController<
                 },
             },
         );
+    }
+
+    public async reorder(
+        $event: CdkDragDrop<OrderUpQuestionItem>,
+    ): Promise<void> {
+        await this.setState({
+            currentPosition: $event.currentIndex,
+        });
+    }
+
+    public async addNextItem(): Promise<void> {
+        const state = this.state();
+        await this.setState({
+            revealedCount: state.revealedCount + 1,
+            currentPosition: state.revealedCount + 1,
+        });
     }
 }

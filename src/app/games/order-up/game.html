@@ -1,3 +1,69 @@
-<!-- @let state = this.state(); -->
-<!-- @let questions = this.questions(); -->
-<!-- @let question = this.currentQuestion(); -->
+@let state = this.state();
+@let questions = this.questions();
+@let question = this.currentQuestion();
+
+@if (!question) {
+    <div class="game-panel">
+        <categories>
+            @for (question of questions; track question.id) {
+                <category
+                    [selected]="state.questionsDone.includes(question.id)">
+                    <span>{{ question.name }}</span>
+                </category>
+            }
+        </categories>
+    </div>
+} @else {
+    <div class="game-panel">
+        <h1>{{ question.name }}</h1>
+        <div
+            slideGroup
+            class="layout-row layout-items-bottom layout-items-center g track"
+            [style.--card-count]="displayedItems().length">
+            @for (item of displayedItems(); track item.order) {
+                @let isSorted = sortedRevealedIndexes().includes(item.order);
+                <div class="card" slideItem>
+                    <playing-card
+                        [class.next]="!isSorted"
+                        [animated]="!isSorted"
+                        [showingFront]="isSorted">
+                        <playing-card-back class="layout-column">
+                            <ng-container
+                                [ngTemplateOutlet]="cardTemplate"
+                                [ngTemplateOutletContext]="{
+                                    $implicit: item,
+                                    front: false,
+                                }" />
+                        </playing-card-back>
+                        <playing-card-front class="layout-column">
+                            <ng-container
+                                [ngTemplateOutlet]="cardTemplate"
+                                [ngTemplateOutletContext]="{
+                                    $implicit: item,
+                                    front: true,
+                                }" />
+                        </playing-card-front>
+                    </playing-card>
+                    @if (isSorted) {
+                        <div class="answer">
+                            <fit-text [text]="item.value" />
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<ng-template #cardTemplate let-item let-front="front">
+    <img src="{{ baseUrl + item.imageId | uploadedFileUrl | async }}" />
+    @if (front) {
+        <div class="label bg-green">
+            <fit-text [text]="item.name" />
+        </div>
+    } @else {
+        <div class="label bg-blue">
+            <fit-text [text]="item.name" />
+        </div>
+    }
+</ng-template>
