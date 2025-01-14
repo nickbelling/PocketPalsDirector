@@ -133,9 +133,8 @@
 }
 
 @mixin _list() {
-    .mat-mdc-list-item-meta {
-        height: 100%;
-        align-content: center;
+    mat-list {
+        overflow-y: scroll;
     }
 
     @include mat.list-overrides(

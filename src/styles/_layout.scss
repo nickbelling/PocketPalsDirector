@@ -158,6 +158,8 @@
                 $basis: 100% * math.div($fraction, $fraction-size);
 
                 flex-basis: $basis;
+                min-width: 0;
+                min-height: 0;
             }
 
             $fraction: $fraction + 1;
