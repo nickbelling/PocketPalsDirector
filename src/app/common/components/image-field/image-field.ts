@@ -76,16 +76,12 @@ export class ImageField {
         if (this.clipboardHasImage()) {
             const clipboardItems = await navigator.clipboard.read();
             for (const item of clipboardItems) {
-                if (
-                    item.types.includes('image/png') ||
-                    item.types.includes('image/jpeg')
-                ) {
-                    const imageBlob =
-                        (await item.getType('image/png')) ||
-                        (await item.getType('image/jpeg'));
-                    const fileName =
-                        'Pasted' +
-                        (imageBlob.type === 'image/png' ? '.png' : '.jpg');
+                if (item.types.some((t) => t.startsWith('image/'))) {
+                    const imageType = item.types.find((t) =>
+                        t.startsWith('image/'),
+                    )!;
+                    const imageBlob = await item.getType(imageType);
+                    const fileName = 'Pasted image';
                     const file = new File([imageBlob], fileName, {
                         type: imageBlob.type,
                     });
@@ -106,10 +102,7 @@ export class ImageField {
         try {
             const clipboardItems = await navigator.clipboard.read();
             for (const item of clipboardItems) {
-                if (
-                    item.types.includes('image/png') ||
-                    item.types.includes('image/jpeg')
-                ) {
+                if (item.types.some((t) => t.startsWith('image/'))) {
                     return true;
                 }
             }
