@@ -37,7 +37,7 @@ export class BaseQuestionEditDialog<
 
     protected async deleteFile(
         path: string,
-        isFullPath?: boolean,
+        isFullPath: boolean = false,
     ): Promise<void> {
         await this.db.deleteFile(path, isFullPath);
     }

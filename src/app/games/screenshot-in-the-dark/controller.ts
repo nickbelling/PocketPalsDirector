@@ -2,11 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Entity } from '../../common/firestore';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { ScreenshotInTheDarkDatabase } from './database';
-import {
-    SCREENSHOT_IN_THE_DARK_BASE_PATH,
-    ScreenshotInTheDarkQuestion,
-    ScreenshotInTheDarkState,
-} from './model';
+import { ScreenshotInTheDarkQuestion, ScreenshotInTheDarkState } from './model';
 import { ScreenshotInTheDarkQuestionEditDialog } from './question-edit';
 
 @Component({
@@ -41,7 +37,7 @@ export class ScreenshotInTheDarkController extends BaseController<
                     const guessTheGameId = question.guessTheGameId;
 
                     if (guessTheGameId) {
-                        const baseUrl = `${SCREENSHOT_IN_THE_DARK_BASE_PATH}/${guessTheGameId}_`;
+                        const baseUrl = `${guessTheGameId}_`;
                         const deletions = [
                             this.deleteFile(baseUrl + 1),
                             this.deleteFile(baseUrl + 2),
