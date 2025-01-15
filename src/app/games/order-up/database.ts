@@ -61,7 +61,6 @@ export class OrderUpDatabase extends BaseGameDatabase<
         const state = this.state();
         const sortedRevealedItems = this.sortedRevealedItems();
         const nextItem = this.nextItem();
-        console.log('displayed items:', state, sortedRevealedItems, nextItem);
 
         if (nextItem) {
             return [

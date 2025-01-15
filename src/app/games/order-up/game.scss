@@ -1,8 +1,18 @@
+.container {
+    width: 100%;
+    container-type: inline-size;
+}
+
+h1 {
+    font-size: 8cqh;
+}
+
 .track {
     --card-width: 200px;
     width: 90%; /* Adjust to the desired container width */
     container-type: inline-size;
     margin-left: calc(var(--card-width) / 2);
+    margin-bottom: calc(var(--card-width) / 2);
 
     .card {
         /* Dynamic margin-left calculation based on --card-count */
@@ -27,11 +37,13 @@
         }
 
         .answer {
+            width: 100%;
             --max-font-size: 65px;
             rotate: -45deg;
             transform-origin: center right;
             translate: -50% 0%;
             text-shadow: 3px 3px #00000088;
+            text-align: right;
         }
     }
 }

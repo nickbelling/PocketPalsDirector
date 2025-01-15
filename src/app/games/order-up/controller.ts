@@ -4,12 +4,7 @@ import { Entity } from '../../common/firestore';
 import { randomizeItems } from '../../common/utils';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { OrderUpDatabase } from './database';
-import {
-    ORDER_UP_STATE_DEFAULT,
-    OrderUpQuestion,
-    OrderUpQuestionItem,
-    OrderUpState,
-} from './model';
+import { OrderUpQuestion, OrderUpQuestionItem, OrderUpState } from './model';
 import { OrderUpQuestionEditDialog } from './question-edit';
 
 @Component({
@@ -38,11 +33,21 @@ export class OrderUpController extends BaseController<
     public async setQuestion(
         question: Entity<OrderUpQuestion> | null,
     ): Promise<void> {
+        const state = this.state();
+        const questionsDone = [...state.questionsDone];
+
+        if (question !== null && !state.questionsDone.includes(question.id)) {
+            questionsDone.push(question.id);
+
+            await this.setState({
+                questionsDone: questionsDone,
+            });
+        }
+
         const sortedIndexes = question?.items.map((i) => i.order) || [];
         const randomizedIndexes = randomizeItems(sortedIndexes);
 
         await this.setState({
-            ...ORDER_UP_STATE_DEFAULT,
             currentQuestion: question?.id || null,
             currentQuestionRevealOrder: randomizedIndexes,
             revealedCount: 1,

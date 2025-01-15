@@ -3,7 +3,7 @@
 @let question = this.currentQuestion();
 
 @if (!question) {
-    <div class="game-panel">
+    <div @fadeInOut class="game-panel">
         <categories>
             @for (question of questions; track question.id) {
                 <category
@@ -13,44 +13,48 @@
             }
         </categories>
     </div>
-} @else {
-    <div class="game-panel">
-        <h1>{{ question.name }}</h1>
-        <div
-            slideGroup
-            class="layout-row layout-items-bottom layout-items-center g track"
-            [style.--card-count]="displayedItems().length">
-            @for (item of displayedItems(); track item.order) {
-                @let isSorted = sortedRevealedIndexes().includes(item.order);
-                <div class="card" slideItem>
-                    <playing-card
-                        [class.next]="!isSorted"
-                        [animated]="!isSorted"
-                        [showingFront]="isSorted">
-                        <playing-card-back class="layout-column">
-                            <ng-container
-                                [ngTemplateOutlet]="cardTemplate"
-                                [ngTemplateOutletContext]="{
-                                    $implicit: item,
-                                    front: false,
-                                }" />
-                        </playing-card-back>
-                        <playing-card-front class="layout-column">
-                            <ng-container
-                                [ngTemplateOutlet]="cardTemplate"
-                                [ngTemplateOutletContext]="{
-                                    $implicit: item,
-                                    front: true,
-                                }" />
-                        </playing-card-front>
-                    </playing-card>
-                    @if (isSorted) {
+} @else if (imagesPreloaded()) {
+    <div @fadeInOut class="game-panel">
+        <div class="container layout-column g">
+            <h1>{{ question.name }}</h1>
+            <div
+                slideGroup
+                class="layout-row layout-items-bottom layout-items-center g track"
+                [style.--card-count]="displayedItems().length">
+                @for (item of displayedItems(); track item.order) {
+                    @let isSorted =
+                        sortedRevealedIndexes().includes(item.order);
+                    <div class="card" slideItem>
+                        <playing-card
+                            [class.next]="!isSorted"
+                            [animated]="!isSorted"
+                            [showingFront]="isSorted">
+                            <playing-card-back class="layout-column">
+                                <ng-container
+                                    [ngTemplateOutlet]="cardTemplate"
+                                    [ngTemplateOutletContext]="{
+                                        $implicit: item,
+                                        front: false,
+                                    }" />
+                            </playing-card-back>
+                            <playing-card-front class="layout-column">
+                                <ng-container
+                                    [ngTemplateOutlet]="cardTemplate"
+                                    [ngTemplateOutletContext]="{
+                                        $implicit: item,
+                                        front: true,
+                                    }" />
+                            </playing-card-front>
+                        </playing-card>
                         <div class="answer">
-                            <fit-text [text]="item.value" />
+                            @if (isSorted) {
+                                <fit-text [text]="item.value" />
+                            }
+                            <span>&nbsp;</span>
                         </div>
-                    }
-                </div>
-            }
+                    </div>
+                }
+            </div>
         </div>
     </div>
 }
