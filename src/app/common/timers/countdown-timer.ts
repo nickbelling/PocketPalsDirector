@@ -8,18 +8,25 @@ interface TimerAudioDefinition {
     endTimestamp: number;
 }
 
-const TIMER_30_SEC: TimerAudioDefinition = {
+const TIMER_30_SEC_DRAMATIC: TimerAudioDefinition = {
     srcFile: 'audio/timer_30sec.webm',
     durationSeconds: 30,
     startTimestamp: 1,
     endTimestamp: 33,
 };
 
-const TIMER_2_MIN: TimerAudioDefinition = {
+const TIMER_2_MIN_DRAMATIC: TimerAudioDefinition = {
     srcFile: 'audio/timer_2min.webm',
     durationSeconds: 120,
     startTimestamp: 1,
     endTimestamp: 129,
+};
+
+const TIMER_2_MIN_FUN: TimerAudioDefinition = {
+    srcFile: 'audio/timer_2min_fun.webm',
+    durationSeconds: 120,
+    startTimestamp: 1,
+    endTimestamp: 116,
 };
 
 export type TimerLength = 30 | 120;
@@ -32,15 +39,21 @@ export type TimerLength = 30 | 120;
 })
 export class CountdownTimer {
     public length = input.required<TimerLength>();
+    public dramatic = input<boolean>(true);
     public currentTime = signal<number>(0);
     public muted = input<boolean>(false);
 
     public timerDefinition = computed<TimerAudioDefinition>(() => {
         const length = this.length();
+        const dramatic = this.dramatic();
         if (length === 30) {
-            return TIMER_30_SEC;
+            return TIMER_30_SEC_DRAMATIC;
         } else if (length === 120) {
-            return TIMER_2_MIN;
+            if (dramatic) {
+                return TIMER_2_MIN_DRAMATIC;
+            } else {
+                return TIMER_2_MIN_FUN;
+            }
         } else {
             throw new Error('Unsupported time.');
         }
