@@ -27,6 +27,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Alert } from '../../../common/components/alert';
+import { ImageField } from '../../../common/components/image-field';
 import { Player } from '../../../common/components/player';
 import { FitTextDirective } from '../../../common/directives';
 import { CommonFirebaseModule } from '../../../common/firestore';
@@ -70,6 +71,7 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     GameHero,
     GameSelector,
     VideogameNamePipe,
+    ImageField,
 ];
 
 /**
