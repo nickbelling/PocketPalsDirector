@@ -16,6 +16,8 @@ export abstract class BaseController<
     public readonly questions: Signal<Entity<TQuestion>[]>;
     public readonly currentQuestionId: Signal<string | null>;
     public readonly currentQuestion: Signal<Entity<TQuestion> | undefined>;
+    public readonly nextQuestion: Signal<Entity<TQuestion> | undefined>;
+    public readonly questionsRemaining: Signal<number>;
 
     constructor(db: BaseGameDatabase<TState, TQuestion>) {
         this._db = db;
@@ -23,6 +25,8 @@ export abstract class BaseController<
         this.questions = db.questions;
         this.currentQuestionId = db.currentQuestionId;
         this.currentQuestion = db.currentQuestion;
+        this.nextQuestion = db.nextQuestion;
+        this.questionsRemaining = db.questionsRemaining;
     }
 
     public async reset(): Promise<void> {

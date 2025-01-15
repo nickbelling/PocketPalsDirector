@@ -65,19 +65,42 @@ export abstract class BaseGameDatabase<
         () => this.state().currentQuestion,
     );
 
+    public readonly currentQuestionIndex = computed<number>(() => {
+        const currentQuestionId = this.currentQuestionId();
+        const questions = this.questions();
+
+        if (currentQuestionId) {
+            return questions.findIndex((q) => q.id === currentQuestionId);
+        } else {
+            return -1;
+        }
+    });
+
     /** The current question entity. */
     public readonly currentQuestion = computed<Entity<TQuestion> | undefined>(
         () => {
-            const currentQuestion = this.currentQuestionId();
+            const currentQuestionIndex = this.currentQuestionIndex();
             const questions = this.questions();
-
-            if (currentQuestion) {
-                return questions.find((q) => q.id === currentQuestion);
-            } else {
-                return undefined;
-            }
+            return questions[currentQuestionIndex];
         },
     );
+
+    /** The next question entity after the current one. */
+    public readonly nextQuestion = computed<Entity<TQuestion> | undefined>(
+        () => {
+            const currentQuestionIndex = this.currentQuestionIndex();
+            const questions = this.questions();
+            const nextQuestion = questions[currentQuestionIndex + 1];
+            return nextQuestion;
+        },
+    );
+
+    public readonly questionsRemaining = computed<number>(() => {
+        const currentQuestionIndex = this.currentQuestionIndex();
+        const questions = this.questions();
+
+        return questions.length - 1 - currentQuestionIndex;
+    });
 
     /** @constructor */
     constructor(path: string, defaultState: TState) {
