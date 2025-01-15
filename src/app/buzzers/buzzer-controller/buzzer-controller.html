@@ -171,5 +171,13 @@
                 <strong>this</strong> question</span
             >
         </mat-slide-toggle>
+        <mat-slide-toggle
+            [checked]="state().incorrectLocksTeamThisQuestion"
+            (change)="setIncorrectLocksTeamThisQuestion($event.checked)">
+            <span
+                >When incorrect, lock <strong>team</strong> for
+                <strong>this</strong> question</span
+            >
+        </mat-slide-toggle>
     </mat-card>
 </ng-template>
