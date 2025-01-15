@@ -16,11 +16,7 @@ export class GameLogoSrcPipe implements PipeTransform {
         game: Entity<VideogameDatabaseItem>,
         isThumbnail: boolean = false,
     ): Promise<string | null> {
-        const storageUrl =
-            VIDEOGAME_STORAGE_BASE +
-            '/' +
-            game.id +
-            `_logo${isThumbnail ? '_thumb' : ''}`;
+        const storageUrl = `${VIDEOGAME_STORAGE_BASE}/${game.id}_logo${isThumbnail ? '_thumb' : ''}`;
         const downloadUrl =
             await this._uploadedFileUrlPipe.transform(storageUrl);
 
@@ -43,11 +39,7 @@ export class GameHeroSrcPipe implements PipeTransform {
         game: Entity<VideogameDatabaseItem>,
         isThumbnail: boolean = false,
     ): Promise<string | null> {
-        const storageUrl =
-            VIDEOGAME_STORAGE_BASE +
-            '/' +
-            game.id +
-            `_hero${isThumbnail ? '_thumb' : ''}`;
+        const storageUrl = `${VIDEOGAME_STORAGE_BASE}/${game.id}_hero${isThumbnail ? '_thumb' : ''}`;
         const downloadUrl =
             await this._uploadedFileUrlPipe.transform(storageUrl);
 

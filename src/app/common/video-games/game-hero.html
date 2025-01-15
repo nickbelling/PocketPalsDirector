@@ -1,15 +1,14 @@
-@let _game = game();
+@let game = this.game();
+@let logoSrc = this.logoSrc();
+@let heroSrc = this.heroSrc();
 
-@if (_game) {
-    @let heroUrl = _game | gameHeroSrc: useThumbnails() | async;
-    @let logoUrl = _game | gameLogoSrc: useThumbnails() | async;
-
-    @if (heroUrl) {
-        <img class="game-hero" src="{{ heroUrl }}" />
+@if (game) {
+    @if (heroSrc) {
+        <img class="game-hero" [src]="heroSrc" />
     }
-    @if (logoUrl) {
-        <img class="game-logo" src="{{ logoUrl }}" />
+    @if (logoSrc) {
+        <img class="game-logo" [src]="logoSrc" />
     } @else {
-        <span>{{ _game.name }}</span>
+        <span>{{ game.name }}</span>
     }
 }
