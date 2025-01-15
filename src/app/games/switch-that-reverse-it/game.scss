@@ -1,0 +1,15 @@
+.game-panel {
+    container-type: size;
+}
+
+.prompt,
+.answer {
+    font-size: 15cqh;
+    text-wrap: balance;
+    text-shadow: 1cqh 1cqh 1cqh rgba(0, 0, 0, 0.3);
+}
+
+.answer {
+    text-transform: uppercase;
+    font-weight: 700;
+}

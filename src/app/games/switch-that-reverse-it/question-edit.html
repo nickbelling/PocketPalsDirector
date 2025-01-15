@@ -1,0 +1,28 @@
+<mat-toolbar>
+    <span>Add question</span>
+</mat-toolbar>
+
+<mat-dialog-content class="layout-column g">
+    <mat-form-field>
+        <mat-label>Prompt</mat-label>
+        <input #firstControl matInput required [(ngModel)]="prompt" />
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Answer</mat-label>
+        <input
+            matInput
+            required
+            [(ngModel)]="answer"
+            (keydown.enter)="submit()" />
+    </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions class="layout-row layout-items-middle g">
+    <button mat-button [disabled]="loading()" mat-dialog-close>Cancel</button>
+    <button
+        mat-flat-button
+        [disabled]="!isValid() || loading()"
+        (click)="submit()">
+        <span>Add</span>
+    </button>
+</mat-dialog-actions>

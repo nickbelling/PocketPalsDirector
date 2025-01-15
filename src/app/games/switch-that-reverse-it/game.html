@@ -1,0 +1,20 @@
+@let state = this.state();
+@let question = this.currentQuestion();
+
+@if (question) {
+    <div @fadeInOut class="game-panel">
+        <p class="prompt" [@fadeInPrompt]="question.prompt">
+            @for (character of promptCharacters(); track character.index) {
+                <span>{{ character.character }}</span>
+            }
+        </p>
+
+        <p class="answer">
+            @if (state.showingAnswer) {
+                <span @fadeInOut>{{ question.answer }}</span>
+            } @else {
+                <span>&ZeroWidthSpace;</span>
+            }
+        </p>
+    </div>
+}

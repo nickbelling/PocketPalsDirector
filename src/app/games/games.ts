@@ -15,6 +15,8 @@ import { ScreenshotInTheDarkController } from './screenshot-in-the-dark/controll
 import { ScreenshotInTheDarkGame } from './screenshot-in-the-dark/game';
 import { StateYourBidnessController } from './state-your-bidness/controller';
 import { StateYourBidnessGame } from './state-your-bidness/game';
+import { SwitchThatReverseItController } from './switch-that-reverse-it/controller';
+import { SwitchThatReverseItGame } from './switch-that-reverse-it/game';
 import { VideogameCentipedeController } from './videogame-centipede/controller';
 import { VideogameCentipedeGame } from './videogame-centipede/game';
 
@@ -75,6 +77,14 @@ export const GAMES: GameDefinition[] = [
         game: RankyPankyGame,
         controller: RankyPankyController,
         supportsBuzzers: false,
+    },
+    {
+        name: 'Switch That, Reverse It',
+        slug: 'switch-that-reverse-it',
+        icon: 'swap_horiz',
+        game: SwitchThatReverseItGame,
+        controller: SwitchThatReverseItController,
+        supportsBuzzers: true,
     },
     {
         name: 'Screenshot in the Dark',
