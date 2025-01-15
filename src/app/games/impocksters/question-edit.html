@@ -1,0 +1,48 @@
+<mat-toolbar>
+    @if (editing) {
+        <span>Edit question</span>
+    } @else {
+        <span>Add question</span>
+    }
+</mat-toolbar>
+
+<mat-dialog-content class="layout-column g">
+    <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput required [(ngModel)]="name" />
+    </mat-form-field>
+    <div class="layout-row g">
+        <mat-form-field>
+            <mat-label>From the:</mat-label>
+            <mat-select [(ngModel)]="fromType">
+                <mat-option value="game">Game</mat-option>
+                <mat-option value="series">Series</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>by the name of:</mat-label>
+            <input matInput required [(ngModel)]="from" />
+        </mat-form-field>
+    </div>
+    <image-field [(fileToUpload)]="imageFile" />
+    <mat-form-field>
+        <mat-label>Forbidden terms</mat-label>
+        <textarea
+            matInput
+            required
+            [(ngModel)]="forbiddenTerms"
+            rows="8"></textarea>
+    </mat-form-field>
+
+    <mat-progress-bar [value]="progress()" />
+</mat-dialog-content>
+
+<mat-dialog-actions class="layout-row layout-items-middle g">
+    <button mat-button [disabled]="loading()" mat-dialog-close>Cancel</button>
+    <button
+        mat-flat-button
+        [disabled]="!isValid() || loading()"
+        (click)="submit()">
+        <span>{{ editing ? 'Edit' : 'Add' }}</span>
+    </button>
+</mat-dialog-actions>

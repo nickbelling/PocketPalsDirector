@@ -3,6 +3,8 @@ import { AvoidingTheDmcaController } from './avoiding-the-dmca/controller';
 import { AvoidingTheDmcaGame } from './avoiding-the-dmca/game';
 import { BeatItController } from './beat-it/controller';
 import { BeatItGame } from './beat-it/game';
+import { ImpockstersController } from './impocksters/controller';
+import { ImpockstersGame } from './impocksters/game';
 import { LightlySteamedController } from './lightly-steamed/controller';
 import { LightlySteamedGame } from './lightly-steamed/game';
 import { OrderUpController } from './order-up/controller';
@@ -41,6 +43,14 @@ export const GAMES: GameDefinition[] = [
         game: BeatItGame,
         controller: BeatItController,
         supportsBuzzers: false,
+    },
+    {
+        name: 'Impocksters',
+        slug: 'impocksters',
+        icon: 'theater_comedy',
+        game: ImpockstersGame,
+        controller: ImpockstersController,
+        supportsBuzzers: true,
     },
     {
         name: 'Lightly Steamed',

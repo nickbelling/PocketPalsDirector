@@ -1,0 +1,85 @@
+.character {
+    position: relative;
+    aspect-ratio: 9/16;
+    height: 100%;
+    container-type: size;
+    text-align: left;
+    --shadow: 0.5cqh 0.5cqh 0.5cqh #00000055;
+
+    h1,
+    h2,
+    h3 {
+        text-transform: uppercase;
+        text-shadow: var(--shadow);
+    }
+
+    .header {
+        .name {
+            height: 26cqh;
+
+            h1 {
+                font-size: 15cqh;
+                line-height: 13cqh;
+            }
+        }
+
+        h2 {
+            font-weight: 700;
+            container-type: inline-size;
+            font-size: unset;
+            --max-font-size: 10cqh;
+        }
+
+        h3 {
+            font-size: 5cqh;
+            line-height: 5cqh;
+        }
+    }
+
+    img {
+        position: absolute;
+        height: 75%;
+        width: 65%;
+        top: 0;
+        right: 0;
+        object-fit: contain;
+        object-position: 100% 20%;
+        z-index: -5;
+    }
+
+    .forbidden-terms {
+        $transparent-blue: color-mix(
+            in srgb,
+            var(--base-blue) 50%,
+            transparent 50%
+        );
+
+        background-color: $transparent-blue;
+        border-radius: var(--rounding);
+        box-shadow: var(--shadow);
+        margin: 1cqh;
+
+        h3 {
+            background-color: $transparent-blue;
+            padding: 1cqh;
+            text-align: center;
+            font-size: 5cqh;
+        }
+
+        .items {
+            padding: 1cqh;
+            text-align: center;
+            text-shadow: var(--shadow);
+            container-type: inline-size;
+            --max-font-size: 4.5cqh;
+        }
+    }
+}
+
+countdown-timer {
+    position: absolute;
+    height: 20cqh;
+    width: 30cqh;
+    top: 30cqh;
+    left: 30cqh;
+}

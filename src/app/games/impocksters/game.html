@@ -1,0 +1,32 @@
+@let state = this.state();
+@let question = this.currentQuestion();
+
+@if (question && imageSrc()) {
+    <div @fadeInOut class="character layout-column layout-fill">
+        <img [src]="imageSrc()" />
+        <div class="header p-x g">
+            <div class="name layout-items-middle">
+                <h1>{{ question.name }}</h1>
+            </div>
+            <h3>From the {{ question.fromType }}:</h3>
+            <h2><fit-text [text]="question.from" /></h2>
+        </div>
+
+        <div class="forbidden-terms layout-fill">
+            <h3>Forbidden terms</h3>
+            <div class="items layout-fill layout-column layout-items-space">
+                @for (term of question.forbiddenTerms; track $index) {
+                    <fit-text [text]="term" />
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@if (state.timerRunning) {
+    <countdown-timer
+        @fadeInOut
+        [length]="120"
+        [dramatic]="false"
+        [muted]="muted()" />
+}
