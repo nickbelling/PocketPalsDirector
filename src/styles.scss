@@ -42,6 +42,10 @@ body {
     white-space: pre-wrap;
 }
 
-.disabled-text {
+.text-disabled {
     color: color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent);
+}
+
+.text-disabled-alt {
+    color: color-mix(in srgb, var(--mat-sys-on-surface) 66%, transparent);
 }

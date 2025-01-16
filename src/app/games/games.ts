@@ -79,14 +79,6 @@ export const GAMES: GameDefinition[] = [
         supportsBuzzers: false,
     },
     {
-        name: 'Switch That, Reverse It',
-        slug: 'switch-that-reverse-it',
-        icon: 'swap_horiz',
-        game: SwitchThatReverseItGame,
-        controller: SwitchThatReverseItController,
-        supportsBuzzers: true,
-    },
-    {
         name: 'Screenshot in the Dark',
         slug: 'screenshot-in-the-dark',
         icon: 'photo_library',
@@ -101,6 +93,14 @@ export const GAMES: GameDefinition[] = [
         game: StateYourBidnessGame,
         controller: StateYourBidnessController,
         supportsBuzzers: false,
+    },
+    {
+        name: 'Switch That, Reverse It',
+        slug: 'switch-that-reverse-it',
+        icon: 'swap_horiz',
+        game: SwitchThatReverseItGame,
+        controller: SwitchThatReverseItController,
+        supportsBuzzers: true,
     },
     {
         name: 'Videogame Centipede',

@@ -92,10 +92,15 @@
                                 review.review
                                     | splitSentence: state.currentSentence
                             }}</span>
-                            <span class="disabled-text">{{
+                            <em class="text-disabled-alt">{{
+                                review.review
+                                    | splitSentenceAtIndex
+                                        : state.currentSentence
+                            }}</em>
+                            <span class="text-disabled">{{
                                 review.review
                                     | splitSentence
-                                        : state.currentSentence
+                                        : state.currentSentence + 1
                                         : true
                             }}</span>
                         </p>

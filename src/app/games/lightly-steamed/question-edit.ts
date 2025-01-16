@@ -95,4 +95,22 @@ export class LightlySteamedQuestionEditDialog extends BaseQuestionEditDialog<Lig
             return updated;
         });
     }
+
+    public moveUp(index: number): void {
+        this.reviews.update((reviews) => {
+            const updated = [...reviews];
+            const moving = updated.splice(index, 1);
+            updated.splice(index - 1, 0, moving[0]);
+            return updated;
+        });
+    }
+
+    public moveDown(index: number): void {
+        this.reviews.update((reviews) => {
+            const updated = [...reviews];
+            const moving = updated.splice(index, 1);
+            updated.splice(index + 1, 0, moving[0]);
+            return updated;
+        });
+    }
 }
