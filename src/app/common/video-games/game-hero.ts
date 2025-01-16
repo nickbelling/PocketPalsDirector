@@ -55,9 +55,15 @@ export class GameHero {
                     heroPath = `${heroPath}_thumb`;
                 }
 
+                const cacheBuster = `t=${game.updatedAt}`;
+
                 const promises = {
-                    logo: this._images.preloadStorageImage(logoPath),
-                    hero: this._images.preloadStorageImage(heroPath),
+                    logo: this._images
+                        .preloadStorageImage(logoPath, cacheBuster)
+                        .catch(() => undefined),
+                    hero: this._images
+                        .preloadStorageImage(heroPath, cacheBuster)
+                        .catch(() => undefined),
                 };
 
                 const entries = await Promise.all(
