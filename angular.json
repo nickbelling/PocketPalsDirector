@@ -35,7 +35,11 @@
                         ],
                         "styles": ["src/styles.scss"],
                         "scripts": [],
-                        "allowedCommonJsDependencies": ["pica", "slugify"]
+                        "allowedCommonJsDependencies": [
+                            "deep-equal",
+                            "pica",
+                            "slugify"
+                        ]
                     },
                     "configurations": {
                         "production": {

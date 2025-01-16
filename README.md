@@ -26,10 +26,21 @@
     ng generate game MyNewGameName
     ```
 
-## Deploying custom Firebase functions
+## Deployment
+
+### Hosting
+
+The following builds and deploys the webapp to hosting. Note that the cloud
+functions must exist in the same Firebase project, or the app will not work.
+
+```
+npm run deploy
+```
+
+### Cloud functions
 
 Firebase functions are defined in `/functions`.
 
 ```
-npx firebase deploy --only functions
+npm run deploy:functions
 ```

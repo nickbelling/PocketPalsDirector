@@ -8,7 +8,9 @@
         "build": "ng build",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
-        "deploy": "npx firebase deploy"
+        "deploy": "npm run deploy:hosting",
+        "deploy:functions": "npx firebase deploy --only functions",
+        "deploy:hosting": "npx firebase deploy --only hosting"
     },
     "schematics": "./schematics/src",
     "private": true,
