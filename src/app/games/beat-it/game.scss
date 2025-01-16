@@ -27,6 +27,20 @@ mat-card.game {
     height: 50%;
 }
 
+.cards {
+    width: 100%;
+    height: 50%;
+}
+
+.hide-until-loaded {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+
+    &.visible {
+        opacity: 1;
+    }
+}
+
 playing-card {
     height: 100%;
     container-type: size;
