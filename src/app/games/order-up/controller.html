@@ -1,4 +1,4 @@
-<!-- @let state = this.state(); -->
+@let state = this.state();
 @let questions = this.questions();
 @let question = this.currentQuestion();
 
@@ -54,8 +54,11 @@
                     question.description
                 }}</mat-card-subtitle>
             </mat-card-header>
-            <mat-card-content class="p-y">
-                <button mat-flat-button (click)="addNextItem()">
+            <mat-card-content class="layout-column p-y">
+                <button
+                    mat-flat-button
+                    [disabled]="state.revealedCount >= question.items.length"
+                    (click)="addNextItem()">
                     <span>Add next item</span>
                 </button>
             </mat-card-content>

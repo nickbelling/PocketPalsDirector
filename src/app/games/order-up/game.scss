@@ -37,6 +37,7 @@ h1 {
         }
 
         .answer {
+            height: 5cqh;
             width: 100%;
             --max-font-size: 65px;
             rotate: -45deg;
@@ -48,25 +49,47 @@ h1 {
     }
 }
 
-img {
-    flex-grow: 1;
-    width: 100%;
-    object-fit: cover;
-    // This might seem weird, but it corrects an issue where if the img
-    // is taller than it is wide, it pushes the label below beyond the edge
-    // of the card.
-    height: 0;
+playing-card-front,
+playing-card-back {
+    display: flex;
+    flex-direction: column;
+
+    img {
+        flex-grow: 1;
+        width: 100%;
+        object-fit: cover;
+        // This might seem weird, but it corrects an issue where if the img
+        // is taller than it is wide, it pushes the label below beyond the edge
+        // of the card.
+        height: 0;
+    }
+
+    .label {
+        height: 100px;
+        width: 100%;
+        font-size: 42px;
+        //padding: calc(var(--padding-amount) / 2);
+        text-wrap: balance;
+        align-content: center;
+    }
 }
 
-.label {
-    height: 100px;
-    padding-left: var(--padding-amount);
-    padding-right: var(--padding-amount);
-    //font-size: 50px;
-    text-wrap: balance;
-    align-content: center;
-    /** Ensure the child <fit-text> element doesn't size text larger than the
-    available vertical space of the container. */
-    container-type: size;
-    --max-font-size: 50cqh;
-}
+// img {
+//     flex-grow: 1;
+//     width: 100%;
+//     object-fit: cover;
+//     // This might seem weird, but it corrects an issue where if the img
+//     // is taller than it is wide, it pushes the label below beyond the edge
+//     // of the card.
+//     height: 0;
+// }
+
+// .label {
+//     height: 100px;
+//     width: 100%;
+//     padding: calc(var(--padding-amount) / 2);
+//     box-sizing: border-box;
+//     font-size: 50px;
+//     text-wrap: balance;
+//     align-content: center;
+// }

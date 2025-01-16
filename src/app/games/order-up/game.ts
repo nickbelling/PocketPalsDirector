@@ -1,9 +1,18 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, linkedSignal } from '@angular/core';
 import { fadeInOutAnimation } from '../../common/animations';
 import { ImageService } from '../../common/files';
 import { BaseGame, CommonGameModule } from '../base/game';
 import { OrderUpDatabase } from './database';
-import { ORDER_UP_BASE_PATH, OrderUpQuestion, OrderUpState } from './model';
+import {
+    ORDER_UP_BASE_PATH,
+    OrderUpQuestion,
+    OrderUpQuestionItem,
+    OrderUpState,
+} from './model';
+
+interface OrderUpQuestionItemWithImage extends OrderUpQuestionItem {
+    imageSrc: string | null;
+}
 
 @Component({
     imports: [CommonGameModule],
@@ -14,27 +23,52 @@ import { ORDER_UP_BASE_PATH, OrderUpQuestion, OrderUpState } from './model';
 })
 export class OrderUpGame extends BaseGame<OrderUpState, OrderUpQuestion> {
     private _images = inject(ImageService);
+    private _resolvedImages: Record<string, string | null> = {};
+
     protected data: OrderUpDatabase = inject(OrderUpDatabase);
     protected baseUrl = `${ORDER_UP_BASE_PATH}/`;
 
-    protected imagesPreloaded = signal<boolean>(false);
+    protected displayedItemsWithImages = linkedSignal<
+        OrderUpQuestionItemWithImage[] | undefined
+    >(() => {
+        // Reset the items if the question ever changes
+        const question = this.currentQuestion();
+
+        if (!question) {
+            return undefined;
+        }
+    });
 
     constructor() {
         super(inject(OrderUpDatabase));
 
         effect(async () => {
-            const currentQuestion = this.currentQuestion();
+            const displayedItems = this.displayedItems();
 
-            if (currentQuestion) {
-                this.imagesPreloaded.set(false);
-                const imagePreloads = currentQuestion.items.map((i) =>
-                    this._images.preloadStorageImage(
-                        `${ORDER_UP_BASE_PATH}/${i.imageId}`,
-                    ),
-                );
+            if (displayedItems && displayedItems.length > 0) {
+                console.log('displayedItemschange');
+                const displayedItemsWithImages: OrderUpQuestionItemWithImage[] =
+                    await Promise.all(
+                        displayedItems.map(async (item) => {
+                            const imageUrl = `${ORDER_UP_BASE_PATH}/${item.imageId}`;
 
-                await Promise.all(imagePreloads);
-                this.imagesPreloaded.set(true);
+                            if (this._resolvedImages[imageUrl] === undefined) {
+                                this._resolvedImages[imageUrl] =
+                                    await this._images
+                                        .preloadStorageImage(imageUrl)
+                                        .catch(() => null);
+                            }
+
+                            return {
+                                ...item,
+                                imageSrc: this._resolvedImages[imageUrl],
+                            };
+                        }),
+                    );
+
+                this.displayedItemsWithImages.set(displayedItemsWithImages);
+            } else {
+                this.displayedItemsWithImages.set(undefined);
             }
         });
     }

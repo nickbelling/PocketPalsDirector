@@ -33,6 +33,7 @@
 
     .game-panel {
         position: relative;
+        container-type: size;
         // Fit panel to panel container
         grid-row: 1;
         grid-column: 1;
