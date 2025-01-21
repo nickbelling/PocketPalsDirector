@@ -1,20 +1,20 @@
 <mat-toolbar>
     <img src="img/pockety.png" />
     <span>Pocket Pals Director</span>
-    <button mat-button [routerLink]="'home'">
+    <a mat-button [routerLink]="'home'">
         <mat-icon>Home</mat-icon>
         <span>Home</span>
-    </button>
+    </a>
     @if (auth.isAdmin()) {
         <button mat-button [mat-menu-trigger-for]="gameSelectMenu">
             <mat-icon>playing_cards</mat-icon>
             <span>Games</span>
             <mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
         </button>
-        <button mat-button [routerLink]="'players'">
+        <a mat-button [routerLink]="'players'">
             <mat-icon>groups</mat-icon>
             <span>Players</span>
-        </button>
+        </a>
         <button mat-button [matMenuTriggerFor]="optionsMenu">
             <mat-icon>Settings</mat-icon>
             <span>Options</span>
@@ -39,19 +39,19 @@
 </div>
 
 <mat-menu #gameSelectMenu="matMenu">
-    <button mat-menu-item [routerLink]="'game-database'">
+    <a mat-menu-item [routerLink]="'game-database'">
         <!-- lol, Material Symbols only has this icon as a "controller" -->
         <mat-icon>stadia_controller</mat-icon>
         <span>Videogame Database</span>
-    </button>
+    </a>
     <mat-divider />
     @for (game of games; track $index) {
-        <button mat-menu-item [routerLink]="['director', game.slug]">
+        <a mat-menu-item [routerLink]="['director', game.slug]">
             @if (game.icon) {
                 <mat-icon>{{ game.icon }}</mat-icon>
             }
             <span>{{ game.name }}</span>
-        </button>
+        </a>
     }
 </mat-menu>
 
