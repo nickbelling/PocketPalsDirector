@@ -26,8 +26,8 @@ export class DashboardGamesDatabaseEditDialog {
     public VIDEOGAME_STORAGE_BASE = VIDEOGAME_STORAGE_BASE;
     public loading = signal<boolean>(false);
     public game = inject<Entity<VideogameDatabaseItem>>(MAT_DIALOG_DATA);
-    public logoFileToUpload = signal<File | undefined>(undefined);
-    public heroFileToUpload = signal<File | undefined>(undefined);
+    public logoFileToUpload = signal<File | null>(null);
+    public heroFileToUpload = signal<File | null>(null);
 
     public async submit(): Promise<void> {
         this.loading.set(true);

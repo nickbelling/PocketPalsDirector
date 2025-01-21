@@ -5,7 +5,7 @@
     <span>Edit game: {{ game.name }}</span>
 </mat-toolbar>
 
-<mat-dialog-content class="layout-column g">
+<mat-dialog-content class="layout-column g" #focus>
     @if (logoUrl) {
         <div class="logo">
             <img src="{{ logoUrl }}" />
@@ -15,25 +15,7 @@
             <h3>No logo found</h3>
         </div>
     }
-    <mat-form-field>
-        <mat-label>Replace logo</mat-label>
-        <input
-            matInput
-            readonly
-            [value]="
-                logoFileInput.files![0]
-                    ? logoFileInput.files![0].name
-                    : 'Upload a file'
-            " />
-        <button matSuffix mat-button (click)="logoFileInput.click()">
-            Choose file
-        </button>
-    </mat-form-field>
-    <input
-        type="file"
-        #logoFileInput
-        hidden
-        (change)="logoFileToUpload.set(logoFileInput.files![0])" />
+    <image-field [(fileToUpload)]="logoFileToUpload" [focusElement]="focus" />
 
     @if (heroUrl) {
         <img class="hero" src="{{ heroUrl }}" />
@@ -42,25 +24,7 @@
             <h3>No hero found</h3>
         </div>
     }
-    <mat-form-field>
-        <mat-label>Replace hero</mat-label>
-        <input
-            matInput
-            readonly
-            [value]="
-                heroFileInput.files![0]
-                    ? heroFileInput.files![0].name
-                    : 'Upload a file'
-            " />
-        <button matSuffix mat-button (click)="heroFileInput.click()">
-            Choose file
-        </button>
-    </mat-form-field>
-    <input
-        type="file"
-        #heroFileInput
-        hidden
-        (change)="heroFileToUpload.set(heroFileInput.files![0])" />
+    <image-field [(fileToUpload)]="heroFileToUpload" [focusElement]="focus" />
 </mat-dialog-content>
 
 <mat-dialog-actions>

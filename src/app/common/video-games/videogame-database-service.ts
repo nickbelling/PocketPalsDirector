@@ -77,6 +77,7 @@ export class VideogameDatabaseService extends BaseFirestoreDataStore {
             {
                 name: gameName,
                 steamGridDbId: steamGridDbId,
+                updatedAt: serverTimestamp(),
             },
             { merge: true },
         );
