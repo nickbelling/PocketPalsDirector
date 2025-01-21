@@ -13,7 +13,7 @@
             }
         </categories>
     </div>
-} @else if (imagesPreloaded()) {
+} @else if (displayedItemsWithImages()) {
     <div @fadeInOut class="game-panel">
         <div class="container layout-column g">
             <h1>{{ question.name }}</h1>
@@ -21,15 +21,16 @@
                 slideGroup
                 class="layout-row layout-items-bottom layout-items-center g track"
                 [style.--card-count]="displayedItems().length">
-                @for (item of displayedItems(); track item.order) {
+                @for (item of displayedItemsWithImages(); track item.order) {
                     @let isSorted =
                         sortedRevealedIndexes().includes(item.order);
                     <div class="card" slideItem>
                         <playing-card
+                            @fadeInOut
                             [class.next]="!isSorted"
                             [animated]="!isSorted"
                             [showingFront]="isSorted">
-                            <playing-card-back class="layout-column">
+                            <playing-card-back>
                                 <ng-container
                                     [ngTemplateOutlet]="cardTemplate"
                                     [ngTemplateOutletContext]="{
@@ -37,7 +38,7 @@
                                         front: false,
                                     }" />
                             </playing-card-back>
-                            <playing-card-front class="layout-column">
+                            <playing-card-front>
                                 <ng-container
                                     [ngTemplateOutlet]="cardTemplate"
                                     [ngTemplateOutletContext]="{
@@ -57,17 +58,21 @@
             </div>
         </div>
     </div>
+} @else {
+    <div @fadeInOut class="game-panel">
+        <h1>{{ question.name }}</h1>
+    </div>
 }
 
 <ng-template #cardTemplate let-item let-front="front">
-    <img src="{{ baseUrl + item.imageId | uploadedFileUrl | async }}" />
-    @if (front) {
-        <div class="label bg-green">
-            <fit-text [text]="item.name" />
+    <div class="layout-column layout-fill">
+        <img [src]="item.imageSrc" />
+        <div
+            class="label"
+            [class.bg-green]="front"
+            [class.bg-blue]="!front"
+            [fitText]="item.name">
+            <span>{{ item.name }}</span>
         </div>
-    } @else {
-        <div class="label bg-blue">
-            <fit-text [text]="item.name" />
-        </div>
-    }
+    </div>
 </ng-template>

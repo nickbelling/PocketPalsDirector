@@ -10,6 +10,7 @@ export interface BuzzerState {
     buzzersEnabled: boolean;
     correctLocksNextQuestion: boolean;
     incorrectLocksThisQuestion: boolean;
+    incorrectLocksTeamThisQuestion: boolean;
 }
 
 export interface BuzzerPlayer {
@@ -32,6 +33,7 @@ export const DEFAULT_BUZZER_STATE: BuzzerState = {
     buzzersEnabled: false,
     correctLocksNextQuestion: true,
     incorrectLocksThisQuestion: true,
+    incorrectLocksTeamThisQuestion: false,
 };
 
 export const DEFAULT_BUZZER_PLAYER: BuzzerPlayer = {

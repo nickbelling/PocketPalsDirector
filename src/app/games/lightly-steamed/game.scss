@@ -5,6 +5,7 @@
     left: 0;
     right: 0;
     bottom: 0;
+    border-radius: var(--rounding);
     box-shadow: var(--mat-sys-level5);
 
     game-hero {
@@ -18,11 +19,12 @@
     height: 100%;
     width: 100%;
     --gap: 3cqh;
+    background-color: rgb(39, 65, 86);
     font-family: 'Brisa Sans', sans-serif;
     font-weight: 400;
-    background-color: rgb(39, 65, 86);
-    box-shadow: var(--mat-sys-level5);
     text-align: left;
+    border-radius: var(--rounding);
+    box-shadow: var(--mat-sys-level5);
 
     .header {
         container-type: size;

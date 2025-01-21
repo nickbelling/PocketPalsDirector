@@ -65,6 +65,7 @@ export class BuzzerDirectorDataStore extends BaseFirestoreDataStore {
         return this._playersData.markIncorrect(
             playerId,
             this.state().incorrectLocksThisQuestion,
+            this.state().incorrectLocksTeamThisQuestion,
         );
     }
 

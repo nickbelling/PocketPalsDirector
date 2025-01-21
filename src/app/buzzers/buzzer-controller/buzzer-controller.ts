@@ -69,6 +69,16 @@ export class BuzzerController {
         }
     }
 
+    public async setIncorrectLocksTeamThisQuestion(
+        value: boolean,
+    ): Promise<void> {
+        if (this.state().incorrectLocksTeamThisQuestion !== value) {
+            await this._data.setState({
+                incorrectLocksTeamThisQuestion: value,
+            });
+        }
+    }
+
     public async buzzIn(playerId: string): Promise<void> {
         await this._data.buzzInPlayer(playerId);
     }

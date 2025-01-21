@@ -26,7 +26,7 @@
                         <span>{{
                             review.review | splitSentence: slider.valueAsNumber
                         }}</span>
-                        <span class="disabled-text">{{
+                        <span class="text-disabled">{{
                             review.review
                                 | splitSentence: slider.valueAsNumber : true
                         }}</span>
@@ -42,6 +42,20 @@
                     </mat-slider>
                 </div>
                 <mat-action-row>
+                    <button
+                        mat-flat-button
+                        [disabled]="$index === 0"
+                        (click)="moveUp($index)">
+                        <mat-icon>arrow_upward</mat-icon>
+                        <span>Move up</span>
+                    </button>
+                    <button
+                        mat-flat-button
+                        [disabled]="$index === reviews().length - 1"
+                        (click)="moveDown($index)">
+                        <mat-icon>arrow_downward</mat-icon>
+                        <span>Move down</span>
+                    </button>
                     <button
                         mat-flat-button
                         class="error"

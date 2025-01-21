@@ -7,11 +7,13 @@
         <div class="game-list" [style.--game-count]="questions.length">
             @for (question of questions; track question.gameId) {
                 <mat-card
-                    class="game"
+                    class="game hide-until-loaded"
+                    [class.visible]="hero.loaded()"
                     [class.selected]="
                         state.questionsDone.includes(question.id)
                     ">
                     <game-hero
+                        #hero
                         [gameId]="question.gameId"
                         [useThumbnails]="true" />
                 </mat-card>
@@ -20,10 +22,14 @@
     </div>
 } @else {
     <div @fadeInOut class="game-panel g">
-        <mat-card class="game hero">
-            <game-hero [gameId]="question.gameId" />
+        <mat-card
+            class="game hero hide-until-loaded"
+            [class.visible]="hero.loaded()">
+            <game-hero #hero [gameId]="question.gameId" />
         </mat-card>
-        <div class="layout-row layout-items-fill g hero">
+        <div
+            class="cards layout-row layout-items-fill g hide-until-loaded"
+            [class.visible]="hero.loaded()">
             <playing-card [showingFront]="state.currentGuess > 0">
                 <playing-card-back
                     class="g layout-column layout-items-middle bg-blue">

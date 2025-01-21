@@ -40,6 +40,18 @@ export class SplitSentencePipe implements PipeTransform {
     }
 }
 
+/** Gets the sentence segment at the given index. */
+@Pipe({
+    name: 'splitSentenceAtIndex',
+    pure: true,
+})
+export class SplitSentenceAtIndexPipe implements PipeTransform {
+    public transform(text: string, index: number): string {
+        const sentences = getSentenceArray(text);
+        return sentences[index];
+    }
+}
+
 /**
  * Gets the amount of sentences in the given array.
  */

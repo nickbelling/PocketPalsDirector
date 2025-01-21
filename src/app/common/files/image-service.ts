@@ -7,14 +7,21 @@ import { getCachedDownloadUrl, STORAGE } from '../firestore';
 export class ImageService {
     private _storage = inject(STORAGE);
 
-    public async preloadStorageImage(firebasePath: string): Promise<string> {
+    public async preloadStorageImage(
+        firebasePath: string,
+        cacheBuster?: string,
+    ): Promise<string> {
         const downloadUrl = await getCachedDownloadUrl(
             this._storage,
             firebasePath,
         );
 
         if (downloadUrl) {
-            return await this.preloadImage(downloadUrl);
+            if (cacheBuster) {
+                return await this.preloadImage(`${downloadUrl}?${cacheBuster}`);
+            } else {
+                return await this.preloadImage(downloadUrl);
+            }
         } else {
             throw new Error(
                 `Could not get a download URL for Firebase path '${firebasePath}'.`,

@@ -114,6 +114,26 @@ export class BuzzerPlayersDataStore extends BaseFirestoreDataStore {
         });
     }
 
+    public async lockPlayerTeam(playerId: string): Promise<void> {
+        const players = this.players();
+        const batch = writeBatch(this._firestore);
+
+        const teamId = players.find((p) => p.id === playerId)?.teamId;
+
+        players.forEach((player) => {
+            if (player.teamId === teamId) {
+                const playerRef = this._getPlayerRef(player.id);
+                batch.set(
+                    playerRef,
+                    { lockedOut: true, buzzTimestamp: null },
+                    { merge: true },
+                );
+            }
+        });
+
+        await batch.commit();
+    }
+
     public async unlockPlayer(playerId: string): Promise<void> {
         await this.editPlayer(playerId, { lockedOut: false });
     }
@@ -162,9 +182,13 @@ export class BuzzerPlayersDataStore extends BaseFirestoreDataStore {
 
     public async markIncorrect(
         playerId: string,
-        incorrectLocksThisQuestion: boolean,
+        incorrectLocksPlayerThisQuestion: boolean,
+        incorrectLocksTeamThisQuestion: boolean,
     ): Promise<void> {
-        if (incorrectLocksThisQuestion) {
+        if (incorrectLocksTeamThisQuestion) {
+            // Lock this player's team
+            await this.lockPlayerTeam(playerId);
+        } else if (incorrectLocksPlayerThisQuestion) {
             // Lock this player (this also implicitly resets their buzzer)
             await this.lockPlayer(playerId);
         } else {
