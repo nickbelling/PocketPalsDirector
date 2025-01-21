@@ -17,10 +17,8 @@
                 <mat-option [value]="null">None</mat-option>
                 @for (question of questions; track question.id) {
                     <mat-option [value]="question.id">
-                        <span
-                            >{{ (question.gameId | gameName)() }} -
-                            {{ question.trackName }}</span
-                        >
+                        <span>{{ question.gameId | gameName }}</span>
+                        <span> - {{ question.trackName }}</span>
                     </mat-option>
                 }
             </mat-select>
@@ -46,7 +44,7 @@
         <mat-card>
             <mat-card-header>
                 <mat-card-title>{{
-                    (question.gameId | gameName)()
+                    question.gameId | gameName
                 }}</mat-card-title>
                 <mat-card-subtitle>{{ question.trackName }}</mat-card-subtitle>
             </mat-card-header>
@@ -74,10 +72,7 @@
                     @if (state.showingGame) {
                         <span>Hide game</span>
                     } @else {
-                        <span
-                            >Show game:
-                            {{ (question.gameId | gameName)() }}</span
-                        >
+                        <span>Show game: {{ question.gameId | gameName }}</span>
                     }
                 </button>
 

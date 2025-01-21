@@ -20,11 +20,8 @@
                     track question.id
                 ) {
                     <mat-option [value]="question.id">
-                        <span
-                            >{{ (question.gameId | gameName)() }} ({{
-                                question.hours
-                            }})</span
-                        >
+                        <span>{{ question.gameId | gameName }}</span>
+                        <span> ({{ question.hours }})</span>
                     </mat-option>
                 }
             </mat-select>
@@ -49,12 +46,10 @@
     @if (question) {
         <mat-card>
             <mat-card-header>
-                <mat-card-title
-                    >{{ (question.gameId | gameName)() }} ({{
-                        question.hours
-                    }}
-                    hours)</mat-card-title
-                >
+                <mat-card-title>
+                    <span>{{ question.gameId | gameName }}</span>
+                    <span> ({{ question.hours }} hours)</span>
+                </mat-card-title>
             </mat-card-header>
             <mat-card-content class="layout-column p-y g">
                 <mat-form-field>

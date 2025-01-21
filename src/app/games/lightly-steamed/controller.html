@@ -17,7 +17,7 @@
                 <mat-option [value]="null">None</mat-option>
                 @for (question of questions; track question.id) {
                     <mat-option [value]="question.id">
-                        <span>{{ (question.gameId | gameName)() }}</span>
+                        <span>{{ question.gameId | gameName }}</span>
                     </mat-option>
                 }
             </mat-select>
@@ -49,9 +49,9 @@
     @if (question) {
         <mat-card>
             <mat-card-header>
-                <mat-card-title>{{
-                    (question.gameId | gameName)()
-                }}</mat-card-title>
+                <mat-card-title>
+                    <span>{{ question.gameId | gameName }}</span>
+                </mat-card-title>
             </mat-card-header>
             <mat-card-content class="layout-column g p-y">
                 <div class="layout-row layout-items-fill g">
