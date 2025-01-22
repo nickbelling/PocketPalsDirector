@@ -9,12 +9,20 @@
     @for (game of games(); track game.id) {
         <mat-card
             class="game-card bg-purple"
-            [matTooltip]="game.name"
+            [matTooltip]="game.id | gameName: true"
             [matMenuTriggerFor]="gameMenu"
             [matMenuTriggerData]="{ $implicit: game }">
             <game-hero [gameId]="game.id" [useThumbnails]="true" />
         </mat-card>
     }
+
+    <button
+        mat-fab
+        class="floating-fab"
+        (click)="addGame()"
+        matTooltip="Add game">
+        <mat-icon>add</mat-icon>
+    </button>
 </div>
 
 <mat-menu #gameMenu>

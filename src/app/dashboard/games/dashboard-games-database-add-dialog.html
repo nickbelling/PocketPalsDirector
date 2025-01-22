@@ -28,6 +28,7 @@
                     (click)="register(result)"
                     [disabled]="result.progress() !== 0">
                     <span>{{ result.game.name }}</span>
+                    <span> ({{ result.releaseYear }})</span>
                     <mat-progress-bar [value]="result.progress()" />
                 </button>
             } @empty {

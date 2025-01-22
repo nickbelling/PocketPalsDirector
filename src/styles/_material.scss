@@ -55,6 +55,20 @@
         )
     );
 
+    .floating-fab {
+        position: absolute;
+        bottom: calc(2 * var(--padding-amount));
+        right: calc(2 * var(--padding-amount));
+
+        @include mat.fab-overrides(
+            (
+                container-shape: 999px,
+                container-color: var(--mat-sys-primary),
+                foreground-color: var(--mat-sys-on-primary),
+            )
+        );
+    }
+
     .error {
         &:not(:disabled) {
             mat-icon {

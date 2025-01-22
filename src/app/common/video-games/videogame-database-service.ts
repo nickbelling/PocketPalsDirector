@@ -23,6 +23,7 @@ export const VIDEOGAME_STORAGE_BASE = 'videogame-db';
 export interface VideogameDatabaseItem {
     name: string;
     steamGridDbId: number;
+    year: number;
     updatedAt: Timestamp | null;
 }
 
@@ -54,17 +55,18 @@ export class VideogameDatabaseService extends BaseFirestoreDataStore {
         );
     }
 
-    public getGameSlug(name: string): string {
-        return slugify(name, { lower: true });
-    }
-
     public getGameName(slug: string): string {
         return this.games().find((g) => g.id === slug)?.name || slug;
+    }
+
+    public getGameSlug(name: string, year: number): string {
+        return `${slugify(name, { lower: true })}-${year}`;
     }
 
     public async registerGame(
         gameSlug: string,
         gameName: string,
+        gameYear: number,
         steamGridDbId: number,
     ): Promise<void> {
         const gameDocRef = doc(
@@ -77,6 +79,7 @@ export class VideogameDatabaseService extends BaseFirestoreDataStore {
             {
                 name: gameName,
                 steamGridDbId: steamGridDbId,
+                year: gameYear,
                 updatedAt: serverTimestamp(),
             },
             { merge: true },

@@ -5,8 +5,8 @@ import {
     signal,
     WritableSignal,
 } from '@angular/core';
-import { SGDBGame } from 'steamgriddb';
 import {
+    SGDBGame,
     SteamGridDbService,
     VideogameDatabaseService,
 } from '../../common/video-games';
@@ -14,6 +14,7 @@ import { CommonControllerModule } from '../../games/base/controller';
 
 interface SearchResult {
     game: SGDBGame;
+    releaseYear: number;
     progress: WritableSignal<number>;
 }
 
@@ -37,11 +38,13 @@ export class DashboardGamesDatabaseAddDialog {
 
         if (results) {
             return results.map((game) => {
-                const slug = this._vgDb.getGameSlug(game.name);
+                const year = new Date(game.release_date * 1000).getFullYear();
+                const slug = this._vgDb.getGameSlug(game.name, year);
                 const gameExists = games.some((g) => g.id === slug);
 
                 return {
                     game: game,
+                    releaseYear: year,
                     progress: signal<number>(gameExists ? 100 : 0),
                 };
             });
@@ -61,6 +64,10 @@ export class DashboardGamesDatabaseAddDialog {
     }
 
     public async register(result: SearchResult): Promise<void> {
-        await this._steamGridDb.registerGame(result.game, result.progress);
+        await this._steamGridDb.registerGame(
+            result.game,
+            result.releaseYear,
+            result.progress,
+        );
     }
 }
