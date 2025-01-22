@@ -1,8 +1,7 @@
 @for (category of categories(); track $index) {
-    <div
-        class="category p"
-        [fitText]="category.text()"
-        [class.selected]="category.selected()">
-        {{ category.text() }}
+    <div class="category p" [class.selected]="category.selected()">
+        <div class="label" [fitText]="category.text()">
+            <span>{{ category.text() }}</span>
+        </div>
     </div>
 }

@@ -1,13 +1,18 @@
+.guesses-container {
+    width: 100%;
+}
+
 .guesses {
     display: grid;
-    height: 75%;
-    width: 80%;
+    height: 100%;
+    width: 100%;
     /* Creates flexible columns */
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(12%, 1fr));
     /* Rows start at 50px but grow as needed */
-    grid-auto-rows: minmax(75px, 500px);
+    grid-auto-rows: minmax(5%, 50%);
     /* Spacing between items */
     gap: var(--padding-amount);
+    font-size: 8cqh;
 
     .box {
         display: flex;
@@ -19,7 +24,6 @@
         align-items: center;
         text-align: center;
         text-wrap: balance;
-        font-size: 50px;
         overflow: hidden;
 
         &.uncommitted {

@@ -10,7 +10,7 @@ import { StateYourBidnessQuestion, StateYourBidnessState } from './model';
     imports: [CommonGameModule],
     templateUrl: './game.html',
     styleUrl: './game.scss',
-    host: { class: 'pocket-pals-game size-1920x1080' },
+    host: { class: 'pocket-pals-game' },
     animations: [fadeInOutAnimation(1000)],
 })
 export class StateYourBidnessGame extends BaseGame<

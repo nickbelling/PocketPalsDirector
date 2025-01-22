@@ -5,12 +5,13 @@
     left: 0;
     right: 0;
     bottom: 0;
-    border-radius: var(--rounding);
-    box-shadow: var(--mat-sys-level5);
 
     game-hero {
         height: 100%;
         width: 100%;
+        border-radius: var(--rounding);
+        box-shadow: var(--mat-sys-level5);
+        overflow: hidden;
     }
 }
 

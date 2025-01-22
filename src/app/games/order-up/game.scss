@@ -3,12 +3,17 @@
     container-type: inline-size;
 }
 
+categories {
+    width: 80%;
+    height: 80%;
+}
+
 h1 {
     font-size: 8cqh;
 }
 
 .track {
-    --card-width: 200px;
+    --card-width: 25cqh;
     width: 90%; /* Adjust to the desired container width */
     container-type: inline-size;
     margin-left: calc(var(--card-width) / 2);
@@ -31,7 +36,7 @@ h1 {
         );
 
         playing-card {
-            height: 300px;
+            height: 35cqh;
             width: var(--card-width);
             flex-shrink: 0;
         }
@@ -39,7 +44,7 @@ h1 {
         .answer {
             height: 5cqh;
             width: 100%;
-            --max-font-size: 65px;
+            --max-font-size: 7cqh;
             rotate: -45deg;
             transform-origin: center right;
             translate: -50% 0%;
@@ -53,6 +58,7 @@ playing-card-front,
 playing-card-back {
     display: flex;
     flex-direction: column;
+    container-type: size;
 
     img {
         flex-grow: 1;
@@ -65,31 +71,12 @@ playing-card-back {
     }
 
     .label {
-        height: 100px;
-        width: 100%;
-        font-size: 42px;
-        //padding: calc(var(--padding-amount) / 2);
+        height: 35%;
+        box-sizing: border-box;
+        font-size: 20cqh;
+        padding-left: 5%;
+        padding-right: 5%;
         text-wrap: balance;
         align-content: center;
     }
 }
-
-// img {
-//     flex-grow: 1;
-//     width: 100%;
-//     object-fit: cover;
-//     // This might seem weird, but it corrects an issue where if the img
-//     // is taller than it is wide, it pushes the label below beyond the edge
-//     // of the card.
-//     height: 0;
-// }
-
-// .label {
-//     height: 100px;
-//     width: 100%;
-//     padding: calc(var(--padding-amount) / 2);
-//     box-sizing: border-box;
-//     font-size: 50px;
-//     text-wrap: balance;
-//     align-content: center;
-// }

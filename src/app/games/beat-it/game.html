@@ -64,7 +64,12 @@
                 <playing-card-front
                     class="g layout-column layout-items-middle bg-blue">
                     <h2>Above/Below</h2>
-                    <h1>{{ state.opposingTeamGuess ? 'Above' : 'Below' }}</h1>
+                    <h1>
+                        <fit-text
+                            [text]="
+                                state.opposingTeamGuess ? 'Above' : 'Below'
+                            " />
+                    </h1>
                 </playing-card-front>
             </playing-card>
         </div>

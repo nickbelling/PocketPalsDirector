@@ -1,6 +1,6 @@
 :host {
-    height: 75%;
-    width: 60%;
+    height: 100%;
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: 1fr;
@@ -11,11 +11,7 @@
     display: flex;
     width: auto;
     height: auto;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    text-wrap: balance;
-    font-size: 60px;
+    container-type: size;
     border-radius: var(--rounding);
     box-shadow: var(--mat-sys-level5);
     overflow: hidden;
@@ -27,6 +23,17 @@
         hsl(from var(--bg-base) h s calc(l - 20)) 90%
     );
     transition: --bg-base opacity 1s linear;
+
+    .label {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        font-size: 50cqh;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        text-wrap: balance;
+    }
 
     &.selected {
         --bg-base: var(--base-grey);

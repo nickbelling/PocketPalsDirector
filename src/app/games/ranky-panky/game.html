@@ -8,6 +8,7 @@
         <categories>
             @for (question of questions; track $index) {
                 <category
+                    [fitText]="question.name"
                     [selected]="state.questionsDone.includes(question.id)"
                     >{{ question.name }}</category
                 >

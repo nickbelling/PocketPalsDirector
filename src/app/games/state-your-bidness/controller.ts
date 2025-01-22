@@ -55,7 +55,7 @@ export class StateYourBidnessController extends BaseController<
         }
 
         await this.setState({
-            currentQuestion: question?.id,
+            currentQuestion: question?.id || null,
             committedTo: 0,
             mainTimerRunning: false,
             secondaryTimerRunning: false,

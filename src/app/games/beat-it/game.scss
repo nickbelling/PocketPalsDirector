@@ -44,9 +44,16 @@ mat-card.game {
 playing-card {
     height: 100%;
     container-type: size;
+    text-shadow: var(--shadow);
+    text-transform: capitalize;
 
     h1 {
         font-size: 50cqh;
+
+        &:has(fit-text) {
+            font-size: unset;
+            --max-font-size: 50cqh;
+        }
     }
 
     h2 {

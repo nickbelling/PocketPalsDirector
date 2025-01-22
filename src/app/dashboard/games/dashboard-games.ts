@@ -1,7 +1,7 @@
 import { Component, computed } from '@angular/core';
 import { BuzzerController } from '../../buzzers/buzzer-controller';
 import { GamePreview } from '../../common/components/preview';
-import { injectRouteData } from '../../common/utils';
+import { injectRouteData, RESOLUTIONS } from '../../common/utils';
 import { CommonControllerModule } from '../../games/base/controller';
 import { GameDefinition } from '../../games/games';
 
@@ -18,6 +18,10 @@ import { GameDefinition } from '../../games/games';
 export class DashboardGames {
     /** The current game's definition (from the current route). */
     protected gameDefinition = injectRouteData<GameDefinition>();
+
+    protected aspectRatios = Object.keys(RESOLUTIONS);
+    protected RESOLUTIONS = RESOLUTIONS;
+    protected currentResolution = this.gameDefinition().defaultResolution;
 
     /**
      * The full URL to a browser source-compatible page that represents this

@@ -10,30 +10,54 @@
 
         <div class="layout-column layout-scroll-y layout-basis-3/5 g">
             <preview class="bg-preview">
-                <div class="size-1920x1080">
+                <div
+                    class="set-resolution"
+                    [style.width.px]="currentResolution.width"
+                    [style.height.px]="currentResolution.height">
                     <ng-container *ngComponentOutlet="gameDef.game" />
                 </div>
             </preview>
 
-            <mat-form-field>
-                <mat-label>Browser source URL</mat-label>
-                <input matInput [value]="gameUrl()" readonly />
-                <button
-                    mat-icon-button
-                    matSuffix
-                    matTooltip="Copy to clipboard"
-                    [cdkCopyToClipboard]="gameUrl()">
-                    <mat-icon>content_copy</mat-icon>
-                </button>
-                <a
-                    mat-icon-button
-                    matSuffix
-                    matTooltip="Open in new tab"
-                    href="{{ gameUrl() }}"
-                    target="_blank">
-                    <mat-icon>open_in_new</mat-icon>
-                </a>
-            </mat-form-field>
+            <div class="layout-row g">
+                <mat-form-field>
+                    <mat-label>Game resolution</mat-label>
+                    <mat-select [(ngModel)]="currentResolution">
+                        @for (aspectRatio of aspectRatios; track aspectRatio) {
+                            <mat-optgroup [label]="aspectRatio">
+                                @for (
+                                    resolution of RESOLUTIONS[aspectRatio];
+                                    track $index
+                                ) {
+                                    <mat-option [value]="resolution">
+                                        <span>{{ resolution.width }}</span>
+                                        <span>x{{ resolution.height }}</span>
+                                    </mat-option>
+                                }
+                            </mat-optgroup>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="layout-fill">
+                    <mat-label>Browser source URL</mat-label>
+                    <input matInput [value]="gameUrl()" readonly />
+                    <button
+                        mat-icon-button
+                        matSuffix
+                        matTooltip="Copy to clipboard"
+                        [cdkCopyToClipboard]="gameUrl()">
+                        <mat-icon>content_copy</mat-icon>
+                    </button>
+                    <a
+                        mat-icon-button
+                        matSuffix
+                        matTooltip="Open in new tab"
+                        href="{{ gameUrl() }}"
+                        target="_blank">
+                        <mat-icon>open_in_new</mat-icon>
+                    </a>
+                </mat-form-field>
+            </div>
 
             @if (gameDef.supportsBuzzers) {
                 <buzzer-controller />

@@ -11,7 +11,7 @@
         </categories> -->
     </div>
 } @else {
-    <div @fadeInOut class="game-panel">
+    <div @fadeInOut class="game-panel g layout-column">
         @if (state.mainTimerRunning) {
             <countdown-timer @fadeInOut [length]="120" [muted]="muted()" />
         } @else if (state.secondaryTimerRunning) {
@@ -27,39 +27,41 @@
             </h2>
         </div>
 
-        <div class="guesses">
-            @for (answer of guessedAnswers(); track answer) {
-                <div
-                    class="box correct animate__animated animate__pulse"
-                    [fitText]="answer">
-                    <span>{{ answer }}</span>
-                </div>
-            }
-            @if (!state.showRemainingAnswers) {
-                @if (state.committedTo > guessedAnswers().length) {
+        <div class="guesses-container layout-fill">
+            <div class="guesses">
+                @for (answer of guessedAnswers(); track $index) {
+                    <div
+                        class="box correct animate__animated animate__pulse"
+                        [fitText]="answer">
+                        <span>{{ answer }}</span>
+                    </div>
+                }
+                @if (!state.showRemainingAnswers) {
+                    @if (state.committedTo > guessedAnswers().length) {
+                        @for (
+                            number of state.committedTo - guessedAnswerCount()
+                                | numberArray;
+                            track number
+                        ) {
+                            <div class="box committed"></div>
+                        }
+                    }
                     @for (
-                        number of state.committedTo - guessedAnswerCount()
-                            | numberArray;
+                        number of unguessedAnswerCount() | numberArray;
                         track number
                     ) {
-                        <div class="box committed"></div>
+                        <div class="box uncommitted"></div>
+                    }
+                } @else {
+                    @for (answer of answers(); track $index) {
+                        @if (!guessedAnswers().includes(answer)) {
+                            <div class="box uncommitted" [fitText]="answer">
+                                <span>{{ answer }}</span>
+                            </div>
+                        }
                     }
                 }
-                @for (
-                    number of unguessedAnswerCount() | numberArray;
-                    track number
-                ) {
-                    <div class="box uncommitted"></div>
-                }
-            } @else {
-                @for (answer of answers(); track answer) {
-                    @if (!guessedAnswers().includes(answer)) {
-                        <div class="box uncommitted" [fitText]="answer">
-                            <span>{{ answer }}</span>
-                        </div>
-                    }
-                }
-            }
+            </div>
         </div>
     </div>
 }

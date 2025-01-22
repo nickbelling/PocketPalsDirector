@@ -51,7 +51,7 @@ interface Resources {
     templateUrl: './game.html',
     styleUrl: './game.scss',
     animations: [fadeInOutAnimation()],
-    host: { class: 'pocket-pals-game size-1920x1080' },
+    host: { class: 'pocket-pals-game' },
 })
 export class ScreenshotInTheDarkGame extends BaseGame<
     ScreenshotInTheDarkState,

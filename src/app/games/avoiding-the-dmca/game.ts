@@ -11,7 +11,7 @@ import { AvoidingTheDmcaQuestion, AvoidingTheDmcaState } from './model';
     templateUrl: './game.html',
     styleUrl: './game.scss',
     animations: [fadeInOutAnimation()],
-    host: { class: 'pocket-pals-game size-1920x1080' },
+    host: { class: 'pocket-pals-game' },
 })
 export class AvoidingTheDmcaGame extends BaseGame<
     AvoidingTheDmcaState,
