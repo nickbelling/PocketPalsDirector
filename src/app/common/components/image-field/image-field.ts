@@ -35,6 +35,7 @@ export class ImageField {
 
     public readonly fileToUpload = model<File | null>(null);
     public readonly focusElement = input<HTMLElement | null>(null);
+    public readonly label = input<string>('Image');
 
     protected clipboardHasImage = signal<boolean>(false);
 
