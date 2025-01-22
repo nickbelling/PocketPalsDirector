@@ -3,40 +3,86 @@
 
 <mat-toolbar>
     <span>Edit game: {{ game.name }}</span>
+    <span class="layout-fill"></span>
+    <button mat-icon-button [disabled]="loading()" mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
 </mat-toolbar>
 
 <mat-dialog-content class="layout-column g" #focus>
-    @if (logoUrl) {
+    @if (logoLoading()) {
+        <div class="placeholder logo">
+            <mat-spinner />
+        </div>
+    } @else if (logoUrl || logoSrc()) {
         <div class="logo">
-            <img src="{{ logoUrl }}" />
+            <img [src]="logoSrc() ? logoSrc() : logoUrl" />
         </div>
     } @else {
         <div class="placeholder logo">
             <h3>No logo found</h3>
         </div>
     }
-    <image-field [(fileToUpload)]="logoFileToUpload" [focusElement]="focus" />
 
-    @if (heroUrl) {
-        <img class="hero" src="{{ heroUrl }}" />
+    <div class="layout-row layout-items-middle g">
+        <button mat-flat-button (click)="selectNewImage('logo')">
+            <span>Select new logo</span>
+        </button>
+        <span>OR</span>
+        <image-field
+            class="layout-fill"
+            label="Replace logo image"
+            [(fileToUpload)]="logoFileToUpload"
+            [focusElement]="focus" />
+    </div>
+
+    @if (heroLoading()) {
+        <div class="placeholder hero">
+            <mat-spinner />
+        </div>
+    } @else if (heroUrl || heroSrc()) {
+        <img class="hero" [src]="heroSrc() ? heroSrc() : heroUrl" />
     } @else {
         <div class="placeholder hero">
             <h3>No hero found</h3>
         </div>
     }
-    <image-field [(fileToUpload)]="heroFileToUpload" [focusElement]="focus" />
+    <div class="layout-row layout-items-middle g">
+        <button mat-flat-button (click)="selectNewImage('hero')">
+            <span>Select new hero</span>
+        </button>
+        <span>OR</span>
+        <image-field
+            class="layout-fill"
+            label="Replace hero image"
+            [(fileToUpload)]="heroFileToUpload"
+            [focusElement]="focus" />
+    </div>
 </mat-dialog-content>
 
 <mat-dialog-actions>
-    <button mat-button [disabled]="loading()" mat-dialog-close>Close</button>
+    <button mat-flat-button class="error" (click)="deleteGame(game)">
+        <mat-icon>delete</mat-icon>
+        <span>Delete</span>
+    </button>
+    @if (game.steamGridDbId) {
+        <a
+            mat-button
+            href="https://www.steamgriddb.com/game/{{ game.steamGridDbId }}"
+            target="_blank">
+            <mat-icon>open_in_new</mat-icon>
+            <span>Open SGDB</span>
+        </a>
+    }
+    <span class="layout-fill"></span>
     <button
         mat-flat-button
         [disabled]="
-            (logoFileToUpload() === undefined &&
-                heroFileToUpload() === undefined) ||
+            (logoFileToUpload() === null && heroFileToUpload() === null) ||
             loading()
         "
         (click)="submit()">
-        <span>Upload new images</span>
+        <mat-icon>save</mat-icon>
+        <span>Save</span>
     </button>
 </mat-dialog-actions>

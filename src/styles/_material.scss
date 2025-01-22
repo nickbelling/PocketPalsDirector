@@ -168,11 +168,5 @@
 
     mat-toolbar {
         flex-shrink: 0;
-
-        @include mat.icon-button-overrides(
-            (
-                icon-color: var(--mat-sys-on-primary),
-            )
-        );
     }
 }

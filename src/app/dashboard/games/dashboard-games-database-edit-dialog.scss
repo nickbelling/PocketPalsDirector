@@ -7,6 +7,8 @@ img {
     height: 300px;
     background-color: var(--mat-sys-surface-dim);
     padding: var(--padding-amount);
+    border-radius: var(--rounding);
+    overflow: hidden;
     box-sizing: border-box;
 
     img {
@@ -19,6 +21,8 @@ img {
 .hero {
     width: 512px;
     height: 165px;
+    border-radius: var(--rounding);
+    overflow: hidden;
 }
 
 .placeholder {
@@ -30,4 +34,5 @@ img {
     border-style: dashed;
     border-width: 3px;
     border-color: var(--mat-sys-outline-variant);
+    border-radius: var(--rounding);
 }

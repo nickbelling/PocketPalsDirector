@@ -1,0 +1,23 @@
+<mat-toolbar>
+    <span>Select image</span>
+</mat-toolbar>
+
+<mat-dialog-content class="layout-column g" #focus>
+    <div class="games g">
+        @if (images.isLoading()) {
+            <mat-spinner />
+        } @else {
+            @for (image of images.value(); track $index) {
+                <mat-card (click)="onSelect(image)">
+                    <img [src]="image.thumb" />
+                </mat-card>
+            } @empty {
+                <p>No results found.</p>
+            }
+        }
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

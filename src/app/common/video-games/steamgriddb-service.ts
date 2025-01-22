@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, WritableSignal } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
 import { default as SGDB } from 'steamgriddb';
-import { CORS_PROXY_FUNCTION_URL, SGDB_PROXY_FUNCTION_URL } from '../firestore';
+import { SGDB_PROXY_FUNCTION_URL } from '../firestore';
+import { downloadUrlAsFile } from '../utils';
 import { VideogameDatabaseService } from './videogame-database-service';
 
 export interface SGDBGame {
@@ -16,6 +16,7 @@ export interface SGDBImage {
     height: number;
     width: number;
     url: string;
+    thumb: string;
 }
 
 const stylePriority: Record<string, number> = {
@@ -28,10 +29,12 @@ export class SteamGridDbService {
     private _http = inject(HttpClient);
     private _videogameDatabaseService = inject(VideogameDatabaseService);
     private _client: SGDB = new SGDB({
-        key: 'abc123',
         // URL comes from Firebase proxy function, as we cannot
         // access SteamGridDB directly due to CORS
         baseURL: `${SGDB_PROXY_FUNCTION_URL}?path=`,
+        // Doesn't matter what this is (proxy has our key embedded as a secret),
+        // so it just needs to be set
+        key: 'abc123',
     });
 
     public async search(term: string): Promise<SGDBGame[]> {
@@ -65,9 +68,10 @@ export class SteamGridDbService {
 
         progress?.set(30);
         if (logo) {
-            const logoFile = await this._downloadImageAsFile(
+            const logoFile = await downloadUrlAsFile(
                 logo.url.toString(),
                 'logo',
+                true,
             );
 
             progress?.set(40);
@@ -76,9 +80,10 @@ export class SteamGridDbService {
 
         progress?.set(60);
         if (hero) {
-            const heroFile = await this._downloadImageAsFile(
+            const heroFile = await downloadUrlAsFile(
                 hero.url.toString(),
                 'hero',
+                true,
             );
 
             progress?.set(70);
@@ -96,15 +101,16 @@ export class SteamGridDbService {
         progress?.set(100);
     }
 
-    private async _downloadImageAsFile(
-        url: string,
-        filename: string,
-    ): Promise<File> {
-        const blob = await firstValueFrom(
-            this._http.get(`${CORS_PROXY_FUNCTION_URL}?url=${url}`, {
-                responseType: 'blob',
-            }),
-        );
-        return new File([blob], filename, { type: blob.type });
+    public async getGameLogos(sgdbGameId: number): Promise<SGDBImage[]> {
+        const logos = await this._client!.getLogosById(sgdbGameId, [
+            'official',
+            'white',
+        ]);
+        return logos as unknown[] as SGDBImage[];
+    }
+
+    public async getGameHeroes(sgdbGameId: number): Promise<SGDBImage[]> {
+        const heroes = await this._client!.getHeroesById(sgdbGameId);
+        return heroes as unknown[] as SGDBImage[];
     }
 }
