@@ -29,6 +29,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Alert } from '../../../common/components/alert';
 import { ImageField } from '../../../common/components/image-field';
 import { Player } from '../../../common/components/player';
+import {
+    QuestionDisplay,
+    QuestionSelector,
+    QuestionTemplateDirective,
+} from '../../../common/components/question-selector';
 import { FitTextDirective } from '../../../common/directives';
 import { CommonFirebaseModule } from '../../../common/firestore';
 import { CommonPipesModule } from '../../../common/pipes/pipes.module';
@@ -72,6 +77,9 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     GameSelector,
     VideogameNamePipe,
     ImageField,
+    QuestionSelector,
+    QuestionTemplateDirective,
+    QuestionDisplay,
 ];
 
 /**

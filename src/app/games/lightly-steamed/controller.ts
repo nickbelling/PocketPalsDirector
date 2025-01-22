@@ -27,10 +27,12 @@ export class LightlySteamedController extends BaseController<
         this.data = database;
     }
 
-    public async setQuestion(questionId: string): Promise<void> {
+    public async setQuestion(
+        question?: Entity<LightlySteamedQuestion>,
+    ): Promise<void> {
         await this.setState({
             ...LIGHTLY_STEAMED_STATE_DEFAULT,
-            currentQuestion: questionId,
+            currentQuestion: question?.id || null,
         });
     }
 
@@ -43,21 +45,6 @@ export class LightlySteamedController extends BaseController<
             autoFocus: false,
             data: question,
         });
-    }
-
-    public confirmDeleteQuestion(
-        question: Entity<LightlySteamedQuestion>,
-    ): void {
-        this._confirm.open(
-            'deleteCancel',
-            'Delete question',
-            `Are you sure you want to delete '${this._vgDb.getGameName(question.gameId)}'?`,
-            {
-                onDelete: async () => {
-                    await this.deleteQuestion(question);
-                },
-            },
-        );
     }
 
     public async setReview(index: number): Promise<void> {

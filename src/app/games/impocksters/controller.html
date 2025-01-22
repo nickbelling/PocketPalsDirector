@@ -1,6 +1,5 @@
 @let state = this.state();
 @let questions = this.questions();
-@let question = this.currentQuestion();
 
 <div class="layout-column g">
     <button mat-flat-button class="error" (click)="reset()">
@@ -8,36 +7,17 @@
         <span>Reset game</span>
     </button>
 
-    <mat-card class="p g">
-        <mat-form-field class="layout-fill">
-            <mat-label>Current question</mat-label>
-            <mat-select
-                [value]="currentQuestionId()"
-                (valueChange)="setQuestion($event)">
-                <mat-option [value]="null">None</mat-option>
-                @for (question of questions; track question.id) {
-                    <mat-option [value]="question.id">
-                        <span>{{ question.name }} ({{ question.from }})</span>
-                    </mat-option>
-                }
-            </mat-select>
-        </mat-form-field>
-
-        <div class="layout-row layout-items-fill g">
-            <button mat-flat-button (click)="addQuestion()">
-                <mat-icon>add_circle</mat-icon>
-                <span>Add question</span>
-            </button>
-            <button
-                mat-flat-button
-                class="error"
-                (click)="confirmDeleteQuestion(question!)"
-                [disabled]="question === undefined">
-                <mat-icon>delete</mat-icon>
-                <span>Delete question</span>
-            </button>
-        </div>
-    </mat-card>
+    <question-selector
+        [questions]="questions"
+        [currentQuestion]="currentQuestion()"
+        (currentQuestionChange)="setQuestion($event)"
+        (addQuestion)="addQuestion()"
+        canDelete
+        (deleteQuestion)="deleteQuestion($event)">
+        <question-display *question="let question; from: questions">
+            <span>{{ question.name }} ({{ question.from }})</span>
+        </question-display>
+    </question-selector>
 
     <button mat-flat-button (click)="toggleTimer()">
         <mat-icon>{{ state.timerRunning ? 'stop' : 'play_arrow' }}</mat-icon>

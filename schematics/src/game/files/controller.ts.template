@@ -25,27 +25,22 @@ export class <%= classify(name) %>Controller extends BaseController<
         this.data = database;
     }
 
-    public async setQuestion(questionId: string): Promise<void> {
+    public async setQuestion(
+        question?: Entity<<%= classify(name) %>Question>
+    ): Promise<void> {
         await this.setState({
             ...<%= underscore(name) %>_STATE_DEFAULT,
-            currentQuestion: questionId,
+            currentQuestion: question?.id || null,
         });
     }
 
     public addQuestion(): void {
-        this._dialog.open(<%= classify(name) %>QuestionEditDialog);
+        this.editQuestion();
     }
 
-    public confirmDeleteQuestion(question: Entity<<%= classify(name) %>Question>): void {
-        this._confirm.open(
-            'deleteCancel',
-            'Delete question',
-            `Are you sure you want to delete '${question.id}'?`,
-            {
-                onDelete: async () => {
-                    await this.deleteQuestion(question);
-                }
-            }
-        );
+    public editQuestion(question?: <%= classify(name) %>Question): void {
+        this._dialog.open(<%= classify(name) %>QuestionEditDialog, {
+            data: question
+        });
     }
 }

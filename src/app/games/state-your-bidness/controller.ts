@@ -44,42 +44,24 @@ export class StateYourBidnessController extends BaseController<
         });
     }
 
-    public async confirmDeleteQuestion(
-        question: Entity<StateYourBidnessQuestion>,
+    public async setQuestion(
+        question?: Entity<StateYourBidnessQuestion>,
     ): Promise<void> {
-        await this._confirm.open(
-            'deleteCancel',
-            'Delete question',
-            `Are you sure you want to delete "${question.name}"?`,
-            {
-                onDelete: async () => {
-                    await this.deleteQuestion(question);
-                },
-            },
-        );
-    }
-
-    public async setQuestion(questionId: string | null): Promise<void> {
         const state = this.state();
-        if (state.currentQuestion !== questionId) {
-            if (
-                questionId !== null &&
-                !state.questionsDone.includes(questionId)
-            ) {
-                await this.setState({
-                    questionsDone: [...state.questionsDone, questionId],
-                });
-            }
-
+        if (question?.id && !state.questionsDone.includes(question.id)) {
             await this.setState({
-                currentQuestion: questionId,
-                committedTo: 0,
-                mainTimerRunning: false,
-                secondaryTimerRunning: false,
-                guessedAnswers: [],
-                showRemainingAnswers: false,
+                questionsDone: [...state.questionsDone, question.id],
             });
         }
+
+        await this.setState({
+            currentQuestion: question?.id,
+            committedTo: 0,
+            mainTimerRunning: false,
+            secondaryTimerRunning: false,
+            guessedAnswers: [],
+            showRemainingAnswers: false,
+        });
     }
 
     public async setCommittedTo(committedTo: number): Promise<void> {

@@ -21,24 +21,11 @@ export class AvoidingTheDmcaController extends BaseController<
         this._dialog.open(AvoidingTheDmcaQuestionEditDialog);
     }
 
-    public async confirmDeleteQuestion(
-        question: Entity<AvoidingTheDmcaQuestion>,
+    public async setQuestion(
+        question?: Entity<AvoidingTheDmcaQuestion>,
     ): Promise<void> {
-        await this._confirm.open(
-            'deleteCancel',
-            'Delete question',
-            `Are you sure you want to delete "${question.trackName}"?`,
-            {
-                onDelete: async () => {
-                    await this.deleteQuestion(question);
-                },
-            },
-        );
-    }
-
-    public async setQuestion(questionId: string): Promise<void> {
         await this.setState({
-            currentQuestion: questionId,
+            currentQuestion: question?.id || null,
             playingBackwards: false,
             showingGame: false,
             showingTrack: false,

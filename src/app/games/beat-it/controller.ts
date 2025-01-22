@@ -42,16 +42,16 @@ export class BeatItController extends BaseController<
         this.data = database;
     }
 
-    public async setQuestion(questionId: string): Promise<void> {
+    public async setQuestion(question?: Entity<BeatItQuestion>): Promise<void> {
         const state = this.state();
-        if (questionId !== null && !state.questionsDone.includes(questionId)) {
+        if (question?.id && !state.questionsDone.includes(question.id)) {
             await this.setState({
-                questionsDone: [...state.questionsDone, questionId],
+                questionsDone: [...state.questionsDone, question.id],
             });
         }
 
         await this.setState({
-            currentQuestion: questionId,
+            currentQuestion: question?.id || null,
             currentGuess: 0,
             opposingTeamGuess: null,
             showingAnswer: false,
@@ -60,19 +60,6 @@ export class BeatItController extends BaseController<
 
     public addQuestion(): void {
         this._dialog.open(BeatItQuestionEditDialog);
-    }
-
-    public confirmDeleteQuestion(question: Entity<BeatItQuestion>): void {
-        this._confirm.open(
-            'deleteCancel',
-            'Delete question',
-            `Are you sure you want to delete '${question.gameId}'?`,
-            {
-                onDelete: async () => {
-                    await this.deleteQuestion(question);
-                },
-            },
-        );
     }
 
     public async setGuess(guess: number): Promise<void> {

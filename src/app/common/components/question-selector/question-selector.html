@@ -1,0 +1,48 @@
+<mat-card class="p g">
+    <mat-form-field class="layout-fill">
+        <mat-label>Current question</mat-label>
+        <mat-select
+            [value]="currentQuestion()"
+            (valueChange)="setQuestion($event)">
+            <mat-option [value]="undefined">None</mat-option>
+            @for (question of questions(); track question) {
+                <mat-option [value]="question">
+                    <ng-container
+                        *ngTemplateOutlet="
+                            questionTemplate()?.template!;
+                            context: { $implicit: question, question: question }
+                        ">
+                    </ng-container>
+                </mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    <div class="layout-row layout-items-fill g">
+        <button mat-flat-button (click)="onAddQuestion()">
+            <mat-icon>add_circle</mat-icon>
+            <span>Add question</span>
+        </button>
+
+        @if (canEdit()) {
+            <button
+                mat-flat-button
+                (click)="onEditQuestion(currentQuestion()!)"
+                [disabled]="currentQuestion() === undefined">
+                <mat-icon>edit</mat-icon>
+                <span>Edit question</span>
+            </button>
+        }
+
+        @if (canDelete()) {
+            <button
+                mat-flat-button
+                class="error"
+                (click)="onDeleteQuestion(currentQuestion()!)"
+                [disabled]="currentQuestion() === undefined">
+                <mat-icon>delete</mat-icon>
+                <span>Delete this question</span>
+            </button>
+        }
+    </div>
+</mat-card>

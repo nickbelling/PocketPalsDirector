@@ -31,12 +31,12 @@ export class OrderUpController extends BaseController<
     }
 
     public async setQuestion(
-        question: Entity<OrderUpQuestion> | null,
+        question?: Entity<OrderUpQuestion>,
     ): Promise<void> {
         const state = this.state();
         const questionsDone = [...state.questionsDone];
 
-        if (question !== null && !state.questionsDone.includes(question.id)) {
+        if (question && !state.questionsDone.includes(question.id)) {
             questionsDone.push(question.id);
 
             await this.setState({
@@ -55,15 +55,10 @@ export class OrderUpController extends BaseController<
     }
 
     public addQuestion(): void {
-        this._dialog.open(OrderUpQuestionEditDialog, {
-            width: '800px',
-            maxWidth: '800px',
-            height: '700px',
-            maxHeight: '700px',
-        });
+        this.editQuestion();
     }
 
-    public editQuestion(question: Entity<OrderUpQuestion>): void {
+    public editQuestion(question?: Entity<OrderUpQuestion>): void {
         this._dialog.open(OrderUpQuestionEditDialog, {
             data: question,
             width: '800px',
@@ -71,19 +66,6 @@ export class OrderUpController extends BaseController<
             height: '700px',
             maxHeight: '700px',
         });
-    }
-
-    public confirmDeleteQuestion(question: Entity<OrderUpQuestion>): void {
-        this._confirm.open(
-            'deleteCancel',
-            'Delete question',
-            `Are you sure you want to delete '${question.id}'?`,
-            {
-                onDelete: async () => {
-                    await this.deleteQuestion(question);
-                },
-            },
-        );
     }
 
     public async reorder(

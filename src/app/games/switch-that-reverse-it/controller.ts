@@ -25,10 +25,12 @@ export class SwitchThatReverseItController extends BaseController<
         this.data = database;
     }
 
-    public async setQuestion(questionId: string | null): Promise<void> {
+    public async setQuestion(
+        question?: Entity<SwitchThatReverseItQuestion>,
+    ): Promise<void> {
         await this.setState({
             ...SWITCH_THAT_REVERSE_IT_STATE_DEFAULT,
-            currentQuestion: questionId,
+            currentQuestion: question?.id || null,
         });
     }
 

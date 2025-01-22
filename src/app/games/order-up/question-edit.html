@@ -58,7 +58,9 @@
                     <mat-icon matListItemIcon cdkDragHandle
                         >drag_indicator</mat-icon
                     >
-                    <span>{{ item.name }} ({{ item.value }})</span>
+                    <span matTooltip="{{ item.name }} ({{ item.value }})"
+                        >{{ item.name }} ({{ item.value }})</span
+                    >
                     <div matListItemMeta>
                         <button
                             mat-icon-button

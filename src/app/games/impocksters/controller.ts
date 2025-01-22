@@ -25,28 +25,17 @@ export class ImpockstersController extends BaseController<
         this.data = database;
     }
 
-    public async setQuestion(questionId: string): Promise<void> {
+    public async setQuestion(
+        question?: Entity<ImpockstersQuestion>,
+    ): Promise<void> {
         await this.setState({
             ...IMPOCKSTERS_STATE_DEFAULT,
-            currentQuestion: questionId,
+            currentQuestion: question?.id || null,
         });
     }
 
     public addQuestion(): void {
         this._dialog.open(ImpockstersQuestionEditDialog);
-    }
-
-    public confirmDeleteQuestion(question: Entity<ImpockstersQuestion>): void {
-        this._confirm.open(
-            'deleteCancel',
-            'Delete question',
-            `Are you sure you want to delete '${question.id}'?`,
-            {
-                onDelete: async () => {
-                    await this.deleteQuestion(question);
-                },
-            },
-        );
     }
 
     public async toggleTimer(): Promise<void> {

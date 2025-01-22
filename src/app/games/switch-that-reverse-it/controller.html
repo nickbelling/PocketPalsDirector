@@ -10,38 +10,17 @@
         <span>Reset game</span>
     </button>
 
-    <mat-card class="p g">
-        <mat-form-field class="layout-fill">
-            <mat-label>Current question</mat-label>
-            <mat-select
-                [value]="currentQuestionId()"
-                (valueChange)="setQuestion($event)">
-                <mat-option [value]="null">None</mat-option>
-                @for (question of questions; track question.id) {
-                    <mat-option [value]="question.id">
-                        <span
-                            >{{ question.prompt }} ({{ question.answer }})</span
-                        >
-                    </mat-option>
-                }
-            </mat-select>
-        </mat-form-field>
-
-        <div class="layout-row layout-items-fill g">
-            <button mat-flat-button (click)="addQuestion()">
-                <mat-icon>add_circle</mat-icon>
-                <span>Add question</span>
-            </button>
-            <button
-                mat-flat-button
-                class="error"
-                (click)="confirmDeleteQuestion(question!)"
-                [disabled]="question === undefined">
-                <mat-icon>delete</mat-icon>
-                <span>Delete question</span>
-            </button>
-        </div>
-    </mat-card>
+    <question-selector
+        [questions]="questions"
+        [currentQuestion]="currentQuestion()"
+        (currentQuestionChange)="setQuestion($event)"
+        (addQuestion)="addQuestion()"
+        canDelete
+        (deleteQuestion)="deleteQuestion($event)">
+        <question-display *question="let question; from: questions">
+            <span>{{ question.prompt }} ({{ question.answer }})</span>
+        </question-display>
+    </question-selector>
 
     @if (question) {
         <mat-card class="layout-column g">
@@ -63,7 +42,7 @@
         <button
             mat-flat-button
             [disabled]="next === undefined"
-            (click)="setQuestion(next?.id || null)">
+            (click)="setQuestion(next)">
             <mat-icon>skip_next</mat-icon>
             <span>Next question ({{ remaining }} remaining)</span>
         </button>

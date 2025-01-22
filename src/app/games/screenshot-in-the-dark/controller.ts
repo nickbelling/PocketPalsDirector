@@ -25,40 +25,33 @@ export class ScreenshotInTheDarkController extends BaseController<
         this._dialog.open(ScreenshotInTheDarkQuestionEditDialog);
     }
 
-    public async confirmDeleteQuestion(
+    public async deleteQuestionAndFiles(
         question: Entity<ScreenshotInTheDarkQuestion>,
     ): Promise<void> {
-        this._confirm.open(
-            'deleteCancel',
-            'Delete question',
-            `Are you sure you want to delete '${question.gameId}'?`,
-            {
-                onDelete: async () => {
-                    const guessTheGameId = question.guessTheGameId;
+        const guessTheGameId = question.guessTheGameId;
 
-                    if (guessTheGameId) {
-                        const baseUrl = `${guessTheGameId}_`;
-                        const deletions = [
-                            this.deleteFile(baseUrl + 1),
-                            this.deleteFile(baseUrl + 2),
-                            this.deleteFile(baseUrl + 3),
-                            this.deleteFile(baseUrl + 4),
-                            this.deleteFile(baseUrl + 5),
-                            this.deleteFile(baseUrl + 6),
-                        ];
+        if (guessTheGameId) {
+            const baseUrl = `${guessTheGameId}_`;
+            const deletions = [
+                this.deleteFile(baseUrl + 1),
+                this.deleteFile(baseUrl + 2),
+                this.deleteFile(baseUrl + 3),
+                this.deleteFile(baseUrl + 4),
+                this.deleteFile(baseUrl + 5),
+                this.deleteFile(baseUrl + 6),
+            ];
 
-                        await Promise.all(deletions);
-                    }
+            await Promise.all(deletions);
+        }
 
-                    await this.deleteQuestion(question);
-                },
-            },
-        );
+        await this.deleteQuestion(question);
     }
 
-    public async setQuestion(questionId: string): Promise<void> {
+    public async setQuestion(
+        question?: Entity<ScreenshotInTheDarkQuestion>,
+    ): Promise<void> {
         await this.setState({
-            currentQuestion: questionId,
+            currentQuestion: question?.id || null,
             isPlaying: false,
             isShowingAnswer: false,
         });

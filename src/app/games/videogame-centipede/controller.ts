@@ -25,24 +25,11 @@ export class VideogameCentipedeController extends BaseController<
         this._dialog.open(VideogameCentipedeQuestionEditDialog);
     }
 
-    public async confirmDeleteQuestion(
-        question: Entity<VideogameCentipedeQuestion>,
+    public async setQuestion(
+        question?: Entity<VideogameCentipedeQuestion>,
     ): Promise<void> {
-        await this._confirm.open(
-            'deleteCancel',
-            'Delete question',
-            `Are you sure you want to delete "${question.answer}"?`,
-            {
-                onDelete: async () => {
-                    await this.deleteQuestion(question);
-                },
-            },
-        );
-    }
-
-    public async setQuestion(questionId: string): Promise<void> {
         await this.setState({
-            currentQuestion: questionId,
+            currentQuestion: question?.id || null,
             showingAnswer: false,
         });
     }
