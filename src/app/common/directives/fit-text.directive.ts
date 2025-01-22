@@ -1,5 +1,6 @@
 import {
     AfterViewInit,
+    DestroyRef,
     Directive,
     ElementRef,
     inject,
@@ -18,49 +19,98 @@ import {
 export class FitTextDirective implements OnChanges, AfterViewInit {
     /** The text being fit into this element. Used to monitor for changes. */
     public fitText = input.required<string>();
-    public minSize = input<number>(10);
+    public fitTextMinSize = input<number>(10);
 
     private _originalFontSize?: number = undefined;
     private _el = inject(ElementRef);
+    private _resizeObserver?: ResizeObserver;
+
+    constructor() {
+        inject(DestroyRef).onDestroy(() => {
+            if (this._resizeObserver) {
+                this._resizeObserver.disconnect();
+            }
+        });
+    }
 
     public ngAfterViewInit(): void {
+        if (this._resizeObserver) {
+            this._resizeObserver.disconnect();
+        }
+
+        this._resizeObserver = new ResizeObserver((resize) => {
+            this._setOriginalSize();
+            this._adjustFontSize();
+        });
+
+        this._resizeObserver.observe(this._el.nativeElement);
+
         // This has to occur after an animation frame, otherwise a font style
         // applied to the element's class may not yet be loaded.
         requestAnimationFrame(() => {
-            this._originalFontSize = parseFloat(
-                window
-                    .getComputedStyle(this._el.nativeElement, null)
-                    .getPropertyValue('font-size'),
-            );
-
-            this.adjustFontSize();
+            this._setOriginalSize();
+            this._adjustFontSize();
         });
     }
 
     public ngOnChanges(): void {
         // The text has changed. Readjust the font
         requestAnimationFrame(() => {
-            this.adjustFontSize();
+            this._adjustFontSize();
         });
     }
 
-    private adjustFontSize(): void {
+    private _setOriginalSize(): void {
+        this._el.nativeElement.style.fontSize = null;
+        this._originalFontSize = parseFloat(
+            window
+                .getComputedStyle(this._el.nativeElement, null)
+                .getPropertyValue('font-size'),
+        );
+    }
+
+    private _adjustFontSize(): void {
         if (this._originalFontSize !== undefined) {
             const element = this._el.nativeElement;
 
-            if (element.clientHeight > 0 && element.clientWidth > 0) {
-                let fontSize = this._originalFontSize;
-                element.style.fontSize = `${fontSize}px`;
+            // Cache the element's dimensions outside the loop (as each of
+            // these cause a layout recalculation)
+            const styles = getComputedStyle(element);
+            const clientHeight = Math.round(parseFloat(styles.height));
+            const clientWidth = Math.round(parseFloat(styles.width));
 
-                // Keep shrinking the text until it fits
-                while (
-                    (element.scrollHeight > element.clientHeight ||
-                        element.scrollWidth > element.clientWidth) &&
-                    fontSize > this.minSize()
-                ) {
-                    fontSize--;
-                    element.style.fontSize = `${fontSize}px`;
+            if (clientHeight > 0 && clientWidth > 0) {
+                let minSize = this.fitTextMinSize();
+                let maxSize = Math.floor(this._originalFontSize);
+                let fontSize = maxSize;
+
+                let adjustments = 0;
+                // Apply a binary search to find the optimal font size
+                while (minSize <= maxSize) {
+                    const midSize = Math.floor((minSize + maxSize) / 2);
+                    element.style.fontSize = `${midSize}px`;
+
+                    const scrollHeight = element.scrollHeight;
+                    const scrollWidth = element.scrollWidth;
+
+                    // Check if the current font size fits within the element
+                    if (
+                        scrollHeight <= clientHeight &&
+                        scrollWidth <= clientWidth
+                    ) {
+                        // Font size fits, try a larger size
+                        fontSize = midSize;
+                        minSize = midSize + 1;
+                    } else {
+                        // Font size does not fit, try a smaller size
+                        maxSize = midSize - 1;
+                    }
+
+                    adjustments++;
                 }
+
+                // Apply the final font size
+                element.style.fontSize = `${fontSize}px`;
             }
         }
     }
