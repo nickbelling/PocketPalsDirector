@@ -13,7 +13,9 @@
         autoActiveFirstOption
         [displayWith]="displayFn">
         @for (game of filteredGames(); track game.id) {
-            <mat-option [value]="game">{{ game.name }}</mat-option>
+            <mat-option [value]="game">
+                <span>{{ game.id | gameName: true }}</span>
+            </mat-option>
         }
     </mat-autocomplete>
 </mat-form-field>

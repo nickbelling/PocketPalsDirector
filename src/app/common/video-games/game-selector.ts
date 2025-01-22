@@ -20,6 +20,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Entity } from '../firestore';
+import { filterByQuery } from '../utils';
+import { VideogameNamePipe } from './game-name.pipe';
 import {
     VideogameDatabaseItem,
     VideogameDatabaseService,
@@ -56,6 +58,7 @@ export class GameSelectionValidator implements Validator {
         MatFormFieldModule,
         MatInputModule,
         GameSelectionValidator,
+        VideogameNamePipe,
     ],
     templateUrl: './game-selector.html',
     styleUrl: './game-selector.scss',
@@ -79,9 +82,8 @@ export class GameSelector {
 
         const filterText =
             typeof selectedGame === 'string' ? selectedGame : selectedGame.name;
-        return this.games().filter((g) =>
-            g.name.toLowerCase().includes(filterText.toLowerCase()),
-        );
+
+        return filterByQuery(this.games(), filterText, (game) => game.name);
     });
 
     constructor() {
