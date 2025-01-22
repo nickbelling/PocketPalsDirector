@@ -1,4 +1,5 @@
 import { Type } from '@angular/core';
+import { Resolution, RESOLUTION_1920x1080 } from '../common/utils/resolutions';
 import { AvoidingTheDmcaController } from './avoiding-the-dmca/controller';
 import { AvoidingTheDmcaGame } from './avoiding-the-dmca/game';
 import { BeatItController } from './beat-it/controller';
@@ -27,6 +28,7 @@ export interface GameDefinition {
     game: Type<unknown>;
     controller: Type<unknown>;
     supportsBuzzers: boolean;
+    defaultResolution: Resolution;
 }
 
 export const GAMES: GameDefinition[] = [
@@ -37,6 +39,7 @@ export const GAMES: GameDefinition[] = [
         game: AvoidingTheDmcaGame,
         controller: AvoidingTheDmcaController,
         supportsBuzzers: true,
+        defaultResolution: RESOLUTION_1920x1080,
     },
     {
         name: 'Beat It',
@@ -45,6 +48,7 @@ export const GAMES: GameDefinition[] = [
         game: BeatItGame,
         controller: BeatItController,
         supportsBuzzers: false,
+        defaultResolution: RESOLUTION_1920x1080,
     },
     {
         name: 'Impocksters',
@@ -53,6 +57,7 @@ export const GAMES: GameDefinition[] = [
         game: ImpockstersGame,
         controller: ImpockstersController,
         supportsBuzzers: true,
+        defaultResolution: RESOLUTION_1920x1080,
     },
     {
         name: 'Lightly Steamed',
@@ -61,6 +66,7 @@ export const GAMES: GameDefinition[] = [
         game: LightlySteamedGame,
         controller: LightlySteamedController,
         supportsBuzzers: true,
+        defaultResolution: RESOLUTION_1920x1080,
     },
     {
         name: 'Order Up',
@@ -69,6 +75,7 @@ export const GAMES: GameDefinition[] = [
         game: OrderUpGame,
         controller: OrderUpController,
         supportsBuzzers: false,
+        defaultResolution: RESOLUTION_1920x1080,
     },
     {
         name: 'Ranky Panky',
@@ -77,6 +84,7 @@ export const GAMES: GameDefinition[] = [
         game: RankyPankyGame,
         controller: RankyPankyController,
         supportsBuzzers: false,
+        defaultResolution: RESOLUTION_1920x1080,
     },
     {
         name: 'Screenshot in the Dark',
@@ -85,6 +93,7 @@ export const GAMES: GameDefinition[] = [
         game: ScreenshotInTheDarkGame,
         controller: ScreenshotInTheDarkController,
         supportsBuzzers: true,
+        defaultResolution: RESOLUTION_1920x1080,
     },
     {
         name: 'State Your Bidness',
@@ -93,6 +102,7 @@ export const GAMES: GameDefinition[] = [
         game: StateYourBidnessGame,
         controller: StateYourBidnessController,
         supportsBuzzers: false,
+        defaultResolution: RESOLUTION_1920x1080,
     },
     {
         name: 'Switch That, Reverse It',
@@ -101,6 +111,7 @@ export const GAMES: GameDefinition[] = [
         game: SwitchThatReverseItGame,
         controller: SwitchThatReverseItController,
         supportsBuzzers: true,
+        defaultResolution: RESOLUTION_1920x1080,
     },
     {
         name: 'Videogame Centipede',
@@ -109,5 +120,6 @@ export const GAMES: GameDefinition[] = [
         game: VideogameCentipedeGame,
         controller: VideogameCentipedeController,
         supportsBuzzers: true,
+        defaultResolution: RESOLUTION_1920x1080,
     },
 ];
