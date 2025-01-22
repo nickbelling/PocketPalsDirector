@@ -1,13 +1,12 @@
 <div
     #previewContainer
     class="preview-container"
-    [style.aspect-ratio]="aspectRatio()"
->
+    [style.aspect-ratio]="aspectRatio()">
     <div
         #previewScale
         class="preview-scale"
-        [style.transform]="scaleTransform()"
-    >
+        [style.scale]="scaleFactor()"
+        [style.translate]="translatePercentage()">
         <div #childContentWrapper>
             <ng-content></ng-content>
         </div>

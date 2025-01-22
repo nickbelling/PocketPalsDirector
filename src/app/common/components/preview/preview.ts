@@ -62,7 +62,7 @@ export class GamePreview {
      * The scale factor that should be applied to the child content to make it
      * fit within the preview window, based on all of the values above.
      */
-    private _scaleFactor = computed<number>(() => {
+    public scaleFactor = computed<number>(() => {
         const containerW = this._containerWidth();
         const containerH = this._containerHeight();
         const childW = this._childWidth();
@@ -83,6 +83,20 @@ export class GamePreview {
         return Math.min(scaleWidth, scaleHeight);
     });
 
+    /**
+     * The "preview-scale" container is positioned absolutely with top and left
+     * at 50%. This then needs to be translated negatively, however cannot be
+     * "-50%" because the container is scaled. This Signal calculates the -50%
+     * translation multiplied by the scale factor so that it can be visually
+     * centered in its parent.
+     */
+    public translatePercentage = computed(() => {
+        const scaleFactor = this.scaleFactor();
+        const value = scaleFactor * -50;
+
+        return `${value}% ${value}%`;
+    });
+
     /** The aspect ratio of the child content, derived from its desired size. */
     public readonly aspectRatio = computed<string>(() => {
         const w = this._childWidth();
@@ -91,11 +105,6 @@ export class GamePreview {
         // Fallback to 16/9 if not available yet
         return w > 0 && h > 0 ? `${w}/${h}` : '16/9';
     });
-
-    /** The scale transform as a CSS string. */
-    public readonly scaleTransform = computed<string>(
-        () => `scale(${this._scaleFactor()})`,
-    );
 
     constructor() {
         // Observer for container resizing
