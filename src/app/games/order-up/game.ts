@@ -46,7 +46,6 @@ export class OrderUpGame extends BaseGame<OrderUpState, OrderUpQuestion> {
             const displayedItems = this.displayedItems();
 
             if (displayedItems && displayedItems.length > 0) {
-                console.log('displayedItemschange');
                 const displayedItemsWithImages: OrderUpQuestionItemWithImage[] =
                     await Promise.all(
                         displayedItems.map(async (item) => {

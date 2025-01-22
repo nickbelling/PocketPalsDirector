@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import {
     Component,
     contentChild,
-    effect,
     inject,
     input,
     model,
@@ -53,29 +52,6 @@ export class QuestionSelector<TQuestion extends Entity<GameQuestionLike>> {
         QuestionTemplateDirective<TQuestion>,
     );
 
-    constructor() {
-        effect(() => {
-            const questions = this.questions();
-            console.log('questions changed:', questions);
-        });
-
-        effect(() => {
-            const currentQuestion = this.currentQuestion();
-            console.log('current question changed:', currentQuestion);
-        });
-
-        effect(() => {
-            const currentQuestion = this.currentQuestion();
-
-            if (currentQuestion) {
-                console.log(
-                    'current question in question list',
-                    this.questions().includes(currentQuestion),
-                );
-            }
-        });
-    }
-
     public setQuestion(question: TQuestion | undefined): void {
         this.currentQuestion.set(question);
     }
@@ -90,7 +66,6 @@ export class QuestionSelector<TQuestion extends Entity<GameQuestionLike>> {
 
     public onDeleteQuestion(question: TQuestion): void {
         const questionDisplayText = this._getQuestionDisplayText(question);
-        console.log('displaying:', questionDisplayText);
 
         this._confirm.open(
             'deleteCancel',
