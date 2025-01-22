@@ -2,11 +2,11 @@
     <mat-form-field class="layout-fill">
         <mat-label>Current question</mat-label>
         <mat-select
-            [value]="currentQuestion()"
+            [value]="currentQuestion()?.id"
             (valueChange)="setQuestion($event)">
             <mat-option [value]="undefined">None</mat-option>
-            @for (question of questions(); track question) {
-                <mat-option [value]="question">
+            @for (question of questions(); track question.id) {
+                <mat-option [value]="question.id">
                     <ng-container
                         *ngTemplateOutlet="
                             questionTemplate()?.template!;

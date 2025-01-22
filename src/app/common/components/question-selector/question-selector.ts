@@ -52,7 +52,9 @@ export class QuestionSelector<TQuestion extends Entity<GameQuestionLike>> {
         QuestionTemplateDirective<TQuestion>,
     );
 
-    public setQuestion(question: TQuestion | undefined): void {
+    public setQuestion(questionId: string | undefined): void {
+        const questions = this.questions();
+        const question = questions.find((q) => q.id === questionId);
         this.currentQuestion.set(question);
     }
 
