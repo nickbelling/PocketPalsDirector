@@ -27,7 +27,7 @@
         (change)="fileToUpload.set(fileInput.files![0])" />
     <div class="layout-row layout-items-middle g">
         <mat-slider
-            class="layout-fill visible"
+            class="layout-fill overflow-visible"
             [disabled]="audioLengthSeconds() === 0"
             [max]="audioLengthSeconds()">
             <input matSliderThumb [(ngModel)]="audioStartPoint" />

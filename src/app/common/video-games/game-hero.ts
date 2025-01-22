@@ -93,11 +93,11 @@ export class GameHero {
 
                 this.loaded.set(true);
             } else if (!game) {
-                this.loaded.set(false);
                 this._lastGameId = undefined;
                 this._lastUpdatedAt = undefined;
                 this.logoSrc.set(undefined);
                 this.heroSrc.set(undefined);
+                this.loaded.set(true);
             }
             // else game "changed" but last updated not changed, so existing
             // images are good
