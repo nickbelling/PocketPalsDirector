@@ -1,20 +1,47 @@
-<h3>Select a game</h3>
+<h3>Home</h3>
 
-<div class="layout-row g">
-    <div class="layout-column layout-basis-2/5 g">
-        @for (game of games; track $index) {
-            <button
-                mat-flat-button
-                [routerLink]="['..', 'director', game.slug]">
-                <mat-icon>{{ game.icon }}</mat-icon>
-                <span>{{ game.name }}</span>
-            </button>
-        }
-    </div>
-    <div class="layout-column layout-basis-3/5 g">
-        <preview class="bg-preview">
-            <buzzer-display />
-        </preview>
-        <buzzer-controller />
-    </div>
-</div>
+<h4>Active games</h4>
+
+<mat-card
+    cdkDropList
+    #activeList="cdkDropList"
+    cdkDropListOrientation="mixed"
+    [cdkDropListData]="activeGames"
+    [cdkDropListConnectedTo]="[inactiveList]"
+    (cdkDropListDropped)="drop($event)"
+    class="game-track active">
+    @for (game of activeGames(); track game.slug) {
+        <mat-card
+            cdkDrag
+            [cdkDragDisabled]="loading()"
+            class="game"
+            [routerLink]="['..', 'director', game.slug]">
+            <img src="img/games/thumbs/{{ game.slug }}.webp" />
+        </mat-card>
+    } @empty {
+        <span class="placeholder">Drag games here to make them active.</span>
+    }
+</mat-card>
+
+<h4>Inactive games</h4>
+
+<mat-card
+    cdkDropList
+    #inactiveList="cdkDropList"
+    cdkDropListOrientation="mixed"
+    [cdkDropListData]="inactiveGames"
+    [cdkDropListConnectedTo]="[activeList]"
+    (cdkDropListDropped)="drop($event)"
+    class="game-track inactive">
+    @for (game of inactiveGames(); track game.slug) {
+        <mat-card
+            cdkDrag
+            [cdkDragDisabled]="loading()"
+            class="game"
+            [routerLink]="['..', 'director', game.slug]">
+            <img src="img/games/thumbs/{{ game.slug }}.webp" />
+        </mat-card>
+    } @empty {
+        <span class="placeholder">Drag games here to make them inactive.</span>
+    }
+</mat-card>

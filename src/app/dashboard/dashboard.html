@@ -11,9 +11,14 @@
             <span>Games</span>
             <mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
         </button>
+        <a mat-button [routerLink]="'game-database'">
+            <!-- lol, Material Symbols only has this icon as a "controller" -->
+            <mat-icon>stadia_controller</mat-icon>
+            <span>Videogame Database</span>
+        </a>
         <a mat-button [routerLink]="'players'">
             <mat-icon>groups</mat-icon>
-            <span>Players</span>
+            <span>Players & Buzzers</span>
         </a>
         <button mat-button [matMenuTriggerFor]="optionsMenu">
             <mat-icon>Settings</mat-icon>
@@ -39,13 +44,22 @@
 </div>
 
 <mat-menu #gameSelectMenu="matMenu">
-    <a mat-menu-item [routerLink]="'game-database'">
-        <!-- lol, Material Symbols only has this icon as a "controller" -->
-        <mat-icon>stadia_controller</mat-icon>
-        <span>Videogame Database</span>
-    </a>
+    @for (game of activeGames(); track game.slug) {
+        <a mat-menu-item [routerLink]="['director', game.slug]">
+            @if (game.icon) {
+                <mat-icon>{{ game.icon }}</mat-icon>
+            }
+            <span>{{ game.name }}</span>
+        </a>
+    }
     <mat-divider />
-    @for (game of games; track $index) {
+    <button mat-menu-item [matMenuTriggerFor]="inactiveGameSelectMenu">
+        <span>Inactive games</span>
+    </button>
+</mat-menu>
+
+<mat-menu #inactiveGameSelectMenu="matMenu">
+    @for (game of inactiveGames(); track game.slug) {
         <a mat-menu-item [routerLink]="['director', game.slug]">
             @if (game.icon) {
                 <mat-icon>{{ game.icon }}</mat-icon>

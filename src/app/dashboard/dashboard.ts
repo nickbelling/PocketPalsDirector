@@ -10,7 +10,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../common/auth';
 import { SoundService } from '../common/files';
-import { GAMES } from '../games';
+import { GlobalDataStore } from './global-data-store';
 
 @Component({
     imports: [
@@ -29,11 +29,13 @@ import { GAMES } from '../games';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Dashboard {
-    public games = GAMES;
+    private _globalData = inject(GlobalDataStore);
     public auth = inject(AuthService);
     public sound = inject(SoundService);
 
     protected soundEnabled = this.sound.soundEnabled;
+    protected activeGames = this._globalData.activeGames;
+    protected inactiveGames = this._globalData.inactiveGames;
 
     constructor() {
         // By default, the admin interface should have sound turned off
