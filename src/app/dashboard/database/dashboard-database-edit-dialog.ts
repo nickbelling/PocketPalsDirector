@@ -28,13 +28,13 @@ import { CommonControllerModule } from '../../games/base/controller';
 import {
     DashboardGamesDatabaseImageSelectDialog,
     DatabaseImageSelectOptions,
-} from './dashboard-games-database-image-select-dialog';
+} from './dashboard-database-image-select-dialog';
 
 @Component({
     imports: [CommonControllerModule, GameLogoSrcPipe, GameHeroSrcPipe],
     providers: [SteamGridDbService],
-    templateUrl: './dashboard-games-database-edit-dialog.html',
-    styleUrl: './dashboard-games-database-edit-dialog.scss',
+    templateUrl: './dashboard-database-edit-dialog.html',
+    styleUrl: './dashboard-database-edit-dialog.scss',
 })
 export class DashboardGamesDatabaseEditDialog {
     private _vgDb = inject(VideogameDatabaseService);

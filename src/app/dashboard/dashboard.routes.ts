@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 import { AdminAuthGuard } from '../common/auth';
 import { Dashboard } from './dashboard';
-import { DashboardGamesDatabase } from './games/dashboard-games-database';
+import { DashboardGamesDatabase } from './database/dashboard-database';
 import { DashboardHome } from './home/dashboard-home';
 import { DashboardPlayers } from './players/dashboard-players';
 import { DashboardSignIn } from './sign-in/dashboard-sign-in';

@@ -11,8 +11,8 @@ export interface DatabaseImageSelectOptions {
 @Component({
     imports: [CommonControllerModule],
     providers: [SteamGridDbService],
-    templateUrl: './dashboard-games-database-image-select-dialog.html',
-    styleUrl: './dashboard-games-database-image-select-dialog.scss',
+    templateUrl: './dashboard-database-image-select-dialog.html',
+    styleUrl: './dashboard-database-image-select-dialog.scss',
 })
 export class DashboardGamesDatabaseImageSelectDialog {
     private _steamGridDb = inject(SteamGridDbService);

@@ -21,8 +21,8 @@ interface SearchResult {
 @Component({
     imports: [CommonControllerModule],
     providers: [SteamGridDbService],
-    templateUrl: './dashboard-games-database-add-dialog.html',
-    styleUrl: './dashboard-games-database-add-dialog.scss',
+    templateUrl: './dashboard-database-add-dialog.html',
+    styleUrl: './dashboard-database-add-dialog.scss',
 })
 export class DashboardGamesDatabaseAddDialog {
     private _steamGridDb = inject(SteamGridDbService);

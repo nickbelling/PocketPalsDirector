@@ -8,14 +8,14 @@ import {
     VideogameDatabaseService,
 } from '../../common/video-games';
 import { CommonControllerModule } from '../../games/base/controller';
-import { DashboardGamesDatabaseAddDialog } from './dashboard-games-database-add-dialog';
-import { DashboardGamesDatabaseEditDialog } from './dashboard-games-database-edit-dialog';
+import { DashboardGamesDatabaseAddDialog } from './dashboard-database-add-dialog';
+import { DashboardGamesDatabaseEditDialog } from './dashboard-database-edit-dialog';
 
 @Component({
     imports: [CommonControllerModule],
     providers: [SteamGridDbService],
-    templateUrl: './dashboard-games-database.html',
-    styleUrl: './dashboard-games-database.scss',
+    templateUrl: './dashboard-database.html',
+    styleUrl: './dashboard-database.scss',
 })
 export class DashboardGamesDatabase {
     private _db = inject(VideogameDatabaseService);
