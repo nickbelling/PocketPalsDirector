@@ -1,7 +1,8 @@
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { CommonModule } from '@angular/common';
 import {
+    booleanAttribute,
     Component,
+    computed,
     contentChild,
     inject,
     input,
@@ -10,11 +11,14 @@ import {
     ViewContainerRef,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { GameQuestionLike } from '../../../games/base/database';
 import { ConfirmDialog } from '../../dialog';
 import { Entity } from '../../firestore';
@@ -25,13 +29,17 @@ import { QuestionTemplateDirective } from './question-template';
     imports: [
         CommonModule,
         FormsModule,
+        MatBadgeModule,
         MatButtonModule,
         MatCardModule,
         MatFormFieldModule,
         MatIconModule,
         MatSelectModule,
+        MatSlideToggleModule,
+        MatTooltipModule,
     ],
     templateUrl: './question-selector.html',
+    styleUrl: './question-selector.scss',
 })
 export class QuestionSelector<TQuestion extends Entity<GameQuestionLike>> {
     private _confirm = inject(ConfirmDialog);
@@ -39,18 +47,59 @@ export class QuestionSelector<TQuestion extends Entity<GameQuestionLike>> {
 
     public readonly questions = input.required<TQuestion[]>();
     public readonly currentQuestion = model.required<TQuestion | undefined>();
-    public readonly canEdit = input(false, {
-        transform: coerceBooleanProperty,
-    });
-    public readonly canDelete = input(true, {
-        transform: coerceBooleanProperty,
-    });
+    public readonly canEdit = input(false, { transform: booleanAttribute });
+    public readonly canDelete = input(true, { transform: booleanAttribute });
+    public readonly canNavigate = input(false, { transform: booleanAttribute });
+    public readonly reset = output<void>();
     public readonly addQuestion = output<void>();
     public readonly editQuestion = output<TQuestion>();
     public readonly deleteQuestion = output<TQuestion>();
     public readonly questionTemplate = contentChild(
         QuestionTemplateDirective<TQuestion>,
     );
+
+    public readonly currentQuestionIndex = computed<number>(() => {
+        const questions = this.questions();
+        const currentQuestion = this.currentQuestion();
+
+        if (currentQuestion) {
+            return questions.findIndex((q) => q.id === currentQuestion.id);
+        } else {
+            return -1;
+        }
+    });
+
+    public readonly questionsRemaining = computed<number>(() => {
+        const questions = this.questions();
+        const currentQuestionIndex = this.currentQuestionIndex();
+        return questions.length - (currentQuestionIndex + 1);
+    });
+
+    public readonly previousQuestion = computed<TQuestion | undefined>(() => {
+        const questions = this.questions();
+        const currentQuestionIndex = this.currentQuestionIndex();
+        return questions[currentQuestionIndex - 1];
+    });
+
+    public readonly nextQuestion = computed<TQuestion | undefined>(() => {
+        const questions = this.questions();
+        const currentQuestionIndex = this.currentQuestionIndex();
+        return questions[currentQuestionIndex + 1];
+    });
+
+    public onReset(): void {
+        this._confirm.open(
+            'yesNo',
+            'Reset game',
+            `Are you sure you want to reset this game? This will return the
+            game to a fresh state, but won't delete any questions.`,
+            {
+                onYes: () => {
+                    this.reset.emit();
+                },
+            },
+        );
+    }
 
     public setQuestion(questionId: string | undefined): void {
         const questions = this.questions();

@@ -3,15 +3,12 @@
 @let question = currentQuestion();
 
 <div class="layout-column g">
-    <button mat-flat-button class="error" (click)="reset()">
-        <mat-icon>refresh</mat-icon>
-        <span>Reset game</span>
-    </button>
-
     <question-selector
         [questions]="questions"
         [currentQuestion]="currentQuestion()"
         (currentQuestionChange)="setQuestion($event)"
+        (reset)="reset()"
+        canNavigate
         (addQuestion)="addQuestion()"
         canDelete
         (deleteQuestion)="deleteQuestion($event)">

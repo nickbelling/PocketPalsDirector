@@ -1,48 +1,100 @@
-<mat-card class="p g">
-    <mat-form-field class="layout-fill">
-        <mat-label>Current question</mat-label>
-        <mat-select
-            [value]="currentQuestion()?.id"
-            (valueChange)="setQuestion($event)">
-            <mat-option [value]="undefined">None</mat-option>
-            @for (question of questions(); track question.id) {
-                <mat-option [value]="question.id">
-                    <ng-container
-                        *ngTemplateOutlet="
-                            questionTemplate()?.template!;
-                            context: { $implicit: question, question: question }
-                        ">
-                    </ng-container>
-                </mat-option>
+<mat-card class="g">
+    <mat-card-content class="layout-column g">
+        <div class="layout-row g">
+            <button mat-flat-button class="error" (click)="onReset()">
+                <mat-icon>refresh</mat-icon>
+                <span>Reset game</span>
+            </button>
+            <span class="layout-fill"></span>
+            <mat-slide-toggle #editMode>
+                <span>Edit mode</span>
+            </mat-slide-toggle>
+        </div>
+
+        <div class="layout-row g">
+            @if (canNavigate()) {
+                <button
+                    mat-fab
+                    matTooltip="Previous question"
+                    (click)="setQuestion(previousQuestion()?.id)"
+                    [disabled]="!previousQuestion()">
+                    <mat-icon>skip_previous</mat-icon>
+                </button>
             }
-        </mat-select>
-    </mat-form-field>
 
-    <div class="layout-row layout-items-fill g">
-        <button mat-flat-button (click)="onAddQuestion()">
-            <mat-icon>add_circle</mat-icon>
-            <span>Add question</span>
-        </button>
+            <mat-form-field class="layout-fill">
+                <mat-label>Current question</mat-label>
+                <mat-select
+                    placeholder="Select question"
+                    [value]="currentQuestion()?.id"
+                    (valueChange)="setQuestion($event)">
+                    @for (question of questions(); track question.id) {
+                        <mat-option [value]="question.id">
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    questionTemplate()?.template!;
+                                    context: {
+                                        $implicit: question,
+                                        question: question,
+                                    }
+                                ">
+                            </ng-container>
+                        </mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
 
-        @if (canEdit()) {
             <button
-                mat-flat-button
-                (click)="onEditQuestion(currentQuestion()!)"
-                [disabled]="currentQuestion() === undefined">
-                <mat-icon>edit</mat-icon>
-                <span>Edit question</span>
+                mat-fab
+                matTooltip="Deselect question"
+                (click)="setQuestion(undefined)"
+                [disabled]="!currentQuestion()">
+                <mat-icon>restart_alt</mat-icon>
             </button>
-        }
 
-        @if (canDelete()) {
-            <button
-                mat-flat-button
-                class="error"
-                (click)="onDeleteQuestion(currentQuestion()!)"
-                [disabled]="currentQuestion() === undefined">
-                <mat-icon>delete</mat-icon>
-                <span>Delete this question</span>
-            </button>
+            @if (canNavigate()) {
+                <button
+                    mat-fab
+                    matTooltip="Next question ({{
+                        questionsRemaining()
+                    }} remaining)"
+                    [matBadge]="questionsRemaining()"
+                    [matBadgeHidden]="questionsRemaining() <= 0"
+                    (click)="setQuestion(nextQuestion()?.id)"
+                    [disabled]="!nextQuestion()">
+                    <mat-icon>skip_next</mat-icon>
+                </button>
+            }
+        </div>
+
+        @if (editMode.checked) {
+            <div class="layout-row layout-items-fill g">
+                <button mat-flat-button (click)="onAddQuestion()">
+                    <mat-icon>add_circle</mat-icon>
+                    <span>Add question</span>
+                </button>
+
+                @if (canEdit()) {
+                    <button
+                        mat-flat-button
+                        (click)="onEditQuestion(currentQuestion()!)"
+                        [disabled]="currentQuestion() === undefined">
+                        <mat-icon>edit</mat-icon>
+                        <span>Edit question</span>
+                    </button>
+                }
+
+                @if (canDelete()) {
+                    <button
+                        mat-flat-button
+                        class="error"
+                        (click)="onDeleteQuestion(currentQuestion()!)"
+                        [disabled]="currentQuestion() === undefined">
+                        <mat-icon>delete</mat-icon>
+                        <span>Delete question</span>
+                    </button>
+                }
+            </div>
         }
-    </div>
+    </mat-card-content>
 </mat-card>

@@ -30,17 +30,7 @@ export abstract class BaseController<
     }
 
     public async reset(): Promise<void> {
-        await this._confirm.open(
-            'yesNo',
-            'Reset game',
-            `Are you sure you want to reset this game? This will return the
-            game to a fresh state, but won't delete any questions.`,
-            {
-                onYes: async () => {
-                    await this._db.resetState();
-                },
-            },
-        );
+        await this._db.resetState();
     }
 
     protected async setState(state: TState | Partial<TState>): Promise<void> {

@@ -1,0 +1,9 @@
+@use '@angular/material' as mat;
+
+:host {
+    @include mat.fab-overrides(
+        (
+            container-elevation-shadow: var(--mat-sys-level2),
+        )
+    );
+}
