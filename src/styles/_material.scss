@@ -69,7 +69,7 @@
         );
     }
 
-    .error {
+    button.error {
         &:not(:disabled) {
             mat-icon {
                 color: var(--mat-sys-on-error);

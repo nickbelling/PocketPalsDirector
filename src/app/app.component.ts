@@ -1,21 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { BootstrapModule } from './common/bootstrap/bootstrap.module';
 
 @Component({
     standalone: true,
-    imports: [CommonModule, RouterModule, MatIconModule],
+    imports: [CommonModule, RouterModule, BootstrapModule],
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
 })
-export class AppComponent {
-    private _matIconRegistry = inject(MatIconRegistry);
-
-    constructor() {
-        this._matIconRegistry.setDefaultFontSetClass(
-            'material-symbols-outlined',
-        );
-    }
-}
+export class AppComponent {}

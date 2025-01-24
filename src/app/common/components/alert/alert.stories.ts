@@ -1,50 +1,64 @@
-import type { Meta, StoryObj } from '@storybook/angular';
-
+import {
+    argsToTemplate,
+    Meta,
+    moduleMetadata,
+    StoryObj,
+} from '@storybook/angular';
+import { BootstrapModule } from '../../bootstrap/bootstrap.module';
 import { Alert } from './alert';
 
-// More on how to set up stories at: https://storybook.js.org/docs/writing-stories
-const meta: Meta<Alert> = {
+type Content = {
+    ngContent: string;
+};
+
+const meta: Meta<Alert & Content> = {
     title: 'Common/Components/Alert',
     component: Alert,
-    tags: ['autodocs'],
+    decorators: [moduleMetadata({ imports: [BootstrapModule] })],
     argTypes: {
         type: {
             control: 'select',
+            options: ['info', 'warning', 'error'],
         },
         title: {
             control: 'text',
         },
+        ngContent: {
+            control: 'text',
+        },
     },
+    args: {
+        ngContent: '<p>Lorem ipsum dolor sit amet</p>',
+    },
+    render: ({ ngContent, ...args }) => ({
+        props: args,
+        template: `
+            <alert ${argsToTemplate(args)}>
+                ${ngContent}
+            </alert>`,
+    }),
 };
 
 export default meta;
-type Story = StoryObj<Alert>;
-
-// More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
-export const Default: Story = {
-    args: {
-        type: 'info',
-        title: 'Basic alert',
-    },
-};
+type Story = StoryObj<Alert & Content>;
 
 export const Info: Story = {
     args: {
         type: 'info',
-        title: 'Info alert',
+        title: 'Alert title',
     },
 };
 
 export const Warning: Story = {
     args: {
         type: 'warning',
-        title: 'Warning alert',
+        title: 'Alert title',
     },
 };
 
 export const Error: Story = {
     args: {
         type: 'error',
-        title: 'Error alert',
+        title: 'Alert title',
     },
 };
