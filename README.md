@@ -3,11 +3,9 @@
 ## TODO
 
 - Investigate using `URL.revokeObjectURL()`
-- Update home page to be a grid of game title images
 - Database:
     - Update `<game-selector>` to enable adding a new game from within it
     - Investigate enabling image export of games at different aspect ratios
-    - Select logos/heros from SteamGridDB rather than requiring download/reupload
 - Documentation
 - Unit tests
 
