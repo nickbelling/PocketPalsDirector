@@ -6,6 +6,7 @@
 /out-tsc
 /bazel-out
 /.firebase
+documentation.json
 
 # Node
 /node_modules
@@ -41,3 +42,5 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+*storybook.log
