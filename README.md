@@ -2,7 +2,6 @@
 
 ## TODO
 
-- Investigate using `URL.revokeObjectURL()`
 - Database:
     - Update `<game-selector>` to enable adding a new game from within it
     - Investigate enabling image export of games at different aspect ratios

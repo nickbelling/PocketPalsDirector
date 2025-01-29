@@ -1,10 +1,4 @@
-import {
-    Component,
-    computed,
-    inject,
-    linkedSignal,
-    signal,
-} from '@angular/core';
+import { Component, inject, linkedSignal, signal } from '@angular/core';
 import {
     MAT_DIALOG_DATA,
     MatDialog,
@@ -52,26 +46,6 @@ export class DashboardGamesDatabaseEditDialog {
     public heroLoading = signal<boolean>(false);
     public logoFileToUpload = signal<File | null>(null);
     public heroFileToUpload = signal<File | null>(null);
-
-    public logoSrc = computed(() => {
-        const file = this.logoFileToUpload();
-
-        if (file) {
-            return URL.createObjectURL(file);
-        } else {
-            return null;
-        }
-    });
-
-    public heroSrc = computed(() => {
-        const file = this.heroFileToUpload();
-
-        if (file) {
-            return URL.createObjectURL(file);
-        } else {
-            return null;
-        }
-    });
 
     public async submit(): Promise<void> {
         this.loading.set(true);

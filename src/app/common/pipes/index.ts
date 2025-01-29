@@ -1,3 +1,4 @@
+export * from './blob-to-data-url.pipe';
 export * from './call-function.pipe';
 export * from './image-color-source.pipe';
 export * from './number-array.pipe';

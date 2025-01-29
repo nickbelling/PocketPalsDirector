@@ -14,9 +14,10 @@
         <div class="placeholder logo">
             <mat-spinner />
         </div>
-    } @else if (logoUrl || logoSrc()) {
+    } @else if (logoUrl || logoFileToUpload()) {
+        @let logoSrc = (logoFileToUpload() | blobToUrl) || logoUrl;
         <div class="logo">
-            <img [src]="logoSrc() ? logoSrc() : logoUrl" />
+            <img [src]="logoSrc" />
         </div>
     } @else {
         <div class="placeholder logo">
@@ -40,8 +41,9 @@
         <div class="placeholder hero">
             <mat-spinner />
         </div>
-    } @else if (heroUrl || heroSrc()) {
-        <img class="hero" [src]="heroSrc() ? heroSrc() : heroUrl" />
+    } @else if (heroUrl || heroFileToUpload()) {
+        @let heroSrc = (heroFileToUpload() | blobToUrl) || heroUrl;
+        <img class="hero" [src]="heroSrc" />
     } @else {
         <div class="placeholder hero">
             <h3>No hero found</h3>

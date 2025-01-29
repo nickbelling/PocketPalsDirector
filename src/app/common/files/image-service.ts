@@ -32,7 +32,7 @@ export class ImageService {
     public async preloadStorageImage(
         firebasePath: string,
         cacheBuster?: string,
-    ): Promise<string> {
+    ): Promise<Blob> {
         const downloadUrl = await this.getDownloadUrl(
             firebasePath,
             cacheBuster,
@@ -40,8 +40,8 @@ export class ImageService {
         return await this.preloadImage(downloadUrl);
     }
 
-    public preloadImage(src: string): Promise<string> {
-        return new Promise<string>((resolve, reject) => {
+    public preloadImage(src: string): Promise<Blob> {
+        return new Promise<Blob>((resolve, reject) => {
             const xhr = new XMLHttpRequest();
             xhr.open('GET', src, true);
             xhr.responseType = 'arraybuffer';
@@ -50,7 +50,7 @@ export class ImageService {
                 const blob = new Blob([xhr.response], {
                     type: xhr.getResponseHeader('Content-Type') || undefined,
                 });
-                resolve(URL.createObjectURL(blob));
+                resolve(blob);
             };
             xhr.onerror = (error) => reject(error);
 

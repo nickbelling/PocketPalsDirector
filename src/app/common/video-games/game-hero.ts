@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+    booleanAttribute,
     Component,
     computed,
     effect,
@@ -10,6 +11,7 @@ import {
 } from '@angular/core';
 import { Timestamp } from 'firebase/firestore';
 import { ImageService } from '../files';
+import { CommonPipesModule } from '../pipes/pipes.module';
 import {
     VIDEOGAME_STORAGE_BASE,
     VideogameDatabaseService,
@@ -17,7 +19,7 @@ import {
 
 @Component({
     selector: 'game-hero',
-    imports: [CommonModule],
+    imports: [CommonModule, CommonPipesModule],
     templateUrl: './game-hero.html',
     styleUrl: './game-hero.scss',
 })
@@ -28,7 +30,7 @@ export class GameHero {
     private _lastUpdatedAt?: Timestamp | null | undefined;
 
     public readonly gameId = input.required<string>();
-    public readonly preload = input<boolean>(false);
+    public readonly preload = input(false, { transform: booleanAttribute });
     public readonly useThumbnails = input<boolean>(false);
     public readonly loaded = signal<boolean>(false);
 
@@ -39,17 +41,18 @@ export class GameHero {
         return games.find((g) => g.id === gameId);
     });
 
-    protected logoSrc = linkedSignal<string | undefined>(() => {
-        // Reset when game input changes
-        const gameId = this.game();
-        return undefined;
-    });
-
-    protected heroSrc = linkedSignal<string | undefined>(() => {
-        // Reset when game input changes
-        const gameId = this.game();
-        return undefined;
-    });
+    protected logoBlob = linkedSignal<Blob | undefined>(
+        this._resetOnGameChange.bind(this),
+    );
+    protected heroBlob = linkedSignal<Blob | undefined>(
+        this._resetOnGameChange.bind(this),
+    );
+    protected logoSrc = linkedSignal<string | undefined>(
+        this._resetOnGameChange.bind(this),
+    );
+    protected heroSrc = linkedSignal<string | undefined>(
+        this._resetOnGameChange.bind(this),
+    );
 
     constructor() {
         effect(async () => {
@@ -88,8 +91,23 @@ export class GameHero {
                     heroPromise.catch(() => undefined),
                 ]);
 
-                this.logoSrc.set(loadedLogo);
-                this.heroSrc.set(loadedHero);
+                if (typeof loadedLogo === 'string') {
+                    this.logoSrc.set(loadedLogo);
+                } else if (loadedLogo) {
+                    this.logoBlob.set(loadedLogo);
+                } else {
+                    this.logoSrc.set(undefined);
+                    this.logoBlob.set(undefined);
+                }
+
+                if (typeof loadedHero === 'string') {
+                    this.heroSrc.set(loadedHero);
+                } else if (loadedHero) {
+                    this.heroBlob.set(loadedHero);
+                } else {
+                    this.heroSrc.set(undefined);
+                    this.heroBlob.set(undefined);
+                }
 
                 this.loaded.set(true);
             } else if (!game) {
@@ -102,5 +120,11 @@ export class GameHero {
             // else game "changed" but last updated not changed, so existing
             // images are good
         });
+    }
+
+    private _resetOnGameChange(): undefined {
+        // Reset when game input changes
+        const gameId = this.game();
+        return undefined;
     }
 }

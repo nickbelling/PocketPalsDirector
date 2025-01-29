@@ -14,8 +14,8 @@
                     ">
                     <game-hero
                         #hero
+                        preload
                         [gameId]="question.gameId"
-                        [preload]="true"
                         [useThumbnails]="true" />
                 </mat-card>
             }
@@ -26,7 +26,7 @@
         <mat-card
             class="game hero hide-until-loaded"
             [class.visible]="hero.loaded()">
-            <game-hero #hero [gameId]="question.gameId" />
+            <game-hero #hero preload [gameId]="question.gameId" />
         </mat-card>
         <div
             class="cards layout-row layout-items-fill g hide-until-loaded"

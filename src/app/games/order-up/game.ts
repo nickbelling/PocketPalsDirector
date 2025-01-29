@@ -11,7 +11,7 @@ import {
 } from './model';
 
 interface OrderUpQuestionItemWithImage extends OrderUpQuestionItem {
-    imageSrc: string | null;
+    imageSrc: Blob | null;
 }
 
 @Component({
@@ -23,7 +23,7 @@ interface OrderUpQuestionItemWithImage extends OrderUpQuestionItem {
 })
 export class OrderUpGame extends BaseGame<OrderUpState, OrderUpQuestion> {
     private _images = inject(ImageService);
-    private _resolvedImages: Record<string, string | null> = {};
+    private _resolvedImages: Record<string, Blob | null> = {};
 
     protected data: OrderUpDatabase = inject(OrderUpDatabase);
     protected baseUrl = `${ORDER_UP_BASE_PATH}/`;

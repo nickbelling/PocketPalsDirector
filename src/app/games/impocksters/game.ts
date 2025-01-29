@@ -24,7 +24,7 @@ export class ImpockstersGame extends BaseGame<
     private _images = inject(ImageService);
     protected data: ImpockstersDatabase;
 
-    protected imageSrc = signal<string | null>(null);
+    protected imageSrc = signal<Blob | null>(null);
     protected muted = computed(() => !this._sounds.soundEnabled());
 
     constructor() {

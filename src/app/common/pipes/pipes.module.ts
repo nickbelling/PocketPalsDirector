@@ -1,4 +1,5 @@
 import { NgModule, Type } from '@angular/core';
+import { BlobToUrlPipe } from './blob-to-data-url.pipe';
 import { CallFunctionPipe } from './call-function.pipe';
 import { ImageColorSourcePipe } from './image-color-source.pipe';
 import { NumberArrayPipe } from './number-array.pipe';
@@ -11,6 +12,7 @@ import {
 } from './split-sentence.pipe';
 
 const PIPES: Type<unknown>[] = [
+    BlobToUrlPipe,
     CallFunctionPipe,
     ImageColorSourcePipe,
     NumberArrayPipe,

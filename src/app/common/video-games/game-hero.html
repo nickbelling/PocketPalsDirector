@@ -1,13 +1,19 @@
 @let game = this.game();
 @let logoSrc = this.logoSrc();
 @let heroSrc = this.heroSrc();
+@let logoBlob = this.logoBlob();
+@let heroBlob = this.heroBlob();
 
 @if (game) {
     @if (heroSrc) {
         <img class="game-hero" [src]="heroSrc" />
+    } @else if (heroBlob) {
+        <img class="game-hero" [src]="heroBlob | blobToUrl" />
     }
     @if (logoSrc) {
         <img class="game-logo" [src]="logoSrc" />
+    } @else if (logoBlob) {
+        <img class="game-logo" [src]="logoBlob | blobToUrl" />
     } @else {
         <span>{{ game.name }}</span>
     }
