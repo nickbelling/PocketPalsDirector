@@ -38,12 +38,12 @@ const TIMESTAMPS: Record<number, number> = {
 };
 
 interface Resources {
-    src1: string;
-    src2: string;
-    src3: string;
-    src4: string;
-    src5: string;
-    src6: string;
+    src1: Blob;
+    src2: Blob;
+    src3: Blob;
+    src4: Blob;
+    src5: Blob;
+    src6: Blob;
 }
 
 @Component({
@@ -176,27 +176,25 @@ export class ScreenshotInTheDarkGame extends BaseGame<
     ): Promise<Resources> {
         const url = `${SCREENSHOT_IN_THE_DARK_BASE_PATH}/${question.guessTheGameId}_`;
 
-        const resourcePromises = {
-            src1: this._images.preloadStorageImage(url + 1),
-            src2: this._images.preloadStorageImage(url + 2),
-            src3: this._images.preloadStorageImage(url + 3),
-            src4: this._images.preloadStorageImage(url + 4),
-            src5: this._images.preloadStorageImage(url + 5),
-            src6: question?.finalIsVideo
+        const [src1, src2, src3, src4, src5, src6] = await Promise.all([
+            this._images.preloadStorageImage(url + 1),
+            this._images.preloadStorageImage(url + 2),
+            this._images.preloadStorageImage(url + 3),
+            this._images.preloadStorageImage(url + 4),
+            this._images.preloadStorageImage(url + 5),
+            question?.finalIsVideo
                 ? this._videos.preloadStorageVideo(url + 6)
                 : this._images.preloadStorageImage(url + 6),
+        ]);
+
+        return {
+            src1,
+            src2,
+            src3,
+            src4,
+            src5,
+            src6,
         };
-
-        const resourcesEntries = await Promise.all(
-            Object.entries(resourcePromises).map(async ([key, promise]) => [
-                key,
-                await promise,
-            ]),
-        );
-
-        const resources = Object.fromEntries(resourcesEntries) as Resources;
-
-        return resources;
     }
 
     private _setCurrentTime(): void {

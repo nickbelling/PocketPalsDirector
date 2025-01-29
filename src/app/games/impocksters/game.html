@@ -3,7 +3,7 @@
 
 @if (question && imageSrc()) {
     <div @fadeInOut class="character layout-column layout-fill">
-        <img [src]="imageSrc()" />
+        <img [src]="imageSrc() | blobToUrl" />
         <div class="header p-x g">
             <div class="name layout-items-middle">
                 <h1>{{ question.name }}</h1>

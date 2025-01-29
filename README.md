@@ -2,6 +2,8 @@
 
 ## TODO
 
+- Redo Ranky Panky controller
+- Fix positioning of games with timers
 - Database:
     - Update `<game-selector>` to enable adding a new game from within it
     - Investigate enabling image export of games at different aspect ratios
