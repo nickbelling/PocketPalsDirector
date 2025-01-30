@@ -21,7 +21,7 @@
         <div class="layout-column g">
             <div slideGroup class="layout-row g">
                 @for (item of currentGuessedItems(); track item.index) {
-                    @let path = item.uploadedFilePath;
+                    @let path = baseUrl + item.uploadedFilePath;
                     <playing-card
                         slideItem
                         [showingFront]="$index + 1 <= state.revealedCards">
@@ -44,7 +44,7 @@
             </div>
             <div slideGroup class="layout-row g">
                 @for (item of answers(); track item.index) {
-                    @let path = item.uploadedFilePath;
+                    @let path = baseUrl + item.uploadedFilePath;
                     <playing-card
                         slideItem
                         [showingFront]="

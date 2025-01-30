@@ -2,7 +2,7 @@
 
 ## TODO
 
-- Redo Ranky Panky controller
+- Public storage file access
 - Fix positioning of games with timers
 - Better error handling with toasts etc
     - Toast component

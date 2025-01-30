@@ -10,7 +10,6 @@ import {
     RankyPankyState,
 } from './model';
 import { RankyPankyQuestionEditDialog } from './question-edit';
-import { RankyPankyQuestionItemsEditDialog } from './question-items-edit';
 
 @Component({
     imports: [CommonControllerModule],
@@ -68,14 +67,7 @@ export class RankyPankyController extends BaseController<
     public editQuestion(question?: Entity<RankyPankyQuestion>): void {
         this._dialog.open(RankyPankyQuestionEditDialog, {
             data: question,
-        });
-    }
-
-    public editQuestionItems(question?: Entity<RankyPankyQuestion>): void {
-        this._dialog.open(RankyPankyQuestionItemsEditDialog, {
-            data: question,
-            width: '800px',
-            maxWidth: '800px',
+            minWidth: '800px',
         });
     }
 

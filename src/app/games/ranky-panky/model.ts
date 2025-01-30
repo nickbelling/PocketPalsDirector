@@ -1,3 +1,5 @@
+export const RANKY_PANKY_BASE_PATH = 'games/ranky-panky';
+
 export interface RankyPankyState {
     currentQuestion: string | null;
     questionsDone: string[];

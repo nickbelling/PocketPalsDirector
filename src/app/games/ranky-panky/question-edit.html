@@ -6,45 +6,114 @@
     }
 </mat-toolbar>
 
-<mat-dialog-content class="layout-column g">
-    <mat-form-field>
-        <mat-label>Question name</mat-label>
-        <input matInput required cdkFocus [(ngModel)]="questionName" />
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Description</mat-label>
-        <input matInput required [(ngModel)]="questionDescription" />
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Top label</mat-label>
-        <input matInput required [(ngModel)]="questionTopLabel" />
-        <mat-icon
-            matSuffix
-            matTooltip="The label that will appear on the left-most side of the scale (e.g. 'Highest')."
-            >help</mat-icon
-        >
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Bottom label</mat-label>
-        <input matInput required [(ngModel)]="questionBottomLabel" />
-        <mat-icon
-            matSuffix
-            matTooltip="The label that will appear on the right-most side of the scale (e.g. 'Lowest')."
-            >help</mat-icon
-        >
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Item suffix</mat-label>
-        <input matInput [(ngModel)]="questionItemSuffix" />
-        <mat-icon
-            matSuffix
-            matTooltip="Optional. This text will be added after each answer's value. For example, the text 'cm' here will add 'cm' to the values so that they display as '123 cm' rather than just '123'."
-            >help</mat-icon
-        >
-    </mat-form-field>
+<mat-dialog-content #focus class="layout-row layout-fill g p-bottom">
+    <!-- Form -->
+    <div class="layout-basis-1/2 layout-column g">
+        <mat-form-field>
+            <mat-label>Question name</mat-label>
+            <input matInput required cdkFocus [(ngModel)]="questionName" />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Description</mat-label>
+            <input matInput required [(ngModel)]="questionDescription" />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Top label</mat-label>
+            <input matInput required [(ngModel)]="questionTopLabel" />
+            @let topLabelHelp =
+                "The label that will appear on the left-most side of the scale (e.g. 'Highest').";
+            <mat-icon matSuffix [matTooltip]="topLabelHelp">help</mat-icon>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Bottom label</mat-label>
+            <input matInput required [(ngModel)]="questionBottomLabel" />
+            @let bottomLabelHelp =
+                "The label that will appear on the right-most side of the scale (e.g. 'Lowest').";
+            <mat-icon matSuffix [matTooltip]="bottomLabelHelp">help</mat-icon>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Item suffix</mat-label>
+            <input matInput [(ngModel)]="questionItemSuffix" />
+            @let itemSuffixHelp =
+                "Optional. This text will be added after each answer's value. For example, the text 'cm' here will add 'cm' to the values so that they display as '123 cm' rather than just '123'.";
+            <mat-icon matSuffix [matTooltip]="itemSuffixHelp">help</mat-icon>
+        </mat-form-field>
+
+        <!-- Add item card -->
+        <mat-card class="layout-fill layout-basis-1/2">
+            <mat-card-header>
+                <mat-card-title>Add item</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="layout-column p-y g">
+                <mat-form-field>
+                    <mat-label>Item name</mat-label>
+                    <input matInput [(ngModel)]="itemName" />
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Item value</mat-label>
+                    <input matInput type="number" [(ngModel)]="itemValue" />
+                    <span matTextSuffix>{{ question?.itemSuffix }}</span>
+                </mat-form-field>
+                <image-field
+                    [(fileToUpload)]="itemImage"
+                    [focusElement]="focus" />
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button
+                    mat-flat-button
+                    (click)="addItem()"
+                    [disabled]="!addItemValid() || loading()">
+                    Add
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+
+    <mat-card class="layout-basis-1/2">
+        <mat-card-header>
+            <mat-card-title>Items (reveal order)</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-list cdkDropList>
+                @for (
+                    item of questionItems();
+                    track item.name;
+                    let index = $index;
+                    let last = $last
+                ) {
+                    <mat-list-item cdkDrag (cdkDragDropped)="reorder($event)">
+                        <mat-icon matListItemIcon cdkDragHandle
+                            >drag_indicator</mat-icon
+                        >
+                        <span
+                            >{{ item.name }} ({{ item.value
+                            }}{{ question?.itemSuffix }})</span
+                        >
+                        <div matListItemMeta>
+                            <button
+                                mat-icon-button
+                                (click)="deleteItem(index)"
+                                matTooltip="Delete item">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                        <mat-list-item
+                            *cdkDragPlaceholder
+                            class="cdk-placeholder" />
+                    </mat-list-item>
+                    @if (!last) {
+                        <mat-divider />
+                    }
+                } @empty {
+                    <mat-list-item>No items.</mat-list-item>
+                }
+            </mat-list>
+        </mat-card-content>
+    </mat-card>
 </mat-dialog-content>
 
-<mat-dialog-actions>
+<mat-dialog-actions class="layout-row layout-items-middle g">
+    <mat-progress-bar [value]="progress()" />
     <button mat-button mat-dialog-close>Cancel</button>
     <button
         mat-flat-button

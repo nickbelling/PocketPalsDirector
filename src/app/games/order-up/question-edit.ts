@@ -27,7 +27,6 @@ interface OrderUpQuestionPendingItem {
     templateUrl: './question-edit.html',
 })
 export class OrderUpQuestionEditDialog extends BaseQuestionEditDialog<OrderUpQuestion> {
-    private _db: OrderUpDatabase;
     private _deletedImageIds: string[] = [];
 
     protected name = signal<string>('');
@@ -53,9 +52,7 @@ export class OrderUpQuestionEditDialog extends BaseQuestionEditDialog<OrderUpQue
     );
 
     constructor() {
-        const db = inject(OrderUpDatabase);
-        super(db);
-        this._db = db;
+        super(inject(OrderUpDatabase));
 
         if (this.question && this.editing) {
             this.name.set(this.question.name);
@@ -118,8 +115,8 @@ export class OrderUpQuestionEditDialog extends BaseQuestionEditDialog<OrderUpQue
 
                 // Delete any images from storage that have been deleted after
                 // being uploaded
-                for (let i = 0; i < this._deletedImageIds.length; i++) {
-                    await this.deleteFile(this._deletedImageIds[i]);
+                for (const deletedImageId of this._deletedImageIds) {
+                    await this.deleteFile(deletedImageId);
                 }
             } else {
                 await this.addQuestion({
