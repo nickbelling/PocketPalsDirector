@@ -1,7 +1,7 @@
 @let state = this.state();
 @let questions = this.questions();
 @let question = currentQuestion();
-@let cardBackUrl = 'games/ranky-panky/card-back' | uploadedFileUrl | async;
+@let cardBackUrl = 'games/ranky-panky/card-back' | resolveUrl;
 
 @if (!question) {
     <div @fadeInOut class="game-panel">
@@ -29,7 +29,7 @@
                             <img src="{{ cardBackUrl }}" />
                         </playing-card-back>
                         <playing-card-front class="layout-column">
-                            <img src="{{ path | uploadedFileUrl | async }}" />
+                            <img src="{{ path | resolveUrl }}" />
                             <div class="label" [fitText]="item.name">
                                 <span>{{ item.name }}</span>
                             </div>
@@ -54,7 +54,7 @@
                             <img src="{{ cardBackUrl }}" />
                         </playing-card-back>
                         <playing-card-front class="layout-column">
-                            <img src="{{ path | uploadedFileUrl | async }}" />
+                            <img src="{{ path | resolveUrl }}" />
                             <div class="label" [fitText]="item.name">
                                 <span
                                     >{{ item.value

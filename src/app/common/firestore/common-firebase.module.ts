@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { FirebaseUploadedFileUrlPipe } from './firebase-file-url.pipe';
+import { FirebaseResolveUrlPipe } from './resolve-url.pipe';
 
 @NgModule({
-    imports: [FirebaseUploadedFileUrlPipe],
-    exports: [FirebaseUploadedFileUrlPipe],
+    imports: [FirebaseResolveUrlPipe],
+    exports: [FirebaseResolveUrlPipe],
 })
 export class CommonFirebaseModule {}

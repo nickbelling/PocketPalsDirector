@@ -4,19 +4,10 @@ import { MatCardModule } from '@angular/material/card';
 import { fadeOutAnimation, growInOutXAnimation } from '../../common/animations';
 import { Player } from '../../common/components/player';
 import { SoundService } from '../../common/files';
-import {
-    CommonFirebaseModule,
-    Entity,
-    getCachedDownloadUrls,
-    STORAGE,
-} from '../../common/firestore';
+import { CommonFirebaseModule, Entity } from '../../common/firestore';
 import { CommonPipesModule } from '../../common/pipes/pipes.module';
 import { SlideModule } from '../../common/slide';
-import {
-    arraysAreEqual,
-    preloadAudio,
-    preloadImages,
-} from '../../common/utils';
+import { arraysAreEqual, downloadUrlAsBlob } from '../../common/utils';
 import { BuzzerDisplayDataStore } from '../data/display-data';
 import {
     BuzzerPlayer,
@@ -83,27 +74,25 @@ export class BuzzerDisplay {
     );
 
     constructor() {
-        const storage = inject(STORAGE);
-
-        // Preload all image paths
+        // Preload all resources
         effect(async () => {
             const allImagePaths = this.allImagePaths();
-            const downloadUrls = await getCachedDownloadUrls(
-                storage,
-                allImagePaths,
+
+            const imagePreloadPromises = allImagePaths.map((p) =>
+                downloadUrlAsBlob(p),
             );
 
-            await preloadImages(downloadUrls);
+            await Promise.all(imagePreloadPromises);
         });
 
         effect(async () => {
             const allSoundPaths = this.allSoundPaths();
-            const downloadUrls = await getCachedDownloadUrls(
-                storage,
-                allSoundPaths,
+
+            const soundPreloadPromises = allSoundPaths.map((p) =>
+                downloadUrlAsBlob(p),
             );
 
-            await preloadAudio(downloadUrls);
+            await Promise.all(soundPreloadPromises);
         });
 
         // Play sound effect whenever a new player buzzes in

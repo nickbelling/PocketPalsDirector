@@ -25,10 +25,8 @@
         </playing-card>
 
         <mat-card class="audio-card bg-green">
-            @let backwardsUrl =
-                baseUrl + question.soundBackwards | uploadedFileUrl | async;
-            @let forwardsUrl =
-                baseUrl + question.soundForwards | uploadedFileUrl | async;
+            @let backwardsUrl = baseUrl + question.soundBackwards | resolveUrl;
+            @let forwardsUrl = baseUrl + question.soundForwards | resolveUrl;
             @if (state.showingGame || state.showingTrack) {
                 @if (forwardsUrl) {
                     <audio-visualizer

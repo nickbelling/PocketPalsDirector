@@ -11,8 +11,7 @@
                 [color]="getTeamColor | call: player : teams()"
                 [image]="
                     BUZZERS_STORAGE_IMAGES_PATH + '/' + player.image
-                        | uploadedFileUrl
-                        | async
+                        | resolveUrl
                 "
                 [animated]="true" />
         </div>

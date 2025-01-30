@@ -61,18 +61,3 @@ export function resizeImage(
         reader.readAsDataURL(file);
     });
 }
-
-/**
- * Preloads all of the given image URLs.
- */
-export async function preloadImages(imageUrls: string[]): Promise<void> {
-    const preloadImage = (src: string) =>
-        new Promise((resolve, reject) => {
-            const image = new Image();
-            image.onload = resolve;
-            image.onerror = reject;
-            image.src = src;
-        });
-
-    await Promise.all(imageUrls.map(preloadImage));
-}

@@ -54,13 +54,10 @@
                         <mat-list-item
                             cdkDrag
                             (cdkDragDropped)="reorder($event)">
-                            <mat-icon matListItemIcon cdkDragHandle
-                                >drag_indicator</mat-icon
-                            >
-                            <span
-                                >{{ item.name }} ({{ item.value
-                                }}{{ question.itemSuffix }})</span
-                            >
+                            <mat-icon matListItemIcon>drag_indicator</mat-icon>
+                            <span>{{ item.name }}</span>
+                            <span> ({{ item.value }}</span>
+                            <span>{{ question.itemSuffix }})</span>
                             <mat-list-item
                                 *cdkDragPlaceholder
                                 class="cdk-placeholder" />

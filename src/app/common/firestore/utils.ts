@@ -12,9 +12,8 @@ import {
     QueryConstraint,
     QueryDocumentSnapshot,
 } from 'firebase/firestore';
-import { FirebaseStorage, getDownloadURL, ref } from 'firebase/storage';
 import { Entity } from './model';
-import { FIRESTORE } from './tokens';
+import { FIREBASE_STORAGE_BUCKET, FIRESTORE } from './tokens';
 
 export function getConverter<TDocType extends object>(): FirestoreDataConverter<
     Entity<TDocType>
@@ -153,30 +152,18 @@ export function subscribeToCollection<TDocType extends object>(
     return collectionRef;
 }
 
-const downloadUrlCache: Record<string, string | null> = {};
+const BASE_URL = `https://firebasestorage.googleapis.com/v0/b/${FIREBASE_STORAGE_BUCKET}/o/`;
 
-export async function getCachedDownloadUrl(
-    storage: FirebaseStorage,
-    path: string,
-): Promise<string | null> {
-    if (!downloadUrlCache[path]) {
-        const fileRef = ref(storage, path);
-        try {
-            downloadUrlCache[path] = await getDownloadURL(fileRef);
-        } catch {
-            downloadUrlCache[path] = null;
-        }
+export function resolveStorageUrl(
+    storagePath: string,
+    cacheBuster?: string,
+): string {
+    const encodedPath = encodeURIComponent(storagePath);
+    let suffix = '?alt=media';
+
+    if (cacheBuster) {
+        suffix = `${suffix}&${cacheBuster}`;
     }
 
-    return downloadUrlCache[path];
-}
-
-export async function getCachedDownloadUrls(
-    storage: FirebaseStorage,
-    paths: string[],
-): Promise<string[]> {
-    const urlPromises = paths.map((p) => getCachedDownloadUrl(storage, p));
-    const urls = await Promise.all(urlPromises);
-
-    return urls.filter((url) => url !== null);
+    return `${BASE_URL}${encodedPath}${suffix}`;
 }

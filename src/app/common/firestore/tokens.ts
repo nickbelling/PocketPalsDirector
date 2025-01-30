@@ -15,6 +15,8 @@ const FIREBASE_CONFIG: FirebaseOptions = {
 
 const firebaseApp = initializeApp(FIREBASE_CONFIG);
 
+export const FIREBASE_STORAGE_BUCKET = FIREBASE_CONFIG.storageBucket;
+
 export const FIRESTORE: InjectionToken<Firestore> = new InjectionToken(
     'FIRESTORE',
     {

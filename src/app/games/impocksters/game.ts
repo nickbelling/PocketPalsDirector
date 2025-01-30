@@ -1,6 +1,8 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { fadeInOutAnimation } from '../../common/animations';
-import { ImageService, SoundService } from '../../common/files';
+import { SoundService } from '../../common/files';
+import { resolveStorageUrl } from '../../common/firestore';
+import { downloadUrlAsBlob } from '../../common/utils';
 import { BaseGame, CommonGameModule } from '../base/game';
 import { ImpockstersDatabase } from './database';
 import {
@@ -21,7 +23,6 @@ export class ImpockstersGame extends BaseGame<
     ImpockstersQuestion
 > {
     private _sounds = inject(SoundService);
-    private _images = inject(ImageService);
     protected data: ImpockstersDatabase;
 
     protected imageSrc = signal<Blob | null>(null);
@@ -38,10 +39,10 @@ export class ImpockstersGame extends BaseGame<
             this.imageSrc.set(null);
 
             if (question) {
-                const imageSrc = await this._images.preloadStorageImage(
+                const downloadUrl = resolveStorageUrl(
                     `${IMPOCKSTERS_BASE_PATH}/${question.imageId}`,
                 );
-
+                const imageSrc = await downloadUrlAsBlob(downloadUrl);
                 this.imageSrc.set(imageSrc);
             }
         });

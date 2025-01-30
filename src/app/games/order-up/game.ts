@@ -1,6 +1,7 @@
 import { Component, effect, inject, linkedSignal } from '@angular/core';
 import { fadeInOutAnimation } from '../../common/animations';
-import { ImageService } from '../../common/files';
+import { resolveStorageUrl } from '../../common/firestore';
+import { downloadUrlAsBlob } from '../../common/utils';
 import { BaseGame, CommonGameModule } from '../base/game';
 import { OrderUpDatabase } from './database';
 import {
@@ -22,7 +23,6 @@ interface OrderUpQuestionItemWithImage extends OrderUpQuestionItem {
     animations: [fadeInOutAnimation()],
 })
 export class OrderUpGame extends BaseGame<OrderUpState, OrderUpQuestion> {
-    private _images = inject(ImageService);
     private _resolvedImages: Record<string, Blob | null> = {};
 
     protected data: OrderUpDatabase = inject(OrderUpDatabase);
@@ -49,13 +49,15 @@ export class OrderUpGame extends BaseGame<OrderUpState, OrderUpQuestion> {
                 const displayedItemsWithImages: OrderUpQuestionItemWithImage[] =
                     await Promise.all(
                         displayedItems.map(async (item) => {
-                            const imageUrl = `${ORDER_UP_BASE_PATH}/${item.imageId}`;
+                            const imageUrl = resolveStorageUrl(
+                                `${ORDER_UP_BASE_PATH}/${item.imageId}`,
+                            );
 
                             if (this._resolvedImages[imageUrl] === undefined) {
                                 this._resolvedImages[imageUrl] =
-                                    await this._images
-                                        .preloadStorageImage(imageUrl)
-                                        .catch(() => null);
+                                    await downloadUrlAsBlob(imageUrl).catch(
+                                        () => null,
+                                    );
                             }
 
                             return {

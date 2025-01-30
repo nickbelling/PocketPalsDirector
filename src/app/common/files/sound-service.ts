@@ -1,26 +1,18 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { getCachedDownloadUrl, STORAGE } from '../firestore';
+import { Injectable, signal } from '@angular/core';
+import { resolveStorageUrl } from '../firestore';
 
 @Injectable({
     providedIn: 'root',
 })
 export class SoundService {
-    private _storage = inject(STORAGE);
-
     public readonly soundEnabled = signal<boolean>(true);
 
     public async playStorageSound(
         firebasePath: string,
         forcePlay: boolean = false,
     ): Promise<void> {
-        const downloadUrl = await getCachedDownloadUrl(
-            this._storage,
-            firebasePath,
-        );
-
-        if (downloadUrl) {
-            await this.playSound(downloadUrl, forcePlay);
-        }
+        const downloadUrl = resolveStorageUrl(firebasePath);
+        await this.playSound(downloadUrl, forcePlay);
     }
 
     public async playSound(

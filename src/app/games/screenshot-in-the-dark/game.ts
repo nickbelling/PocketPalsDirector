@@ -9,8 +9,9 @@ import {
     viewChild,
 } from '@angular/core';
 import { fadeInOutAnimation } from '../../common/animations';
-import { ImageService, SoundService, VideoService } from '../../common/files';
-import { Entity } from '../../common/firestore';
+import { SoundService } from '../../common/files';
+import { Entity, resolveStorageUrl } from '../../common/firestore';
+import { downloadUrlAsBlob } from '../../common/utils';
 import { BaseGame, CommonGameModule } from '../base/game';
 import { ScreenshotInTheDarkDatabase } from './database';
 import {
@@ -58,8 +59,6 @@ export class ScreenshotInTheDarkGame extends BaseGame<
     ScreenshotInTheDarkQuestion
 > {
     private _destroyRef = inject(DestroyRef);
-    private _images = inject(ImageService);
-    private _videos = inject(VideoService);
     private _sounds = inject(SoundService);
     private _audioElement = viewChild<ElementRef<HTMLAudioElement>>('audio');
     private _animationFrameId: number | null = null;
@@ -177,14 +176,12 @@ export class ScreenshotInTheDarkGame extends BaseGame<
         const url = `${SCREENSHOT_IN_THE_DARK_BASE_PATH}/${question.guessTheGameId}_`;
 
         const [src1, src2, src3, src4, src5, src6] = await Promise.all([
-            this._images.preloadStorageImage(url + 1),
-            this._images.preloadStorageImage(url + 2),
-            this._images.preloadStorageImage(url + 3),
-            this._images.preloadStorageImage(url + 4),
-            this._images.preloadStorageImage(url + 5),
-            question?.finalIsVideo
-                ? this._videos.preloadStorageVideo(url + 6)
-                : this._images.preloadStorageImage(url + 6),
+            downloadUrlAsBlob(resolveStorageUrl(url + 1)),
+            downloadUrlAsBlob(resolveStorageUrl(url + 2)),
+            downloadUrlAsBlob(resolveStorageUrl(url + 3)),
+            downloadUrlAsBlob(resolveStorageUrl(url + 4)),
+            downloadUrlAsBlob(resolveStorageUrl(url + 5)),
+            downloadUrlAsBlob(resolveStorageUrl(url + 6)),
         ]);
 
         return {

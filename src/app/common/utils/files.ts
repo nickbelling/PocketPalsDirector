@@ -12,6 +12,16 @@ export async function downloadUrlAsFile(
     filename: string,
     useCorsProxy: boolean = false,
 ): Promise<File> {
+    const blob = await downloadUrlAsBlob(url, useCorsProxy);
+
+    // Create a File object using the Blob and the provided filename
+    return new File([blob], filename, { type: blob.type });
+}
+
+export async function downloadUrlAsBlob(
+    url: string,
+    useCorsProxy: boolean = false,
+): Promise<Blob> {
     if (useCorsProxy) {
         url = `${CORS_PROXY_FUNCTION_URL}/?url=${url}`;
     }
@@ -26,8 +36,5 @@ export async function downloadUrlAsFile(
     }
 
     // Read the response as a Blob
-    const blob = await response.blob();
-
-    // Create a File object using the Blob and the provided filename
-    return new File([blob], filename, { type: blob.type });
+    return await response.blob();
 }

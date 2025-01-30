@@ -1,6 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
 import { fadeInOutAnimation } from '../../common/animations';
-import { ImageService } from '../../common/files';
 import { CommonGameModule } from '../base/game';
 import { BaseGame } from '../base/game/base-game';
 import { RankyPankyDatabase } from './database';
@@ -21,8 +20,6 @@ export class RankyPankyGame extends BaseGame<
     RankyPankyState,
     RankyPankyQuestion
 > {
-    private _images = inject(ImageService);
-
     protected baseUrl = `${RANKY_PANKY_BASE_PATH}/`;
 
     constructor() {

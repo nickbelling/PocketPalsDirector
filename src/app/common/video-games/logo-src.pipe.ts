@@ -1,5 +1,5 @@
-import { inject, Pipe, PipeTransform } from '@angular/core';
-import { Entity, FirebaseUploadedFileUrlPipe } from '../firestore';
+import { Pipe, PipeTransform } from '@angular/core';
+import { Entity, resolveStorageUrl } from '../firestore';
 import {
     VIDEOGAME_STORAGE_BASE,
     VideogameDatabaseItem,
@@ -10,21 +10,15 @@ import {
     pure: true,
 })
 export class GameLogoSrcPipe implements PipeTransform {
-    private _uploadedFileUrlPipe = inject(FirebaseUploadedFileUrlPipe);
-
-    public async transform(
+    public transform(
         game: Entity<VideogameDatabaseItem>,
         isThumbnail: boolean = false,
-    ): Promise<string | null> {
+    ): string {
         const storageUrl = `${VIDEOGAME_STORAGE_BASE}/${game.id}_logo${isThumbnail ? '_thumb' : ''}`;
-        const downloadUrl =
-            await this._uploadedFileUrlPipe.transform(storageUrl);
-
-        if (downloadUrl) {
-            return `${downloadUrl}?t=${game.updatedAt}`;
-        } else {
-            return null;
-        }
+        const cacheBuster = game.updatedAt
+            ? `t=${game.updatedAt.toMillis()}`
+            : undefined;
+        return resolveStorageUrl(storageUrl, cacheBuster);
     }
 }
 
@@ -33,20 +27,14 @@ export class GameLogoSrcPipe implements PipeTransform {
     pure: true,
 })
 export class GameHeroSrcPipe implements PipeTransform {
-    private _uploadedFileUrlPipe = inject(FirebaseUploadedFileUrlPipe);
-
-    public async transform(
+    public transform(
         game: Entity<VideogameDatabaseItem>,
         isThumbnail: boolean = false,
-    ): Promise<string | null> {
+    ): string {
         const storageUrl = `${VIDEOGAME_STORAGE_BASE}/${game.id}_hero${isThumbnail ? '_thumb' : ''}`;
-        const downloadUrl =
-            await this._uploadedFileUrlPipe.transform(storageUrl);
-
-        if (downloadUrl) {
-            return `${downloadUrl}?t=${game.updatedAt}`;
-        } else {
-            return null;
-        }
+        const cacheBuster = game.updatedAt
+            ? `t=${game.updatedAt.toMillis()}`
+            : undefined;
+        return resolveStorageUrl(storageUrl, cacheBuster);
     }
 }
