@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Entity } from '../../common/firestore';
 import { BaseGameDatabase } from '../base/database';
 import {
     STATE_YOUR_BUSINESS_STATE_DEFAULT,
@@ -15,5 +16,11 @@ export class StateYourBidnessDatabase extends BaseGameDatabase<
 > {
     constructor() {
         super('games/state-your-bidness', STATE_YOUR_BUSINESS_STATE_DEFAULT);
+    }
+
+    protected override getQuestionString(
+        question: Entity<StateYourBidnessQuestion>,
+    ): string {
+        return `${question.name} (${question.items.length})`;
     }
 }

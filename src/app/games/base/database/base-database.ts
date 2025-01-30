@@ -7,6 +7,7 @@ import {
     doc,
     DocumentData,
     DocumentReference,
+    getDoc,
     onSnapshot,
     orderBy,
     query,
@@ -54,6 +55,12 @@ export abstract class BaseGameDatabase<
      */
     private _path: string;
 
+    /** The Firestore object converter for TState objects. */
+    private _stateConverter = getConverter<TState>();
+
+    /** The Firestore object converter for TQuestion objects. */
+    private _questionConverter = getConverter<TQuestion>();
+
     /** The current state of this game's state. */
     public readonly state: Signal<TState>;
 
@@ -65,6 +72,10 @@ export abstract class BaseGameDatabase<
         () => this.state().currentQuestion,
     );
 
+    /**
+     * The index of the current question in the "questions" array. If no current
+     * question is set, returns -1.
+     */
     public readonly currentQuestionIndex = computed<number>(() => {
         const currentQuestionId = this.currentQuestionId();
         const questions = this.questions();
@@ -95,6 +106,7 @@ export abstract class BaseGameDatabase<
         },
     );
 
+    /** The number of questions remaining after the "current" question. */
     public readonly questionsRemaining = computed<number>(() => {
         const currentQuestionIndex = this.currentQuestionIndex();
         const questions = this.questions();
@@ -106,10 +118,6 @@ export abstract class BaseGameDatabase<
     constructor(path: string, defaultState: TState) {
         this._path = path;
         this._defaultState = defaultState;
-
-        // Create the typed converters for use with this game
-        const stateConverter = getConverter<TState>();
-        const questionConverter = getConverter<TQuestion>();
 
         // Create the state/question signals. These are ONLY updatable from
         // within this constructor, so their public types are just `Signal<T>`,
@@ -123,7 +131,7 @@ export abstract class BaseGameDatabase<
 
         // Create a reference to the TState document.
         this._stateRef = doc(this._firestore, path).withConverter(
-            stateConverter,
+            this._stateConverter,
         );
 
         // Set up a snapshot of the TState document.
@@ -143,13 +151,13 @@ export abstract class BaseGameDatabase<
         this._questionsRef = collection(
             this._firestore,
             `${path}/questions`,
-        ).withConverter(questionConverter);
+        ).withConverter(this._questionConverter);
 
         // Create a query across the collection.
         const questionsQuery = query(
             this._questionsRef,
             orderBy('createdAt'),
-        ).withConverter(questionConverter);
+        ).withConverter(this._questionConverter);
 
         // Set up a snapshot of the TQuestion collection.
         const unsubscribeQuestions: Unsubscribe = onSnapshot(
@@ -173,6 +181,54 @@ export abstract class BaseGameDatabase<
         });
     }
 
+    //#region Overridable hooks
+
+    /** Gets a descriptive string representing the question. */
+    protected abstract getQuestionString(question: Entity<TQuestion>): string;
+
+    /** Fired before the requested question is added. */
+    protected async beforeAddQuestion(question: TQuestion): Promise<void> {}
+
+    /**
+     * Fired after a question is added. The "question" parameter is a
+     * fully-resolved entity post-add (i.e. it has an ID), but may not yet exist
+     * in the "questions" array - do not use it for storing or comparison.
+     */
+    protected async afterAddQuestion(
+        question: Entity<TQuestion>,
+    ): Promise<void> {}
+
+    /** Fired before a question is edited. */
+    protected async beforeEditQuestion(
+        id: string,
+        question: TQuestion | Partial<TQuestion>,
+    ): Promise<void> {}
+
+    /**
+     * Fired after a question is edited. The "question" parameter is a
+     * fully-resolved entity post-edit, but may not yet exist in the "questions"
+     * array - do not use it for storing or comparison.
+     */
+    protected async afterEditQuestion(
+        question: Entity<TQuestion>,
+    ): Promise<void> {}
+
+    /** Fired before a question is deleted. */
+    protected async beforeDeleteQuestion(
+        question: Entity<TQuestion>,
+    ): Promise<void> {}
+
+    /**
+     * Fired after a question is deleted. The "question" parameter *may* still
+     * exist in the "questions" array at this point, but it has been deleted
+     * from the server.
+     */
+    protected async afterDeleteQuestion(
+        question: Entity<TQuestion>,
+    ): Promise<void> {}
+
+    //#endregion
+
     /**
      * Sets the current state of the game.
      * @param state The new state object to set.
@@ -193,10 +249,15 @@ export abstract class BaseGameDatabase<
      * @param question The question to add.
      */
     public async addQuestion(question: TQuestion): Promise<void> {
-        await addDoc(this._questionsRef, {
+        await this.beforeAddQuestion(question);
+        const newDocRef = await addDoc(this._questionsRef, {
             ...question,
             createdAt: serverTimestamp(),
         });
+        const addedEntity = await getDoc(
+            newDocRef.withConverter(this._questionConverter),
+        );
+        await this.afterAddQuestion(addedEntity.data()!);
     }
 
     /**
@@ -208,11 +269,16 @@ export abstract class BaseGameDatabase<
         id: string,
         question: TQuestion | Partial<TQuestion>,
     ): Promise<void> {
+        await this.beforeEditQuestion(id, question);
         const questionDocRef = doc(
             this._firestore,
             `${this._questionsRef.path}/${id}`,
-        );
+        ).withConverter(this._questionConverter);
         await setDoc(questionDocRef, question, { merge: true });
+        const editedEntity = await getDoc(
+            questionDocRef.withConverter(this._questionConverter),
+        );
+        await this.afterEditQuestion(editedEntity.data()!);
     }
 
     /**
@@ -237,11 +303,13 @@ export abstract class BaseGameDatabase<
      * Removes the given question from the question collection for this game.
      */
     public async deleteQuestion(question: Entity<TQuestion>): Promise<void> {
+        await this.beforeDeleteQuestion(question);
         const questionDocRef = doc(
             this._firestore,
             `${this._questionsRef.path}/${question.id}`,
         );
         await deleteDoc(questionDocRef);
+        await this.afterDeleteQuestion(question);
     }
 
     /**

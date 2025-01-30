@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { CORS_PROXY_FUNCTION_URL } from '../../common/firestore';
+import { CORS_PROXY_FUNCTION_URL, Entity } from '../../common/firestore';
+import { VideogameDatabaseService } from '../../common/video-games';
 import { BaseGameDatabase } from '../base/database';
 import {
     SCREENSHOT_IN_THE_DARK_BASE_PATH,
@@ -18,12 +19,39 @@ export class ScreenshotInTheDarkDatabase extends BaseGameDatabase<
     ScreenshotInTheDarkQuestion
 > {
     private _http = inject(HttpClient);
+    private _vgdb = inject(VideogameDatabaseService);
 
     constructor() {
         super(
             SCREENSHOT_IN_THE_DARK_BASE_PATH,
             SCREENSHOT_IN_THE_DARK_STATE_DEFAULT,
         );
+    }
+
+    protected override getQuestionString(
+        question: Entity<ScreenshotInTheDarkQuestion>,
+    ): string {
+        return this._vgdb.getGameName(question.gameId);
+    }
+
+    protected override async afterDeleteQuestion(
+        question: Entity<ScreenshotInTheDarkQuestion>,
+    ): Promise<void> {
+        const guessTheGameId = question.guessTheGameId;
+
+        if (guessTheGameId) {
+            const baseUrl = `${guessTheGameId}_`;
+            const deletions = [
+                this.deleteFile(baseUrl + 1, false),
+                this.deleteFile(baseUrl + 2, false),
+                this.deleteFile(baseUrl + 3, false),
+                this.deleteFile(baseUrl + 4, false),
+                this.deleteFile(baseUrl + 5, false),
+                this.deleteFile(baseUrl + 6, false),
+            ];
+
+            await Promise.all(deletions);
+        }
     }
 
     public async getGuessTheGameImage(

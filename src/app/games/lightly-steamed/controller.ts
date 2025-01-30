@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { Entity } from '../../common/firestore';
-import { VideogameDatabaseService } from '../../common/video-games';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { LightlySteamedDatabase } from './database';
 import {
@@ -19,7 +18,6 @@ export class LightlySteamedController extends BaseController<
     LightlySteamedQuestion
 > {
     protected data: LightlySteamedDatabase;
-    private _vgDb = inject(VideogameDatabaseService);
 
     constructor() {
         const database = inject(LightlySteamedDatabase);

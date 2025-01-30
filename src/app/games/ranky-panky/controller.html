@@ -1,75 +1,34 @@
 @let state = this.state();
 @let questions = this.questions();
+@let question = this.currentQuestion();
 
 <div class="layout-column g">
-    <div class="layout-row layout-items-fill g">
-        <button mat-flat-button class="error" (click)="reset()">
-            <mat-icon>refresh</mat-icon>
-            <span>Reset game</span>
-        </button>
+    <button mat-flat-button (click)="cardBackUpload.click()">
+        <mat-icon>image</mat-icon>
+        <span>Upload new card back</span>
+    </button>
+    <input
+        type="file"
+        hidden
+        #cardBackUpload
+        (change)="uploadCardBack($event)" />
 
-        <button mat-flat-button (click)="cardBackUpload.click()">
-            <mat-icon>image</mat-icon>
-            <span>Upload new card back</span>
-        </button>
-        <input
-            type="file"
-            hidden
-            #cardBackUpload
-            (change)="uploadCardBack($event)" />
-    </div>
+    <question-selector
+        [questions]="questions"
+        [currentQuestion]="currentQuestion()"
+        (currentQuestionChange)="setQuestion($event)"
+        (reset)="reset()"
+        (addQuestion)="addQuestion()"
+        canEdit
+        (editQuestion)="editQuestion($event)"
+        canDelete
+        (deleteQuestion)="deleteQuestion($event)">
+        <question-display *question="let question; from: questions">
+            <span>{{ question.name }}</span>
+        </question-display>
+    </question-selector>
 
-    <mat-card class="p g">
-        <mat-form-field class="layout-fill">
-            <mat-label>Current question</mat-label>
-            <mat-select
-                [value]="currentQuestionId()"
-                (valueChange)="setQuestion($event)">
-                <mat-option [value]="null">None</mat-option>
-                @for (question of questions; track question.id) {
-                    <mat-option [value]="question.id">
-                        <span>{{ question.name }}</span>
-                        @if (question.items.length < 2) {
-                            <mat-icon class="error">error</mat-icon>
-                        }
-                    </mat-option>
-                }
-            </mat-select>
-        </mat-form-field>
-
-        <div class="layout-row layout-items-fill g">
-            <button mat-flat-button (click)="addQuestion()">
-                <mat-icon>add_circle</mat-icon>
-                <span>Add question</span>
-            </button>
-            <button
-                mat-flat-button
-                (click)="editQuestion(currentQuestion())"
-                [disabled]="currentQuestion() === undefined">
-                <mat-icon>edit</mat-icon>
-                <span>Edit question</span>
-            </button>
-            <button
-                mat-flat-button
-                (click)="editQuestionItems(currentQuestion())"
-                [disabled]="currentQuestion() === undefined">
-                <mat-icon>playing_cards</mat-icon>
-                <span>Edit items</span>
-            </button>
-            <button
-                mat-flat-button
-                class="error"
-                (click)="deleteQuestionAndFiles(currentQuestion()!)"
-                [disabled]="currentQuestion() === undefined">
-                <mat-icon>delete</mat-icon>
-                <span>Delete question</span>
-            </button>
-        </div>
-    </mat-card>
-
-    @if (currentQuestion()) {
-        @let question = currentQuestion()!;
-
+    @if (question) {
         <mat-card class="g">
             <mat-card-header>
                 <mat-card-title>{{ question.name }}</mat-card-title>
@@ -78,64 +37,52 @@
                 }}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content class="layout-column g">
-                @if (question.items.length >= 2) {
-                    <button
-                        mat-flat-button
-                        (click)="revealItem()"
-                        [disabled]="
-                            state.revealedCards >= question.items.length
-                        ">
-                        <mat-icon>arrow_forward</mat-icon>
-                        <span> Reveal next card </span>
-                    </button>
+                <button
+                    mat-flat-button
+                    (click)="revealItem()"
+                    [disabled]="state.revealedCards >= question.items.length">
+                    <mat-icon>arrow_forward</mat-icon>
+                    <span> Reveal next card </span>
+                </button>
 
-                    <mat-list cdkDropList>
-                        @for (
-                            item of guessedItemOrder();
-                            track item.index;
-                            let last = $last
-                        ) {
+                <mat-list cdkDropList>
+                    @for (
+                        item of guessedItemOrder();
+                        track item.index;
+                        let last = $last
+                    ) {
+                        <mat-list-item
+                            cdkDrag
+                            (cdkDragDropped)="reorder($event)">
+                            <mat-icon matListItemIcon cdkDragHandle
+                                >drag_indicator</mat-icon
+                            >
+                            <span
+                                >{{ item.name }} ({{ item.value
+                                }}{{ question.itemSuffix }})</span
+                            >
                             <mat-list-item
-                                cdkDrag
-                                (cdkDragDropped)="reorder($event)">
-                                <mat-icon matListItemIcon cdkDragHandle
-                                    >drag_indicator</mat-icon
-                                >
-                                <span
-                                    >{{ item.name }} ({{ item.value
-                                    }}{{ question.itemSuffix }})</span
-                                >
-                                <mat-list-item
-                                    *cdkDragPlaceholder
-                                    class="cdk-placeholder" />
-                            </mat-list-item>
-                            @if (!last) {
-                                <mat-divider />
-                            }
-                        } @empty {
-                            <mat-list-item>No items.</mat-list-item>
+                                *cdkDragPlaceholder
+                                class="cdk-placeholder" />
+                        </mat-list-item>
+                        @if (!last) {
+                            <mat-divider />
                         }
-                    </mat-list>
+                    } @empty {
+                        <mat-list-item>No items.</mat-list-item>
+                    }
+                </mat-list>
 
-                    <button
-                        mat-flat-button
-                        (click)="revealAnswer()"
-                        [disabled]="
-                            state.revealedCards < question.items.length ||
-                            state.revealedAnswers >= question.items.length
-                        ">
-                        <mat-icon>check_circle</mat-icon>
-                        <span>Reveal next answer</span>
-                    </button>
-                } @else {
-                    <alert type="warning">
-                        This question is invalid until it has at least two
-                        items. Click the
-                        <mat-icon inline>playing_cards</mat-icon>
-                        <strong>Edit items</strong> button above to add items to
-                        this question.
-                    </alert>
-                }
+                <button
+                    mat-flat-button
+                    (click)="revealAnswer()"
+                    [disabled]="
+                        state.revealedCards < question.items.length ||
+                        state.revealedAnswers >= question.items.length
+                    ">
+                    <mat-icon>check_circle</mat-icon>
+                    <span>Reveal next answer</span>
+                </button>
             </mat-card-content>
         </mat-card>
     }

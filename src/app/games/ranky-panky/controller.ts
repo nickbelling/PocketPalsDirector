@@ -43,25 +43,22 @@ export class RankyPankyController extends BaseController<
         }
     }
 
-    public async setQuestion(questionId: string | null): Promise<void> {
+    public async setQuestion(
+        question: Entity<RankyPankyQuestion> | undefined,
+    ): Promise<void> {
         const state = this.state();
-        if (state.currentQuestion !== questionId) {
-            if (
-                questionId !== null &&
-                !state.questionsDone.includes(questionId)
-            ) {
-                await this.setState({
-                    questionsDone: [...state.questionsDone, questionId],
-                });
-            }
-
+        if (question?.id && !state.questionsDone.includes(question.id)) {
             await this.setState({
-                currentQuestion: questionId,
-                revealedCards: 0,
-                currentGuessedOrder: [],
-                revealedAnswers: 0,
+                questionsDone: [...state.questionsDone, question.id],
             });
         }
+
+        await this.setState({
+            currentQuestion: question?.id || null,
+            revealedCards: 0,
+            currentGuessedOrder: [],
+            revealedAnswers: 0,
+        });
     }
 
     public addQuestion(): void {

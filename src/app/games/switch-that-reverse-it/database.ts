@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Entity } from '../../common/firestore';
 import { BaseGameDatabase } from '../base/database';
 import {
     SWITCH_THAT_REVERSE_IT_BASE_PATH,
@@ -19,5 +20,11 @@ export class SwitchThatReverseItDatabase extends BaseGameDatabase<
             SWITCH_THAT_REVERSE_IT_BASE_PATH,
             SWITCH_THAT_REVERSE_IT_STATE_DEFAULT,
         );
+    }
+
+    protected override getQuestionString(
+        question: Entity<SwitchThatReverseItQuestion>,
+    ): string {
+        return `${question.prompt} (${question.answer})`;
     }
 }

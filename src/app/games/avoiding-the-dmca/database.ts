@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Mp3Encoder } from '@breezystack/lamejs';
+import { Entity } from '../../common/firestore';
+import { VideogameDatabaseService } from '../../common/video-games';
 import { BaseGameDatabase } from '../base/database';
 import {
     AVOIDING_THE_DMCA_STATE_DEFAULT,
@@ -14,10 +16,25 @@ export class AvoidingTheDmcaDatabase extends BaseGameDatabase<
     AvoidingTheDmcaState,
     AvoidingTheDmcaQuestion
 > {
+    private _vgdb = inject(VideogameDatabaseService);
     private _audioContext = new AudioContext();
 
     constructor() {
         super('games/avoiding-the-dmca', AVOIDING_THE_DMCA_STATE_DEFAULT);
+    }
+
+    protected override getQuestionString(
+        question: Entity<AvoidingTheDmcaQuestion>,
+    ): string {
+        return `${this._vgdb.getGameName(question.gameId)} - ${question.trackName}`;
+    }
+
+    protected override async afterDeleteQuestion(
+        question: Entity<AvoidingTheDmcaQuestion>,
+    ): Promise<void> {
+        // Delete the audio files associated with the question
+        await this.deleteFile(question.soundForwards, false);
+        await this.deleteFile(question.soundBackwards, false);
     }
 
     /**
@@ -89,25 +106,26 @@ export class AvoidingTheDmcaDatabase extends BaseGameDatabase<
     }
 
     /**
-     * Reverses the audio in the given MP3 File and returns a new reversed MP3 File.
+     * Reverses the audio in the given MP3 File and returns a new, reversed, MP3
+     * File.
      * @param audioFile The original MP3 File object.
      * @returns A Promise that resolves to a new reversed MP3 File.
      */
     public async getReversedAudioFile(audioFile: File): Promise<File> {
-        // Step 1: Read the file as ArrayBuffer
+        // Read the file
         const arrayBuffer = await this._readFileAsArrayBuffer(audioFile);
 
-        // Step 2: Decode the audio data
+        // Decode the audio data
         const originalBuffer =
             await this._audioContext.decodeAudioData(arrayBuffer);
 
-        // Step 3: Reverse the audio data
+        // Reverse the audio data
         const reversedBuffer = this._reverseAudioBuffer(originalBuffer);
 
-        // Step 4: Encode the reversed audio to MP3
+        // Encode the reversed audio to MP3
         const mp3Blob = this._encodeMP3(reversedBuffer);
 
-        // Step 5: Create a new File from the Blob
+        // Create a new File from the Blob
         const reversedFile = new File(
             [mp3Blob],
             `reversed_${audioFile.name.replace(/\.[^/.]+$/, '')}.mp3`,

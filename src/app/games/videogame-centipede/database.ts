@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
+import { Entity } from '../../common/firestore';
 import { BaseGameDatabase } from '../base/database';
 import {
-    VideogameCentipedeState,
-    VideogameCentipedeQuestion,
     VIDEOGAME_CENTIPEDE_BASE_PATH,
     VIDEOGAME_CENTIPEDE_STATE_DEFAULT,
+    VideogameCentipedeQuestion,
+    VideogameCentipedeState,
 } from './model';
 
 @Injectable({
@@ -15,8 +16,12 @@ export class VideogameCentipedeDatabase extends BaseGameDatabase<
     VideogameCentipedeQuestion
 > {
     constructor() {
-        super(
-            VIDEOGAME_CENTIPEDE_BASE_PATH,
-            VIDEOGAME_CENTIPEDE_STATE_DEFAULT);
+        super(VIDEOGAME_CENTIPEDE_BASE_PATH, VIDEOGAME_CENTIPEDE_STATE_DEFAULT);
+    }
+
+    protected override getQuestionString(
+        question: Entity<VideogameCentipedeQuestion>,
+    ): string {
+        return question.answer;
     }
 }

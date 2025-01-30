@@ -1,4 +1,5 @@
 import { computed, Injectable } from '@angular/core';
+import { Entity } from '../../common/firestore';
 import { BaseGameDatabase } from '../base/database';
 import {
     ORDER_UP_BASE_PATH,
@@ -16,6 +17,21 @@ export class OrderUpDatabase extends BaseGameDatabase<
 > {
     constructor() {
         super(ORDER_UP_BASE_PATH, ORDER_UP_STATE_DEFAULT);
+    }
+
+    protected override getQuestionString(
+        question: Entity<OrderUpQuestion>,
+    ): string {
+        return question.name;
+    }
+
+    protected override async afterDeleteQuestion(
+        question: Entity<OrderUpQuestion>,
+    ): Promise<void> {
+        // Delete the images associated with this question
+        for (const item of question.items) {
+            await this.deleteFile(item.imageId, false);
+        }
     }
 
     public readonly revealOrderedItems = computed(() => {

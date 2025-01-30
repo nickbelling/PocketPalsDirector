@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
+import { Entity } from '../../common/firestore';
 import { BaseGameDatabase } from '../base/database';
 import {
-    ImpockstersState,
-    ImpockstersQuestion,
     IMPOCKSTERS_BASE_PATH,
     IMPOCKSTERS_STATE_DEFAULT,
+    ImpockstersQuestion,
+    ImpockstersState,
 } from './model';
 
 @Injectable({
@@ -15,8 +16,18 @@ export class ImpockstersDatabase extends BaseGameDatabase<
     ImpockstersQuestion
 > {
     constructor() {
-        super(
-            IMPOCKSTERS_BASE_PATH,
-            IMPOCKSTERS_STATE_DEFAULT);
+        super(IMPOCKSTERS_BASE_PATH, IMPOCKSTERS_STATE_DEFAULT);
+    }
+
+    protected override getQuestionString(
+        question: Entity<ImpockstersQuestion>,
+    ): string {
+        return `${question.name} (${question.from})`;
+    }
+
+    protected override async afterDeleteQuestion(
+        question: Entity<ImpockstersQuestion>,
+    ): Promise<void> {
+        await this.deleteFile(question.imageId, false);
     }
 }

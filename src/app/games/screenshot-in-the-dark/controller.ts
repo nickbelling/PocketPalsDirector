@@ -25,28 +25,6 @@ export class ScreenshotInTheDarkController extends BaseController<
         this._dialog.open(ScreenshotInTheDarkQuestionEditDialog);
     }
 
-    public async deleteQuestionAndFiles(
-        question: Entity<ScreenshotInTheDarkQuestion>,
-    ): Promise<void> {
-        const guessTheGameId = question.guessTheGameId;
-
-        if (guessTheGameId) {
-            const baseUrl = `${guessTheGameId}_`;
-            const deletions = [
-                this.deleteFile(baseUrl + 1),
-                this.deleteFile(baseUrl + 2),
-                this.deleteFile(baseUrl + 3),
-                this.deleteFile(baseUrl + 4),
-                this.deleteFile(baseUrl + 5),
-                this.deleteFile(baseUrl + 6),
-            ];
-
-            await Promise.all(deletions);
-        }
-
-        await this.deleteQuestion(question);
-    }
-
     public async setQuestion(
         question?: Entity<ScreenshotInTheDarkQuestion>,
     ): Promise<void> {

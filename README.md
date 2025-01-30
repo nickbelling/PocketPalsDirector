@@ -4,6 +4,9 @@
 
 - Redo Ranky Panky controller
 - Fix positioning of games with timers
+- Better error handling with toasts etc
+    - Toast component
+- Replace derived (`effect`-set) signals with `resource()`
 - Database:
     - Update `<game-selector>` to enable adding a new game from within it
     - Investigate enabling image export of games at different aspect ratios

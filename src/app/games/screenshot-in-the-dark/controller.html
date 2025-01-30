@@ -11,7 +11,7 @@
         canNavigate
         (addQuestion)="addQuestion()"
         canDelete
-        (deleteQuestion)="deleteQuestionAndFiles($event)">
+        (deleteQuestion)="deleteQuestion($event)">
         <question-display *question="let question; from: questions">
             <span>{{ question.gameId | gameName }}</span>
         </question-display>
