@@ -1,3 +1,8 @@
+:host {
+    position: relative;
+    container-type: size;
+}
+
 .character {
     position: relative;
     aspect-ratio: 9/16;
@@ -80,6 +85,6 @@ countdown-timer {
     position: absolute;
     height: 12cqh;
     width: 20cqh;
-    top: 35cqh;
-    left: 60%;
+    top: 40cqh;
+    left: 80%;
 }

@@ -21,9 +21,8 @@
         <div class="layout-column">
             <h1>{{ currentQuestion()?.name }}</h1>
             <h2>
-                {{ currentQuestion()?.description }} ({{
-                    possibleAnswersCount()
-                }})
+                <span>{{ currentQuestion()?.description }}</span>
+                <span> ({{ possibleAnswersCount() }})</span>
             </h2>
         </div>
 
