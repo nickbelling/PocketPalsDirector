@@ -1,5 +1,6 @@
 import { Component, inject, resource, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ToastService } from '../../common/toast';
 import { SGDBImage, SteamGridDbService } from '../../common/video-games';
 import { CommonControllerModule } from '../../games/base/controller';
 
@@ -19,16 +20,27 @@ export class DashboardGamesDatabaseImageSelectDialog {
     private _dialog = inject(
         MatDialogRef<DashboardGamesDatabaseImageSelectDialog>,
     );
+    private _toast = inject(ToastService);
+
     public loading = signal<boolean>(false);
     public data = inject<DatabaseImageSelectOptions>(MAT_DIALOG_DATA);
 
     public images = resource({
         request: () => this.data,
-        loader: ({ request }) => {
-            if (request.type === 'hero') {
-                return this._steamGridDb.getGameHeroes(request.sgdbGameId);
-            } else {
-                return this._steamGridDb.getGameLogos(request.sgdbGameId);
+        loader: async ({ request }) => {
+            try {
+                if (request.type === 'hero') {
+                    return await this._steamGridDb.getGameHeroes(
+                        request.sgdbGameId,
+                    );
+                } else {
+                    return await this._steamGridDb.getGameLogos(
+                        request.sgdbGameId,
+                    );
+                }
+            } catch (error) {
+                this._toast.error('Failed to load images.', error);
+                return [];
             }
         },
     });

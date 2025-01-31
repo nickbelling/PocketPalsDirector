@@ -6,7 +6,6 @@ import {
     signal,
     viewChild,
 } from '@angular/core';
-import { ToastService } from '../../common/toast';
 import { isNotEmpty } from '../../common/utils';
 import {
     BaseQuestionEditDialog,
@@ -21,7 +20,6 @@ import { SwitchThatReverseItQuestion } from './model';
 })
 export class SwitchThatReverseItQuestionEditDialog extends BaseQuestionEditDialog<SwitchThatReverseItQuestion> {
     private _db: SwitchThatReverseItDatabase;
-    private _toast = inject(ToastService);
     private _firstControl =
         viewChild<ElementRef<HTMLInputElement>>('firstControl');
 
@@ -47,8 +45,6 @@ export class SwitchThatReverseItQuestionEditDialog extends BaseQuestionEditDialo
                 prompt: this.prompt(),
                 answer: this.answer(),
             });
-
-            this._toast.open(`Added '${this.answer()}'.`);
 
             // Don't close. Just reset
             this.prompt.set('');

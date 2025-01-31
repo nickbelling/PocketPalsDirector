@@ -6,6 +6,7 @@ import {
 } from '@angular/material/dialog';
 import { ConfirmDialog } from '../../common/dialog';
 import { Entity } from '../../common/firestore';
+import { ToastService } from '../../common/toast';
 import { downloadUrlAsFile } from '../../common/utils';
 import {
     SGDBImage,
@@ -35,6 +36,7 @@ export class DashboardGamesDatabaseEditDialog {
     private _dialog = inject(MatDialogRef<DashboardGamesDatabaseEditDialog>);
     private _confirm = inject(ConfirmDialog);
     private _newDialog = inject(MatDialog);
+    private _toast = inject(ToastService);
 
     public VIDEOGAME_STORAGE_BASE = VIDEOGAME_STORAGE_BASE;
     public game = inject<Entity<VideogameDatabaseItem>>(MAT_DIALOG_DATA);
@@ -63,7 +65,10 @@ export class DashboardGamesDatabaseEditDialog {
 
             await this._vgDb.updateRegisteredGame(this.game.id);
 
+            this._toast.info(`${this.game.name} updated successfully.`);
             this._dialog.close();
+        } catch (error) {
+            this._toast.error(`Failed to update ${this.game.name}.`, error);
         } finally {
             this.loading.set(false);
         }
@@ -94,12 +99,19 @@ export class DashboardGamesDatabaseEditDialog {
                     this.heroLoading.set(true);
                 }
 
-                const file = await downloadUrlAsFile(image.url, type, true);
+                try {
+                    const file = await downloadUrlAsFile(image.url, type, true);
 
-                if (type === 'logo') {
-                    this.logoFileToUpload.set(file);
-                } else if (type === 'hero') {
-                    this.heroFileToUpload.set(file);
+                    if (type === 'logo') {
+                        this.logoFileToUpload.set(file);
+                    } else if (type === 'hero') {
+                        this.heroFileToUpload.set(file);
+                    }
+                } catch (error) {
+                    this._toast.error(
+                        'Failed to download the image file.',
+                        error,
+                    );
                 }
 
                 this.logoLoading.set(false);
@@ -116,9 +128,18 @@ export class DashboardGamesDatabaseEditDialog {
             {
                 onDelete: async () => {
                     this.loading.set(true);
-                    await this._vgDb.deleteGame(game.id);
-                    this.loading.set(false);
-                    this._dialog.close();
+                    try {
+                        await this._vgDb.deleteGame(game.id);
+                        this._toast.info(`Successfully deleted ${game.name}.`);
+                        this._dialog.close();
+                    } catch (error) {
+                        this._toast.error(
+                            `Failed to delete ${game.name}.`,
+                            error,
+                        );
+                    } finally {
+                        this.loading.set(false);
+                    }
                 },
             },
         );

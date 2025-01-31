@@ -19,7 +19,7 @@ export class VideogameCentipedeDatabase extends BaseGameDatabase<
         super(VIDEOGAME_CENTIPEDE_BASE_PATH, VIDEOGAME_CENTIPEDE_STATE_DEFAULT);
     }
 
-    protected override getQuestionString(
+    public override getQuestionString(
         question: Entity<VideogameCentipedeQuestion>,
     ): string {
         return question.answer;

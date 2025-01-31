@@ -21,6 +21,7 @@
         @include _dialog();
         @include _expansion-panel();
         @include _list();
+        @include _snack-bar();
         @include _toolbar();
     }
 }
@@ -156,6 +157,26 @@
             list-item-container-color: var(--mat-sys-surface),
         )
     );
+}
+
+@mixin _snack-bar() {
+    .toast-info {
+        @include mat.snack-bar-overrides(
+            (
+                container-color: var(--mat-sys-primary),
+                supporting-text-color: var(--mat-sys-on-primary),
+            )
+        );
+    }
+
+    .toast-error {
+        @include mat.snack-bar-overrides(
+            (
+                container-color: var(--mat-sys-error),
+                supporting-text-color: var(--mat-sys-on-error),
+            )
+        );
+    }
 }
 
 @mixin _toolbar() {

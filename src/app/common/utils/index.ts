@@ -1,5 +1,6 @@
 export * from './color';
 export * from './equality';
+export * from './errors';
 export * from './files';
 export * from './images';
 export * from './inject';

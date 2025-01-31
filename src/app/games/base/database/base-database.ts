@@ -181,10 +181,10 @@ export abstract class BaseGameDatabase<
         });
     }
 
-    //#region Overridable hooks
+    //#region Overridable CRUD hooks
 
     /** Gets a descriptive string representing the question. */
-    protected abstract getQuestionString(question: Entity<TQuestion>): string;
+    public abstract getQuestionString(question: TQuestion): string;
 
     /** Fired before the requested question is added. */
     protected async beforeAddQuestion(question: TQuestion): Promise<void> {}
@@ -268,7 +268,7 @@ export abstract class BaseGameDatabase<
     public async editQuestion(
         id: string,
         question: TQuestion | Partial<TQuestion>,
-    ): Promise<void> {
+    ): Promise<Entity<TQuestion>> {
         await this.beforeEditQuestion(id, question);
         const questionDocRef = doc(
             this._firestore,
@@ -279,6 +279,7 @@ export abstract class BaseGameDatabase<
             questionDocRef.withConverter(this._questionConverter),
         );
         await this.afterEditQuestion(editedEntity.data()!);
+        return editedEntity.data()!;
     }
 
     /**
@@ -318,7 +319,8 @@ export abstract class BaseGameDatabase<
      * @param subPath The path (within this service's path) to upload the file to.
      * @param onProgress Optional callback for reporting upload progress.
      * @returns The full internal storage path of the file. NOTE: this must be
-     * converted to a download URL using the "getDownloadUrl" function.
+     * converted to a download URL using the "getDownloadUrl" function or the
+     * "resolveStorageUrl" function to be used publicly.
      */
     public async uploadFile(
         file: File,

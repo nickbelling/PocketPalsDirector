@@ -1,9 +1,12 @@
+import { inject } from '@angular/core';
+import { ToastService } from '../../../common/toast';
 import { BaseGameDatabase, GameQuestionLike, GameStateLike } from '../database';
 import { BaseEntityEditDialog } from './base-entity-edit';
 
 export class BaseQuestionEditDialog<
     TQuestion extends GameQuestionLike,
 > extends BaseEntityEditDialog<TQuestion> {
+    private _toast = inject(ToastService);
     protected db: BaseGameDatabase<GameStateLike, TQuestion>;
     protected question = this.entity;
 
@@ -13,7 +16,14 @@ export class BaseQuestionEditDialog<
     }
 
     protected async addQuestion(question: TQuestion): Promise<void> {
-        await this.db.addQuestion(question);
+        const questionName = this.db.getQuestionString(question);
+
+        try {
+            await this.db.addQuestion(question);
+            this._toast.info(`Successfully added question "${questionName}".`);
+        } catch (error) {
+            this._toast.error(`Failed to add question "${questionName}".`);
+        }
     }
 
     protected async editQuestion(
@@ -21,9 +31,19 @@ export class BaseQuestionEditDialog<
     ): Promise<void> {
         const id = this.id();
         if (id) {
-            await this.db.editQuestion(id, question);
+            try {
+                const edited = await this.db.editQuestion(id, question);
+                const questionName = this.db.getQuestionString(edited);
+                this._toast.info(
+                    `Successfully edited question "${questionName}".`,
+                );
+            } catch (error) {
+                this._toast.error('Failed to edit question.', error);
+            }
         } else {
-            throw new Error('Dialog not in edit mode.');
+            this._toast.error(
+                'Failed to edit question: Dialog not in edit mode.',
+            );
         }
     }
 

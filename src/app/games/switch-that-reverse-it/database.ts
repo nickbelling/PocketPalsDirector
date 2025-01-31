@@ -22,7 +22,7 @@ export class SwitchThatReverseItDatabase extends BaseGameDatabase<
         );
     }
 
-    protected override getQuestionString(
+    public override getQuestionString(
         question: Entity<SwitchThatReverseItQuestion>,
     ): string {
         return `${question.prompt} (${question.answer})`;

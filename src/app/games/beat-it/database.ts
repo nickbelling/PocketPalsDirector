@@ -22,7 +22,7 @@ export class BeatItDatabase extends BaseGameDatabase<
         super(BEAT_IT_BASE_PATH, BEAT_IT_STATE_DEFAULT);
     }
 
-    protected override getQuestionString(
+    public override getQuestionString(
         question: Entity<BeatItQuestion>,
     ): string {
         return `${this._vgdb.getGameName(question.gameId)} (${question.hours})`;

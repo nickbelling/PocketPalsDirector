@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import { ToastService } from '../../common/toast';
 import { GameDefinition } from '../../games/games';
 import { GlobalDataStore, GlobalState } from '../global-data-store';
 
@@ -31,6 +32,7 @@ import { GlobalDataStore, GlobalState } from '../global-data-store';
 })
 export class DashboardHome {
     private _globalData = inject(GlobalDataStore);
+    private _toast = inject(ToastService);
     private _activeGames = this._globalData.activeGames;
     private _inactiveGames = this._globalData.inactiveGames;
 
@@ -84,6 +86,8 @@ export class DashboardHome {
         this.loading.set(true);
         try {
             await this._globalData.setState(state);
+        } catch (error) {
+            this._toast.error('Failed to update game order.', error);
         } finally {
             this.loading.set(false);
         }

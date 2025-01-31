@@ -23,7 +23,7 @@ export class AvoidingTheDmcaDatabase extends BaseGameDatabase<
         super('games/avoiding-the-dmca', AVOIDING_THE_DMCA_STATE_DEFAULT);
     }
 
-    protected override getQuestionString(
+    public override getQuestionString(
         question: Entity<AvoidingTheDmcaQuestion>,
     ): string {
         return `${this._vgdb.getGameName(question.gameId)} - ${question.trackName}`;

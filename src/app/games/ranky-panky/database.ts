@@ -18,7 +18,7 @@ export class RankyPankyDatabase extends BaseGameDatabase<
         super('games/ranky-panky', RANKY_PANKY_STATE_DEFAULT);
     }
 
-    protected override getQuestionString(
+    public override getQuestionString(
         question: Entity<RankyPankyQuestion>,
     ): string {
         return question.name;

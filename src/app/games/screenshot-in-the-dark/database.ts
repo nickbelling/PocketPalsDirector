@@ -28,7 +28,7 @@ export class ScreenshotInTheDarkDatabase extends BaseGameDatabase<
         );
     }
 
-    protected override getQuestionString(
+    public override getQuestionString(
         question: Entity<ScreenshotInTheDarkQuestion>,
     ): string {
         return this._vgdb.getGameName(question.gameId);

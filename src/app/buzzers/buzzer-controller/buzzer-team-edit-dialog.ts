@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
+import { ToastService } from '../../common/toast';
 import { isValidColor } from '../../common/utils';
 import {
     BaseEntityEditDialog,
@@ -16,6 +17,7 @@ import { BuzzerTeam } from '../data/model';
 export class BuzzerTeamEditDialog extends BaseEntityEditDialog<BuzzerTeam> {
     private _data = inject(BuzzerDirectorDataStore);
     private _dialog = inject(MatDialogRef<BuzzerTeamEditDialog>);
+    private _toast = inject(ToastService);
 
     protected name = signal<string>('');
     protected color = signal<string>('');
@@ -47,6 +49,11 @@ export class BuzzerTeamEditDialog extends BaseEntityEditDialog<BuzzerTeam> {
                 });
             }
             this._dialog.close();
+        } catch (error) {
+            this._toast.error(
+                this.editing ? 'Failed to edit team.' : 'Failed to add team.',
+                error,
+            );
         } finally {
             this.loading.set(false);
         }

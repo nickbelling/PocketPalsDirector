@@ -2,8 +2,7 @@
 
 ## TODO
 
-- Better error handling with toasts etc
-    - Toast component
+- Non-ugly scroll bars
 - Database:
     - Update `<game-selector>` to enable adding a new game from within it
     - Investigate enabling image export of games at different aspect ratios

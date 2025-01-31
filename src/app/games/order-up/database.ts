@@ -19,7 +19,7 @@ export class OrderUpDatabase extends BaseGameDatabase<
         super(ORDER_UP_BASE_PATH, ORDER_UP_STATE_DEFAULT);
     }
 
-    protected override getQuestionString(
+    public override getQuestionString(
         question: Entity<OrderUpQuestion>,
     ): string {
         return question.name;

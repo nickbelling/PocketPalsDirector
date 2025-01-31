@@ -2,6 +2,7 @@ import { inject, Signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialog } from '../../../common/dialog';
 import { Entity } from '../../../common/firestore';
+import { ToastService } from '../../../common/toast';
 import { BaseGameDatabase, GameQuestionLike, GameStateLike } from '../database';
 
 export abstract class BaseController<
@@ -10,6 +11,7 @@ export abstract class BaseController<
 > {
     protected _dialog = inject(MatDialog);
     protected _confirm = inject(ConfirmDialog);
+    protected _toast = inject(ToastService);
     private _db: BaseGameDatabase<TState, TQuestion>;
 
     public readonly state: Signal<TState>;
@@ -30,29 +32,64 @@ export abstract class BaseController<
     }
 
     public async reset(): Promise<void> {
-        await this._db.resetState();
+        try {
+            await this._db.resetState();
+            this._toast.info('Game reset successfully.');
+        } catch (error) {
+            this._toast.error('Failed to reset the game.', error);
+        }
+    }
+
+    public getQuestionString(question: Entity<TQuestion>): string {
+        return this._db.getQuestionString(question);
     }
 
     protected async setState(state: TState | Partial<TState>): Promise<void> {
-        await this._db.setState(state);
+        try {
+            await this._db.setState(state);
+        } catch (error) {
+            this._toast.error('Failed to update the game state.', error);
+        }
     }
 
     protected async deleteQuestion(question: Entity<TQuestion>): Promise<void> {
-        await this._db.deleteQuestion(question);
+        try {
+            await this._db.deleteQuestion(question);
+            this._toast.info(
+                `Successfully deleted question "${this.getQuestionString(question)}".`,
+            );
+        } catch (error) {
+            this._toast.error(
+                `Failed to delete question "${this.getQuestionString(question)}".`,
+            );
+        }
     }
 
     protected async uploadFile(
         file: File,
         subPath: string,
         onProgress?: (progress: number) => void,
-    ): Promise<string> {
-        return await this._db.uploadFile(file, subPath, onProgress);
+    ): Promise<string | null> {
+        try {
+            const url = await this._db.uploadFile(file, subPath, onProgress);
+            return url;
+        } catch (error) {
+            this._toast.error(
+                `Failed to upload file to path "${subPath}".`,
+                error,
+            );
+            return null;
+        }
     }
 
     protected async deleteFile(
         path: string,
         isFullPath?: boolean,
     ): Promise<void> {
-        await this._db.deleteFile(path, isFullPath);
+        try {
+            await this._db.deleteFile(path, isFullPath);
+        } catch (error) {
+            this._toast.error(`Failed to delete the file "${path}".`, error);
+        }
     }
 }

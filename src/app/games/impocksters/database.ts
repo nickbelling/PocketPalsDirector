@@ -19,7 +19,7 @@ export class ImpockstersDatabase extends BaseGameDatabase<
         super(IMPOCKSTERS_BASE_PATH, IMPOCKSTERS_STATE_DEFAULT);
     }
 
-    protected override getQuestionString(
+    public override getQuestionString(
         question: Entity<ImpockstersQuestion>,
     ): string {
         return `${question.name} (${question.from})`;

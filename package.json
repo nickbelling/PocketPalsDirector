@@ -35,6 +35,7 @@
         "pica": "^9.0.1",
         "prettier": "^3.4.2",
         "rxjs": "~7.8.0",
+        "serialize-error": "^12.0.0",
         "slugify": "^1.6.6",
         "steamgriddb": "^2.2.0",
         "tslib": "^2.3.0",

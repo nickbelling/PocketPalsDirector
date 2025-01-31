@@ -18,7 +18,7 @@ export class StateYourBidnessDatabase extends BaseGameDatabase<
         super('games/state-your-bidness', STATE_YOUR_BUSINESS_STATE_DEFAULT);
     }
 
-    protected override getQuestionString(
+    public override getQuestionString(
         question: Entity<StateYourBidnessQuestion>,
     ): string {
         return `${question.name} (${question.items.length})`;

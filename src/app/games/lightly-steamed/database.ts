@@ -22,7 +22,7 @@ export class LightlySteamedDatabase extends BaseGameDatabase<
         super(LIGHTLY_STEAMED_BASE_PATH, LIGHTLY_STEAMED_STATE_DEFAULT);
     }
 
-    protected override getQuestionString(
+    public override getQuestionString(
         question: Entity<LightlySteamedQuestion>,
     ): string {
         return this._vgdb.getGameName(question.gameId);

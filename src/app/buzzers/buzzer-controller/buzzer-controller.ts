@@ -1,8 +1,9 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Entity } from '../../common/firestore';
+import { ToastService } from '../../common/toast';
 import { CommonControllerModule } from '../../games/base/controller';
 import { BuzzerDirectorDataStore } from '../data/director-data';
-import { BuzzerPlayer, BuzzerTeam } from '../data/model';
+import { BuzzerPlayer, BuzzerState, BuzzerTeam } from '../data/model';
 
 @Component({
     selector: 'buzzer-controller',
@@ -12,6 +13,7 @@ import { BuzzerPlayer, BuzzerTeam } from '../data/model';
 })
 export class BuzzerController {
     private _data = inject(BuzzerDirectorDataStore);
+    private _toast = inject(ToastService);
 
     protected state = this._data.state;
     protected players = this._data.players;
@@ -45,17 +47,24 @@ export class BuzzerController {
 
     public async setBuzzersEnabled(value: boolean): Promise<void> {
         if (this.state().buzzersEnabled !== value) {
-            if (value) {
-                await this._data.enableBuzzers();
-            } else {
-                await this._data.disableBuzzers();
+            try {
+                if (value) {
+                    await this._data.enableBuzzers();
+                } else {
+                    await this._data.disableBuzzers();
+                }
+            } catch (error) {
+                this._toast.error(
+                    'Failed to change the global buzzer state.',
+                    error,
+                );
             }
         }
     }
 
     public async setCorrectLocksNextQuestion(value: boolean): Promise<void> {
         if (this.state().correctLocksNextQuestion !== value) {
-            await this._data.setState({
+            await this._setState({
                 correctLocksNextQuestion: value,
             });
         }
@@ -63,7 +72,7 @@ export class BuzzerController {
 
     public async setIncorrectLocksThisQuestion(value: boolean): Promise<void> {
         if (this.state().incorrectLocksThisQuestion !== value) {
-            await this._data.setState({
+            await this._setState({
                 incorrectLocksThisQuestion: value,
             });
         }
@@ -73,42 +82,70 @@ export class BuzzerController {
         value: boolean,
     ): Promise<void> {
         if (this.state().incorrectLocksTeamThisQuestion !== value) {
-            await this._data.setState({
+            await this._setState({
                 incorrectLocksTeamThisQuestion: value,
             });
         }
     }
 
     public async buzzIn(playerId: string): Promise<void> {
-        await this._data.buzzInPlayer(playerId);
+        try {
+            await this._data.buzzInPlayer(playerId);
+        } catch (error) {
+            this._toast.error('Failed to buzz in player.', error);
+        }
     }
 
     public async resetBuzzer(playerId: string): Promise<void> {
-        await this._data.resetPlayerBuzzer(playerId);
+        try {
+            await this._data.resetPlayerBuzzer(playerId);
+        } catch (error) {
+            this._toast.error('Failed to reset player buzzer.', error);
+        }
     }
 
     public async resetAllBuzzers(): Promise<void> {
-        await this._data.resetAllPlayerBuzzers();
+        try {
+            await this._data.resetAllPlayerBuzzers();
+        } catch (error) {
+            this._toast.error('Failed to reset player buzzers.', error);
+        }
     }
 
     public async toggleLock(playerId: string, locked: boolean): Promise<void> {
-        if (locked) {
-            await this._data.unlockPlayer(playerId);
-        } else {
-            await this._data.lockPlayer(playerId);
+        try {
+            if (locked) {
+                await this._data.unlockPlayer(playerId);
+            } else {
+                await this._data.lockPlayer(playerId);
+            }
+        } catch (error) {
+            this._toast.error('Failed to toggle player lock state.', error);
         }
     }
 
     public async unlockAll(): Promise<void> {
-        await this._data.unlockAllPlayers();
+        try {
+            await this._data.unlockAllPlayers();
+        } catch (error) {
+            this._toast.error('Failed to unlock all players.', error);
+        }
     }
 
     public async markCorrect(player: Entity<BuzzerPlayer>): Promise<void> {
-        await this._data.markCorrect(player.id);
+        try {
+            await this._data.markCorrect(player.id);
+        } catch (error) {
+            this._toast.error('Failed to mark player as correct.', error);
+        }
     }
 
     public async markIncorrect(player: Entity<BuzzerPlayer>): Promise<void> {
-        await this._data.markIncorrect(player.id);
+        try {
+            await this._data.markIncorrect(player.id);
+        } catch (error) {
+            this._toast.error('Failed to mark player as incorrect.', error);
+        }
     }
 
     public getTeam(
@@ -116,5 +153,15 @@ export class BuzzerController {
         teams: Entity<BuzzerTeam>[],
     ): Entity<BuzzerTeam> | undefined {
         return teams.find((t) => t.id === player.teamId);
+    }
+
+    private async _setState(
+        state: BuzzerState | Partial<BuzzerState>,
+    ): Promise<void> {
+        try {
+            await this._data.setState(state);
+        } catch (error) {
+            this._toast.error('Failed to update the buzzer options.', error);
+        }
     }
 }

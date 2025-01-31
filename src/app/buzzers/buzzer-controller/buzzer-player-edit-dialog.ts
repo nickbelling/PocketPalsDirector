@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
+import { ToastService } from '../../common/toast';
 import {
     BaseEntityEditDialog,
     CommonControllerModule,
@@ -15,6 +16,7 @@ import { BuzzerPlayer } from '../data/model';
 export class BuzzerPlayerAddDialog extends BaseEntityEditDialog<BuzzerPlayer> {
     private _data = inject(BuzzerDirectorDataStore);
     private _dialog = inject(MatDialogRef<BuzzerPlayerAddDialog>);
+    private _toast = inject(ToastService);
 
     protected name = signal<string>('');
     protected teamId = signal<string | null>(null);
@@ -116,6 +118,13 @@ export class BuzzerPlayerAddDialog extends BaseEntityEditDialog<BuzzerPlayer> {
                 this.uploadProgress.set(100);
             }
             await this._dialog.close();
+        } catch (error) {
+            this._toast.error(
+                this.editing
+                    ? 'Failed to edit player.'
+                    : 'Failed to add player.',
+                error,
+            );
         } finally {
             this.uploadProgress.set(0);
             this.loading.set(false);

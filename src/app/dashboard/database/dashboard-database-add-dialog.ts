@@ -5,6 +5,7 @@ import {
     signal,
     WritableSignal,
 } from '@angular/core';
+import { ToastService } from '../../common/toast';
 import {
     SGDBGame,
     SteamGridDbService,
@@ -27,6 +28,7 @@ interface SearchResult {
 export class DashboardGamesDatabaseAddDialog {
     private _steamGridDb = inject(SteamGridDbService);
     private _vgDb = inject(VideogameDatabaseService);
+    private _toast = inject(ToastService);
 
     public loading = signal<boolean>(false);
     public searchTerm = signal<string>('');
@@ -58,16 +60,25 @@ export class DashboardGamesDatabaseAddDialog {
         try {
             const results = await this._steamGridDb.search(this.searchTerm());
             this.rawResults.set(results);
+        } catch (error) {
+            this._toast.error('Failed to search SteamGridDB.', error);
         } finally {
             this.loading.set(false);
         }
     }
 
     public async register(result: SearchResult): Promise<void> {
-        await this._steamGridDb.registerGame(
-            result.game,
-            result.releaseYear,
-            result.progress,
-        );
+        try {
+            await this._steamGridDb.registerGame(
+                result.game,
+                result.releaseYear,
+                result.progress,
+            );
+            this._toast.info(
+                `Successfully registered ${result.game} (${result.releaseYear}).`,
+            );
+        } catch (error) {
+            this._toast.error(`Failed to register ${result.game}.`, error);
+        }
     }
 }

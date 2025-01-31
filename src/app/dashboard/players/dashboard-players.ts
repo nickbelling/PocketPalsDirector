@@ -18,6 +18,7 @@ import { GamePreview } from '../../common/components/preview';
 import { ConfirmDialog } from '../../common/dialog';
 import { SoundService } from '../../common/files';
 import { CommonFirebaseModule, Entity } from '../../common/firestore';
+import { ToastService } from '../../common/toast';
 import { CommonControllerModule } from '../../games/base/controller';
 
 @Component({
@@ -37,6 +38,7 @@ export class DashboardPlayers {
     private _dialog = inject(MatDialog);
     private _confirm = inject(ConfirmDialog);
     private _sound = inject(SoundService);
+    private _toast = inject(ToastService);
 
     protected imagesBasePath = BUZZERS_STORAGE_IMAGES_PATH;
     protected soundsBasePath = BUZZERS_STORAGE_SOUNDS_PATH;
@@ -64,7 +66,15 @@ export class DashboardPlayers {
             `Are you sure you want to delete ${team.name}?`,
             {
                 onDelete: async () => {
-                    await this._data.deleteTeam(team);
+                    try {
+                        await this._data.deleteTeam(team);
+                        this._toast.info(`Successfully deleted ${team.name}.`);
+                    } catch (error) {
+                        this._toast.error(
+                            `Failed to delete ${team.name}.`,
+                            error,
+                        );
+                    }
                 },
             },
         );
@@ -87,7 +97,17 @@ export class DashboardPlayers {
             `Are you sure you want to delete ${player.name}?`,
             {
                 onDelete: async () => {
-                    await this._data.deletePlayer(player);
+                    try {
+                        await this._data.deletePlayer(player);
+                        this._toast.info(
+                            `Successfully deleted ${player.name}.`,
+                        );
+                    } catch (error) {
+                        this._toast.error(
+                            `Failed to delete ${player.name}.`,
+                            error,
+                        );
+                    }
                 },
             },
         );
@@ -95,10 +115,14 @@ export class DashboardPlayers {
 
     public async playSound(soundEffectPath: string | null): Promise<void> {
         if (soundEffectPath != null) {
-            await this._sound.playStorageSound(
-                this.soundsBasePath + '/' + soundEffectPath,
-                true,
-            );
+            try {
+                await this._sound.playStorageSound(
+                    this.soundsBasePath + '/' + soundEffectPath,
+                    true,
+                );
+            } catch (error) {
+                this._toast.error('Failed to play sound.', error);
+            }
         }
     }
 
