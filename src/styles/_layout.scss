@@ -126,16 +126,16 @@
     }
 
     .layout-scroll-x {
-        overflow-x: scroll;
+        overflow-x: auto;
         flex-shrink: 0;
     }
 
     .layout-scroll-y {
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 
     .layout-scroll {
-        overflow: scroll;
+        overflow: auto;
     }
 
     .layout-wrap {
