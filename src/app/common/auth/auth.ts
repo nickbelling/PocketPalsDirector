@@ -113,7 +113,7 @@ export class AuthService {
      */
     public async signOut(): Promise<void> {
         await signOut(this._auth);
-        this._router.navigate(['/', 'admin', '403']);
+        this._router.navigate(['/', 'dashboard', '403']);
     }
 
     /**

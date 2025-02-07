@@ -1,0 +1,22 @@
+@use '@angular/material' as mat;
+
+.avatar {
+    height: 48px;
+    width: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    vertical-align: middle;
+    background-color: var(--mat-sys-surface-dim);
+}
+
+.mat-column-avatar,
+.mat-column-actions {
+    width: 32px;
+}
+
+@include mat.chips-overrides(
+    (
+        label-text-color: var(--mat-sys-on-primary),
+        elevated-container-color: var(--mat-sys-primary),
+    )
+);

@@ -3,11 +3,11 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: 'admin',
+        redirectTo: 'dashboard',
         pathMatch: 'full',
     },
     {
-        path: 'admin',
+        path: 'dashboard',
         loadComponent: () =>
             import('./dashboard/dashboard').then((x) => x.Dashboard),
         loadChildren: () =>

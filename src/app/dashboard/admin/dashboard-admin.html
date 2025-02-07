@@ -1,0 +1,69 @@
+<h3>User Management</h3>
+
+@let currentUser = user();
+@let users = userList.value() || [];
+@let columns = ['avatar', 'displayName', 'email', 'roles', 'actions'];
+
+<mat-card>
+    <table mat-table [dataSource]="users">
+        <ng-container matColumnDef="avatar">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let user">
+                @if (user.photoUrl) {
+                    <img class="avatar" src="{{ user.photoUrl }}" />
+                } @else {
+                    <div class="avatar">&nbsp;</div>
+                }
+            </td>
+        </ng-container>
+
+        <mat-text-column name="displayName" headerText="Name" />
+        <mat-text-column name="email" headerText="Email" />
+
+        <ng-container matColumnDef="roles">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let user">
+                <mat-chip-set>
+                    @if (user.admin) {
+                        <mat-chip
+                            [disabled]="currentUser?.uid === user.uid"
+                            [class.primary]="currentUser?.uid !== user.uid">
+                            <span>Admin</span>
+                        </mat-chip>
+                    }
+                </mat-chip-set>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let user">
+                <button
+                    mat-icon-button
+                    [disabled]="currentUser?.uid === user.uid"
+                    [matMenuTriggerFor]="actionMenu"
+                    [matMenuTriggerData]="{ $implicit: user }">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+    </table>
+</mat-card>
+
+<mat-menu #actionMenu="matMenu">
+    <ng-template matMenuContent let-user>
+        <button mat-menu-item (click)="setAdmin(user, !user.admin)">
+            <mat-icon>{{
+                user.admin ? 'remove_moderator' : 'add_moderator'
+            }}</mat-icon>
+            @if (user.admin) {
+                <span>Remove Administrator Privileges</span>
+            } @else {
+                <span>Grant Administrator Privileges</span>
+            }
+        </button>
+    </ng-template>
+</mat-menu>

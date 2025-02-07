@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 import { AdminAuthGuard } from '../common/auth';
+import { DashboardAdmin } from './admin/dashboard-admin';
 import { Dashboard } from './dashboard';
 import { DashboardGamesDatabase } from './database/dashboard-database';
 import { DashboardHome } from './home/dashboard-home';
@@ -42,6 +43,12 @@ export const dashboardChildRoutes: Route[] = [
         path: 'players',
         title: 'Pocket Pals Director | Players',
         component: DashboardPlayers,
+        canActivate: [AdminAuthGuard],
+    },
+    {
+        path: 'admin',
+        title: 'Pocket Pals Director | Administration',
+        component: DashboardAdmin,
         canActivate: [AdminAuthGuard],
     },
 ];

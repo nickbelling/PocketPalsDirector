@@ -75,10 +75,10 @@ export class DashboardGamesDatabaseAddDialog {
                 result.progress,
             );
             this._toast.info(
-                `Successfully registered ${result.game} (${result.releaseYear}).`,
+                `Successfully registered ${result.game.name} (${result.releaseYear}).`,
             );
         } catch (error) {
-            this._toast.error(`Failed to register ${result.game}.`, error);
+            this._toast.error(`Failed to register ${result.game.name}.`, error);
         }
     }
 }

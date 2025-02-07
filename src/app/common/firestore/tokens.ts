@@ -2,6 +2,7 @@ import { InjectionToken } from '@angular/core';
 import { FirebaseOptions, initializeApp } from 'firebase/app';
 import { Auth, getAuth } from 'firebase/auth';
 import { Firestore, getFirestore } from 'firebase/firestore';
+import { Functions, getFunctions } from 'firebase/functions';
 import { FirebaseStorage, getStorage } from 'firebase/storage';
 
 const FIREBASE_CONFIG: FirebaseOptions = {
@@ -15,6 +16,7 @@ const FIREBASE_CONFIG: FirebaseOptions = {
 
 const firebaseApp = initializeApp(FIREBASE_CONFIG);
 
+export const FIREBASE_PROJECT_ID = FIREBASE_CONFIG.projectId;
 export const FIREBASE_STORAGE_BUCKET = FIREBASE_CONFIG.storageBucket;
 
 export const FIRESTORE: InjectionToken<Firestore> = new InjectionToken(
@@ -37,3 +39,11 @@ export const AUTH: InjectionToken<Auth> = new InjectionToken('AUTH', {
     providedIn: 'root',
     factory: () => getAuth(firebaseApp),
 });
+
+export const FUNCTIONS: InjectionToken<Functions> = new InjectionToken(
+    'FUNCTIONS',
+    {
+        providedIn: 'root',
+        factory: () => getFunctions(firebaseApp),
+    },
+);

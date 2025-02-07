@@ -30,7 +30,7 @@ export class AdminAuthGuard implements CanActivate {
             this._auth.setRedirectUrl(state.url);
 
             // Boot them to the 403 page
-            this._router.navigate(['/', 'admin', '403']);
+            this._router.navigate(['/', 'dashboard', '403']);
 
             // Prevent visiting this guarded route
             return false;
