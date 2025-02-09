@@ -1,14 +1,18 @@
+import { GlobalPositionStrategy, Overlay } from '@angular/cdk/overlay';
+import { ComponentPortal } from '@angular/cdk/portal';
 import { Component, inject, linkedSignal, signal } from '@angular/core';
 import {
     MAT_DIALOG_DATA,
     MatDialog,
     MatDialogRef,
 } from '@angular/material/dialog';
+import { toPng } from 'html-to-image';
 import { ConfirmDialog } from '../../common/dialog';
 import { Entity } from '../../common/firestore';
 import { ToastService } from '../../common/toast';
-import { downloadUrlAsFile } from '../../common/utils';
+import { downloadUrlAsFile, sleep } from '../../common/utils';
 import {
+    GameHero,
     SGDBImage,
     SteamGridDbService,
     VIDEOGAME_STORAGE_BASE,
@@ -37,6 +41,7 @@ export class DashboardGamesDatabaseEditDialog {
     private _confirm = inject(ConfirmDialog);
     private _newDialog = inject(MatDialog);
     private _toast = inject(ToastService);
+    private _overlay = inject(Overlay);
 
     public VIDEOGAME_STORAGE_BASE = VIDEOGAME_STORAGE_BASE;
     public game = inject<Entity<VideogameDatabaseItem>>(MAT_DIALOG_DATA);
@@ -143,5 +148,60 @@ export class DashboardGamesDatabaseEditDialog {
                 },
             },
         );
+    }
+
+    public async makeImage(width: number, height: number): Promise<void> {
+        // Set up the portal to appear just off-screen (i.e. the image's
+        // bottom-right will be at the screen's top-left)
+        const position = new GlobalPositionStrategy();
+        position.top(`-${height}px`);
+        position.left(`-${width}px`);
+        const overlayRef = this._overlay.create({
+            width: width,
+            height: height,
+            positionStrategy: position,
+        });
+
+        // Spawn a new GameHero component in an overlay
+        const portal = new ComponentPortal(GameHero);
+        const componentRef = overlayRef.attach(portal);
+        componentRef.setInput('gameId', this.game.id);
+
+        // Wait for the hero to report that it's loaded
+        let count = 0;
+        while (!componentRef.instance.loaded()) {
+            await sleep(100);
+            count++;
+
+            if (count >= 100) {
+                break;
+            }
+        }
+
+        try {
+            // Get a reference to the element
+            const element = componentRef.location.nativeElement;
+
+            // Render the image as a PNG
+            const dataUrl = await toPng(element!, {
+                width: width,
+                height: height,
+                canvasWidth: width,
+                canvasHeight: height,
+                pixelRatio: 1,
+            });
+
+            // Download the image
+            const link = document.createElement('a');
+            link.download = `${this.game.id}.png`;
+            link.href = dataUrl;
+            link.click();
+        } catch (error) {
+            this._toast.error('Failed to create image file.', error);
+        } finally {
+            // Dispose of the overlay, which inherently destroys the GameHero
+            // component
+            overlayRef.dispose();
+        }
     }
 }

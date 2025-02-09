@@ -2,8 +2,6 @@
 
 ## TODO
 
-- Database:
-    - Investigate enabling image export of games at different aspect ratios
 - Documentation
 - Unit tests
 

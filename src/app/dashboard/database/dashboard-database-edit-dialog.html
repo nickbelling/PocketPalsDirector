@@ -76,6 +76,11 @@
             <span>Open SGDB</span>
         </a>
     }
+    <button mat-button [matMenuTriggerFor]="makeImageMenu">
+        <mat-icon>image</mat-icon>
+        <span>Make image</span>
+        <mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
+    </button>
     <span class="layout-fill"></span>
     <button
         mat-flat-button
@@ -88,3 +93,28 @@
         <span>Save</span>
     </button>
 </mat-dialog-actions>
+
+<mat-menu #makeImageMenu="matMenu">
+    <button mat-menu-item (click)="makeImage(1000, 1000)">
+        <mat-icon>crop_square</mat-icon>
+        <span>1:1 (1000x1000)</span>
+    </button>
+    <mat-divider />
+    <button mat-menu-item (click)="makeImage(1400, 1050)">
+        <mat-icon>crop_square</mat-icon>
+        <span>4:3 (1400x1050)</span>
+    </button>
+    <button mat-menu-item (click)="makeImage(1050, 1400)">
+        <mat-icon>crop_square</mat-icon>
+        <span>3:4 (1050x1400)</span>
+    </button>
+    <mat-divider />
+    <button mat-menu-item (click)="makeImage(1920, 1080)">
+        <mat-icon>crop_16_9</mat-icon>
+        <span>16:9 (1920x1080)</span>
+    </button>
+    <button mat-menu-item (click)="makeImage(1080, 1920)">
+        <mat-icon>crop_9_16</mat-icon>
+        <span>9:16 (1080x1920)</span>
+    </button>
+</mat-menu>
