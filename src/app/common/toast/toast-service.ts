@@ -17,6 +17,7 @@ export class ToastService {
     }
 
     public error(title: string, error?: unknown): void {
+        console.error(title, error);
         const titleWithError = error ? `${title} ${parseError(error)}` : title;
 
         this.open({
