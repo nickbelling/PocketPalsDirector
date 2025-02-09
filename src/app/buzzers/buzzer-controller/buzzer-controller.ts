@@ -5,6 +5,9 @@ import { CommonControllerModule } from '../../games/base/controller';
 import { BuzzerDirectorDataStore } from '../data/director-data';
 import { BuzzerPlayer, BuzzerState, BuzzerTeam } from '../data/model';
 
+/**
+ * Controls used for managing the current state of the
+ */
 @Component({
     selector: 'buzzer-controller',
     imports: [CommonControllerModule],
@@ -15,22 +18,39 @@ export class BuzzerController {
     private _data = inject(BuzzerDirectorDataStore);
     private _toast = inject(ToastService);
 
-    protected state = this._data.state;
-    protected players = this._data.players;
-    protected teams = this._data.teams;
+    /** The current state of the buzzer options. */
+    protected readonly state = this._data.state;
 
-    protected buzzerBaseUrl = `${window.location.origin}/buzzer/`;
-    protected optionsOpen = signal<boolean>(false);
+    /** The current list of players. */
+    protected readonly players = this._data.players;
 
-    protected anyPlayersBuzzed = computed(() =>
+    /** The current list of teams. */
+    protected readonly teams = this._data.teams;
+
+    /**
+     * The URL used as the base of a player's buzzer. The player's ID is added
+     * to this to create the URL to the actual BuzzerPlayer component in this
+     * app's router.
+     */
+    protected readonly buzzerBaseUrl = `${window.location.origin}/buzzer/`;
+
+    /** True if the options menu is open. */
+    protected readonly optionsOpen = signal<boolean>(false);
+
+    /** True if any players are currently buzzed in. */
+    protected anyPlayersBuzzed = computed<boolean>(() =>
         this.players().some((p) => p.buzzTimestamp !== null),
     );
 
+    /** True if any players are currently locked. */
     protected anyPlayersLocked = computed(() =>
         this.players().some((p) => p.lockedOut),
     );
 
-    protected buzzedInPlayers = computed(() => {
+    /**
+     * The list of currently buzzed in players, ordered by when they buzzed in.
+     */
+    protected buzzedInPlayers = computed<Entity<BuzzerPlayer>[]>(() => {
         const players = this.players();
         return players
             .filter((p) => p.buzzTimestamp !== null)
@@ -40,11 +60,13 @@ export class BuzzerController {
             );
     });
 
-    protected buzzedOutPlayers = computed(() => {
+    /** The list of players who have not buzzed in. */
+    protected buzzedOutPlayers = computed<Entity<BuzzerPlayer>[]>(() => {
         const players = this.players();
         return players.filter((p) => p.buzzTimestamp === null);
     });
 
+    /** Globally enables or disables all buzzers. */
     public async setBuzzersEnabled(value: boolean): Promise<void> {
         if (this.state().buzzersEnabled !== value) {
             try {
@@ -62,6 +84,10 @@ export class BuzzerController {
         }
     }
 
+    /**
+     * Sets the global state option that causes a correct answer to lock that
+     * player for the next question.
+     */
     public async setCorrectLocksNextQuestion(value: boolean): Promise<void> {
         if (this.state().correctLocksNextQuestion !== value) {
             await this._setState({
@@ -70,6 +96,10 @@ export class BuzzerController {
         }
     }
 
+    /**
+     * Sets the global state option that causes an incorrect answer to lock that
+     * player for the current question.
+     */
     public async setIncorrectLocksThisQuestion(value: boolean): Promise<void> {
         if (this.state().incorrectLocksThisQuestion !== value) {
             await this._setState({
@@ -78,6 +108,10 @@ export class BuzzerController {
         }
     }
 
+    /**
+     * Sets the global state option that causes an incorrect answer to lock that
+     * player's entire team for the current question.
+     */
     public async setIncorrectLocksTeamThisQuestion(
         value: boolean,
     ): Promise<void> {
@@ -88,6 +122,7 @@ export class BuzzerController {
         }
     }
 
+    /** Buzzes in the given player. */
     public async buzzIn(playerId: string): Promise<void> {
         try {
             await this._data.buzzInPlayer(playerId);
@@ -96,6 +131,7 @@ export class BuzzerController {
         }
     }
 
+    /** Buzzes out the given player. */
     public async resetBuzzer(playerId: string): Promise<void> {
         try {
             await this._data.resetPlayerBuzzer(playerId);
@@ -104,6 +140,7 @@ export class BuzzerController {
         }
     }
 
+    /** Resets the buzzers for all players. */
     public async resetAllBuzzers(): Promise<void> {
         try {
             await this._data.resetAllPlayerBuzzers();
@@ -112,6 +149,7 @@ export class BuzzerController {
         }
     }
 
+    /** Sets the player's lock state. */
     public async toggleLock(playerId: string, locked: boolean): Promise<void> {
         try {
             if (locked) {
@@ -124,6 +162,7 @@ export class BuzzerController {
         }
     }
 
+    /** Unlocks all player buzzers. */
     public async unlockAll(): Promise<void> {
         try {
             await this._data.unlockAllPlayers();
@@ -132,6 +171,10 @@ export class BuzzerController {
         }
     }
 
+    /**
+     * Marks the given player as "correct", which has knock-on effects based on
+     * the current state options.
+     */
     public async markCorrect(player: Entity<BuzzerPlayer>): Promise<void> {
         try {
             await this._data.markCorrect(player.id);
@@ -140,6 +183,10 @@ export class BuzzerController {
         }
     }
 
+    /**
+     * Marks the given player as "incorrect", which has knock-on effects based
+     * on the current state options.
+     */
     public async markIncorrect(player: Entity<BuzzerPlayer>): Promise<void> {
         try {
             await this._data.markIncorrect(player.id);
@@ -148,6 +195,7 @@ export class BuzzerController {
         }
     }
 
+    /** Gets the team information for the given player. */
     public getTeam(
         player: BuzzerPlayer,
         teams: Entity<BuzzerTeam>[],
@@ -155,6 +203,7 @@ export class BuzzerController {
         return teams.find((t) => t.id === player.teamId);
     }
 
+    /** Sets the global buzzer state. */
     private async _setState(
         state: BuzzerState | Partial<BuzzerState>,
     ): Promise<void> {

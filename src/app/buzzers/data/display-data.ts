@@ -5,6 +5,10 @@ import { BuzzerPlayersDataStore } from './players-data';
 import { BuzzerStateDataStore } from './state-data';
 import { BuzzerTeamsDataStore } from './teams-data';
 
+/**
+ * The aggregate data store service for displaying information about the current
+ * state of the buzzers. For viewing only - can't edit anything.
+ */
 @Injectable({
     providedIn: 'root',
 })

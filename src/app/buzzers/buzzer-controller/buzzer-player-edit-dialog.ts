@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
 import { ToastService } from '../../common/toast';
+import { isNotEmpty } from '../../common/utils';
 import {
     BaseEntityEditDialog,
     CommonControllerModule,
@@ -9,6 +10,7 @@ import {
 import { BuzzerDirectorDataStore } from '../data/director-data';
 import { BuzzerPlayer } from '../data/model';
 
+/** Dialog for editing a buzzer player. */
 @Component({
     imports: [CommonControllerModule],
     templateUrl: './buzzer-player-edit-dialog.html',
@@ -20,11 +22,11 @@ export class BuzzerPlayerAddDialog extends BaseEntityEditDialog<BuzzerPlayer> {
 
     protected name = signal<string>('');
     protected teamId = signal<string | null>(null);
-    protected isValid = computed(() => this.name().trim().length > 0);
     protected imageFileToUpload = signal<File | null>(null);
     protected soundFileToUpload = signal<File | null>(null);
     protected uploadProgress = signal<number>(0);
 
+    protected isValid = computed(() => isNotEmpty(this.name));
     protected teams = this._data.teams;
 
     constructor() {
@@ -117,7 +119,8 @@ export class BuzzerPlayerAddDialog extends BaseEntityEditDialog<BuzzerPlayer> {
 
                 this.uploadProgress.set(100);
             }
-            await this._dialog.close();
+
+            this._dialog.close();
         } catch (error) {
             this._toast.error(
                 this.editing

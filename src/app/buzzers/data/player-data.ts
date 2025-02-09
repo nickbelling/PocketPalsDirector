@@ -11,12 +11,14 @@ import { ActivatedRoute } from '@angular/router';
 import { DocumentReference, serverTimestamp, setDoc } from 'firebase/firestore';
 import {
     BaseFirestoreDataStore,
+    Entity,
     subscribeToDocument,
 } from '../../common/firestore';
 import {
     BuzzerPlayer,
     BUZZERS_PLAYERS_COLLECTION_PATH,
     BuzzerState,
+    BuzzerTeam,
     DEFAULT_BUZZER_PLAYER,
 } from './model';
 import { BuzzerStateDataStore } from './state-data';
@@ -41,27 +43,46 @@ export function providePlayerIdToken(): Provider {
     };
 }
 
+/**
+ * The data store service for a single player's buzzer state. Can read
+ * information about the global state, the team and the player themselves, but
+ * is only capable of actually being able to set the current timestamp on that
+ * player's buzzer.
+ *
+ * Requires the `BUZZER_PLAYER_ID_TOKEN` to be set. This means the component
+ * using this service needs to include `providePlayerIdToken()` in its
+ * `providers` array.
+ */
 @Injectable()
 export class BuzzerPlayerDataStore extends BaseFirestoreDataStore {
     private _playerId = inject<string>(BUZZER_PLAYER_ID_TOKEN);
     private _stateData = inject(BuzzerStateDataStore);
     private _teamsData = inject(BuzzerTeamsDataStore);
+    private _playerRef: DocumentReference<BuzzerPlayer>;
 
     public readonly state: Signal<BuzzerState> = this._stateData.state;
     public readonly player = signal<BuzzerPlayer>(DEFAULT_BUZZER_PLAYER);
-    public readonly playerTeamId = computed(() => this.player().teamId);
-    public readonly team = computed(() => {
+
+    /** The ID of the current player's team (may be null). */
+    public readonly playerTeamId = computed<string | null>(
+        () => this.player().teamId,
+    );
+
+    /**
+     * Represents the current player's team, computed from the `playerTeamId`
+     * and the list of teams.
+     */
+    public readonly team = computed<Entity<BuzzerTeam> | undefined>(() => {
         const teamId = this.playerTeamId();
         const teams = this._teamsData.teams();
 
         return teams.find((t) => t.id === teamId);
     });
 
-    private _playerRef: DocumentReference<BuzzerPlayer>;
-
     constructor() {
         super();
 
+        // Subscribe to updates about the current player
         this._playerRef = subscribeToDocument<BuzzerPlayer>(
             `${BUZZERS_PLAYERS_COLLECTION_PATH}/${this._playerId}`,
             (data) => {
@@ -70,6 +91,10 @@ export class BuzzerPlayerDataStore extends BaseFirestoreDataStore {
         );
     }
 
+    /**
+     * Buzzes the current player in by setting their `buzzTimestamp` to the
+     * current server time.
+     */
     public async buzz(): Promise<void> {
         const state = this.state();
         const player = this.player();
@@ -85,7 +110,7 @@ export class BuzzerPlayerDataStore extends BaseFirestoreDataStore {
                 { merge: true },
             );
         } else {
-            throw new Error('Could not buzz');
+            throw new Error('Could not buzz.');
         }
     }
 }

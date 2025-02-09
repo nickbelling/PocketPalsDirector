@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { deleteObject, ref, uploadBytesResumable } from 'firebase/storage';
 import { FIRESTORE, STORAGE } from './tokens';
 
-export class BaseFirestoreDataStore {
+export abstract class BaseFirestoreDataStore {
     protected _firestore = inject(FIRESTORE);
     protected _storage = inject(STORAGE);
 

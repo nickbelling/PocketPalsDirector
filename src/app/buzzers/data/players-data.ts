@@ -24,6 +24,10 @@ import {
     BUZZERS_STORAGE_SOUNDS_PATH,
 } from './model';
 
+/**
+ * The data store that represents the current state of all of the buzzer
+ * players. Shared by the Director and Display services.
+ */
 @Injectable({
     providedIn: 'root',
 })
@@ -31,11 +35,14 @@ export class BuzzerPlayersDataStore extends BaseFirestoreDataStore {
     private _playersRef: CollectionReference<BuzzerPlayer, DocumentData>;
     private _playerConverter = getConverter<BuzzerPlayer>();
 
+    /** The global list of BuzzerPlayers. */
     public readonly players = signal<Entity<BuzzerPlayer>[]>([]);
 
     constructor() {
         super();
 
+        // Subscribe to the collection of players in Firestore and update the
+        // Signal whenever anything changes.
         this._playersRef = subscribeToCollection(
             BUZZERS_PLAYERS_COLLECTION_PATH,
             (data) => {
@@ -44,6 +51,7 @@ export class BuzzerPlayersDataStore extends BaseFirestoreDataStore {
         );
     }
 
+    /** Adds the given player. */
     public async addPlayer(player: BuzzerPlayer): Promise<void> {
         await addDoc(this._playersRef, {
             ...player,
@@ -51,6 +59,7 @@ export class BuzzerPlayersDataStore extends BaseFirestoreDataStore {
         });
     }
 
+    /** Edits the given player. */
     public async editPlayer(
         playerId: string,
         player: BuzzerPlayer | Partial<BuzzerPlayer>,
@@ -62,19 +71,23 @@ export class BuzzerPlayersDataStore extends BaseFirestoreDataStore {
         await setDoc(playerRef, player, { merge: true });
     }
 
+    /** Deletes the given player. */
     public async deletePlayer(player: Entity<BuzzerPlayer>): Promise<void> {
+        // Delete image file from storage if it exists.
         if (player.image) {
             await this.deleteFile(
                 `${BUZZERS_STORAGE_IMAGES_PATH}/${player.image}`,
             );
         }
 
+        // Delete sound effect file from storage if it exists.
         if (player.soundEffect) {
             await this.deleteFile(
                 `${BUZZERS_STORAGE_SOUNDS_PATH}/${player.soundEffect}`,
             );
         }
 
+        // Delete the player document/record.
         const playerRef = doc(
             this._firestore,
             `${this._playersRef.path}/${player.id}`,
@@ -83,18 +96,26 @@ export class BuzzerPlayersDataStore extends BaseFirestoreDataStore {
         await deleteDoc(playerRef);
     }
 
+    /**
+     * Buzzes in the given player by setting their buzz timestamp to the current
+     * time.
+     */
     public async buzzInPlayer(playerId: string): Promise<void> {
         await this.editPlayer(playerId, {
             buzzTimestamp: serverTimestamp() as Timestamp,
         });
     }
 
+    /** Buzzes out the given player by setting their buzz timestamp to null. */
     public async resetPlayerBuzzer(playerId: string): Promise<void> {
         await this.editPlayer(playerId, { buzzTimestamp: null });
     }
 
+    /** Resets the buzzers for every player. */
     public async resetAllPlayerBuzzers(): Promise<void> {
         const players = this.players();
+
+        // Batch changes
         const batch = writeBatch(this._firestore);
 
         players.forEach((player) => {
@@ -104,9 +125,11 @@ export class BuzzerPlayersDataStore extends BaseFirestoreDataStore {
             }
         });
 
+        // Commit the batch of changes in a single operation
         await batch.commit();
     }
 
+    /** Locks the given player. */
     public async lockPlayer(playerId: string): Promise<void> {
         await this.editPlayer(playerId, {
             lockedOut: true,
@@ -114,8 +137,11 @@ export class BuzzerPlayersDataStore extends BaseFirestoreDataStore {
         });
     }
 
+    /** Locks the given player's team. */
     public async lockPlayerTeam(playerId: string): Promise<void> {
         const players = this.players();
+
+        // Batch changes
         const batch = writeBatch(this._firestore);
 
         const teamId = players.find((p) => p.id === playerId)?.teamId;
@@ -131,13 +157,16 @@ export class BuzzerPlayersDataStore extends BaseFirestoreDataStore {
             }
         });
 
+        // Commit the batch of changes in a single operation
         await batch.commit();
     }
 
+    /** Unlocks the given player. */
     public async unlockPlayer(playerId: string): Promise<void> {
         await this.editPlayer(playerId, { lockedOut: false });
     }
 
+    /** Unlocks every player. */
     public async unlockAllPlayers(): Promise<void> {
         const players = this.players();
         const batch = writeBatch(this._firestore);
@@ -152,6 +181,10 @@ export class BuzzerPlayersDataStore extends BaseFirestoreDataStore {
         await batch.commit();
     }
 
+    /**
+     * Marks the given player as "correct", which may also lock them if that
+     * option is set, while also unlocking all other players.
+     */
     public async markCorrect(
         playerId: string,
         correctLocksNextQuestion: boolean,
@@ -180,6 +213,10 @@ export class BuzzerPlayersDataStore extends BaseFirestoreDataStore {
         await batch.commit();
     }
 
+    /**
+     * Marks the given player as "incorrect", which may lock them (or everyone
+     * on their team).
+     */
     public async markIncorrect(
         playerId: string,
         incorrectLocksPlayerThisQuestion: boolean,
@@ -197,6 +234,7 @@ export class BuzzerPlayersDataStore extends BaseFirestoreDataStore {
         }
     }
 
+    /** Gets the Firebase document ref for the player with the given ID. */
     private _getPlayerRef(
         playerId: string,
     ): DocumentReference<Entity<BuzzerPlayer>> {

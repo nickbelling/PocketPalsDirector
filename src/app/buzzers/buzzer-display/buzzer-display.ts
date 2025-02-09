@@ -16,6 +16,11 @@ import {
     BuzzerTeam,
 } from '../data/model';
 
+/**
+ * Displays the currently-buzzed in players, in the order they buzzed in.
+ * Also plays the player's chosen sound effect when the buzz in (if they have a
+ * sound effect set).
+ */
 @Component({
     selector: 'buzzer-display',
     imports: [
@@ -33,9 +38,16 @@ import {
 export class BuzzerDisplay {
     private _data = inject(BuzzerDisplayDataStore);
     private _sound = inject(SoundService);
+
+    /**
+     * A Set representing the previously-known list of buzzed-in player IDs.
+     * Used to determine if a new one has been added, so that we can play their
+     * sound effect.
+     */
     private _previousBuzzedInPlayerIds: Set<string> = new Set<string>();
 
     protected BUZZERS_STORAGE_IMAGES_PATH = BUZZERS_STORAGE_IMAGES_PATH;
+
     protected players = this._data.players;
     protected teams = this._data.teams;
 
@@ -74,7 +86,7 @@ export class BuzzerDisplay {
     );
 
     constructor() {
-        // Preload all resources
+        // Preload all images
         effect(async () => {
             const allImagePaths = this.allImagePaths();
 
@@ -85,6 +97,7 @@ export class BuzzerDisplay {
             await Promise.all(imagePreloadPromises);
         });
 
+        // Preload all sound effects
         effect(async () => {
             const allSoundPaths = this.allSoundPaths();
 
@@ -99,6 +112,11 @@ export class BuzzerDisplay {
         effect(async () => {
             const buzzedInPlayers = this.buzzedInPlayers();
 
+            // The _previousBuzzedInPlayerIds Set holds our last-known set of
+            // player IDs, and this effect is called when the buzzedInPlayers
+            // list changes. Therefore, whatever player IDs are in the
+            // buzzedInPlayers list but NOT in the Set have just been added to
+            // the list, meaning we should play their sound effect.
             buzzedInPlayers.forEach(async (player) => {
                 if (!this._previousBuzzedInPlayerIds.has(player.id)) {
                     if (player.soundEffect) {
@@ -109,12 +127,16 @@ export class BuzzerDisplay {
                 }
             });
 
+            // Update the "previous" set with the now-known set of player IDs.
             this._previousBuzzedInPlayerIds = new Set(
                 buzzedInPlayers.map((p) => p.id),
             );
         });
     }
 
+    /**
+     * Given a player and the list of teams, gets the CSS color for their team.
+     */
     public getTeamColor(
         player: BuzzerPlayer,
         teams: Entity<BuzzerTeam>[],

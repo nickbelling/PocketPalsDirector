@@ -13,6 +13,10 @@ import { BuzzerPlayersDataStore } from './players-data';
 import { BuzzerStateDataStore } from './state-data';
 import { BuzzerTeamsDataStore } from './teams-data';
 
+/**
+ * The data store service used for the Director's view of the buzzers. Has the
+ * ability to change data globally, where the other services do not.
+ */
 @Injectable({
     providedIn: 'root',
 })

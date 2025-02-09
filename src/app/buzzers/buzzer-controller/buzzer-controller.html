@@ -8,6 +8,7 @@
         : 'Mark this player as incorrect. This will reset their buzzer and they will immediately be able to buzz in again.';
 
 <div class="layout-column g">
+    <!-- Global options -->
     <div class="layout-row layout-items-middle g">
         <mat-slide-toggle
             [checked]="state().buzzersEnabled"
@@ -39,7 +40,9 @@
             <mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
         </button>
     </div>
+
     <div class="layout-row layout-items-fill g">
+        <!-- Buzzed in players -->
         <mat-card>
             <mat-card-header>
                 <mat-card-title>Buzzed in players</mat-card-title>
@@ -96,6 +99,8 @@
                 }
             </mat-list>
         </mat-card>
+
+        <!-- Buzzed out players -->
         <mat-card>
             <mat-card-header>
                 <mat-card-title>Buzzed out players</mat-card-title>
@@ -140,6 +145,7 @@
     </div>
 </div>
 
+<!-- Options overlay menu -->
 <ng-template
     cdkConnectedOverlay
     [cdkConnectedOverlayOrigin]="optionsButton"

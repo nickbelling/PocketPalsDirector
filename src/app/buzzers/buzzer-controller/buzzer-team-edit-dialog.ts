@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
 import { ToastService } from '../../common/toast';
-import { isValidColor } from '../../common/utils';
+import { isNotEmpty, isValidColor } from '../../common/utils';
 import {
     BaseEntityEditDialog,
     CommonControllerModule,
@@ -10,6 +10,7 @@ import {
 import { BuzzerDirectorDataStore } from '../data/director-data';
 import { BuzzerTeam } from '../data/model';
 
+/** Dialog for editing a buzzer team. */
 @Component({
     imports: [CommonControllerModule],
     templateUrl: './buzzer-team-edit-dialog.html',
@@ -22,7 +23,7 @@ export class BuzzerTeamEditDialog extends BaseEntityEditDialog<BuzzerTeam> {
     protected name = signal<string>('');
     protected color = signal<string>('');
     protected isValid = computed(
-        () => this.name().trim().length > 0 && isValidColor(this.color()),
+        () => isNotEmpty(this.name) && isValidColor(this.color()),
     );
 
     constructor() {
