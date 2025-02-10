@@ -20,11 +20,15 @@ export class BuzzerTeamEditDialog extends BaseEntityEditDialog<BuzzerTeam> {
     private _dialog = inject(MatDialogRef<BuzzerTeamEditDialog>);
     private _toast = inject(ToastService);
 
+    //#region Form fields
+
     protected name = signal<string>('');
     protected color = signal<string>('');
     protected isValid = computed(
         () => isNotEmpty(this.name) && isValidColor(this.color()),
     );
+
+    //#endregion
 
     constructor() {
         super();
@@ -34,6 +38,7 @@ export class BuzzerTeamEditDialog extends BaseEntityEditDialog<BuzzerTeam> {
         }
     }
 
+    /** Adds a new team, or edits an old one. */
     public async submit(): Promise<void> {
         this.loading.set(true);
         try {
@@ -49,6 +54,7 @@ export class BuzzerTeamEditDialog extends BaseEntityEditDialog<BuzzerTeam> {
                     createdAt: Timestamp.now(),
                 });
             }
+
             this._dialog.close();
         } catch (error) {
             this._toast.error(

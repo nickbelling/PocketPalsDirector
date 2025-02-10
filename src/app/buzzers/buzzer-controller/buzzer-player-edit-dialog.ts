@@ -20,14 +20,24 @@ export class BuzzerPlayerAddDialog extends BaseEntityEditDialog<BuzzerPlayer> {
     private _dialog = inject(MatDialogRef<BuzzerPlayerAddDialog>);
     private _toast = inject(ToastService);
 
+    /** The list of teams that can be selected. */
+    protected teams = this._data.teams;
+
+    //#region Form fields
+
     protected name = signal<string>('');
     protected teamId = signal<string | null>(null);
     protected imageFileToUpload = signal<File | null>(null);
     protected soundFileToUpload = signal<File | null>(null);
-    protected uploadProgress = signal<number>(0);
-
     protected isValid = computed(() => isNotEmpty(this.name));
-    protected teams = this._data.teams;
+
+    //#endregion
+
+    /**
+     * The current progress of the add/edit operation. Used to display a
+     * progress bar.
+     */
+    protected uploadProgress = signal<number>(0);
 
     constructor() {
         super();
@@ -37,6 +47,7 @@ export class BuzzerPlayerAddDialog extends BaseEntityEditDialog<BuzzerPlayer> {
         }
     }
 
+    /** Adds a new player, or edits the current one. */
     public async submit(): Promise<void> {
         this.loading.set(true);
         try {
@@ -86,11 +97,14 @@ export class BuzzerPlayerAddDialog extends BaseEntityEditDialog<BuzzerPlayer> {
                     partialPlayer.soundEffect = soundId;
                 }
 
+                // Finally, update the record
                 await this._data.editPlayer(entity.id, partialPlayer);
 
                 this.uploadProgress.set(100);
             } else {
                 this.uploadProgress.set(25);
+
+                // Upload image
                 let imageId = null;
                 if (this.imageFileToUpload()) {
                     imageId = await this._data.uploadImage(
@@ -99,6 +113,8 @@ export class BuzzerPlayerAddDialog extends BaseEntityEditDialog<BuzzerPlayer> {
                 }
 
                 this.uploadProgress.set(50);
+
+                // Upload sound effect
                 let soundId = null;
                 if (this.soundFileToUpload()) {
                     soundId = await this._data.uploadSound(
@@ -107,6 +123,8 @@ export class BuzzerPlayerAddDialog extends BaseEntityEditDialog<BuzzerPlayer> {
                 }
 
                 this.uploadProgress.set(75);
+
+                // Add the player record
                 await this._data.addPlayer({
                     name: this.name(),
                     createdAt: Timestamp.now(),

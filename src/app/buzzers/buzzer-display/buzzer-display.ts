@@ -46,11 +46,16 @@ export class BuzzerDisplay {
      */
     private _previousBuzzedInPlayerIds: Set<string> = new Set<string>();
 
+    /** Exposing const to template */
     protected BUZZERS_STORAGE_IMAGES_PATH = BUZZERS_STORAGE_IMAGES_PATH;
 
+    /** The list of players from the data store. */
     protected players = this._data.players;
+
+    /** The list of teams from the data store. */
     protected teams = this._data.teams;
 
+    /** The currently buzzed in players, in order of when they buzzed. */
     protected buzzedInPlayers = computed(() => {
         const players = this.players();
         return players
@@ -61,6 +66,7 @@ export class BuzzerDisplay {
             );
     });
 
+    /** The paths to the images in Firebase Storage for each player. */
     protected allImagePaths = computed(
         () => {
             const players = this.players();
@@ -69,10 +75,14 @@ export class BuzzerDisplay {
                 .map((p) => `${BUZZERS_STORAGE_IMAGES_PATH}/${p.image}`);
         },
         {
+            // Because we use this signal to determine whether we need to
+            // preload images, we don't emit a new value if all the images are
+            // the same, even if the order changes.
             equal: arraysAreEqual,
         },
     );
 
+    /** The paths to the sound effects in Firebase storage for each player. */
     protected allSoundPaths = computed(
         () => {
             const players = this.players();
@@ -81,6 +91,9 @@ export class BuzzerDisplay {
                 .map((p) => `${BUZZERS_STORAGE_SOUNDS_PATH}/${p.soundEffect}`);
         },
         {
+            // Because we use this signal to determine whether we need to
+            // preload sounds, we don't emit a new value if all the sounds are
+            // the same, even if the order changes.
             equal: arraysAreEqual,
         },
     );
