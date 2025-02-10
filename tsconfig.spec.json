@@ -5,8 +5,9 @@
     "compilerOptions": {
         "emitDecoratorMetadata": true,
         "outDir": "./out-tsc/spec",
+        "sourceMap": true,
+        "module": "CommonJS",
         "types": ["jest", "node"]
     },
-    "files": ["src/setup.jest.ts"],
     "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }

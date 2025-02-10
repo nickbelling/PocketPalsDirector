@@ -1,16 +1,12 @@
 import type { Config } from 'jest';
+import presets from 'jest-preset-angular/presets';
+
+const preset = presets.createCjsPreset();
 
 const config: Config = {
+    ...preset,
     verbose: true,
-    transform: {
-        '^.+\\.tsx?$': [
-            'ts-jest',
-            {
-                allowSyntheticDefaultImports: true,
-            },
-        ],
-        '^.+\\.js$': 'babel-jest',
-    },
+    setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
 };
 
 export default config;
