@@ -22,46 +22,12 @@
             }
         </mat-select>
     </mat-form-field>
-    <mat-form-field>
-        <mat-label>Image</mat-label>
-        <input
-            matInput
-            readonly
-            [value]="
-                imageFileInput.files![0]
-                    ? imageFileInput.files![0].name
-                    : 'Upload a file'
-            " />
-        <button matSuffix mat-button (click)="imageFileInput.click()">
-            Choose file
-        </button>
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Sound effect</mat-label>
-        <input
-            matInput
-            readonly
-            [value]="
-                soundFileInput.files![0]
-                    ? soundFileInput.files![0].name
-                    : 'Upload a file'
-            " />
-        <button matSuffix mat-button (click)="soundFileInput.click()">
-            Choose file
-        </button>
-    </mat-form-field>
-    <input
-        type="file"
-        #imageFileInput
-        hidden
-        accept="image/*"
-        (change)="imageFileToUpload.set(imageFileInput.files![0])" />
-    <input
-        type="file"
-        #soundFileInput
-        hidden
-        accept="audio/*"
-        (change)="soundFileToUpload.set(soundFileInput.files![0])" />
+    <image-file-field
+        [(fileToUpload)]="imageFileToUpload"
+        label="Avatar image" />
+    <audio-file-field
+        [(fileToUpload)]="soundFileToUpload"
+        label="Sound effect" />
     <mat-progress-bar value="{{ uploadProgress() }}" />
 </mat-dialog-content>
 

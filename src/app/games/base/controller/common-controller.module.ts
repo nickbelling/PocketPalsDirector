@@ -28,7 +28,10 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Alert } from '../../../common/components/alert';
-import { ImageField } from '../../../common/components/image-field';
+import {
+    AudioFileField,
+    ImageFileField,
+} from '../../../common/components/file-fields';
 import { Player } from '../../../common/components/player';
 import {
     QuestionDisplay,
@@ -78,7 +81,8 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     GameHero,
     GameSelector,
     VideogameNamePipe,
-    ImageField,
+    ImageFileField,
+    AudioFileField,
     QuestionSelector,
     QuestionTemplateDirective,
     QuestionDisplay,

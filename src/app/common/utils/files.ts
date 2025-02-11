@@ -38,3 +38,48 @@ export async function downloadUrlAsBlob(
     // Read the response as a Blob
     return await response.blob();
 }
+
+/**
+ * Returns true if the given concrete MIME file type matches the given "accepts"
+ * pattern.
+ * @param concreteType The concrete file MIME type to check, e.g. `"image/png"`.
+ * @param pattern The "accepts" pattern to match, e.g. `"image/*"`,
+ * `"image/png, image/jpg"`, etc.
+ * @returns True if the file type matches the pattern.
+ */
+export function fileTypeMatchesInputPattern(
+    concreteType: string,
+    pattern: string,
+): boolean {
+    // If no pattern is specified (or only whitespace), allow all file types.
+    if (!pattern || pattern.trim() === '') {
+        return true;
+    }
+
+    // Split the pattern string by commas, trim extra spaces, and filter out empties.
+    const patterns = pattern
+        .split(',')
+        .map((p) => p.trim())
+        .filter((p) => p !== '');
+
+    for (const p of patterns) {
+        if (p === '*/*') {
+            // Accepts any MIME type.
+            return true;
+        } else if (p.endsWith('/*')) {
+            // For wildcard patterns (like "image/*"), check if concreteType
+            // starts with the prefix. Remove the trailing '*' to get "image/".
+            const prefix = p.slice(0, -1);
+            if (concreteType.startsWith(prefix)) {
+                return true;
+            }
+        } else {
+            // Otherwise, check for an exact match.
+            if (concreteType === p) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}

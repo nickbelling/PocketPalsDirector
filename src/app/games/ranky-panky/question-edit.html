@@ -54,7 +54,7 @@
                     <input matInput type="number" [(ngModel)]="itemValue" />
                     <span matTextSuffix>{{ question?.itemSuffix }}</span>
                 </mat-form-field>
-                <image-field
+                <image-file-field
                     [(fileToUpload)]="itemImage"
                     [focusElement]="focus" />
             </mat-card-content>

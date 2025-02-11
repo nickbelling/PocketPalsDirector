@@ -1,7 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, computed, inject, signal } from '@angular/core';
 import { v4 } from 'uuid';
-import { ImageField } from '../../common/components/image-field/image-field';
 import {
     hasAtLeast,
     isNotEmpty,
@@ -23,7 +22,7 @@ interface OrderUpQuestionPendingItem {
 }
 
 @Component({
-    imports: [CommonControllerModule, ImageField],
+    imports: [CommonControllerModule],
     templateUrl: './question-edit.html',
 })
 export class OrderUpQuestionEditDialog extends BaseQuestionEditDialog<OrderUpQuestion> {
