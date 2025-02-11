@@ -7,6 +7,7 @@ import {
 } from '@angular/router';
 import { AuthService } from './auth';
 
+/** Router guard used to prevent unauthorized access to admin-only routes. */
 @Injectable({
     providedIn: 'root',
 })
@@ -14,6 +15,7 @@ export class AdminAuthGuard implements CanActivate {
     private _auth = inject(AuthService);
     private _router = inject(Router);
 
+    /** @inheritdoc */
     public async canActivate(
         _: ActivatedRouteSnapshot,
         state: RouterStateSnapshot,

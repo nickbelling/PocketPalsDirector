@@ -17,6 +17,10 @@ import {
 import { firstValueFrom, ReplaySubject } from 'rxjs';
 import { AUTH } from '../firestore/tokens';
 
+/**
+ * Service used for signing in/out of Firebase Auth, and determining if the
+ * currently auth'd user has admin privileges.
+ */
 @Injectable({
     providedIn: 'root',
 })
@@ -24,12 +28,28 @@ export class AuthService {
     private _auth = inject(AUTH);
     private _router = inject(Router);
     private _destroyRef = inject(DestroyRef);
+
+    /**
+     * A replay subject used by `waitForAuthInit` to complete the promise once
+     * `isLoaded` is set to `true` for the first time. */
     private _loadedWaiter = new ReplaySubject<void>(1);
+
+    /**
+     * If the user is redirected as the result of an auth failure event, stores
+     * it here.
+     */
     private _redirectUrl?: string;
 
+    /** The currently signed-in user, or null if not signed in. */
     public user = signal<User | null>(null);
+
+    /** True if the user is currently signed in. */
     public isSignedIn = computed(() => this.user() !== null);
+
+    /** True if the currently signed in user is an admin. */
     public isAdmin = signal<boolean>(false);
+
+    /** True if the user's credentials have been loaded. */
     public isLoaded = signal<boolean>(false);
 
     constructor() {
