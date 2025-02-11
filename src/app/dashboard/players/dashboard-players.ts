@@ -25,6 +25,7 @@ import {
 import { ToastService } from '../../common/toast';
 import { CommonControllerModule } from '../../games/base/controller';
 
+/** The Players & Buzzers management screen. */
 @Component({
     imports: [
         CommonControllerModule,
@@ -49,20 +50,28 @@ export class DashboardPlayers {
     protected buzzerBaseUrl = `${window.location.origin}/buzzer/`;
     protected buzzerDisplayUrl = `${window.location.origin}/buzzer-display`;
 
+    /** The current list of players. */
     public players = this._data.players;
-    public state = this._data.state;
+
+    /** The current list of buzzer teams. */
     public teams = this._data.teams;
 
+    /** The current global state of the buzzers. */
+    public state = this._data.state;
+
+    /** Pops the Add Team dialog. */
     public addTeam(): void {
         this._dialog.open(BuzzerTeamEditDialog);
     }
 
+    /** Pops the Edit Team dialog. */
     public editTeam(team: Entity<BuzzerTeam>): void {
         this._dialog.open(BuzzerTeamEditDialog, {
             data: team,
         });
     }
 
+    /** Deletes the given team. */
     public deleteTeam(team: Entity<BuzzerTeam>): void {
         this._confirm.open(
             'deleteCancel',
@@ -84,16 +93,19 @@ export class DashboardPlayers {
         );
     }
 
+    /** Pops the Add Player dialog. */
     public addPlayer(): void {
         this._dialog.open(BuzzerPlayerAddDialog);
     }
 
+    /** Pops the Edit Player dialog. */
     public editPlayer(player: Entity<BuzzerPlayer>): void {
         this._dialog.open(BuzzerPlayerAddDialog, {
             data: player,
         });
     }
 
+    /** Deletes the given player. */
     public deletePlayer(player: Entity<BuzzerPlayer>): void {
         this._confirm.open(
             'deleteCancel',
@@ -117,6 +129,7 @@ export class DashboardPlayers {
         );
     }
 
+    /** Plays the sound effect for the given player. */
     public async playSound(soundEffectPath: string | null): Promise<void> {
         if (soundEffectPath != null) {
             try {
@@ -132,6 +145,7 @@ export class DashboardPlayers {
         }
     }
 
+    /** Given a player, gets their team. */
     public getTeam(
         player: BuzzerPlayer,
         teams: Entity<BuzzerTeam>[],

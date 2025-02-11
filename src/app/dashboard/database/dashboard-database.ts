@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { Entity } from '../../common/firestore';
 import {
     SteamGridDbService,
-    VIDEOGAME_STORAGE_BASE,
     VideogameDatabaseItem,
     VideogameDatabaseService,
 } from '../../common/video-games';
@@ -11,6 +10,7 @@ import { CommonControllerModule } from '../../games/base/controller';
 import { DashboardGamesDatabaseAddDialog } from './dashboard-database-add-dialog';
 import { DashboardGamesDatabaseEditDialog } from './dashboard-database-edit-dialog';
 
+/** The Videogame Database screen. */
 @Component({
     imports: [CommonControllerModule],
     providers: [SteamGridDbService],
@@ -21,15 +21,17 @@ export class DashboardGamesDatabase {
     private _db = inject(VideogameDatabaseService);
     private _dialog = inject(MatDialog);
 
-    public VIDEOGAME_STORAGE_BASE = VIDEOGAME_STORAGE_BASE;
+    /** The full list of games. */
     public games = this._db.games;
 
+    /** Opens the add game dialog. */
     public addGame(): void {
         this._dialog.open(DashboardGamesDatabaseAddDialog, {
             minWidth: '600px',
         });
     }
 
+    /** Opens the edit game dialog. */
     public editGame(game: Entity<VideogameDatabaseItem>): void {
         this._dialog.open(DashboardGamesDatabaseEditDialog, {
             data: game,

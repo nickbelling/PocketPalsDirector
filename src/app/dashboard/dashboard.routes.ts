@@ -7,6 +7,25 @@ import { DashboardHome } from './home/dashboard-home';
 import { DashboardPlayers } from './players/dashboard-players';
 import { DashboardSignIn } from './sign-in/dashboard-sign-in';
 
+export const dashboardRoutes: Route[] = [
+    {
+        path: 'admin',
+        component: Dashboard,
+        children: [
+            {
+                path: '',
+                redirectTo: 'home',
+                pathMatch: 'full',
+            },
+            {
+                path: 'home',
+                title: 'Pocket Pals Director | Home',
+                component: DashboardHome,
+            },
+        ],
+    },
+];
+
 export const dashboardChildRoutes: Route[] = [
     {
         path: '',
@@ -50,24 +69,5 @@ export const dashboardChildRoutes: Route[] = [
         title: 'Pocket Pals Director | Administration',
         component: DashboardAdmin,
         canActivate: [AdminAuthGuard],
-    },
-];
-
-export const dashboardRoutes: Route[] = [
-    {
-        path: 'admin',
-        component: Dashboard,
-        children: [
-            {
-                path: '',
-                redirectTo: 'home',
-                pathMatch: 'full',
-            },
-            {
-                path: 'home',
-                title: 'Pocket Pals Director | Home',
-                component: DashboardHome,
-            },
-        ],
     },
 ];

@@ -13,6 +13,7 @@ import { AudioService } from '../common/audio';
 import { AuthService } from '../common/auth';
 import { GlobalDataStore } from './global-data-store';
 
+/** The main dashboard component, showing the top toolbar. */
 @Component({
     imports: [
         CommonModule,

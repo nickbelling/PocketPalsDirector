@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { AdminService, AuthService, UserRecord } from '../../common/auth';
 import { ToastService } from '../../common/toast';
 
+/** User management screen. Allows conversion of other users to/from admin. */
 @Component({
     imports: [
         CommonModule,
@@ -27,8 +28,10 @@ export class DashboardAdmin {
     private _admin = inject(AdminService);
     private _toast = inject(ToastService);
 
+    /** The currently logged-in user. */
     protected readonly user = this._auth.user;
 
+    /** The full user list. */
     protected readonly userList = resource({
         loader: async () => {
             const users = await this._admin.listUsers();
@@ -36,6 +39,11 @@ export class DashboardAdmin {
         },
     });
 
+    /**
+     * Grants or revokes admin permissions from the given user.
+     * @param user The user to change.
+     * @param isAdmin Whether to grant or revoke admin permissions.
+     */
     public async setAdmin(user: UserRecord, isAdmin: boolean): Promise<void> {
         try {
             await this._admin.setAdmin(user.uid, isAdmin);

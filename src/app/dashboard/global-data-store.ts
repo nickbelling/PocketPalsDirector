@@ -21,25 +21,30 @@ function getGamesFromSlugs(slugs: string[]): GameDefinition[] {
         .filter<GameDefinition>((g) => g !== undefined);
 }
 
+/** Global data store for determining the current list of active/inactive games. */
 @Injectable({
     providedIn: 'root',
 })
 export class GlobalDataStore {
     private _stateRef: DocumentReference<GlobalState>;
 
+    /** The current global state. */
     public readonly state = signal<GlobalState>(DEFAULT_GLOBAL_STATE);
 
+    /** The list of active games. */
     public readonly activeGames = computed(() => {
         const state = this.state();
         return getGamesFromSlugs(state.activeGames);
     });
 
+    /** The list of inactive games. */
     public readonly inactiveGames = computed(() => {
         const state = this.state();
         return getGamesFromSlugs(state.inactiveGames);
     });
 
     constructor() {
+        // Subscribe to state updates
         this._stateRef = subscribeToDocument<GlobalState>(DOC_PATH, (state) => {
             if (state) {
                 // If any games are missing from the state object, work out what
@@ -58,6 +63,7 @@ export class GlobalDataStore {
         });
     }
 
+    /** Sets the global state. */
     public async setState(state: GlobalState): Promise<void> {
         // If any games are present in both arrays, remove them from the
         // inactive one
@@ -68,6 +74,7 @@ export class GlobalDataStore {
         await setDoc(this._stateRef, state);
     }
 
+    /** Gets any game slugs that are missing from the provided GlobalState. */
     private _getMissingGameSlugs(state: GlobalState): string[] | null {
         // Get all the game slugs first
         let missingGameSlugs = GAMES.map((g) => g.slug);

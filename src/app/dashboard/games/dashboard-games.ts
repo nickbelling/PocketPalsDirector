@@ -1,4 +1,4 @@
-import { Component, computed } from '@angular/core';
+import { Component, computed, linkedSignal } from '@angular/core';
 import { BuzzerController } from '../../buzzers/buzzer-controller';
 import { GamePreview } from '../../common/components/preview';
 import { injectRouteData, RESOLUTIONS } from '../../common/utils';
@@ -19,9 +19,18 @@ export class DashboardGames {
     /** The current game's definition (from the current route). */
     protected gameDefinition = injectRouteData<GameDefinition>();
 
-    protected aspectRatios = Object.keys(RESOLUTIONS);
+    /** The list of possible resolutions. */
     protected RESOLUTIONS = RESOLUTIONS;
-    protected currentResolution = this.gameDefinition().defaultResolution;
+    /** An array of supported aspect ratios. */
+    protected aspectRatios = Object.keys(RESOLUTIONS);
+
+    /**
+     * The currently selected resolution. When the game changes, automatically
+     * sets it to that game's default resolution.
+     */
+    protected currentResolution = linkedSignal(
+        () => this.gameDefinition().defaultResolution,
+    );
 
     /**
      * The full URL to a browser source-compatible page that represents this

@@ -12,8 +12,8 @@
             <preview class="bg-preview">
                 <div
                     class="set-resolution"
-                    [style.width.px]="currentResolution.width"
-                    [style.height.px]="currentResolution.height">
+                    [style.width.px]="currentResolution().width"
+                    [style.height.px]="currentResolution().height">
                     <ng-container *ngComponentOutlet="gameDef.game" />
                 </div>
             </preview>

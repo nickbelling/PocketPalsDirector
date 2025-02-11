@@ -6,12 +6,15 @@
     <mat-form-field>
         <mat-label>Search</mat-label>
         <input
+            #searchBar
             matInput
             cdkFocus
-            [disabled]="loading()"
-            (keyup.enter)="search()"
-            [(ngModel)]="searchTerm" />
-        <button matSuffix mat-icon-button (click)="search()">
+            [disabled]="searchResults.isLoading()"
+            (keyup.enter)="searchTerm.set(searchBar.value)" />
+        <button
+            matSuffix
+            mat-icon-button
+            (click)="searchTerm.set(searchBar.value)">
             <mat-icon>search</mat-icon>
         </button>
         <button matSuffix mat-icon-button (click)="searchTerm.set('')">
@@ -19,9 +22,9 @@
         </button>
     </mat-form-field>
 
-    <mat-action-list [disabled]="loading()">
-        @if (searchResults() !== undefined) {
-            @for (result of searchResults(); track result.game.id) {
+    <mat-action-list [disabled]="searchResults.isLoading()">
+        @if (searchResults.hasValue()) {
+            @for (result of searchResults.value(); track result.game.id) {
                 <button
                     mat-list-item
                     class="search-result"

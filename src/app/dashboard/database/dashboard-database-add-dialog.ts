@@ -1,11 +1,12 @@
 import {
     Component,
-    computed,
     inject,
+    resource,
     signal,
     WritableSignal,
 } from '@angular/core';
 import { ToastService } from '../../common/toast';
+import { isNotEmpty } from '../../common/utils';
 import {
     SGDBGame,
     SteamGridDbService,
@@ -19,6 +20,7 @@ interface SearchResult {
     progress: WritableSignal<number>;
 }
 
+/** The Videogame Database "Add Game" dialog. */
 @Component({
     imports: [CommonControllerModule],
     providers: [SteamGridDbService],
@@ -30,43 +32,55 @@ export class DashboardGamesDatabaseAddDialog {
     private _vgDb = inject(VideogameDatabaseService);
     private _toast = inject(ToastService);
 
-    public loading = signal<boolean>(false);
+    /** The current SGDB search term. */
     public searchTerm = signal<string>('');
-    public rawResults = signal<SGDBGame[] | undefined>(undefined);
 
-    public searchResults = computed<SearchResult[] | undefined>(() => {
-        const results = this.rawResults();
-        const games = this._vgDb.games();
+    /** The results of searching for the given SGDB search term. */
+    public searchResults = resource({
+        request: () => {
+            return { searchTerm: this.searchTerm(), games: this._vgDb.games() };
+        },
+        loader: async (params) => {
+            const searchTerm = params.request.searchTerm;
+            const games = params.request.games;
 
-        if (results) {
-            return results.map((game) => {
-                const year = new Date(game.release_date * 1000).getFullYear();
-                const gameId = this._vgDb.getGameId(game.name, year);
-                const gameExists = games.some((g) => g.id === gameId);
+            if (isNotEmpty(searchTerm)) {
+                const results = await this._steamGridDb.search(searchTerm);
 
-                return {
-                    game: game,
-                    releaseYear: year,
-                    progress: signal<number>(gameExists ? 100 : 0),
-                };
-            });
-        } else {
-            return undefined;
-        }
+                return results.map((game) => {
+                    // SGDB game release_date field is num seconds since epoch,
+                    // multiply by 1000 to get milliseconds for JS Date
+                    const releaseDate = Number.isNaN(game.release_date)
+                        ? 0
+                        : game.release_date * 1000;
+                    const releaseYear =
+                        releaseDate !== 0
+                            ? new Date(releaseDate).getFullYear()
+                            : 0;
+
+                    const gameId = this._vgDb.getGameId(game.name, releaseYear);
+                    const gameExists = games.some((g) => g.id === gameId);
+
+                    return {
+                        game: game,
+                        releaseYear: releaseYear,
+                        progress: signal<number>(gameExists ? 100 : 0),
+                    };
+                });
+            } else {
+                return [];
+            }
+        },
     });
 
-    public async search(): Promise<void> {
-        this.loading.set(true);
-        try {
-            const results = await this._steamGridDb.search(this.searchTerm());
-            this.rawResults.set(results);
-        } catch (error) {
-            this._toast.error('Failed to search SteamGridDB.', error);
-        } finally {
-            this.loading.set(false);
-        }
-    }
-
+    /**
+     * Registers the given search result with the Videogame Database. Downloads
+     * all of the given game's images, uploads them to Storage, and adds the
+     * game to the Firestore Collection.
+     *
+     * Reports the current progress via the given SearchResult's "progress"
+     * Signal, so that it can be shown in the UI.
+     */
     public async register(result: SearchResult): Promise<void> {
         try {
             await this._steamGridDb.registerGame(
@@ -78,6 +92,7 @@ export class DashboardGamesDatabaseAddDialog {
                 `Successfully registered ${result.game.name} (${result.releaseYear}).`,
             );
         } catch (error) {
+            result.progress.set(0);
             this._toast.error(`Failed to register ${result.game.name}.`, error);
         }
     }
