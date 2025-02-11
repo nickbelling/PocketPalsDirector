@@ -17,8 +17,8 @@ import { getSentenceArray } from '../utils';
  * Therefore:
  *
  * * `text | splitSentence: 1: true` would be "Then this. And then this."
- * * `text | splitSentence: 2` would be "And then this."
- * * `text | splitSentence: 0` would be "This. Then this. And then this.".
+ * * `text | splitSentence: 2: true` would be "And then this."
+ * * `text | splitSentence: 0: true` would be "This. Then this. And then this.".
  */
 @Pipe({
     name: 'splitSentence',

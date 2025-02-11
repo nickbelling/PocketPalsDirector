@@ -1,6 +1,5 @@
 export * from './base-data-store';
 export * from './common-firebase.module';
-export * from './functions';
 export * from './model';
 export * from './resolve-url.pipe';
 export * from './tokens';

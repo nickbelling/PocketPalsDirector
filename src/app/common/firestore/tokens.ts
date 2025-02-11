@@ -1,24 +1,14 @@
 import { InjectionToken } from '@angular/core';
-import { FirebaseOptions, initializeApp } from 'firebase/app';
+import { initializeApp } from 'firebase/app';
 import { Auth, getAuth } from 'firebase/auth';
 import { Firestore, getFirestore } from 'firebase/firestore';
 import { Functions, getFunctions } from 'firebase/functions';
 import { FirebaseStorage, getStorage } from 'firebase/storage';
-
-const FIREBASE_CONFIG: FirebaseOptions = {
-    projectId: 'pocket-pals-director',
-    appId: '1:421698142516:web:9fd5531992f213bba56561',
-    storageBucket: 'pocket-pals-director.firebasestorage.app',
-    apiKey: 'AIzaSyAI7PBhNb177728aLV5U4LZsA0PgUvipIQ',
-    authDomain: 'pocket-pals-director.firebaseapp.com',
-    messagingSenderId: '421698142516',
-};
+import { FIREBASE_CONFIG } from './model';
 
 const firebaseApp = initializeApp(FIREBASE_CONFIG);
 
-export const FIREBASE_PROJECT_ID = FIREBASE_CONFIG.projectId;
-export const FIREBASE_STORAGE_BUCKET = FIREBASE_CONFIG.storageBucket;
-
+/** Injectable reference to Firebase Firestore. */
 export const FIRESTORE: InjectionToken<Firestore> = new InjectionToken(
     'FIRESTORE',
     {
@@ -27,6 +17,7 @@ export const FIRESTORE: InjectionToken<Firestore> = new InjectionToken(
     },
 );
 
+/** Injectable reference to Firebase Storage. */
 export const STORAGE: InjectionToken<FirebaseStorage> = new InjectionToken(
     'STORAGE',
     {
@@ -35,11 +26,13 @@ export const STORAGE: InjectionToken<FirebaseStorage> = new InjectionToken(
     },
 );
 
+/** Injectable reference to Firebase Authentication. */
 export const AUTH: InjectionToken<Auth> = new InjectionToken('AUTH', {
     providedIn: 'root',
     factory: () => getAuth(firebaseApp),
 });
 
+/** Injectable reference to Firebase Functions. */
 export const FUNCTIONS: InjectionToken<Functions> = new InjectionToken(
     'FUNCTIONS',
     {

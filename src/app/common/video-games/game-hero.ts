@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import {
-    booleanAttribute,
     Component,
     computed,
     effect,
@@ -16,6 +15,14 @@ import {
     VideogameDatabaseService,
 } from './videogame-database-service';
 
+/**
+ * Shows the given game's logo in front of a blurred version of its hero image
+ * as a background. Scales the logo to always fit 80% of its container in any
+ * direction, with the hero background always filling it.
+ *
+ * The "loaded" signal becomes true when both the logo and hero have finished
+ * loading.
+ */
 @Component({
     selector: 'game-hero',
     imports: [CommonModule, CommonPipesModule],
@@ -25,10 +32,21 @@ import {
 export class GameHero {
     private _vgDb = inject(VideogameDatabaseService);
 
+    /** The game's ID, as it was registered in the Videogame Database. */
     public readonly gameId = input.required<string>();
-    public readonly preload = input(false, { transform: booleanAttribute });
+
+    /**
+     * Set to true to load thumbnail versions of the images (max 300px) instead
+     * of the full-sized ones.
+     */
     public readonly useThumbnails = input<boolean>(false);
+
+    /**
+     * Becomes true when the logo and hero images have fully loaded (or errored).
+     */
     public readonly loaded = signal<boolean>(false);
+
+    /** The game's registered record in the Videogame Database. */
     public game = computed(() => {
         const games = this._vgDb.games();
         const gameId = this.gameId();
@@ -38,20 +56,28 @@ export class GameHero {
 
     constructor() {
         effect(() => {
-            this.loaded.set(this.heroLoaded() && this.logoLoaded());
+            this.loaded.set(this.logoLoaded() && this.heroLoaded());
         });
     }
 
-    protected heroLoaded = linkedSignal<boolean>(() => {
-        const game = this.gameId();
-        return false;
-    });
-
+    /** True if the logo image is loaded. */
     protected logoLoaded = linkedSignal<boolean>(() => {
+        // Reset to false whenever the game changes
         const game = this.gameId();
         return false;
     });
 
+    /** True if the hero image is loaded. */
+    protected heroLoaded = linkedSignal<boolean>(() => {
+        // Reset to false whenever the game changes
+        const game = this.gameId();
+        return false;
+    });
+
+    /**
+     * The cacheBuster used to enforce fetching new images if they have changed.
+     * Prevents the browser from using stale images if they are replaced later.
+     */
     protected cacheBuster = computed(() => {
         const game = this.game();
 
@@ -62,6 +88,7 @@ export class GameHero {
         return undefined;
     });
 
+    /** The path in Firebase storage to the game's logo image. */
     protected logoPath = computed(() => {
         const game = this.game();
         const thumbnails = this.useThumbnails();
@@ -79,6 +106,7 @@ export class GameHero {
         }
     });
 
+    /** The path in Firebase storage to the game's hero image. */
     protected heroPath = computed(() => {
         const game = this.game();
         const thumbnails = this.useThumbnails();
@@ -96,6 +124,7 @@ export class GameHero {
         }
     });
 
+    /** The resolved URL to the public logo image. */
     protected logoSrc = computed(() => {
         const logoPath = this.logoPath();
         const cacheBuster = this.cacheBuster();
@@ -107,6 +136,7 @@ export class GameHero {
         }
     });
 
+    /** The resolved URL to the public hero image. */
     protected heroSrc = computed(() => {
         const heroPath = this.heroPath();
         const cacheBuster = this.cacheBuster();

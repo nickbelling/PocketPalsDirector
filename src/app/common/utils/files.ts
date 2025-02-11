@@ -18,6 +18,12 @@ export async function downloadUrlAsFile(
     return new File([blob], filename, { type: blob.type });
 }
 
+/**
+ * Downloads the given URL and makes it available as a {@link Blob}.
+ * @param url The URL to download.
+ * @param useCorsProxy If true, downloads via the CORS proxy.
+ * @returns The downloaded file, as a {@link Blob}.
+ */
 export async function downloadUrlAsBlob(
     url: string,
     useCorsProxy: boolean = false,

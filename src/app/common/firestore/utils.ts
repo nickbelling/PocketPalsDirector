@@ -12,9 +12,17 @@ import {
     QueryConstraint,
     QueryDocumentSnapshot,
 } from 'firebase/firestore';
-import { Entity } from './model';
-import { FIREBASE_STORAGE_BUCKET, FIRESTORE } from './tokens';
+import { getDownloadURL } from 'firebase/storage';
+import { Entity, PUBLIC_STORAGE_BASE_URL } from './model';
+import { FIRESTORE } from './tokens';
 
+/**
+ * Creates a data converter that handles materializing entities from Firestore
+ * in the correct type (and wrapping them as {@link Entity<T>} types with the
+ * correct ID), as well as ensuring if those types are passed back for setting,
+ * the additional properties are stripped out.
+ * @returns A typed Firestore converter for the given generic type.
+ */
 export function getConverter<TDocType extends object>(): FirestoreDataConverter<
     Entity<TDocType>
 > {
@@ -39,9 +47,20 @@ export function getConverter<TDocType extends object>(): FirestoreDataConverter<
     };
 }
 
+/**
+ * Gets the Firestore document at the provided path. This is a point-in-time
+ * snapshot of the document which does not update.
+ *
+ * NOTE: Must be called from an injection context (e.g. service constructor).
+ *
+ * @param path The complete Firestore path to the document to fetch.
+ * @returns The document if found, or `undefined` otherwise.
+ */
 export async function getDocument<TDocType extends object>(
     path: string,
 ): Promise<Entity<TDocType> | undefined> {
+    assertInInjectionContext(getDocument);
+
     const firestore = inject(FIRESTORE);
     const converter = getConverter<TDocType>();
 
@@ -152,8 +171,19 @@ export function subscribeToCollection<TDocType extends object>(
     return collectionRef;
 }
 
-const BASE_URL = `https://firebasestorage.googleapis.com/v0/b/${FIREBASE_STORAGE_BUCKET}/o/`;
-
+/**
+ * For a given path in Firebase Storage, resolves a publicly accessible URL for
+ * it.
+ *
+ * Because this is synchronous and does not make a call to the Firebase servers
+ * to validate it, the returned URL may be invalid if the asset is not public or
+ * if it does not exist. If you need to check the validity of a storage path,
+ * use Firebase Storage's {@link getDownloadURL} function instead.
+ *
+ * @param storagePath The path in Firebase Storage to the asset.
+ * @param cacheBuster A cache buster to add to the URL (e.g. `"t=12345"`).
+ * @returns A URL to the publicly available asset.
+ */
 export function resolveStorageUrl(
     storagePath: string,
     cacheBuster?: string,
@@ -165,5 +195,5 @@ export function resolveStorageUrl(
         suffix = `${suffix}&${cacheBuster}`;
     }
 
-    return `${BASE_URL}${encodedPath}${suffix}`;
+    return `${PUBLIC_STORAGE_BASE_URL}/${encodedPath}${suffix}`;
 }

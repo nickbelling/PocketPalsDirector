@@ -68,7 +68,7 @@ export class DashboardGamesDatabaseEditDialog {
                 await this._vgDb.uploadHero(this.game.id, heroFile);
             }
 
-            await this._vgDb.updateRegisteredGame(this.game.id);
+            await this._vgDb.markGameAsUpdated(this.game.id);
 
             this._toast.info(`${this.game.name} updated successfully.`);
             this._dialog.close();

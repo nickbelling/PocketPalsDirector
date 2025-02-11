@@ -5,6 +5,7 @@ import {
     VideogameDatabaseItem,
 } from './videogame-database-service';
 
+/** Given a VGDB game object, resolves the URL to its public logo. */
 @Pipe({
     name: 'gameLogoSrc',
     pure: true,
@@ -22,6 +23,7 @@ export class GameLogoSrcPipe implements PipeTransform {
     }
 }
 
+/** Given a VGDB game object, resolves the URL to its public logo. */
 @Pipe({
     name: 'gameHeroSrc',
     pure: true,

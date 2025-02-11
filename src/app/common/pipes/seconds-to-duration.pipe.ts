@@ -1,15 +1,18 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+/**
+ * For the given number of seconds, converts it to a MM:SS display, with
+ * optional milliseconds also shown.
+ */
 @Pipe({
     name: 'secondsToDuration',
     pure: true,
 })
 export class SecondsToDurationPipe implements PipeTransform {
     public transform(value: number, showMillis: boolean = false): string {
-        const minutes = Math.abs(Math.floor(value / 60));
-        const seconds = Math.abs(
-            showMillis ? value % 60 : Math.floor(value % 60),
-        );
+        const absValue = Math.abs(value);
+        const minutes = Math.floor(absValue / 60);
+        const seconds = showMillis ? absValue % 60 : Math.floor(absValue % 60);
 
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     }

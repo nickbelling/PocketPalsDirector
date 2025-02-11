@@ -1,6 +1,13 @@
 /**
  * Given a block of text, splits it into an array of sentences.
  *
+ * Each "sentence" represents the text, up to a punctuation point, with all of
+ * the whitespace that follows it in-tact. Calling `.join` on the returned array
+ * should reproduce the original string.
+ *
+ * The function splits on full stops, commas, colons, exclamation/question marks,
+ * and newline characters.
+ *
  * RegExes are damn near unreadable. Basically, this one splits a block of
  * text into sentences. It also handles when there is a newline or paragraph
  * break (and treats that as a "sentence" as well, e.g. a list of items).
@@ -17,6 +24,17 @@ export function getSentenceArray(text: string): string[] {
     } else {
         return matches.map((match) => match);
     }
+}
+
+/**
+ * Normalizes a string representing a "title" for sorting purposes.
+ *
+ * For example, "The Legend of Zelda" becomes "Legend of Zelda", and is sorted
+ * alongside other items beginning with L rather than grouping everything
+ * beginning with "The".
+ */
+export function normalizeTitle(title: string): string {
+    return title.replace(/^(the)\s+/i, '').trim();
 }
 
 /**

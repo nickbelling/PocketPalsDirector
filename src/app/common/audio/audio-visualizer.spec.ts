@@ -44,23 +44,23 @@ describe('AudioVisualizer', () => {
         fixture.detectChanges();
     });
 
-    test('should create the component', () => {
+    it('should create the component', () => {
         expect(component).toBeTruthy();
     });
 
-    test('should initialize with default values', () => {
+    it('should initialize with default values', () => {
         expect(component.playing()).toBe(false);
         expect(component.frequencies()).toEqual([]);
         expect(component.barCount()).toBe(64);
     });
 
-    test('should update bars computed signal correctly', () => {
+    it('should update bars computed signal correctly', () => {
         component.frequencies.set(Array(512).fill(100)); // Simulate uniform frequency data
         expect(component.bars()).toHaveLength(64);
         expect(component.bars()[0]).toBeGreaterThan(0);
     });
 
-    test('should set playing signal when audio starts', async () => {
+    it('should set playing signal when audio starts', async () => {
         const audioElement = screen.getByRole('audio') as HTMLAudioElement;
 
         // Simulate audio starting
@@ -69,7 +69,7 @@ describe('AudioVisualizer', () => {
         expect(component.playing()).toBe(true);
     });
 
-    test('should unset playing signal when audio pauses', async () => {
+    it('should unset playing signal when audio pauses', async () => {
         const audioElement = screen.getByRole('audio') as HTMLAudioElement;
 
         // Simulate play event first
@@ -81,7 +81,7 @@ describe('AudioVisualizer', () => {
         expect(component.playing()).toBe(false);
     });
 
-    test('should emit ended event when audio finishes playing', async () => {
+    it('should emit ended event when audio finishes playing', async () => {
         const audioElement = screen.getByRole('audio') as HTMLAudioElement;
         const endedSpy = jest.spyOn(component.ended, 'emit');
 
@@ -92,7 +92,7 @@ describe('AudioVisualizer', () => {
         expect(endedSpy).toHaveBeenCalled();
     });
 
-    test('should correctly play audio when play() is called', async () => {
+    it('should correctly play audio when play() is called', async () => {
         const audioElement = screen.getByRole('audio') as HTMLAudioElement;
         jest.spyOn(audioElement, 'play').mockImplementation(() =>
             Promise.resolve(),
@@ -102,7 +102,7 @@ describe('AudioVisualizer', () => {
         expect(audioElement.play).toHaveBeenCalled();
     });
 
-    test('should correctly stop audio when stop() is called', async () => {
+    it('should correctly stop audio when stop() is called', async () => {
         const audioElement = screen.getByRole('audio') as HTMLAudioElement;
         jest.spyOn(audioElement, 'pause').mockImplementation(() => {});
 
@@ -119,7 +119,7 @@ describe('AudioVisualizer', () => {
         expect(component.playing()).toBe(false);
     });
 
-    test('should update frequencies when visualizer is active', () => {
+    it('should update frequencies when visualizer is active', () => {
         // Mock AnalyserNode
         const mockAnalyser = {
             getByteFrequencyData: jest.fn((data: Uint8Array) => {
@@ -135,7 +135,7 @@ describe('AudioVisualizer', () => {
         expect(component.frequencies()).toEqual(Array(256).fill(128));
     });
 
-    test('should stop animation frame when stopping visualizer', () => {
+    it('should stop animation frame when stopping visualizer', () => {
         // Simulate an animation frame ID
         component['_animationId'] = 123;
 

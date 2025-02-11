@@ -27,6 +27,10 @@ import {
     VideogameDatabaseService,
 } from './videogame-database-service';
 
+/**
+ * A validator used to determine whether or not the autocomplete control's value
+ * is a string (and therefore not a selected game object).
+ */
 @Directive({
     selector: '[gameSelectionValidator]',
     providers: [
@@ -49,6 +53,10 @@ export class GameSelectionValidator implements Validator {
     }
 }
 
+/**
+ * A component that wraps up an Angular Material Autocomplete form field control
+ * with logic for selecting a game from the Videogame Database.
+ */
 @Component({
     selector: 'game-selector',
     imports: [
@@ -66,13 +74,24 @@ export class GameSelectionValidator implements Validator {
 export class GameSelector {
     private _vgDb = inject(VideogameDatabaseService);
 
+    /** The selected game's ID. */
     public readonly gameId = model<string | null>();
+
+    /** True if the control should be disabled. */
     public readonly disabled = input<boolean>(false);
 
+    /** The list of games registered in the Videogame Database. */
     protected readonly games = this._vgDb.games;
+
+    /** The currently selected game, or the typed filter text. */
     protected selectedGame = signal<
         string | null | Entity<VideogameDatabaseItem>
     >(null);
+
+    /**
+     * The list of filtered games that match the "selected game" string (if it
+     * is a string).
+     */
     protected filteredGames = computed(() => {
         const selectedGame = this.selectedGame();
 
@@ -117,8 +136,15 @@ export class GameSelector {
         });
     }
 
-    public displayFn(game: VideogameDatabaseItem): string {
+    /**
+     * When the game is set in the Autocomplete control, formats its display
+     * string.
+     */
+    public displayFn(game?: VideogameDatabaseItem): string {
         if (game) {
+            if (game.year) {
+                return `${game.name} (${game.year})`;
+            }
             return game.name;
         } else {
             return '';

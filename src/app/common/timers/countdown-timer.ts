@@ -1,35 +1,12 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { CommonPipesModule } from '../pipes/pipes.module';
-
-interface TimerAudioDefinition {
-    srcFile: string;
-    durationSeconds: number;
-    startTimestamp: number;
-    endTimestamp: number;
-}
-
-const TIMER_30_SEC_DRAMATIC: TimerAudioDefinition = {
-    srcFile: 'audio/timer_30sec.webm',
-    durationSeconds: 30,
-    startTimestamp: 1,
-    endTimestamp: 33,
-};
-
-const TIMER_2_MIN_DRAMATIC: TimerAudioDefinition = {
-    srcFile: 'audio/timer_2min.webm',
-    durationSeconds: 120,
-    startTimestamp: 1,
-    endTimestamp: 129,
-};
-
-const TIMER_2_MIN_FUN: TimerAudioDefinition = {
-    srcFile: 'audio/timer_2min_fun.webm',
-    durationSeconds: 120,
-    startTimestamp: 1,
-    endTimestamp: 116,
-};
-
-export type TimerLength = 30 | 120;
+import {
+    TIMER_2_MIN_DRAMATIC,
+    TIMER_2_MIN_FUN,
+    TIMER_30_SEC_DRAMATIC,
+    TimerAudioDefinition,
+    TimerLength,
+} from './definitions';
 
 @Component({
     selector: 'countdown-timer',
@@ -38,11 +15,19 @@ export type TimerLength = 30 | 120;
     styleUrl: './countdown-timer.scss',
 })
 export class CountdownTimer {
+    /** The length of the timer. */
     public length = input.required<TimerLength>();
+
+    /** True if the audio used should be the "dramatic" variant. */
     public dramatic = input<boolean>(true);
+
+    /** The current point in time of the playing audio. */
     public currentTime = signal<number>(0);
+
+    /** True if the audio is muted (even when playing). */
     public muted = input<boolean>(false);
 
+    /** The definition object for the currently configured timer. */
     public timerDefinition = computed<TimerAudioDefinition>(() => {
         const length = this.length();
         const dramatic = this.dramatic();
@@ -59,6 +44,23 @@ export class CountdownTimer {
         }
     });
 
+    /**
+     * The current time as displayed, relative to the currently playing audio,
+     * scaled appropriately.
+     *
+     * @description
+     * An audio track that, for example, represents a 30 second timer, may in
+     * reality be 35 seconds long. Musically, the "start" of the countdown might
+     * be a beat at the 2 second mark and the "end" a beat at the 34 second
+     * mark. This means the timer would *actually* run for 32 seconds from a
+     * music perspective, but that doesn't make sense visually, so we do a
+     * Mario-Bros-style "adjustment" to the timer so that it displays "0:30" at
+     * the 2 second mark of the track, and counts down proportionately until it
+     * hits "0:00" at the 34-second mark.
+     *
+     * Is that unfair? Maybe, but it's way more satisfying to have it follow the
+     * music (within reason) than it is to be exactly to the mark time-wise.
+     */
     public displayTime = computed(() => {
         const timerDef = this.timerDefinition();
         const currentTime = this.currentTime();
@@ -80,6 +82,10 @@ export class CountdownTimer {
         return countdownTime;
     });
 
+    /**
+     * Fired when the template `<audio>` element updates its time - sets the
+     * currentTime signal here.
+     */
     public onTimeUpdate(event: Event): void {
         if (event.target instanceof HTMLAudioElement) {
             const audio = event.target;

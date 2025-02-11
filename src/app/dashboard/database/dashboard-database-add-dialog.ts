@@ -41,8 +41,8 @@ export class DashboardGamesDatabaseAddDialog {
         if (results) {
             return results.map((game) => {
                 const year = new Date(game.release_date * 1000).getFullYear();
-                const slug = this._vgDb.getGameSlug(game.name, year);
-                const gameExists = games.some((g) => g.id === slug);
+                const gameId = this._vgDb.getGameId(game.name, year);
+                const gameExists = games.some((g) => g.id === gameId);
 
                 return {
                     game: game,
