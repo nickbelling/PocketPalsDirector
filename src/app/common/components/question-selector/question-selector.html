@@ -6,7 +6,9 @@
                 <span>Reset game</span>
             </button>
             <span class="layout-fill"></span>
-            <mat-slide-toggle #editMode>
+            <mat-slide-toggle
+                [checked]="editModeEnabled()"
+                (change)="editModeEnabled.set($event.checked)">
                 <span>Edit mode</span>
             </mat-slide-toggle>
         </div>
@@ -67,7 +69,7 @@
             }
         </div>
 
-        @if (editMode.checked) {
+        @if (editModeEnabled()) {
             <div class="layout-row layout-items-fill g">
                 <button mat-flat-button (click)="onAddQuestion()">
                     <mat-icon>add_circle</mat-icon>

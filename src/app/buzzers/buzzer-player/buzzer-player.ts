@@ -10,7 +10,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { Title } from '@angular/platform-browser';
-import { SoundService } from '../../common/files';
+import { AudioService } from '../../common/audio';
 import {
     BuzzerPlayerDataStore,
     providePlayerIdToken,
@@ -28,7 +28,7 @@ export type BuzzerButtonState = 'disabled' | 'locked' | 'buzzed' | 'active';
 export class BuzzerPlayerButton {
     private _data = inject(BuzzerPlayerDataStore);
     private _title = inject(Title);
-    private _sounds = inject(SoundService);
+    private _audio = inject(AudioService);
 
     /**
      * Used to detect whether or not the buzzer went from "can't buzz" to
@@ -109,7 +109,7 @@ export class BuzzerPlayerButton {
             if (this._previousReadyState === false && canBuzz === true) {
                 // Went from cannot buzz to buzz, play sound
                 if (this.playSounds()) {
-                    this._sounds.playSound('audio/ready.mp3');
+                    this._audio.playAudio('audio/ready.mp3');
                 }
             }
 

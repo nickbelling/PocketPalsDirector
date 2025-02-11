@@ -2,9 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { fadeOutAnimation, growInOutXAnimation } from '../../common/animations';
+import { AudioService } from '../../common/audio';
 import { Player } from '../../common/components/player';
-import { SoundService } from '../../common/files';
-import { CommonFirebaseModule, Entity } from '../../common/firestore';
+import {
+    CommonFirebaseModule,
+    Entity,
+    resolveStorageUrl,
+} from '../../common/firestore';
 import { CommonPipesModule } from '../../common/pipes/pipes.module';
 import { SlideModule } from '../../common/slide';
 import { arraysAreEqual, downloadUrlAsBlob } from '../../common/utils';
@@ -37,7 +41,7 @@ import {
 })
 export class BuzzerDisplay {
     private _data = inject(BuzzerDisplayDataStore);
-    private _sound = inject(SoundService);
+    private _audio = inject(AudioService);
 
     /**
      * A Set representing the previously-known list of buzzed-in player IDs.
@@ -133,9 +137,10 @@ export class BuzzerDisplay {
             buzzedInPlayers.forEach(async (player) => {
                 if (!this._previousBuzzedInPlayerIds.has(player.id)) {
                     if (player.soundEffect) {
-                        await this._sound.playStorageSound(
+                        const audioUrl = resolveStorageUrl(
                             `${BUZZERS_STORAGE_SOUNDS_PATH}/${player.soundEffect}`,
                         );
+                        await this._audio.playAudio(audioUrl);
                     }
                 }
             });

@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { fadeInOutAnimation } from '../../common/animations';
-import { SoundService } from '../../common/files';
+import { AudioService } from '../../common/audio';
 import { resolveStorageUrl } from '../../common/firestore';
 import { downloadUrlAsBlob } from '../../common/utils';
 import { BaseGame, CommonGameModule } from '../base/game';
@@ -22,11 +22,11 @@ export class ImpockstersGame extends BaseGame<
     ImpockstersState,
     ImpockstersQuestion
 > {
-    private _sounds = inject(SoundService);
+    private _audio = inject(AudioService);
     protected data: ImpockstersDatabase;
 
     protected imageSrc = signal<Blob | null>(null);
-    protected muted = computed(() => !this._sounds.soundEnabled());
+    protected muted = computed(() => !this._audio.audioEnabled());
 
     constructor() {
         const database = inject(ImpockstersDatabase);

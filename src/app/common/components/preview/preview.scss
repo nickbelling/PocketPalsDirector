@@ -15,4 +15,7 @@
     top: 50%;
     left: 50%;
     transform-origin: top left;
+    outline-width: 1000px;
+    outline-style: solid;
+    outline-color: color-mix(in srgb, black 50%, transparent 50%);
 }

@@ -13,11 +13,15 @@ import {
     BUZZERS_STORAGE_SOUNDS_PATH,
     BuzzerTeam,
 } from '../../buzzers/data/model';
+import { AudioService } from '../../common/audio';
 import { Player } from '../../common/components/player';
 import { GamePreview } from '../../common/components/preview';
 import { ConfirmDialog } from '../../common/dialog';
-import { SoundService } from '../../common/files';
-import { CommonFirebaseModule, Entity } from '../../common/firestore';
+import {
+    CommonFirebaseModule,
+    Entity,
+    resolveStorageUrl,
+} from '../../common/firestore';
 import { ToastService } from '../../common/toast';
 import { CommonControllerModule } from '../../games/base/controller';
 
@@ -37,7 +41,7 @@ export class DashboardPlayers {
     private _data = inject(BuzzerDirectorDataStore);
     private _dialog = inject(MatDialog);
     private _confirm = inject(ConfirmDialog);
-    private _sound = inject(SoundService);
+    private _audio = inject(AudioService);
     private _toast = inject(ToastService);
 
     protected imagesBasePath = BUZZERS_STORAGE_IMAGES_PATH;
@@ -116,8 +120,10 @@ export class DashboardPlayers {
     public async playSound(soundEffectPath: string | null): Promise<void> {
         if (soundEffectPath != null) {
             try {
-                await this._sound.playStorageSound(
-                    this.soundsBasePath + '/' + soundEffectPath,
+                await this._audio.playAudio(
+                    resolveStorageUrl(
+                        `${this.soundsBasePath}/${soundEffectPath}`,
+                    ),
                     true,
                 );
             } catch (error) {

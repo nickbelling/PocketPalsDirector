@@ -3,25 +3,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { firstValueFrom } from 'rxjs';
 import { ConfirmDialogComponent } from './confirm-dialog-component';
 import {
+    Callback,
     ConfirmDialogData,
+    ConfirmDialogOptions,
     ConfirmDialogResult,
     ConfirmDialogType,
 } from './model';
-
-type Callback<T> = () => T | Promise<T>;
-
-export interface ConfirmDialogCallbacks {
-    /** Fired when the user clicks "Cancel" in the dialog. */
-    onCancel?: Callback<void>;
-    /** Fired when the user clicks "Yes" in the dialog. */
-    onYes?: Callback<void>;
-    /** Fired when the user clicks "No" in the dialog. */
-    onNo?: Callback<void>;
-    /** Fired when the user clicks "OK" in the dialog. */
-    onOk?: Callback<void>;
-    /** Fired when the user clicks "Delete" in the dialog. */
-    onDelete?: Callback<void>;
-}
 
 /** A service used for displaying prompts for user confirmation. */
 @Injectable({
@@ -34,10 +21,10 @@ export class ConfirmDialog {
     public async open(
         type: ConfirmDialogType,
         title: string,
-        description: string,
-        options: ConfirmDialogCallbacks,
+        prompt: string,
+        options: ConfirmDialogOptions,
     ): Promise<void> {
-        // Open the dialog with the data
+        // Open the confirmation dialog with the data
         const dialogRef = this._dialog.open<
             ConfirmDialogComponent,
             ConfirmDialogData,
@@ -45,7 +32,7 @@ export class ConfirmDialog {
         >(ConfirmDialogComponent, {
             data: {
                 title: title,
-                description: description,
+                prompt: prompt,
                 type: type,
             },
             disableClose: true,

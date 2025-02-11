@@ -5,7 +5,7 @@ import {
     transition,
     trigger,
 } from '@angular/animations';
-import { Component, computed, contentChild, input, model } from '@angular/core';
+import { Component, computed, contentChild, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 
 /**
@@ -32,12 +32,22 @@ import { MatCardModule } from '@angular/material/card';
     ],
 })
 export class PlayingCard {
-    public readonly showingFront = model<boolean>(false);
+    /** True if the card is showing its front. */
+    public readonly showingFront = input<boolean>(false);
+
+    /** True if the card should gently rotate with a Balatro-like animation. */
     public readonly animated = input<boolean>(false);
 
+    /** A reference to the child `<playing-card-back>`. */
     private _playingCardBack = contentChild(PlayingCardBack);
+
+    /** A reference to the child `<playing-card-front>`. */
     private _playingCardFront = contentChild(PlayingCardFront);
 
+    /**
+     * The classlist applied to the `<playing-card-back>`, so that it can be
+     * propagated to the internal `<mat-card>`.
+     */
     protected backClass = computed(() => {
         const cardBack = this._playingCardBack();
 
@@ -48,6 +58,10 @@ export class PlayingCard {
         }
     });
 
+    /**
+     * The classlist applied to the `<playing-card-front>`, so that it can be
+     * propagated to the internal `<mat-card>`.
+     */
     protected frontClass = computed(() => {
         const cardFront = this._playingCardFront();
 
@@ -59,6 +73,7 @@ export class PlayingCard {
     });
 }
 
+/** The "front" component of a `<playing-card>`. */
 @Component({
     selector: 'playing-card-front',
     template: '<ng-content />',
@@ -71,9 +86,14 @@ export class PlayingCard {
     `,
 })
 export class PlayingCardFront {
+    /**
+     * Passes the class applied to this element to the `mat-card` wrapper in the
+     * parent `<playing-card>` element.
+     */
     public readonly class = input<string | undefined>(undefined);
 }
 
+/** The "back" component of a `<playing-card>`. */
 @Component({
     selector: 'playing-card-back',
     template: '<ng-content />',
@@ -86,5 +106,9 @@ export class PlayingCardFront {
     `,
 })
 export class PlayingCardBack {
+    /**
+     * Passes the class applied to this element to the `mat-card` wrapper in the
+     * parent `<playing-card>` element.
+     */
     public readonly class = input<string | undefined>(undefined);
 }

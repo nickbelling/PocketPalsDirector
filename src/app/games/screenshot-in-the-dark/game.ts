@@ -9,7 +9,7 @@ import {
     viewChild,
 } from '@angular/core';
 import { fadeInOutAnimation } from '../../common/animations';
-import { SoundService } from '../../common/files';
+import { AudioService } from '../../common/audio';
 import { Entity, resolveStorageUrl } from '../../common/firestore';
 import { downloadUrlAsBlob } from '../../common/utils';
 import { BaseGame, CommonGameModule } from '../base/game';
@@ -59,7 +59,7 @@ export class ScreenshotInTheDarkGame extends BaseGame<
     ScreenshotInTheDarkQuestion
 > {
     private _destroyRef = inject(DestroyRef);
-    private _sounds = inject(SoundService);
+    private _audio = inject(AudioService);
     private _audioElement = viewChild<ElementRef<HTMLAudioElement>>('audio');
     private _animationFrameId: number | null = null;
 
@@ -67,7 +67,7 @@ export class ScreenshotInTheDarkGame extends BaseGame<
     protected resources = signal<Resources | null>(null);
     protected gameId = signal<string | null>(null);
     protected currentTime = signal<number>(0);
-    protected muted = computed(() => !this._sounds.soundEnabled());
+    protected muted = computed(() => !this._audio.audioEnabled());
 
     protected currentScreenshot = computed<number>(() => {
         const currentTime = this.currentTime();

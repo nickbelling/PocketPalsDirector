@@ -7,9 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
+import { AudioService } from '../common/audio';
 import { AuthService } from '../common/auth';
-import { SoundService } from '../common/files';
 import { GlobalDataStore } from './global-data-store';
 
 @Component({
@@ -23,6 +24,7 @@ import { GlobalDataStore } from './global-data-store';
         MatMenuModule,
         MatSlideToggleModule,
         MatToolbarModule,
+        MatTooltipModule,
     ],
     templateUrl: './dashboard.html',
     styleUrl: './dashboard.scss',
@@ -30,15 +32,15 @@ import { GlobalDataStore } from './global-data-store';
 })
 export class Dashboard {
     private _globalData = inject(GlobalDataStore);
+    private _audio = inject(AudioService);
     public auth = inject(AuthService);
-    public sound = inject(SoundService);
 
-    protected soundEnabled = this.sound.soundEnabled;
+    protected audioEnabled = this._audio.audioEnabled;
     protected activeGames = this._globalData.activeGames;
     protected inactiveGames = this._globalData.inactiveGames;
 
     constructor() {
         // By default, the admin interface should have sound turned off
-        this.soundEnabled.set(false);
+        this.audioEnabled.set(false);
     }
 }
