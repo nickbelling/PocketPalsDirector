@@ -1,0 +1,6 @@
+<div class="layout-column">
+    <mat-progress-bar
+        [mode]="isWorking() ? 'buffer' : 'determinate'"
+        [value]="progress()" />
+    <mat-hint>{{ description() }}</mat-hint>
+</div>
