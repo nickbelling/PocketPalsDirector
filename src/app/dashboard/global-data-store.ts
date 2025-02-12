@@ -15,12 +15,6 @@ export const DEFAULT_GLOBAL_STATE: GlobalState = {
 
 const DOC_PATH = 'global/state';
 
-function getGamesFromSlugs(slugs: string[]): GameDefinition[] {
-    return slugs
-        .map((slug) => GAMES.find((g) => g.slug === slug))
-        .filter<GameDefinition>((g) => g !== undefined);
-}
-
 /** Global data store for determining the current list of active/inactive games. */
 @Injectable({
     providedIn: 'root',
@@ -34,13 +28,13 @@ export class GlobalDataStore {
     /** The list of active games. */
     public readonly activeGames = computed(() => {
         const state = this.state();
-        return getGamesFromSlugs(state.activeGames);
+        return this._getGamesFromSlugs(state.activeGames);
     });
 
     /** The list of inactive games. */
     public readonly inactiveGames = computed(() => {
         const state = this.state();
-        return getGamesFromSlugs(state.inactiveGames);
+        return this._getGamesFromSlugs(state.inactiveGames);
     });
 
     constructor() {
@@ -72,6 +66,13 @@ export class GlobalDataStore {
         );
 
         await setDoc(this._stateRef, state);
+    }
+
+    /** Given an array of game slugs, maps them to their full definitions. */
+    private _getGamesFromSlugs(slugs: string[]): GameDefinition[] {
+        return slugs
+            .map((slug) => GAMES.find((g) => g.slug === slug))
+            .filter<GameDefinition>((g) => g !== undefined);
     }
 
     /** Gets any game slugs that are missing from the provided GlobalState. */

@@ -15,7 +15,6 @@ export class ScreenshotInTheDarkQuestionEditDialog extends BaseQuestionEditDialo
 
     protected gameId = signal<string | null>(null);
     protected guessTheGameId = signal<number>(0);
-    protected progress = signal<number>(0);
 
     protected isValid = computed(
         () => this.gameId() !== null && this.guessTheGameId() !== 0,
@@ -29,7 +28,6 @@ export class ScreenshotInTheDarkQuestionEditDialog extends BaseQuestionEditDialo
 
     public async submit(): Promise<void> {
         this.loading.set(true);
-        this.progress.set(0);
 
         const guessTheGameId = this.guessTheGameId();
 
@@ -39,30 +37,34 @@ export class ScreenshotInTheDarkQuestionEditDialog extends BaseQuestionEditDialo
             finalIsVideo: false,
         };
 
+        this.progress.start(7);
+
         try {
-            this.progress.set(10);
+            this.progress.increment('Getting file 1...');
             await this._getAndUploadFile(guessTheGameId, 1);
-            this.progress.set(20);
+            this.progress.increment('Getting file 2...');
             await this._getAndUploadFile(guessTheGameId, 2);
-            this.progress.set(30);
+            this.progress.increment('Getting file 3...');
             await this._getAndUploadFile(guessTheGameId, 3);
-            this.progress.set(40);
+            this.progress.increment('Getting file 4...');
             await this._getAndUploadFile(guessTheGameId, 4);
-            this.progress.set(50);
+            this.progress.increment('Getting file 5...');
             await this._getAndUploadFile(guessTheGameId, 5);
-            this.progress.set(60);
+            this.progress.increment('Getting file 6...');
             const result = await this._getAndUploadFile(guessTheGameId, 6);
             question.finalIsVideo = result.isVideo;
 
-            this.progress.set(80);
+            this.progress.increment('Adding question...');
             await this.addQuestion(question);
 
+            this.progress.finish();
             this.dialog.close();
-        } finally {
+        } catch (error) {
+            this._toast.error('Failed to add the question.', error);
         }
 
+        this.progress.reset();
         this.loading.set(false);
-        this.progress.set(0);
     }
 
     private async _getAndUploadFile(

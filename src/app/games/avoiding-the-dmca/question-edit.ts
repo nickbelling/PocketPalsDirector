@@ -21,7 +21,6 @@ export class AvoidingTheDmcaQuestionEditDialog extends BaseQuestionEditDialog<Av
     protected fileToUpload = signal<File | null>(null);
     protected audioStartPoint = signal<number>(0);
     protected audioLengthSeconds = signal<number>(0);
-    protected progress = signal<number>(0);
     protected games = this._vgDb.games;
 
     constructor() {
@@ -54,25 +53,25 @@ export class AvoidingTheDmcaQuestionEditDialog extends BaseQuestionEditDialog<Av
         const audioId = uuid();
         const forwardId = audioId + '_forward';
         const backwardId = audioId + '_backward';
-        this.progress.set(0);
+        this.progress.start(5);
 
         try {
-            this.progress.set(5);
+            this.progress.set(1, 'Trimming audio to 30 seconds...');
             const forwardFile = await this._db.getPreviewFile(
                 this.fileToUpload()!,
                 this.audioStartPoint(),
             );
 
-            this.progress.set(20);
+            this.progress.set(2, 'Reversing audio...');
             const backwardFile =
                 await this._db.getReversedAudioFile(forwardFile);
 
-            this.progress.set(40);
+            this.progress.set(3, 'Uploading forwards audio file...');
             await this.uploadFile(forwardFile, forwardId);
-            this.progress.set(60);
+            this.progress.set(4, 'Uploading backwards audio file...');
             await this.uploadFile(backwardFile, backwardId);
 
-            this.progress.set(80);
+            this.progress.set(5, 'Adding question...');
             await this.addQuestion({
                 gameId: gameId,
                 trackName: trackName,
@@ -80,10 +79,10 @@ export class AvoidingTheDmcaQuestionEditDialog extends BaseQuestionEditDialog<Av
                 soundBackwards: backwardId,
             });
 
-            this.progress.set(100);
+            this.progress.finish();
             this.dialog.close();
         } finally {
-            this.progress.set(0);
+            this.progress.reset();
             this.loading.set(false);
         }
     }

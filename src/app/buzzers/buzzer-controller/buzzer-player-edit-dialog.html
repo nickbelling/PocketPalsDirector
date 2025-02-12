@@ -28,7 +28,7 @@
     <audio-file-field
         [(fileToUpload)]="soundFileToUpload"
         label="Sound effect" />
-    <mat-progress-bar value="{{ uploadProgress() }}" />
+    <progress-indicator [monitor]="progress" />
 </mat-dialog-content>
 
 <mat-dialog-actions>

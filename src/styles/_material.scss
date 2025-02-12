@@ -21,6 +21,7 @@
         @include _chips();
         @include _dialog();
         @include _expansion-panel();
+        @include _hint();
         @include _list();
         @include _snack-bar();
         @include _toolbar();
@@ -156,6 +157,17 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+    }
+}
+
+@mixin _hint() {
+    mat-hint {
+        color: var(--mat-sys-on-surface-variant);
+        font-family: var(--mat-sys-body-small-font);
+        line-height: var(--mat-sys-body-small-line-height);
+        letter-spacing: var(--mat-sys-body-small-tracking);
+        font-size: var(--mat-sys-body-small-size);
+        font-weight: var(--mat-sys-body-small-weight);
     }
 }
 

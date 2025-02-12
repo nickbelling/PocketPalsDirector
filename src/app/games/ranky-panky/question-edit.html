@@ -67,6 +67,8 @@
                 </button>
             </mat-card-actions>
         </mat-card>
+
+        <progress-indicator [monitor]="progress" />
     </div>
 
     <mat-card class="layout-basis-1/2">
@@ -113,7 +115,6 @@
 </mat-dialog-content>
 
 <mat-dialog-actions class="layout-row layout-items-middle g">
-    <mat-progress-bar [value]="progress()" />
     <button mat-button mat-dialog-close>Cancel</button>
     <button
         mat-flat-button

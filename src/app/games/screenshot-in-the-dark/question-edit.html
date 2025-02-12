@@ -14,7 +14,7 @@
             [(ngModel)]="guessTheGameId" />
     </mat-form-field>
 
-    <mat-progress-bar [value]="progress()" />
+    <progress-indicator [monitor]="progress" />
 </mat-dialog-content>
 
 <mat-dialog-actions class="layout-row layout-items-middle g">

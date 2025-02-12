@@ -29,7 +29,7 @@ export class RankyPankyDatabase extends BaseGameDatabase<
     ): Promise<void> {
         // Delete the images associated with this question
         for (const item of question.items) {
-            await this.deleteFile(item.uploadedFilePath, false);
+            await this.deleteFile(item.uploadedFilePath);
         }
     }
 }

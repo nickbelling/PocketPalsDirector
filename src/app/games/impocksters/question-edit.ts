@@ -15,7 +15,6 @@ import { ImpocksterOriginType, ImpockstersQuestion } from './model';
 export class ImpockstersQuestionEditDialog extends BaseQuestionEditDialog<ImpockstersQuestion> {
     private _db: ImpockstersDatabase;
 
-    protected progress = signal<number>(0);
     protected name = signal<string>('');
     protected from = signal<string>('');
     protected fromType = signal<ImpocksterOriginType>('series');
@@ -42,15 +41,16 @@ export class ImpockstersQuestionEditDialog extends BaseQuestionEditDialog<Impock
         try {
             if (this.editing) {
             } else {
-                this.progress.set(25);
+                this.progress.start(3);
+                this.progress.set(1, 'Resizing image...');
                 const file = this.imageFile();
                 const resizedImage = await resizeImage(file!, 500, 500);
                 const imageId = v4();
 
-                this.progress.set(50);
+                this.progress.set(2, 'Uploading image...');
                 await this.uploadFile(resizedImage, imageId);
 
-                this.progress.set(75);
+                this.progress.set(3, 'Adding question...');
                 await this.addQuestion({
                     name: this.name(),
                     fromType: this.fromType(),
@@ -58,9 +58,11 @@ export class ImpockstersQuestionEditDialog extends BaseQuestionEditDialog<Impock
                     imageId: imageId,
                     forbiddenTerms: this.forbiddenTerms().trim().split('\n'),
                 });
+                this.progress.finish();
             }
             this.dialog.close();
         } finally {
+            this.progress.reset();
             this.loading.set(false);
         }
     }

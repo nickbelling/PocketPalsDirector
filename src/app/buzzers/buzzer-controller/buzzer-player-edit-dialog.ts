@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
+import { ProgressMonitor } from '../../common/components/progress';
 import { ToastService } from '../../common/toast';
 import { isNotEmpty } from '../../common/utils';
 import {
@@ -37,7 +38,7 @@ export class BuzzerPlayerAddDialog extends BaseEntityEditDialog<BuzzerPlayer> {
      * The current progress of the add/edit operation. Used to display a
      * progress bar.
      */
-    protected uploadProgress = signal<number>(0);
+    protected progress = new ProgressMonitor();
 
     constructor() {
         super();
@@ -53,35 +54,37 @@ export class BuzzerPlayerAddDialog extends BaseEntityEditDialog<BuzzerPlayer> {
         try {
             if (this.editing) {
                 const entity = this.entity!;
-                this.uploadProgress.set(25);
+                this.progress.start(5);
 
                 let imageId = undefined;
                 if (this.imageFileToUpload()) {
                     // Overriding an old image
                     if (entity.image) {
+                        this.progress.set(1, 'Removing old image...');
                         await this._data.deleteImage(entity.image);
                     }
 
+                    this.progress.set(2, 'Uploading image...');
                     imageId = await this._data.uploadImage(
                         this.imageFileToUpload()!,
                     );
                 }
 
-                this.uploadProgress.set(50);
-
                 let soundId = undefined;
                 if (this.soundFileToUpload()) {
                     // Overriding an old sound
                     if (entity.soundEffect) {
+                        this.progress.set(3, 'Removing old sound effect...');
                         await this._data.deleteSound(entity.soundEffect);
                     }
 
+                    this.progress.set(4, 'Uploading sound effect...');
                     soundId = await this._data.uploadSound(
                         this.soundFileToUpload()!,
                     );
                 }
 
-                this.uploadProgress.set(75);
+                this.progress.set(5, 'Adding player...');
 
                 const partialPlayer: Partial<BuzzerPlayer> = {
                     name: this.name(),
@@ -100,31 +103,30 @@ export class BuzzerPlayerAddDialog extends BaseEntityEditDialog<BuzzerPlayer> {
                 // Finally, update the record
                 await this._data.editPlayer(entity.id, partialPlayer);
 
-                this.uploadProgress.set(100);
+                this.progress.finish();
             } else {
-                this.uploadProgress.set(25);
+                this.progress.start(3);
 
                 // Upload image
                 let imageId = null;
                 if (this.imageFileToUpload()) {
+                    this.progress.set(1, 'Uploading image...');
                     imageId = await this._data.uploadImage(
                         this.imageFileToUpload()!,
                     );
                 }
 
-                this.uploadProgress.set(50);
-
                 // Upload sound effect
                 let soundId = null;
                 if (this.soundFileToUpload()) {
+                    this.progress.set(2, 'Uploading sound effect...');
                     soundId = await this._data.uploadSound(
                         this.soundFileToUpload()!,
                     );
                 }
 
-                this.uploadProgress.set(75);
-
                 // Add the player record
+                this.progress.set(3, 'Adding player...');
                 await this._data.addPlayer({
                     name: this.name(),
                     createdAt: Timestamp.now(),
@@ -135,7 +137,7 @@ export class BuzzerPlayerAddDialog extends BaseEntityEditDialog<BuzzerPlayer> {
                     teamId: this.teamId(),
                 });
 
-                this.uploadProgress.set(100);
+                this.progress.finish();
             }
 
             this._dialog.close();
@@ -147,7 +149,7 @@ export class BuzzerPlayerAddDialog extends BaseEntityEditDialog<BuzzerPlayer> {
                 error,
             );
         } finally {
-            this.uploadProgress.set(0);
+            this.progress.reset();
             this.loading.set(false);
         }
     }

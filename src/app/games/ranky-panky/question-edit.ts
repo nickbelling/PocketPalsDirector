@@ -40,8 +40,6 @@ export class RankyPankyQuestionEditDialog extends BaseQuestionEditDialog<RankyPa
     protected itemValue = signal<number>(0);
     protected itemImage = signal<File | null>(null);
 
-    protected progress = signal<number>(0);
-
     constructor() {
         super(inject(RankyPankyDatabase));
 
@@ -87,20 +85,18 @@ export class RankyPankyQuestionEditDialog extends BaseQuestionEditDialog<RankyPa
         this.loading.set(true);
 
         try {
-            this.progress.set(10);
-
             // Set up the items that will make up this question
-            this.progress.set(10);
             const pendingItems = this.questionItems();
             const items: RankyPankyQuestionItem[] = [];
 
+            this.progress.start(pendingItems.length + 1);
             // Upload images
             for (let i = 0; i < pendingItems.length; i++) {
                 const item = pendingItems[i];
 
                 if (item.image !== null) {
                     // Newly added image, has image file
-                    this.progress.update((old) => old + 5);
+                    this.progress.increment(`Uploading image ${i + 1}...`);
                     const resized = await resizeImage(item.image, 300, 300);
                     const imageId = v4();
                     await this.uploadFile(resized, imageId);
@@ -116,6 +112,7 @@ export class RankyPankyQuestionEditDialog extends BaseQuestionEditDialog<RankyPa
             }
 
             if (this.editing) {
+                this.progress.increment('Updating question...');
                 await this.editQuestion({
                     name: this.questionName(),
                     description: this.questionDescription(),
@@ -128,9 +125,10 @@ export class RankyPankyQuestionEditDialog extends BaseQuestionEditDialog<RankyPa
                 // Delete any images from storage that have been deleted after
                 // being uploaded
                 for (const deletedImageId of this._deletedImageIds) {
-                    await this.deleteFile(deletedImageId, false);
+                    await this.deleteFile(deletedImageId);
                 }
             } else {
+                this.progress.increment('Adding question...');
                 await this.addQuestion({
                     name: this.questionName(),
                     description: this.questionDescription(),
@@ -141,9 +139,10 @@ export class RankyPankyQuestionEditDialog extends BaseQuestionEditDialog<RankyPa
                 });
             }
 
+            this.progress.finish();
             this.dialog.close();
         } finally {
-            this.progress.set(0);
+            this.progress.reset();
             this.loading.set(false);
         }
     }

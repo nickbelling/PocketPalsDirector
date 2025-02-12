@@ -11,8 +11,6 @@ import { VideogameCentipedeQuestion } from './model';
     templateUrl: './question-edit.html',
 })
 export class VideogameCentipedeQuestionEditDialog extends BaseQuestionEditDialog<VideogameCentipedeQuestion> {
-    private _db: VideogameCentipedeDatabase;
-
     protected prompt = signal<string>('');
     protected answer = signal<string>('');
     protected isValid = computed(
@@ -21,9 +19,7 @@ export class VideogameCentipedeQuestionEditDialog extends BaseQuestionEditDialog
     );
 
     constructor() {
-        const db = inject(VideogameCentipedeDatabase);
-        super(db);
-        this._db = db;
+        super(inject(VideogameCentipedeDatabase));
     }
 
     public async submit(): Promise<void> {

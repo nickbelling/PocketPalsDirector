@@ -42,12 +42,12 @@ export class ScreenshotInTheDarkDatabase extends BaseGameDatabase<
         if (guessTheGameId) {
             const baseUrl = `${guessTheGameId}_`;
             const deletions = [
-                this.deleteFile(baseUrl + 1, false),
-                this.deleteFile(baseUrl + 2, false),
-                this.deleteFile(baseUrl + 3, false),
-                this.deleteFile(baseUrl + 4, false),
-                this.deleteFile(baseUrl + 5, false),
-                this.deleteFile(baseUrl + 6, false),
+                this.deleteFile(baseUrl + 1),
+                this.deleteFile(baseUrl + 2),
+                this.deleteFile(baseUrl + 3),
+                this.deleteFile(baseUrl + 4),
+                this.deleteFile(baseUrl + 5),
+                this.deleteFile(baseUrl + 6),
             ];
 
             await Promise.all(deletions);

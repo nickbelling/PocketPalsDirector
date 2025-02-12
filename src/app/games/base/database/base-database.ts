@@ -27,6 +27,11 @@ import {
 export type GameStateLike = object & { currentQuestion: string | null };
 export type GameQuestionLike = object;
 
+/**
+ * An abstract base class that games can implement to reduce boilerplate around
+ * management of data in Firebase, such as question lists, game state, and
+ * associated files in Storage.
+ */
 export abstract class BaseGameDatabase<
     TState extends GameStateLike,
     TQuestion extends GameQuestionLike,
@@ -87,7 +92,7 @@ export abstract class BaseGameDatabase<
         }
     });
 
-    /** The current question entity. */
+    /** The current question entity, or undefined if no question is selected. */
     public readonly currentQuestion = computed<Entity<TQuestion> | undefined>(
         () => {
             const currentQuestionIndex = this.currentQuestionIndex();
@@ -96,7 +101,10 @@ export abstract class BaseGameDatabase<
         },
     );
 
-    /** The next question entity after the current one. */
+    /**
+     * The next question entity after the current one, or undefined if the
+     * current question is the last one.
+     */
     public readonly nextQuestion = computed<Entity<TQuestion> | undefined>(
         () => {
             const currentQuestionIndex = this.currentQuestionIndex();
@@ -122,23 +130,23 @@ export abstract class BaseGameDatabase<
         // Create the state/question signals. These are ONLY updatable from
         // within this constructor, so their public types are just `Signal<T>`,
         // even though here we're creating `WritableSignal<T>`s for use later on
-        // in the callbacks, and we just setting the public properties to their
+        // in the callbacks, and we just set the public properties to their
         // references.
         const stateSignal = signal<TState>(defaultState);
         this.state = stateSignal;
         const questionsSignal = signal<Entity<TQuestion>[]>([]);
         this.questions = questionsSignal;
 
-        // Create a reference to the TState document.
+        // Create a reference to the TState document in Firestore.
         this._stateRef = doc(this._firestore, path).withConverter(
             this._stateConverter,
         );
 
-        // Set up a snapshot of the TState document.
+        // Set up a snapshot updated callback of the TState document.
         const unsubscribeState: Unsubscribe = onSnapshot(
             this._stateRef,
             (snapshot) => {
-                // Either this is the document or it's null/undefined.
+                // Either we got the document, or it's null/undefined.
                 // If null/undefined, use the defaultState.
                 const documentData = snapshot.data() || defaultState;
 
@@ -147,7 +155,7 @@ export abstract class BaseGameDatabase<
             },
         );
 
-        // Create a reference to the TQuestion collection.
+        // Create a reference to the TQuestion collection in Firestore.
         this._questionsRef = collection(
             this._firestore,
             `${path}/questions`,
@@ -159,7 +167,7 @@ export abstract class BaseGameDatabase<
             orderBy('createdAt'),
         ).withConverter(this._questionConverter);
 
-        // Set up a snapshot of the TQuestion collection.
+        // Set up a snapshot updated callback of the TQuestion collection.
         const unsubscribeQuestions: Unsubscribe = onSnapshot(
             questionsQuery,
             (snapshot) => {
@@ -174,7 +182,7 @@ export abstract class BaseGameDatabase<
             },
         );
 
-        // Unsubscribe from the snapshots when the
+        // Unsubscribe from the snapshots when this service is destroyed.
         this._destroyRef.onDestroy(() => {
             unsubscribeState();
             unsubscribeQuestions();
@@ -230,8 +238,8 @@ export abstract class BaseGameDatabase<
     //#endregion
 
     /**
-     * Sets the current state of the game.
-     * @param state The new state object to set.
+     * Sets or updates the current state of the game.
+     * @param state The new state object to set, or a partial implementation.
      */
     public async setState(state: TState | Partial<TState>): Promise<void> {
         await setDoc(this._stateRef, state, { merge: true });
@@ -250,6 +258,7 @@ export abstract class BaseGameDatabase<
      */
     public async addQuestion(question: TQuestion): Promise<void> {
         await this.beforeAddQuestion(question);
+
         const newDocRef = await addDoc(this._questionsRef, {
             ...question,
             createdAt: serverTimestamp(),
@@ -257,27 +266,32 @@ export abstract class BaseGameDatabase<
         const addedEntity = await getDoc(
             newDocRef.withConverter(this._questionConverter),
         );
+
         await this.afterAddQuestion(addedEntity.data()!);
     }
 
     /**
      * Edits a question.
      * @param id The Firebase ID of the question to edit.
-     * @param question The updated question.
+     * @param question The updated question, or a partial implementation.
+     * @returns The edited question.
      */
     public async editQuestion(
         id: string,
         question: TQuestion | Partial<TQuestion>,
     ): Promise<Entity<TQuestion>> {
         await this.beforeEditQuestion(id, question);
+
         const questionDocRef = doc(
             this._firestore,
             `${this._questionsRef.path}/${id}`,
         ).withConverter(this._questionConverter);
         await setDoc(questionDocRef, question, { merge: true });
+
         const editedEntity = await getDoc(
             questionDocRef.withConverter(this._questionConverter),
         );
+
         await this.afterEditQuestion(editedEntity.data()!);
         return editedEntity.data()!;
     }
@@ -320,7 +334,7 @@ export abstract class BaseGameDatabase<
      * @param onProgress Optional callback for reporting upload progress.
      * @returns The full internal storage path of the file. NOTE: this must be
      * converted to a download URL using the "getDownloadUrl" function or the
-     * "resolveStorageUrl" function to be used publicly.
+     * "resolveStorageUrl" function if used publicly.
      */
     public async uploadFile(
         file: File,
@@ -332,6 +346,7 @@ export abstract class BaseGameDatabase<
 
         // Upload the file
         const uploadTask = uploadBytesResumable(storageRef, file, {
+            // Ensure the file is publicly accessible
             cacheControl: 'public, max-age=31536000',
         });
 
@@ -358,18 +373,9 @@ export abstract class BaseGameDatabase<
     /**
      * Deletes an uploaded file from storage for this service.
      * @param path The Firebase path to the file to delete (not the download URL).
-     * @param isFullPath True if the path is a full path; false if it is only a
-     * subpath.
      */
-    public async deleteFile(
-        path: string,
-        isFullPath: boolean = true,
-    ): Promise<void> {
-        if (!isFullPath) {
-            // Path is not a full path, append it to this database's main path
-            path = `${this._path}/${path}`;
-        }
-
+    public async deleteFile(subPath: string): Promise<void> {
+        const path = `${this._path}/${subPath}`;
         const fileRef = ref(this._storage, path);
         await deleteObject(fileRef);
     }

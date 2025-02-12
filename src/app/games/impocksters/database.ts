@@ -28,6 +28,6 @@ export class ImpockstersDatabase extends BaseGameDatabase<
     protected override async afterDeleteQuestion(
         question: Entity<ImpockstersQuestion>,
     ): Promise<void> {
-        await this.deleteFile(question.imageId, false);
+        await this.deleteFile(question.imageId);
     }
 }

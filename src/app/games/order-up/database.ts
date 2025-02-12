@@ -30,7 +30,7 @@ export class OrderUpDatabase extends BaseGameDatabase<
     ): Promise<void> {
         // Delete the images associated with this question
         for (const item of question.items) {
-            await this.deleteFile(item.imageId, false);
+            await this.deleteFile(item.imageId);
         }
     }
 

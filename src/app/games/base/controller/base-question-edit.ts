@@ -1,20 +1,28 @@
 import { inject } from '@angular/core';
+import { ProgressMonitor } from '../../../common/components/progress';
 import { ToastService } from '../../../common/toast';
 import { BaseGameDatabase, GameQuestionLike, GameStateLike } from '../database';
 import { BaseEntityEditDialog } from './base-entity-edit';
 
+/**
+ * Base class for a dialog component for editing a game question.
+ * Abstracts away as much of the common stuff as possible.
+ */
 export class BaseQuestionEditDialog<
     TQuestion extends GameQuestionLike,
 > extends BaseEntityEditDialog<TQuestion> {
-    private _toast = inject(ToastService);
-    protected db: BaseGameDatabase<GameStateLike, TQuestion>;
-    protected question = this.entity;
+    protected _toast = inject(ToastService);
+
+    public readonly db: BaseGameDatabase<GameStateLike, TQuestion>;
+    public readonly question = this.entity;
+    public readonly progress = new ProgressMonitor();
 
     constructor(db: BaseGameDatabase<GameStateLike, TQuestion>) {
         super();
         this.db = db;
     }
 
+    /** Adds the given question to the database. */
     protected async addQuestion(question: TQuestion): Promise<void> {
         const questionName = this.db.getQuestionString(question);
 
@@ -26,6 +34,7 @@ export class BaseQuestionEditDialog<
         }
     }
 
+    /** Updates the given question in the database. */
     protected async editQuestion(
         question: TQuestion | Partial<TQuestion>,
     ): Promise<void> {
@@ -47,6 +56,7 @@ export class BaseQuestionEditDialog<
         }
     }
 
+    /** Uploads the given file to this game's Firebase Storage subpath. */
     protected async uploadFile(
         file: File,
         subPath: string,
@@ -55,10 +65,8 @@ export class BaseQuestionEditDialog<
         return await this.db.uploadFile(file, subPath, onProgress);
     }
 
-    protected async deleteFile(
-        path: string,
-        isFullPath: boolean = false,
-    ): Promise<void> {
-        await this.db.deleteFile(path, isFullPath);
+    /** Deletes the given file from this game's Firebase Storage subpath. */
+    protected async deleteFile(subPath: string): Promise<void> {
+        await this.db.deleteFile(subPath);
     }
 }

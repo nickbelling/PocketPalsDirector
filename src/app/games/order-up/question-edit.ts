@@ -31,7 +31,6 @@ export class OrderUpQuestionEditDialog extends BaseQuestionEditDialog<OrderUpQue
     protected name = signal<string>('');
     protected description = signal<string>('');
     protected items = signal<OrderUpQuestionPendingItem[]>([]);
-    protected progress = signal<number>(0);
     protected itemName = signal<string>('');
     protected itemValue = signal<string>('');
     protected itemImage = signal<File | null>(null);
@@ -75,12 +74,11 @@ export class OrderUpQuestionEditDialog extends BaseQuestionEditDialog<OrderUpQue
         this.loading.set(true);
 
         try {
-            this.progress.set(5);
-
             // Set up the items that will make up this question
-            this.progress.set(10);
             const pendingItems = this.items();
             const items: OrderUpQuestionItem[] = [];
+
+            this.progress.start(pendingItems.length + 1);
 
             // Upload images
             for (let i = 0; i < pendingItems.length; i++) {
@@ -88,7 +86,7 @@ export class OrderUpQuestionEditDialog extends BaseQuestionEditDialog<OrderUpQue
 
                 if (item.image !== null) {
                     // Newly added image, has image file
-                    this.progress.update((old) => old + 5);
+                    this.progress.increment(`Uploading image ${i + 1}...`);
                     const resized = await resizeImage(item.image, 300, 300);
                     const imageId = v4();
                     await this.uploadFile(resized, imageId);
@@ -103,9 +101,8 @@ export class OrderUpQuestionEditDialog extends BaseQuestionEditDialog<OrderUpQue
                 });
             }
 
-            this.progress.set(90);
-
             if (this.editing) {
+                this.progress.increment('Updating question...');
                 await this.editQuestion({
                     name: this.name(),
                     description: this.description(),
@@ -118,14 +115,15 @@ export class OrderUpQuestionEditDialog extends BaseQuestionEditDialog<OrderUpQue
                     await this.deleteFile(deletedImageId);
                 }
             } else {
+                this.progress.increment('Adding question...');
                 await this.addQuestion({
                     name: this.name(),
                     description: this.description(),
                     items: items,
                 });
-
-                this.progress.set(100);
             }
+
+            this.progress.finish();
             this.dialog.close();
         } finally {
             this.loading.set(false);

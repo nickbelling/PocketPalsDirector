@@ -33,8 +33,8 @@ export class AvoidingTheDmcaDatabase extends BaseGameDatabase<
         question: Entity<AvoidingTheDmcaQuestion>,
     ): Promise<void> {
         // Delete the audio files associated with the question
-        await this.deleteFile(question.soundForwards, false);
-        await this.deleteFile(question.soundBackwards, false);
+        await this.deleteFile(question.soundForwards);
+        await this.deleteFile(question.soundBackwards);
     }
 
     /**
@@ -184,7 +184,7 @@ export class AvoidingTheDmcaDatabase extends BaseGameDatabase<
             segmentData.push(channelData);
         }
 
-        // Mix down to mono for simplicity (optional: handle stereo)
+        // Mix down to mono for simplicity
         let monoData: Float32Array;
         if (numChannels > 1) {
             monoData = new Float32Array(segmentLength);

@@ -19,7 +19,7 @@
         <span>{{ audioStartPoint() | secondsToDuration }}</span>
     </div>
 
-    <mat-progress-bar class="layout-fill" [value]="progress()" />
+    <progress-indicator [monitor]="progress" />
 </mat-dialog-content>
 
 <mat-dialog-actions class="layout-row layout-items-middle g">

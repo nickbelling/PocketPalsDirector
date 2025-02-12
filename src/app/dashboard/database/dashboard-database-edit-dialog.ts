@@ -7,6 +7,7 @@ import {
     MatDialogRef,
 } from '@angular/material/dialog';
 import { toPng } from 'html-to-image';
+import { ProgressMonitor } from '../../common/components/progress';
 import { ConfirmDialog } from '../../common/dialog';
 import { Entity } from '../../common/firestore';
 import { ToastService } from '../../common/toast';
@@ -53,6 +54,7 @@ export class DashboardGamesDatabaseEditDialog {
     private _newDialog = inject(MatDialog);
     private _toast = inject(ToastService);
     private _overlay = inject(Overlay);
+    protected progress = new ProgressMonitor();
 
     /** The VGDB record for the game currently being edited. */
     public game = inject<Entity<VideogameDatabaseItem>>(MAT_DIALOG_DATA);
@@ -87,21 +89,28 @@ export class DashboardGamesDatabaseEditDialog {
         }
 
         try {
+            this.progress.start(3);
+
             if (logoFile) {
+                this.progress.set(1, 'Uploading logo image...');
                 await this._vgDb.uploadLogo(this.game.id, logoFile);
             }
 
             if (heroFile) {
+                this.progress.set(2, 'Uploading hero image...');
                 await this._vgDb.uploadHero(this.game.id, heroFile);
             }
 
+            this.progress.set(3, 'Updating game...');
             await this._vgDb.markGameAsUpdated(this.game.id);
 
+            this.progress.finish();
             this._toast.info(`${this.game.name} updated successfully.`);
             this._dialog.close();
         } catch (error) {
             this._toast.error(`Failed to update ${this.game.name}.`, error);
         } finally {
+            this.progress.reset();
             this.loading.set(false);
         }
     }

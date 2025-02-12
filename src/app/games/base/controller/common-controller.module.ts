@@ -33,6 +33,7 @@ import {
     ImageFileField,
 } from '../../../common/components/file-fields';
 import { Player } from '../../../common/components/player';
+import { ProgressIndicator } from '../../../common/components/progress';
 import {
     QuestionDisplay,
     QuestionSelector,
@@ -86,6 +87,7 @@ const CONTROLLER_MODULES: Type<unknown>[] = [
     QuestionSelector,
     QuestionTemplateDirective,
     QuestionDisplay,
+    ProgressIndicator,
 ];
 
 /**

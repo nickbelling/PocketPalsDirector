@@ -82,7 +82,7 @@ export class RankyPankyController extends BaseController<
                 onDelete: async () => {
                     // Delete all uploaded files for this question
                     question.items.forEach(async (item) => {
-                        await this.deleteFile(item.uploadedFilePath, true);
+                        await this.deleteFile(item.uploadedFilePath);
                     });
 
                     // Delete the question
