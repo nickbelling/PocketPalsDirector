@@ -31,6 +31,6 @@
     type="file"
     #fileInput
     hidden
-    accept="image/*"
+    [accept]="acceptType()"
     multiple="false"
     (change)="fileToUpload.set(fileInput.files![0])" />
