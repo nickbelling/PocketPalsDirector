@@ -8,6 +8,5 @@ import { BootstrapModule } from './common/bootstrap/bootstrap.module';
     imports: [CommonModule, RouterModule, BootstrapModule],
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrl: './app.component.scss',
 })
 export class AppComponent {}

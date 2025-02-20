@@ -23,7 +23,7 @@ $colors: (
 }
 
 :root {
-    // Set
+    // Set the --bg-[color] root variables
     @each $color-name, $color-value in $colors {
         --bg-#{$color-name}: radial-gradient(
             circle at 10% 20%,

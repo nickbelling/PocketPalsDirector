@@ -40,6 +40,7 @@ export class LightlySteamedGame extends BaseGame<
         effect(() => {
             const state = this.state();
 
+            // Whenever the review changes, pick a random avatar image and color
             if (state.currentReview !== this._lastReviewNum) {
                 let randomAvatarNum = getRandomItem(RANDOM_AVATAR_NUMS);
                 while (this.randomAvatarNum() === randomAvatarNum) {

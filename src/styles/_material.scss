@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
 
+/** Configures Angular Material themes specific to this app. */
 @mixin all-material() {
     html {
         @include mat.theme(

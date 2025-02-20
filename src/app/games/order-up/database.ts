@@ -34,6 +34,10 @@ export class OrderUpDatabase extends BaseGameDatabase<
         }
     }
 
+    /**
+     * Based on the "currentQuestionRevealOrder" in the state object, orders the
+     * item objects for the current question in that order.
+     */
     public readonly revealOrderedItems = computed(() => {
         const state = this.state();
         const question = this.currentQuestion();
@@ -53,6 +57,7 @@ export class OrderUpDatabase extends BaseGameDatabase<
         }
     });
 
+    /** The "revealed" items in their sorted order. */
     public readonly sortedRevealedItems = computed(() => {
         const state = this.state();
         const revealOrderedItems = this.revealOrderedItems();
@@ -62,10 +67,15 @@ export class OrderUpDatabase extends BaseGameDatabase<
             .sort((a, b) => a.order - b.order);
     });
 
+    /** The "revealed" item indexes. */
     public readonly sortedRevealedIndexes = computed(() => {
         return this.sortedRevealedItems().map((i) => i.order);
     });
 
+    /**
+     * The next item in the reveal order that has not yet currently been sorted
+     * into place.
+     */
     public readonly nextItem = computed(() => {
         const state = this.state();
         const revealOrderedItems = this.revealOrderedItems();
@@ -73,6 +83,10 @@ export class OrderUpDatabase extends BaseGameDatabase<
         return revealOrderedItems[state.revealedCount];
     });
 
+    /**
+     * The currently displayed items, with the "next" item in its currently
+     * pending position.
+     */
     public readonly displayedItems = computed(() => {
         const state = this.state();
         const sortedRevealedItems = this.sortedRevealedItems();

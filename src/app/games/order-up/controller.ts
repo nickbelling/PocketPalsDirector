@@ -44,6 +44,7 @@ export class OrderUpController extends BaseController<
             });
         }
 
+        // Shuffle the items in the question into a randomized "reveal" order.
         const sortedIndexes = question?.items.map((i) => i.order) || [];
         const randomizedIndexes = randomizeItems(sortedIndexes);
 

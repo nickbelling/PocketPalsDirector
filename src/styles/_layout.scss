@@ -1,5 +1,6 @@
 @use 'sass:math';
 
+/** Utility classes for simplifying flex layouts. */
 @mixin all-layout() {
     /* This element should be the app's root element */
     body > :first-child {

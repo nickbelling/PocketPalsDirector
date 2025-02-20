@@ -1,5 +1,11 @@
 import { Routes } from '@angular/router';
 
+/**
+ * Routes used by the Angular router at the application root.
+ *
+ * Note that we use `import()` statements from `loadComponent` or `loadChildren`
+ * callbacks rather than direct usage to facilitate chunking and lazy loading.
+ */
 export const routes: Routes = [
     {
         path: '',

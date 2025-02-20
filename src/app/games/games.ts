@@ -27,15 +27,41 @@ import { VideogameCentipedeController } from './videogame-centipede/controller';
 import { VideogameCentipedeGame } from './videogame-centipede/game';
 
 export interface GameDefinition {
+    /** The game's canonical name. */
     name: string;
+
+    /**
+     * A "slugged" version of the game's name - used for routing to the game's
+     * browser source link for OBS/vMix.
+     */
     slug: string;
+
+    /** An icon representing the game. */
     icon?: string;
+
+    /** The game's Angular component. */
     game: Type<unknown>;
+
+    /** The game's director controller Angular component. */
     controller: Type<unknown>;
+
+    /**
+     * True if the game supports buzzers and therefore should add those controls
+     * to the controller.
+     */
     supportsBuzzers: boolean;
+
+    /**
+     * The default resolution for the game as it should appear in the director's
+     * preview for this game.
+     */
     defaultResolution: Resolution;
 }
 
+/**
+ * Definitions for each game, used as route data to both list the available
+ * games but also define their slug
+ */
 export const GAMES: GameDefinition[] = [
     {
         name: 'Avoiding the DMCA',
