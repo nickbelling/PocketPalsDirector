@@ -14,13 +14,14 @@ import { FormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GameQuestionLike } from '../../../games/base/database';
-import { ConfirmDialog } from '../../dialog';
+import { ConfirmDialog, DocumentationDialog } from '../../dialog';
 import { Entity } from '../../firestore';
 import { QuestionEditorService } from './question-edit-service';
 import { QuestionTemplateDirective } from './question-template';
@@ -45,6 +46,7 @@ import { QuestionTemplateDirective } from './question-template';
         MatBadgeModule,
         MatButtonModule,
         MatCardModule,
+        MatDialogModule,
         MatFormFieldModule,
         MatIconModule,
         MatSelectModule,
@@ -56,6 +58,7 @@ import { QuestionTemplateDirective } from './question-template';
 })
 export class QuestionSelector<TQuestion extends Entity<GameQuestionLike>> {
     private _confirm = inject(ConfirmDialog);
+    private _docs = inject(DocumentationDialog);
     private _viewContainerRef = inject(ViewContainerRef);
     private _edit = inject(QuestionEditorService);
 
@@ -64,6 +67,9 @@ export class QuestionSelector<TQuestion extends Entity<GameQuestionLike>> {
 
     /** The currently selected question. `undefined` if no question selected. */
     public readonly currentQuestion = model.required<TQuestion | undefined>();
+
+    /** The Markdown documentation for this game. */
+    public readonly documentation = input<string | undefined>();
 
     /** True if the game has editable questions. */
     public readonly canEdit = input(false, { transform: booleanAttribute });
@@ -214,6 +220,15 @@ export class QuestionSelector<TQuestion extends Entity<GameQuestionLike>> {
                 },
             },
         );
+    }
+
+    /** Shows a popup that includes the documentation for this game. */
+    public showDocs(): void {
+        const docs = this.documentation();
+
+        if (docs) {
+            this._docs.open('How to play', docs);
+        }
     }
 
     /**

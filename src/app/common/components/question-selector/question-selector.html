@@ -5,6 +5,12 @@
                 <mat-icon>refresh</mat-icon>
                 <span>Reset game</span>
             </button>
+            @if (documentation()) {
+                <button mat-flat-button class="help" (click)="showDocs()">
+                    <mat-icon>help_circle</mat-icon>
+                    <span>How to play</span>
+                </button>
+            }
             <span class="layout-fill"></span>
             <mat-slide-toggle
                 [checked]="editModeEnabled()"
