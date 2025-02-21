@@ -1,26 +1,39 @@
 @let state = this.state();
 @let question = currentQuestion();
 
+@let gameId = this.gameId();
+@let trackName = this.trackName();
+
 @if (question) {
     <div class="game-panel" @fadeInOut>
-        <playing-card class="game-card" [showingFront]="state.showingGame">
+        <playing-card
+            class="game-card"
+            [showingFront]="state.showingGame"
+            (shownBack)="gameBackShowing.set(true)"
+            (shownFront)="gameBackShowing.set(false)">
             <playing-card-back
                 class="layout-column layout-items-middle bg-purple">
                 <span>Game</span>
             </playing-card-back>
             <playing-card-front>
-                <game-hero [gameId]="question.gameId" />
+                @if (gameId) {
+                    <game-hero [gameId]="gameId" />
+                }
             </playing-card-front>
         </playing-card>
 
-        <playing-card class="track-card" [showingFront]="state.showingTrack">
+        <playing-card
+            class="track-card"
+            [showingFront]="state.showingTrack"
+            (shownBack)="trackBackShowing.set(true)"
+            (shownFront)="trackBackShowing.set(false)">
             <playing-card-back
                 class="layout-column layout-items-middle bg-blue">
                 <span>Track</span>
             </playing-card-back>
             <playing-card-front
                 class="layout-column layout-items-middle bg-blue">
-                <span>{{ question.trackName }}</span>
+                <span>{{ trackName }}</span>
             </playing-card-front>
         </playing-card>
 
