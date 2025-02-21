@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Entity } from '../../common/firestore';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { AvoidingTheDmcaDatabase } from './database';
+import docs from './index.md';
 import { AvoidingTheDmcaQuestion, AvoidingTheDmcaState } from './model';
 import { AvoidingTheDmcaQuestionEditDialog } from './question-edit';
 
@@ -13,6 +14,8 @@ export class AvoidingTheDmcaController extends BaseController<
     AvoidingTheDmcaState,
     AvoidingTheDmcaQuestion
 > {
+    public docs = docs;
+
     constructor() {
         super(inject(AvoidingTheDmcaDatabase));
     }
