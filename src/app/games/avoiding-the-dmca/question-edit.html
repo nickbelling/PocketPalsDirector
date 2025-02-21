@@ -9,14 +9,17 @@
         <input matInput required [(ngModel)]="trackName" />
     </mat-form-field>
     <audio-file-field [(fileToUpload)]="fileToUpload" />
-    <div class="layout-row layout-items-middle g">
-        <mat-slider
-            class="layout-fill overflow-visible"
-            [disabled]="audioLengthSeconds() === 0"
-            [max]="audioLengthSeconds()">
-            <input matSliderThumb [(ngModel)]="audioStartPoint" />
-        </mat-slider>
-        <span>{{ audioStartPoint() | secondsToDuration }}</span>
+    <div class="layout-column">
+        <div class="layout-row layout-items-middle g">
+            <mat-slider
+                class="layout-fill overflow-visible"
+                [disabled]="audioLengthSeconds() === 0"
+                [max]="audioLengthSeconds()">
+                <input matSliderThumb [(ngModel)]="audioStartPoint" />
+            </mat-slider>
+            <span>{{ audioStartPoint() | secondsToDuration }}</span>
+        </div>
+        <mat-hint>Drag slider to select audio start point.</mat-hint>
     </div>
 
     <progress-indicator [monitor]="progress" />
