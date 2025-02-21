@@ -39,7 +39,10 @@
                             "deep-equal",
                             "pica",
                             "slugify"
-                        ]
+                        ],
+                        "loader": {
+                            ".md": "text"
+                        }
                     },
                     "configurations": {
                         "production": {

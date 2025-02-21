@@ -33,3 +33,11 @@ export interface ConfirmDialogOptions {
     /** Fired when the user clicks "Delete" in the dialog. */
     onDelete?: Callback<void>;
 }
+
+export interface DocumentationDialogData {
+    /** The title, as it should appear in the dialog's toolbar. */
+    title: string;
+
+    /** The main documentation to display, in Markdown format. */
+    documentation: string;
+}
