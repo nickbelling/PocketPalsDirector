@@ -2,6 +2,7 @@ import { Component, computed, inject, linkedSignal } from '@angular/core';
 import { Entity } from '../../common/firestore';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { BeatItDatabase } from './database';
+import docs from './index.md';
 import { BeatItQuestion, BeatItState } from './model';
 import { BeatItQuestionEditDialog } from './question-edit';
 
@@ -13,6 +14,7 @@ export class BeatItController extends BaseController<
     BeatItState,
     BeatItQuestion
 > {
+    protected docs = docs;
     protected data: BeatItDatabase;
     protected guess = linkedSignal<number>(() => this.state().currentGuess);
 
@@ -25,7 +27,7 @@ export class BeatItController extends BaseController<
             const answer = question.hours;
             const percentage = Math.abs(guess - answer) / answer;
 
-            if (percentage <= 0.05) return 5;
+            if (Math.abs(guess - answer) <= 0.5) return 5;
             else if (percentage <= 0.1) return 4;
             else if (percentage <= 0.2) return 3;
             else if (percentage <= 0.3) return 2;
