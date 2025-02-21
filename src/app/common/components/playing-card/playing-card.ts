@@ -1,11 +1,18 @@
 import {
     animate,
+    AnimationEvent,
     state,
     style,
     transition,
     trigger,
 } from '@angular/animations';
-import { Component, computed, contentChild, input } from '@angular/core';
+import {
+    Component,
+    computed,
+    contentChild,
+    input,
+    output,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 
 /**
@@ -37,6 +44,12 @@ export class PlayingCard {
 
     /** True if the card should gently rotate with a Balatro-like animation. */
     public readonly animated = input<boolean>(false);
+
+    /** Fired when the front is fully shown. */
+    public readonly shownFront = output<void>();
+
+    /** Fired when the back is fully shown. */
+    public readonly shownBack = output<void>();
 
     /** A reference to the child `<playing-card-back>`. */
     private _playingCardBack = contentChild(PlayingCardBack);
@@ -71,6 +84,42 @@ export class PlayingCard {
             return '';
         }
     });
+
+    /**
+     * Fired when the flipFront animation is complete. If we're showing the
+     * front when this happens, emit the "shownFront" event.
+     */
+    public onFlipFrontDone(event: AnimationEvent): void {
+        if (event.totalTime > 0) {
+            if (this.showingFront()) {
+                this.shownFront.emit();
+            } else {
+                // Animation completed, but we're showing the back.
+                // This means the front flipped OUT of view rather than in view.
+            }
+        } else {
+            // The animation event fired due to the component being disposed.
+            // Don't ever emit the event in this case
+        }
+    }
+
+    /**
+     * Fired when the flipBack animation is complete. If we're showing the
+     * back when this happens, emit the "shownBack" event.
+     */
+    public onFlipBackDone(event: AnimationEvent): void {
+        if (event.totalTime > 0) {
+            if (!this.showingFront()) {
+                this.shownBack.emit();
+            } else {
+                // Animation completed, but we're showing the front.
+                // This means the back flipped OUT of view rather than in view.
+            }
+        } else {
+            // The animation event fired due to the component being disposed.
+            // Don't ever emit the event in this case
+        }
+    }
 }
 
 /** The "front" component of a `<playing-card>`. */

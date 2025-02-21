@@ -4,12 +4,14 @@
     [class.animate]="animated()">
     <mat-card
         class="playing-card-front {{ frontClass() }}"
-        [@flipFront]="showingFront() ? 'front' : 'back'">
+        [@flipFront]="showingFront() ? 'front' : 'back'"
+        (@flipFront.done)="onFlipFrontDone($event)">
         <ng-content select="playing-card-front"></ng-content>
     </mat-card>
     <mat-card
         class="playing-card-back {{ backClass() }}"
-        [@flipBack]="showingFront() ? 'front' : 'back'">
+        [@flipBack]="showingFront() ? 'front' : 'back'"
+        (@flipBack.done)="onFlipBackDone($event)">
         <ng-content select="playing-card-back"></ng-content>
     </mat-card>
 </div>
