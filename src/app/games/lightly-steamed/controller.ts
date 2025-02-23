@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Entity } from '../../common/firestore';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { LightlySteamedDatabase } from './database';
+import docs from './index.md';
 import {
     LIGHTLY_STEAMED_STATE_DEFAULT,
     LightlySteamedQuestion,
@@ -18,6 +19,8 @@ export class LightlySteamedController extends BaseController<
     LightlySteamedQuestion
 > {
     protected data: LightlySteamedDatabase;
+
+    protected docs = docs;
 
     constructor() {
         const database = inject(LightlySteamedDatabase);

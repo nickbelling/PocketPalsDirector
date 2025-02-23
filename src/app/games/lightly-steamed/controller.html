@@ -8,6 +8,7 @@
         [currentQuestion]="currentQuestion()"
         (currentQuestionChange)="setQuestion($event)"
         (reset)="reset()"
+        [documentation]="docs"
         canNavigate
         (addQuestion)="addQuestion()"
         canEdit
@@ -33,7 +34,7 @@
                             mat-flat-button
                             (click)="setReview($index)"
                             [disabled]="state.currentReview === $index">
-                            <span>{{ $index + 1 }}</span>
+                            <span>{{ 5 - $index }}</span>
                         </button>
                     }
                     <button
