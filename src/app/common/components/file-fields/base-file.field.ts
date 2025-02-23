@@ -67,6 +67,9 @@ export abstract class BaseFileField {
     /** The field's label (displayed above it). */
     public readonly label = model<string>();
 
+    /** An optional hint to display underneath the form field. */
+    public readonly hint = input<string | undefined>();
+
     /** True if pasting is allowed. */
     public readonly canPaste = input(true);
 

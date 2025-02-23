@@ -24,6 +24,9 @@
             <mat-icon>content_paste</mat-icon>
         </button>
     }
+    @if (hint()) {
+        <mat-hint>{{ hint() }}</mat-hint>
+    }
 </mat-form-field>
 
 <!-- Hidden file upload field -->
