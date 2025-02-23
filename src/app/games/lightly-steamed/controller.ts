@@ -19,7 +19,6 @@ export class LightlySteamedController extends BaseController<
     LightlySteamedQuestion
 > {
     protected data: LightlySteamedDatabase;
-
     protected docs = docs;
 
     constructor() {

@@ -14,7 +14,7 @@ export class AvoidingTheDmcaController extends BaseController<
     AvoidingTheDmcaState,
     AvoidingTheDmcaQuestion
 > {
-    public docs = docs;
+    protected docs = docs;
 
     constructor() {
         super(inject(AvoidingTheDmcaDatabase));

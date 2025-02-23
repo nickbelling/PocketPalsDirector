@@ -34,7 +34,8 @@
                 </mat-form-field>
                 <image-file-field
                     [(fileToUpload)]="itemImage"
-                    [focusElement]="focus" />
+                    [focusElement]="focus"
+                    hint="Use a square-ish image." />
             </mat-card-content>
             <mat-card-actions align="end">
                 <button
@@ -54,6 +55,7 @@
         <mat-card-header>
             <mat-card-title>Items (in correct order)</mat-card-title>
         </mat-card-header>
+
         <mat-list cdkDropList>
             @for (item of items(); track item.name) {
                 <mat-list-item cdkDrag (cdkDragDropped)="reorder($event)">
@@ -82,6 +84,15 @@
                 <mat-list-item>No items.</mat-list-item>
             }
         </mat-list>
+
+        @if (items().length < 10) {
+            <mat-card-footer class="p">
+                <alert
+                    class=""
+                    type="warning"
+                    title="There must be at least 10 items." />
+            </mat-card-footer>
+        }
     </mat-card>
 </mat-dialog-content>
 

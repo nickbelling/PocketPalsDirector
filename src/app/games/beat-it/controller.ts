@@ -14,8 +14,9 @@ export class BeatItController extends BaseController<
     BeatItState,
     BeatItQuestion
 > {
-    protected docs = docs;
     protected data: BeatItDatabase;
+    protected docs = docs;
+
     protected guess = linkedSignal<number>(() => this.state().currentGuess);
 
     protected score = computed(() => {

@@ -19,7 +19,6 @@ export class ImpockstersController extends BaseController<
     ImpockstersQuestion
 > {
     protected data: ImpockstersDatabase;
-
     protected docs = docs;
 
     constructor() {
