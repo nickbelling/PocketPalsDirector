@@ -2,9 +2,9 @@ import { Component, inject } from '@angular/core';
 import { Entity } from '../../common/firestore';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { VideogameCentipedeDatabase } from './database';
-import docs from './index.md';
 import { VideogameCentipedeQuestion, VideogameCentipedeState } from './model';
 import { VideogameCentipedeQuestionEditDialog } from './question-edit';
+import docs from './README.md';
 
 @Component({
     imports: [CommonControllerModule],

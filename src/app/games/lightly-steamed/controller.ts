@@ -2,13 +2,13 @@ import { Component, inject } from '@angular/core';
 import { Entity } from '../../common/firestore';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { LightlySteamedDatabase } from './database';
-import docs from './index.md';
 import {
     LIGHTLY_STEAMED_STATE_DEFAULT,
     LightlySteamedQuestion,
     LightlySteamedState,
 } from './model';
 import { LightlySteamedQuestionEditDialog } from './question-edit';
+import docs from './README.md';
 
 @Component({
     imports: [CommonControllerModule],

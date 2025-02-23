@@ -2,13 +2,13 @@ import { Component, inject } from '@angular/core';
 import { Entity } from '../../common/firestore';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { ImpockstersDatabase } from './database';
-import docs from './index.md';
 import {
     IMPOCKSTERS_STATE_DEFAULT,
     ImpockstersQuestion,
     ImpockstersState,
 } from './model';
 import { ImpockstersQuestionEditDialog } from './question-edit';
+import docs from './README.md';
 
 @Component({
     imports: [CommonControllerModule],

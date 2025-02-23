@@ -2,13 +2,13 @@ import { Component, inject } from '@angular/core';
 import { Entity } from '../../common/firestore';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { SwitchThatReverseItDatabase } from './database';
-import docs from './index.md';
 import {
     SWITCH_THAT_REVERSE_IT_STATE_DEFAULT,
     SwitchThatReverseItQuestion,
     SwitchThatReverseItState,
 } from './model';
 import { SwitchThatReverseItQuestionEditDialog } from './question-edit';
+import docs from './README.md';
 
 @Component({
     imports: [CommonControllerModule],

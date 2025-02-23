@@ -2,9 +2,9 @@ import { Component, computed, inject, linkedSignal } from '@angular/core';
 import { Entity } from '../../common/firestore';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { BeatItDatabase } from './database';
-import docs from './index.md';
 import { BeatItQuestion, BeatItState } from './model';
 import { BeatItQuestionEditDialog } from './question-edit';
+import docs from './README.md';
 
 @Component({
     imports: [CommonControllerModule],

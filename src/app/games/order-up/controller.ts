@@ -4,9 +4,9 @@ import { Entity } from '../../common/firestore';
 import { randomizeItems } from '../../common/utils';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { OrderUpDatabase } from './database';
-import docs from './index.md';
 import { OrderUpQuestion, OrderUpQuestionItem, OrderUpState } from './model';
 import { OrderUpQuestionEditDialog } from './question-edit';
+import docs from './README.md';
 
 @Component({
     imports: [CommonControllerModule],

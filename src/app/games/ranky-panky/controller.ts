@@ -4,13 +4,13 @@ import { Entity } from '../../common/firestore';
 import { resizeImage } from '../../common/utils';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { RankyPankyDatabase } from './database';
-import docs from './index.md';
 import {
     RankyPankyQuestion,
     RankyPankyQuestionItem,
     RankyPankyState,
 } from './model';
 import { RankyPankyQuestionEditDialog } from './question-edit';
+import docs from './README.md';
 
 @Component({
     imports: [CommonControllerModule],
