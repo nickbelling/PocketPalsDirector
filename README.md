@@ -68,7 +68,7 @@ on screen. To make this more visually interesting than just showing its name,
 the Pocket Pals Director includes something called the Video Game Database
 (VGDB):
 
-![](docs/img/vgdb-list.png)
+![The Video Game Database](docs/img/vgdb-list.png)
 
 Adding a game to the VGDB automatically fetches its main logo and hero image
 from [SteamGridDB](https://steamgriddb.com). This can then be used in any game
@@ -79,7 +79,7 @@ background with the game's logo overlaid on-top.
 For any game, it's possible to manually swap the logo or hero to any other one
 available in SteamGridDB, as well as uploading a custom one.
 
-![](docs/img/vgdb-edit.png)
+![Editing a game in the VGDB](docs/img/vgdb-edit.png)
 
 You can also export an image of the game (e.g. its logo over the hero
 background) to a variety of aspect ratios using the "Make image" option shown
