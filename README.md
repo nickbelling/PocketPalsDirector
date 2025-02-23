@@ -96,9 +96,15 @@ routes become enabled:
           which can be reordered or made (inactive) for the current broadcast
         - `/director/{gameId}`: Displays the controller interface for a given
           game, where it's possible to both control the game as it appears on
-          the broadcast, or edit the questions.
+          the broadcast, or edit the questions. The controller displays a live
+          preview of the game as it will appear in the broadcast. If the game
+          also supports player buzzers, there's also a small control panel to
+          manage the buzzers.
         - `/video-game-database`: Displays the interface for adding, editing
           or removing games in the Video Game Database.
+        - `/players`: Displays the interface for adding, editing or removing
+          player buzzers, managing team memberships, sound effects, and
+          avatars.
         - `/admin`: Enables managing users with access to the Dashboard.
     - `/game/{gameId}`: Displays the current state of the game for the
       broadcast - this is the URL which is placed into an OBS/vMix Browser
@@ -131,7 +137,7 @@ that may have passed me by since I last checked, as well as trying out what's
 coming down the pipeline in the future.
 
 As a result, I tried to make this repo look as much like a mini version of a
-modern enterprise-scale app as much as I could.
+modern enterprise-scale app as I could.
 
 ### Angular
 
