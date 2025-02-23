@@ -4,6 +4,7 @@ import { Entity } from '../../common/firestore';
 import { resizeImage } from '../../common/utils';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { RankyPankyDatabase } from './database';
+import docs from './index.md';
 import {
     RankyPankyQuestion,
     RankyPankyQuestionItem,
@@ -19,6 +20,8 @@ export class RankyPankyController extends BaseController<
     RankyPankyState,
     RankyPankyQuestion
 > {
+    protected docs = docs;
+
     constructor() {
         super(inject(RankyPankyDatabase));
     }

@@ -58,7 +58,7 @@
                     [(fileToUpload)]="itemImage"
                     [focusElement]="focus" />
             </mat-card-content>
-            <mat-card-actions align="end">
+            <mat-card-actions class="p" align="end">
                 <button
                     mat-flat-button
                     (click)="addItem()"
@@ -71,11 +71,15 @@
         <progress-indicator [monitor]="progress" />
     </div>
 
-    <mat-card class="layout-basis-1/2">
+    <mat-card class="layout-basis-1/2 g">
         <mat-card-header>
-            <mat-card-title>Items (reveal order)</mat-card-title>
+            <mat-card-title>Items</mat-card-title>
         </mat-card-header>
         <mat-card-content>
+            <alert
+                type="info"
+                title="The order the cards appear here will be the order in which they are first revealed." />
+
             <mat-list cdkDropList>
                 @for (
                     item of questionItems();
@@ -83,7 +87,12 @@
                     let index = $index;
                     let last = $last
                 ) {
-                    <mat-list-item cdkDrag (cdkDragDropped)="reorder($event)">
+                    <mat-list-item
+                        cdkDrag
+                        (cdkDragDropped)="reorder($event)"
+                        matTooltip="{{ item.name }} ({{ item.value }}{{
+                            question?.itemSuffix
+                        }})">
                         <mat-icon matListItemIcon cdkDragHandle
                             >drag_indicator</mat-icon
                         >
