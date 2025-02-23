@@ -3,7 +3,6 @@
 </mat-toolbar>
 
 <mat-dialog-content class="layout-column g">
-    <game-selector [(gameId)]="gameId" [disabled]="loading()" />
     <mat-form-field>
         <mat-label>GuessThe.Game ID</mat-label>
         <input
@@ -13,6 +12,7 @@
             [disabled]="loading()"
             [(ngModel)]="guessTheGameId" />
     </mat-form-field>
+    <game-selector [(gameId)]="gameId" [disabled]="loading()" />
 
     <progress-indicator [monitor]="progress" />
 </mat-dialog-content>

@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Entity } from '../../common/firestore';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { ScreenshotInTheDarkDatabase } from './database';
+import docs from './index.md';
 import { ScreenshotInTheDarkQuestion, ScreenshotInTheDarkState } from './model';
 import { ScreenshotInTheDarkQuestionEditDialog } from './question-edit';
 
@@ -14,6 +15,7 @@ export class ScreenshotInTheDarkController extends BaseController<
     ScreenshotInTheDarkQuestion
 > {
     protected data: ScreenshotInTheDarkDatabase;
+    protected docs = docs;
 
     constructor() {
         const database = inject(ScreenshotInTheDarkDatabase);
