@@ -24,7 +24,10 @@
             <input matInput required [(ngModel)]="from" />
         </mat-form-field>
     </div>
-    <image-file-field [(fileToUpload)]="imageFile" />
+    <image-file-field
+        [(fileToUpload)]="imageFile"
+        hint="Upload an image with the character's face in the top-right
+    corner." />
     <mat-form-field>
         <mat-label>Forbidden terms</mat-label>
         <textarea
@@ -32,6 +35,7 @@
             required
             [(ngModel)]="forbiddenTerms"
             rows="8"></textarea>
+        <mat-hint>One item per line.</mat-hint>
     </mat-form-field>
 
     <progress-indicator [monitor]="progress" />

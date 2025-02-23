@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Entity } from '../../common/firestore';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { ImpockstersDatabase } from './database';
+import docs from './index.md';
 import {
     IMPOCKSTERS_STATE_DEFAULT,
     ImpockstersQuestion,
@@ -18,6 +19,8 @@ export class ImpockstersController extends BaseController<
     ImpockstersQuestion
 > {
     protected data: ImpockstersDatabase;
+
+    protected docs = docs;
 
     constructor() {
         const database = inject(ImpockstersDatabase);
