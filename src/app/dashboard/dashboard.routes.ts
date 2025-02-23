@@ -53,7 +53,7 @@ export const dashboardChildRoutes: Route[] = [
             ),
     },
     {
-        path: 'game-database',
+        path: 'video-game-database',
         title: 'Pocket Pals Director | Videogame Database',
         component: DashboardGamesDatabase,
         canActivate: [AdminAuthGuard],
