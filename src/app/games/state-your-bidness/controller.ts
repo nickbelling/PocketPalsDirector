@@ -2,6 +2,7 @@ import { Component, computed, inject, linkedSignal } from '@angular/core';
 import { Entity } from '../../common/firestore';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { StateYourBidnessDatabase } from './database';
+import docs from './index.md';
 import { StateYourBidnessQuestion, StateYourBidnessState } from './model';
 import { StateYourBidnessQuestionEditDialog } from './question-edit';
 
@@ -13,6 +14,8 @@ export class StateYourBidnessController extends BaseController<
     StateYourBidnessState,
     StateYourBidnessQuestion
 > {
+    protected docs = docs;
+
     constructor() {
         super(inject(StateYourBidnessDatabase));
     }

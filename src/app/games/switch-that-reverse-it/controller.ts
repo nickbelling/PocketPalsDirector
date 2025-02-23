@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Entity } from '../../common/firestore';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { SwitchThatReverseItDatabase } from './database';
+import docs from './index.md';
 import {
     SWITCH_THAT_REVERSE_IT_STATE_DEFAULT,
     SwitchThatReverseItQuestion,
@@ -18,6 +19,7 @@ export class SwitchThatReverseItController extends BaseController<
     SwitchThatReverseItQuestion
 > {
     protected data: SwitchThatReverseItDatabase;
+    protected docs = docs;
 
     constructor() {
         const database = inject(SwitchThatReverseItDatabase);
