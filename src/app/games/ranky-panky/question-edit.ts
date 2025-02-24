@@ -141,6 +141,8 @@ export class RankyPankyQuestionEditDialog extends BaseQuestionEditDialog<RankyPa
 
             this.progress.finish();
             this.dialog.close();
+        } catch (error) {
+            this._toast.error('Failed to add question.', error);
         } finally {
             this.progress.reset();
             this.loading.set(false);

@@ -134,7 +134,7 @@ export abstract class BaseFileField {
                     )!;
                     const fileBlob = await item.getType(concreteType);
                     const fileName = 'Pasted file';
-                    const file = new File([concreteType], fileName, {
+                    const file = new File([fileBlob], fileName, {
                         type: fileBlob.type,
                     });
 
