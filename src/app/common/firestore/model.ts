@@ -18,6 +18,9 @@ export const CORS_PROXY_FUNCTION_URL = `https://${FIREBASE_CONFIG.projectId}.web
 /** HTTPS base URL for the sgdbProxy Firebase Function. */
 export const SGDB_PROXY_FUNCTION_URL = `https://${FIREBASE_CONFIG.projectId}.web.app/sgdbproxy`;
 
+/** HTTPS base URL for the steamSpyProxy Firebase Function. */
+export const STEAM_SPY_PROXY_FUNCTION_URL = `https://${FIREBASE_CONFIG.projectId}.web.app/steamspyproxy`;
+
 /** Base URL for items uploaded to Firebase Storage publicly. */
 export const PUBLIC_STORAGE_BASE_URL = `https://firebasestorage.googleapis.com/v0/b/${FIREBASE_CONFIG.storageBucket}/o`;
 

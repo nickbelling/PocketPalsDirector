@@ -31,6 +31,12 @@
                 "function": {
                     "functionId": "sgdbProxy"
                 }
+            },
+            {
+                "source": "/steamspyproxy",
+                "function": {
+                    "functionId": "steamSpyProxy"
+                }
             }
         ]
     }
