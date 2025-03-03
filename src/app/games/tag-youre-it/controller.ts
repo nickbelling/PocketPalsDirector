@@ -65,4 +65,19 @@ export class TagYoureItController extends BaseController<
         const state = this.state();
         return state.revealedTagIndex >= TAG_GROUPS.length - 1;
     }
+
+    public groupedTags(): Array<Array<string>> {
+        let allTags = this.currentQuestion()?.tags;
+        if (!allTags) return [];
+
+        let groupedTags = [];
+
+        for (let i = 1; i < TAG_GROUPS.length; i++) {
+            groupedTags.push(
+                allTags?.slice(TAG_GROUPS[i][0], TAG_GROUPS[i][1]),
+            );
+        }
+
+        return groupedTags;
+    }
 }

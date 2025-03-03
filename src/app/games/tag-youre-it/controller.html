@@ -24,8 +24,18 @@
                 </mat-card-title>
             </mat-card-header>
             <mat-card-content class="layout-column g p-y">
-                @for (tag of question.tags; track $index) {
-                    <p>{{ $index + 1 }}. {{ tag }}</p>
+                @for (
+                    tagGroup of groupedTags();
+                    track $index;
+                    let groupIndex = $index
+                ) {
+                    <p
+                        [class.text-disabled]="
+                            state.revealedTagIndex > groupIndex ||
+                            state.showingAnswer
+                        ">
+                        {{ groupIndex + 1 }}. {{ tagGroup.join(', ') }}
+                    </p>
                 }
 
                 <button
