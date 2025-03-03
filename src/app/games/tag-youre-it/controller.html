@@ -1,4 +1,4 @@
-<!-- @let state = this.state(); -->
+@let state = this.state();
 @let questions = this.questions();
 @let question = this.currentQuestion();
 
@@ -28,12 +28,18 @@
                     <p>{{ $index + 1 }}. {{ tag }}</p>
                 }
 
-                <button mat-flat-button (click)="revealNextTagGroup()">
+                <button
+                    mat-flat-button
+                    [disabled]="state.showingAnswer || allTagsRevealed()"
+                    (click)="revealNextTagGroup()">
                     <mat-icon>check_circle</mat-icon>
                     <span>Reveal next tags</span>
                 </button>
 
-                <button mat-flat-button (click)="showAnswer()">
+                <button
+                    mat-flat-button
+                    [disabled]="state.showingAnswer"
+                    (click)="showAnswer()">
                     <mat-icon>check_circle</mat-icon>
                     <span>Show answer</span>
                 </button>

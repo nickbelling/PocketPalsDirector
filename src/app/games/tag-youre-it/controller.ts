@@ -60,4 +60,9 @@ export class TagYoureItController extends BaseController<
             showingAnswer: true,
         });
     }
+
+    public allTagsRevealed(): boolean {
+        const state = this.state();
+        return state.revealedTagIndex >= TAG_GROUPS.length - 1;
+    }
 }
