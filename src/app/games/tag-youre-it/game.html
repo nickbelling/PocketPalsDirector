@@ -1,4 +1,31 @@
-<!-- @let state = this.state(); -->
-<!-- @let questions = this.questions(); -->
-<!-- @let question = this.currentQuestion(); -->
+@let tagsWithBreakpoint = this.tagsWithBreakpoint();
 
+@if (this.showingAnswer()) {
+    <div class="game-display">
+        <div @fadeInOut class="">
+            <game-hero [gameId]="this.gameId()!" />
+        </div>
+    </div>
+}
+
+<div class="tags-layout">
+    <div class="tag-container tag-container-list">
+        @for (tag of tagsWithBreakpoint[0]; track $index) {
+            <div class="tag animate__animated animate__bounceInUp">
+                {{ tag }}
+            </div>
+        }
+    </div>
+
+    <div class="tag-container tag-container-current">
+        @for (tag of tagsWithBreakpoint[1]; track $index) {
+            <div class="tag animate__animated animate__pulse">{{ tag }}</div>
+        }
+    </div>
+</div>
+
+<!-- @for (tag of tags(); track $index) {
+    <div class="box correct animate__animated animate__pulse" [fitText]="tag">
+        <span>{{ tag }}</span>
+    </div>
+} -->

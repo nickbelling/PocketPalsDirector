@@ -3,6 +3,7 @@ import { Entity } from '../../common/firestore';
 import { BaseController, CommonControllerModule } from '../base/controller';
 import { TagYoureItDatabase } from './database';
 import {
+    TAG_GROUPS,
     TAG_YOURE_IT_STATE_DEFAULT,
     TagYoureItQuestion,
     TagYoureItState,
@@ -41,6 +42,22 @@ export class TagYoureItController extends BaseController<
     public editQuestion(question?: TagYoureItQuestion): void {
         this._dialog.open(TagYoureItQuestionEditDialog, {
             data: question,
+        });
+    }
+
+    public async revealNextTagGroup(): Promise<void> {
+        const state = this.state();
+        let newRevealedTagIndex = state.revealedTagIndex + 1;
+        if (newRevealedTagIndex >= TAG_GROUPS.length) return;
+
+        await this.setState({
+            revealedTagIndex: newRevealedTagIndex,
+        });
+    }
+
+    public async showAnswer(): Promise<void> {
+        await this.setState({
+            showingAnswer: true,
         });
     }
 }

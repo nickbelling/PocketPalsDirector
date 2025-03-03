@@ -1,5 +1,14 @@
 export const TAG_YOURE_IT_BASE_PATH = 'games/tag-youre-it';
 
+export const TAG_GROUPS = [
+    [0, 0],
+    [0, 3],
+    [3, 6],
+    [6, 10],
+    [10, 15],
+    [15, 20],
+];
+
 export interface TagYoureItState {
     /**
      * The current question ID. Null if no question selected.
@@ -7,15 +16,19 @@ export interface TagYoureItState {
     currentQuestion: string | null;
 
     /**
-     * The number of cards which have been revealed from the set the player is
+     * The index of TAG_GROUPS which have been revealed from the set the player is
      * able to manipulate.
      */
-    revealedTags: number;
+    revealedTagIndex: number;
+
+    /** True if the answer is showing. */
+    showingAnswer: boolean;
 }
 
 export const TAG_YOURE_IT_STATE_DEFAULT: TagYoureItState = {
     currentQuestion: null,
-    revealedTags: 0,
+    revealedTagIndex: 0,
+    showingAnswer: false,
 };
 
 export interface TagYoureItQuestion {
