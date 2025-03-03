@@ -153,7 +153,7 @@ export const GAMES: GameDefinition[] = [
         game: TagYoureItGame,
         controller: TagYoureItController,
         supportsBuzzers: true,
-        defaultResolution: RESOLUTION_960x720,
+        defaultResolution: RESOLUTION_1280x720,
     },
     {
         name: 'Videogame Centipede',
