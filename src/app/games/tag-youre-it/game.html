@@ -1,12 +1,8 @@
 @let tagsWithBreakpoint = this.tagsWithBreakpoint();
 
-@if (this.showingAnswer()) {
-    <div class="game-display">
-        <div @fadeInOut class="">
-            <game-hero [gameId]="this.gameId()!" />
-        </div>
-    </div>
-}
+<div class="game-display" [class.game-display-shown]="this.showingAnswer()">
+    <game-hero [gameId]="this.gameId()!" />
+</div>
 
 <div class="tags-layout">
     <div class="tag-container tag-container-list">
@@ -23,9 +19,3 @@
         }
     </div>
 </div>
-
-<!-- @for (tag of tags(); track $index) {
-    <div class="box correct animate__animated animate__pulse" [fitText]="tag">
-        <span>{{ tag }}</span>
-    </div>
-} -->

@@ -60,6 +60,12 @@
 
     z-index: 1;
 
+    opacity: 0;
+
+    &.game-display-shown {
+        opacity: 1;
+    }
+
     img {
         height: 100%;
         width: 100%;
