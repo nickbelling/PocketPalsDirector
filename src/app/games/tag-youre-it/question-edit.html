@@ -1,0 +1,32 @@
+<mat-toolbar>
+    @if (editing) {
+        <span>Edit question</span>
+    } @else {
+        <span>Add question</span>
+    }
+</mat-toolbar>
+
+<mat-dialog-content class="layout-column g">
+    <mat-form-field>
+        <mat-label>Steam App ID</mat-label>
+        <input
+            type="number"
+            matInput
+            required
+            [disabled]="loading()"
+            [(ngModel)]="steamAppId" />
+    </mat-form-field>
+    <game-selector [(gameId)]="gameId" [disabled]="loading()" />
+
+    <progress-indicator [monitor]="progress" />
+</mat-dialog-content>
+
+<mat-dialog-actions class="layout-row layout-items-middle g">
+    <button mat-button [disabled]="loading()" mat-dialog-close>Cancel</button>
+    <button
+        mat-flat-button
+        [disabled]="!isValid() || loading()"
+        (click)="submit()">
+        <span>{{ editing ? 'Edit' : 'Add' }}</span>
+    </button>
+</mat-dialog-actions>

@@ -23,6 +23,8 @@ import { StateYourBidnessController } from './state-your-bidness/controller';
 import { StateYourBidnessGame } from './state-your-bidness/game';
 import { SwitchThatReverseItController } from './switch-that-reverse-it/controller';
 import { SwitchThatReverseItGame } from './switch-that-reverse-it/game';
+import { TagYoureItController } from './tag-youre-it/controller';
+import { TagYoureItGame } from './tag-youre-it/game';
 import { VideogameCentipedeController } from './videogame-centipede/controller';
 import { VideogameCentipedeGame } from './videogame-centipede/game';
 
@@ -143,6 +145,15 @@ export const GAMES: GameDefinition[] = [
         controller: SwitchThatReverseItController,
         supportsBuzzers: true,
         defaultResolution: RESOLUTION_960x720,
+    },
+    {
+        name: "Tag, You're It!",
+        slug: 'tag-youre-it',
+        icon: 'tag',
+        game: TagYoureItGame,
+        controller: TagYoureItController,
+        supportsBuzzers: true,
+        defaultResolution: RESOLUTION_1280x720,
     },
     {
         name: 'Videogame Centipede',
