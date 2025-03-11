@@ -21,7 +21,7 @@ export const corsProxy = onRequest(async (req: Request, res: Response) => {
             }
 
             // Fetch the content from the provided URL
-            const response = await fetch(decodeURI(url));
+            const response = await fetch(url);
 
             // If the response is not OK, return the status from the target
             if (!response.ok) {
