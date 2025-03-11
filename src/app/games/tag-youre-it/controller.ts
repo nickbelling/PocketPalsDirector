@@ -9,6 +9,7 @@ import {
     TagYoureItState,
 } from './model';
 import { TagYoureItQuestionEditDialog } from './question-edit';
+import docs from './README.md';
 
 @Component({
     imports: [CommonControllerModule],
@@ -18,6 +19,7 @@ export class TagYoureItController extends BaseController<
     TagYoureItState,
     TagYoureItQuestion
 > {
+    protected docs = docs;
     protected data: TagYoureItDatabase;
 
     constructor() {
