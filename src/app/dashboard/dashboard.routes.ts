@@ -3,6 +3,7 @@ import { AdminAuthGuard } from '../common/auth';
 import { DashboardAdmin } from './admin/dashboard-admin';
 import { Dashboard } from './dashboard';
 import { DashboardGamesDatabase } from './database/dashboard-database';
+import { DashboardBuzzerDevices } from './devices/dashboard-buzzer-devices';
 import { DashboardHome } from './home/dashboard-home';
 import { DashboardPlayers } from './players/dashboard-players';
 import { DashboardSignIn } from './sign-in/dashboard-sign-in';
@@ -62,6 +63,12 @@ export const dashboardChildRoutes: Route[] = [
         path: 'players',
         title: 'Pocket Pals Director | Players',
         component: DashboardPlayers,
+        canActivate: [AdminAuthGuard],
+    },
+    {
+        path: 'devices',
+        title: 'Pocket Pals Director | Devices',
+        component: DashboardBuzzerDevices,
         canActivate: [AdminAuthGuard],
     },
     {

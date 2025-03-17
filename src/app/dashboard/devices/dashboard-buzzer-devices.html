@@ -1,0 +1,95 @@
+<h2>Devices (BETA)</h2>
+
+<div class="layout-column g" cdkDropListGroup>
+    @if (canUseDevices()) {
+        <div class="layout-row g">
+            <button mat-flat-button (click)="connectHubs()">
+                <mat-icon>nest_remote</mat-icon>
+                <span>Pair a new hub</span>
+            </button>
+
+            @for (hub of hubs(); track $index) {
+                <button
+                    mat-flat-button
+                    class="error"
+                    (click)="disconnectHub(hub)">
+                    <mat-icon>usb_off</mat-icon>
+                    <span>Unpair Hub {{ $index + 1 }}</span>
+                </button>
+            }
+        </div>
+
+        @if (hubs().length > 0) {
+            <h3>Buzzer Devices</h3>
+            <alert type="info" title="About Sony Buzz! Controllers">
+                <p>
+                    Wireless Buzz! controllers will flash the red light when
+                    turning on, and flash the blue light when turning off.
+                </p>
+                <p>
+                    Controllers will turn off after 20 minutes of sitting idle.
+                </p>
+            </alert>
+
+            <alert type="warning" title="Do not refresh this page">
+                <p>
+                    Refreshing this website after assigning players to devices
+                    will reset all buzzer assignments.
+                </p>
+            </alert>
+        }
+
+        <div class="layout-row layout-items-middle g">
+            @for (device of devices(); track $index) {
+                <mat-card class="buzzer layout-column layout-items-center p g">
+                    <img class="controller" src="img/buzz_controller.png" />
+                    <button
+                        mat-flat-button
+                        (click)="identify(device.buzzer)"
+                        matTooltip="Click to flash the light on this controller, if it is connected.">
+                        <mat-icon>flare</mat-icon>
+                        <span>Identify</span>
+                    </button>
+                    <div
+                        cdkDropList
+                        [cdkDropListData]="device.buzzer"
+                        (cdkDropListDropped)="playerDropped($event)"
+                        class="placeholder">
+                        @if (device.player) {
+                            <mat-card class="player p">
+                                <player
+                                    [name]="device.player.name"
+                                    [image]="
+                                        imagesBasePath +
+                                            '/' +
+                                            device.player.image | resolveUrl
+                                    "
+                                    [animated]="false" />
+                            </mat-card>
+                        }
+                    </div>
+                </mat-card>
+            }
+        </div>
+
+        <h3>Unassigned Players</h3>
+        <div
+            cdkDropList
+            cdkDropListSortingDisabled
+            cdkDropListOrientation="mixed"
+            class="layout-row g">
+            @for (player of unassignedPlayers(); track player.id) {
+                <mat-card cdkDrag [cdkDragData]="player" class="player p">
+                    <player
+                        [name]="player.name"
+                        [image]="
+                            imagesBasePath + '/' + player.image | resolveUrl
+                        "
+                        [animated]="false" />
+                </mat-card>
+            }
+        </div>
+    } @else {
+        <alert>This browser does not support USB device connections.</alert>
+    }
+</div>

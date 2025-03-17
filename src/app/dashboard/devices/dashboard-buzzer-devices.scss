@@ -1,0 +1,36 @@
+.buzzer {
+    width: 175px;
+
+    img.controller {
+        height: 250px;
+        object-fit: contain;
+    }
+}
+
+.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 150px;
+    aspect-ratio: 3/4;
+    flex-shrink: 1;
+    outline-style: dashed;
+    outline-color: var(--mat-sys-outline);
+    outline-width: 4px;
+    border-radius: var(--rounding);
+}
+
+.cdk-drag-placeholder {
+    opacity: 0.5;
+}
+
+.player {
+    height: 150px;
+    aspect-ratio: 3/4;
+    flex-shrink: 0;
+
+    player {
+        height: 100%;
+        object-fit: contain;
+    }
+}

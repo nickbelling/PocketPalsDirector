@@ -18,8 +18,18 @@
         </a>
         <a mat-button [routerLink]="'players'">
             <mat-icon>groups</mat-icon>
-            <span>Players & Buzzers</span>
+            <span>Players/Buzzers</span>
         </a>
+        <a
+            mat-button
+            [routerLink]="'devices'"
+            [disabled]="!canUseDevices()"
+            [matBadge]="assignedBuzzerCount()"
+            [matBadgeHidden]="assignedBuzzerCount() === 0">
+            <mat-icon>nest_remote</mat-icon>
+            <span>Devices</span>
+        </a>
+
         <button mat-button [matMenuTriggerFor]="optionsMenu">
             <mat-icon>Settings</mat-icon>
             <span>Options</span>

@@ -5,6 +5,8 @@
     "editor.codeActionsOnSave": {
         "source.organizeImports": "always"
     },
+
+    "cSpell.allowCompoundWords": true,
     "cSpell.words": [
         "Balatro",
         "Bidness",
@@ -25,6 +27,7 @@
         "SGDB",
         "steamgriddb",
         "unguessed",
+        "unpair",
         "vgdb",
         "videogame",
         "videogames"
