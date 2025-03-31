@@ -1,17 +1,24 @@
-import { computed, effect, Injectable, signal, untracked } from '@angular/core';
-import { BuzzerDevice } from './buzzer-device';
-import { BuzzerHub } from './buzzer-hub';
+import {
+    computed,
+    effect,
+    inject,
+    Injectable,
+    signal,
+    untracked,
+} from '@angular/core';
+import { BuzzerDevice, BuzzerDeviceHub } from './model';
+import {
+    deviceIsSonyBuzzDevice,
+    SONY_WIRELESS_BUZZ_CONTROLLER_HID_FILTER,
+    SonyBuzzDeviceService,
+} from './sony-wireless-buzz';
 
-const SONY_BUZZ_CONTROLLER_INFO = {
-    vendorId: 0x054c, // Sony Corp.
-    productId: 0x1000, // Wireless Buzz! Receiver
-};
-
-/** Service that manages connected Sony Buzz! Controllers. */
 @Injectable({
     providedIn: 'root',
 })
 export class BuzzerDeviceService {
+    private _sonyDevices = inject(SonyBuzzDeviceService);
+
     /** True if this browser supports WebHID devices. */
     public canUseDevices = signal<boolean>(navigator.hid !== undefined);
 
@@ -19,22 +26,24 @@ export class BuzzerDeviceService {
     public hidDevices = signal<HIDDevice[]>([]);
 
     /**
-     * A list of BuzzerHubs. Set asynchronously in an effect below, due to
-     * needing asynchronous setup/teardown.
+     * The list of currently configured BuzzerDeviceHubs, based on each
+     * device-specific service's list of hubs. Used to match HIDDevices to their
+     * device-specific handling.
      */
-    public hubs = signal<BuzzerHub[]>([]);
-
-    /** A list of available buzzer devices. */
-    public buzzers = computed<BuzzerDevice[]>(() => {
-        const hubs = this.hubs();
-        return hubs?.flatMap((hub) => hub.buzzers()) || [];
+    public hubs = computed<BuzzerDeviceHub[]>(() => {
+        return [...this._sonyDevices.hubs()];
     });
 
-    /** @constructor */
+    /**
+     * The list of currently configured BuzzerDevices, based on each
+     * device-specific service's list of buzzers.
+     */
+    public buzzers = computed<BuzzerDevice[]>(() => {
+        return [...this._sonyDevices.buzzers()];
+    });
+
     constructor() {
-        if (this.canUseDevices()) {
-            this._addEventListeners();
-        }
+        this._addEventListeners();
 
         // When we first determine we can use WebHID devices, find any which are
         // already paired and make their companion BuzzerHubs.
@@ -53,8 +62,8 @@ export class BuzzerDeviceService {
         effect(async () => {
             const updatedDeviceList: HIDDevice[] = this.hidDevices();
 
-            const updatedHubs = await untracked(async () => {
-                const hubs: BuzzerHub[] = this.hubs() || [];
+            await untracked(async () => {
+                const hubs: BuzzerDeviceHub[] = this.hubs() || [];
 
                 // Figure out which devices don't already have hubs and require
                 // asynchronous setup.
@@ -73,20 +82,18 @@ export class BuzzerDeviceService {
 
                 // Set up the new devices.
                 for (const addedDevice of addedDevices) {
-                    const hub = await BuzzerHub.create(addedDevice);
-                    hubs.push(hub);
+                    if (deviceIsSonyBuzzDevice(addedDevice)) {
+                        await this._sonyDevices.addHub(addedDevice);
+                    }
                 }
 
                 // Tear down the old devices.
                 for (const removedHub of removedHubs) {
-                    await removedHub.dispose();
-                    hubs.splice(hubs.indexOf(removedHub), 1);
+                    if (deviceIsSonyBuzzDevice(removedHub.device)) {
+                        await this._sonyDevices.removeHub(removedHub);
+                    }
                 }
-
-                return [...hubs];
             });
-
-            this.hubs.set(updatedHubs);
         });
     }
 
@@ -94,7 +101,7 @@ export class BuzzerDeviceService {
     public async connectHubs(): Promise<void> {
         // Prompt user to select a device
         const requestedDevices = await navigator.hid.requestDevice({
-            filters: [SONY_BUZZ_CONTROLLER_INFO],
+            filters: [SONY_WIRELESS_BUZZ_CONTROLLER_HID_FILTER],
         });
 
         for (const device of requestedDevices) {
@@ -103,7 +110,7 @@ export class BuzzerDeviceService {
     }
 
     /** Disconnects the given BrowserHub device. */
-    public async disconnectHub(hub: BuzzerHub): Promise<void> {
+    public async disconnectHub(hub: BuzzerDeviceHub): Promise<void> {
         this._removeHIDDevice(hub.device);
     }
 
@@ -129,12 +136,17 @@ export class BuzzerDeviceService {
         );
     }
 
+    /** Returns true if the device is a supported device. */
+    private _deviceIsSupported(device: HIDDevice): boolean {
+        return deviceIsSonyBuzzDevice(device); // or some other device
+    }
+
     /**
      * Given a HIDDevice, determines if it's a Buzz Wireless Receiver we don't
      * know about, and adds it to the list of HIDDevices if it's new.
      */
     private _addHIDDevice(device: HIDDevice): void {
-        if (this._deviceIsBuzzReceiverHub(device)) {
+        if (this._deviceIsSupported(device)) {
             // Determine if device being added is a new one
             this.hidDevices.update((existingDevices) => {
                 if (existingDevices.includes(device)) {
@@ -151,21 +163,10 @@ export class BuzzerDeviceService {
      * it.
      */
     private async _removeHIDDevice(device: HIDDevice): Promise<void> {
-        if (this._deviceIsBuzzReceiverHub(device)) {
+        if (this._deviceIsSupported(device)) {
             this.hidDevices.update((existingDevices) => {
                 return existingDevices.filter((d) => d !== device);
             });
         }
-    }
-
-    /**
-     * Returns true if the given HIDDevice is a PS3 Buzz! Wireless Controller
-     * Receiver.
-     */
-    private _deviceIsBuzzReceiverHub(device: HIDDevice): boolean {
-        return (
-            device.vendorId === SONY_BUZZ_CONTROLLER_INFO.vendorId &&
-            device.productId === SONY_BUZZ_CONTROLLER_INFO.productId
-        );
     }
 }

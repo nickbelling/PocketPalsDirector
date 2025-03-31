@@ -1,44 +1,61 @@
 import { computed, signal } from '@angular/core';
-import { BuzzerDevice } from './buzzer-device';
-import { BuzzerHubButtonState } from './model';
+import { BuzzerDeviceHub, SupportedBuzzerDeviceType } from '../model';
+import { SonyBuzzControllerHubButtonState } from './model';
+import { SonyWirelessBuzzController } from './sony-wireless-buzz-controller';
 
-interface BuzzerHubLightState {
+interface SonyWirelessBuzzControllerHubLightState {
     light1On: boolean;
     light2On: boolean;
     light3On: boolean;
     light4On: boolean;
 }
 
+export function hubIsSonyWirelessHub(
+    hub: BuzzerDeviceHub,
+): hub is SonyWirelessBuzzControllerHub {
+    return hub.type === 'sonyWirelessBuzz';
+}
+
 /**
- * Represents a single Buzz Wireless Controller Receiver. Enables setting the
- * lights of all 4 controllers and interpreting when one of their buttons has
- * been pressed.
+ * Represents a single Sony Buzz! Wireless Controller Receiver. Enables setting
+ * the lights of all 4 controllers and interpreting when one of their buttons
+ * has been pressed.
  *
- * Create by calling the {@link BuzzerHub.create} static factory method. The
- * resultant object will be fully set up to work with the currently plugged in
- * USB device.
+ * Create by calling the {@link SonyWirelessBuzzController.create} static
+ * factory method. The resultant object will be fully set up to work with the
+ * currently plugged in USB device.
  */
-export class BuzzerHub {
+export class SonyWirelessBuzzControllerHub implements BuzzerDeviceHub {
+    public type: SupportedBuzzerDeviceType = 'sonyWirelessBuzz';
+
     /** The WebHID USB device this BuzzerHub abstracts. */
     public readonly device: HIDDevice;
 
     /** The first controller device paired to this hub. */
-    public readonly buzzer1 = signal<BuzzerDevice>(new BuzzerDevice(this, 1));
+    public readonly buzzer1 = signal<SonyWirelessBuzzController>(
+        new SonyWirelessBuzzController(this, 1),
+    );
 
     /** The second controller device paired to this hub. */
-    public readonly buzzer2 = signal<BuzzerDevice>(new BuzzerDevice(this, 2));
+    public readonly buzzer2 = signal<SonyWirelessBuzzController>(
+        new SonyWirelessBuzzController(this, 2),
+    );
 
     /** The third controller device paired to this hub. */
-    public readonly buzzer3 = signal<BuzzerDevice>(new BuzzerDevice(this, 3));
+    public readonly buzzer3 = signal<SonyWirelessBuzzController>(
+        new SonyWirelessBuzzController(this, 3),
+    );
 
     /** The fourth controller device paired to this hub. */
-    public readonly buzzer4 = signal<BuzzerDevice>(new BuzzerDevice(this, 4));
+    public readonly buzzer4 = signal<SonyWirelessBuzzController>(
+        new SonyWirelessBuzzController(this, 4),
+    );
 
     /**
      * The current state of all of the lights on the controllers connected to
      * this hub.
      */
-    public readonly lights = signal<BuzzerHubLightState>({
+    public readonly lights = signal<SonyWirelessBuzzControllerHubLightState>({
         light1On: false,
         light2On: false,
         light3On: false,
@@ -63,11 +80,13 @@ export class BuzzerHub {
     }
 
     /**
-     * Asynchronously creates a BuzzerHub object to represent the given USB
-     * device.
+     * Asynchronously creates a SonyWirelessBuzzControllerHub object to
+     * represent the given USB device.
      */
-    static async create(device: HIDDevice): Promise<BuzzerHub> {
-        const hub = new BuzzerHub(device);
+    static async create(
+        device: HIDDevice,
+    ): Promise<SonyWirelessBuzzControllerHub> {
+        const hub = new SonyWirelessBuzzControllerHub(device);
 
         if (!device.opened) {
             await device.open();
@@ -77,7 +96,7 @@ export class BuzzerHub {
         return hub;
     }
 
-    /** Asynchronously disposes this BuzzerHub. */
+    /** Asynchronously disposes this SonyWirelessBuzzControllerHub. */
     public async dispose(): Promise<void> {
         if (this.device.opened) {
             this.device.removeEventListener(
@@ -156,11 +175,13 @@ export class BuzzerHub {
 
     /**
      * Given the contents of a Buzz Controller's input report fired when a
-     * button is pressed or released, create a {@link BuzzerHubButtonState}
+     * button is pressed or released, create a {@link SonyBuzzControllerHubButtonState}
      * object to represent the pressed/unpressed state of all 20 buttons (5
      * buttons on 4 controllers).
      */
-    protected parseReport(arrData: Uint8Array): BuzzerHubButtonState {
+    protected parseReport(
+        arrData: Uint8Array,
+    ): SonyBuzzControllerHubButtonState {
         return {
             buzzer1: {
                 red: (arrData[2] & 0x01) !== 0,
@@ -197,7 +218,7 @@ export class BuzzerHub {
      * Given a parsed button state object for this entire hub, update each
      * controller's understanding of its current button state.
      */
-    protected setButtonState(state: BuzzerHubButtonState): void {
+    protected setButtonState(state: SonyBuzzControllerHubButtonState): void {
         this.buzzer1().setButtonState(state.buzzer1);
         this.buzzer2().setButtonState(state.buzzer2);
         this.buzzer3().setButtonState(state.buzzer3);

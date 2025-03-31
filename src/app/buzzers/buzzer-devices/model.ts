@@ -1,29 +1,34 @@
-export type BuzzerDeviceButton = 'red' | 'blue' | 'orange' | 'green' | 'yellow';
+import { EventEmitter } from '@angular/core';
 
-/**
- * The current state of the buttons on a single buzzer device connected to a hub.
- */
-export interface BuzzerDeviceButtonState {
-    /** True if the red button is currently pressed. */
-    red: boolean;
-    /** True if the yellow button is currently pressed. */
-    yellow: boolean;
-    /** True if the green button is currently pressed. */
-    green: boolean;
-    /** True if the orange button is currently pressed. */
-    orange: boolean;
-    /** True if the blue button is currently pressed. */
-    blue: boolean;
+export type SupportedBuzzerDeviceType = 'sonyWirelessBuzz';
+
+export interface BuzzerDevice {
+    type: SupportedBuzzerDeviceType;
+
+    get name(): string;
+
+    /** Fired when the player buzzes in (i.e. presses the button). */
+    buzzed: EventEmitter<void>;
+
+    /** Identifies the buzzer (usually by flashing its light). */
+    identify(): Promise<void>;
+
+    /** Enables the buzzer for the current player (usually turning on its light). */
+    enable(): Promise<void>;
+
+    /** Disables the buzzer for the current player (usually turning off its light). */
+    disable(): Promise<void>;
 }
 
-/** The current state of the buttons on a Buzzer Hub. */
-export interface BuzzerHubButtonState {
-    /** The current state of the buttons on buzzer 1. */
-    buzzer1: BuzzerDeviceButtonState;
-    /** The current state of the buttons on buzzer 2. */
-    buzzer2: BuzzerDeviceButtonState;
-    /** The current state of the buttons on buzzer 3. */
-    buzzer3: BuzzerDeviceButtonState;
-    /** The current state of the buttons on buzzer 4. */
-    buzzer4: BuzzerDeviceButtonState;
+export interface BuzzerDeviceHub {
+    type: SupportedBuzzerDeviceType;
+
+    /** The physical USB HID device this hub represents. */
+    device: HIDDevice;
+}
+
+export class UnsupportedDeviceError extends Error {
+    constructor(public device: HIDDevice) {
+        super(`${device.productName} is unsupported.`);
+    }
 }

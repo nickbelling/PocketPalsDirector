@@ -8,9 +8,10 @@ import {
     untracked,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { BuzzerDevice } from '../../buzzers/buzzer-devices/buzzer-device';
-import { BuzzerDeviceService } from '../../buzzers/buzzer-devices/buzzer-device-service';
-import { BuzzerDeviceButton } from '../../buzzers/buzzer-devices/model';
+import {
+    BuzzerDevice,
+    BuzzerDeviceService,
+} from '../../buzzers/buzzer-devices';
 import { BuzzerDirectorDataStore } from '../../buzzers/data';
 import { BuzzerPlayer, BuzzerState } from '../../buzzers/data/model';
 import { Entity } from '../../common/firestore';
@@ -18,7 +19,7 @@ import { Entity } from '../../common/firestore';
 interface PlayerIdBuzzerLink {
     playerId: string;
     buzzer: BuzzerDevice;
-    buttonPressedSubscription: Subscription;
+    buzzedInSubscription: Subscription;
 }
 
 interface PlayerBuzzerLink {
@@ -66,7 +67,7 @@ export class BuzzerPlayerService {
     constructor() {
         // When something changes about the players, turn the appropriate buzzer
         // lights on or off.
-        effect(() => {
+        effect(async () => {
             const state = this._players.state();
             const playerBuzzers = this.playerBuzzerMap();
 
@@ -74,11 +75,15 @@ export class BuzzerPlayerService {
                 const player = playerBuzzer.player;
                 const buzzer = playerBuzzer.buzzer;
 
-                untracked(() => {
+                await untracked(async () => {
                     if (player) {
-                        buzzer.setLight(this._playerCanBuzz(state, player));
+                        if (this._playerCanBuzz(state, player)) {
+                            await buzzer.enable();
+                        } else {
+                            await buzzer.disable();
+                        }
                     } else {
-                        buzzer.setLight(false);
+                        await buzzer.disable();
                     }
                 });
             }
@@ -99,7 +104,7 @@ export class BuzzerPlayerService {
 
                 // Clean up the links
                 for (const removedLink of removedLinks) {
-                    removedLink.buttonPressedSubscription.unsubscribe();
+                    removedLink.buzzedInSubscription.unsubscribe();
                 }
 
                 this._playerIdBuzzerLinks.update((links) => {
@@ -110,7 +115,7 @@ export class BuzzerPlayerService {
 
         inject(DestroyRef).onDestroy(() => {
             for (const link of this._playerIdBuzzerLinks()) {
-                link.buttonPressedSubscription.unsubscribe();
+                link.buzzedInSubscription.unsubscribe();
             }
         });
     }
@@ -129,18 +134,17 @@ export class BuzzerPlayerService {
                 existingList.push({
                     playerId: player.id,
                     buzzer: buzzer,
-                    buttonPressedSubscription: buzzer.buttonPressed.subscribe(
-                        (button) => this._buttonPressed(buzzer, button),
+                    buzzedInSubscription: buzzer.buzzed.subscribe(() =>
+                        this._buttonPressed(buzzer),
                     ),
                 });
             } else {
-                existingLink.buttonPressedSubscription.unsubscribe();
+                existingLink.buzzedInSubscription.unsubscribe();
                 existingLink.playerId = player.id;
                 existingLink.buzzer = buzzer;
-                existingLink.buttonPressedSubscription =
-                    buzzer.buttonPressed.subscribe((button) =>
-                        this._buttonPressed(buzzer, button),
-                    );
+                existingLink.buzzedInSubscription = buzzer.buzzed.subscribe(
+                    () => this._buttonPressed(buzzer),
+                );
             }
 
             return [...existingList];
@@ -160,22 +164,17 @@ export class BuzzerPlayerService {
     }
 
     /** Fired when a button is pressed on a buzzer device. */
-    private async _buttonPressed(
-        buzzer: BuzzerDevice,
-        button: BuzzerDeviceButton,
-    ): Promise<void> {
-        if (button === 'red') {
-            const state = this._players.state();
-            const player = this._getPlayerForBuzzer(buzzer);
+    private async _buttonPressed(buzzer: BuzzerDevice): Promise<void> {
+        const state = this._players.state();
+        const player = this._getPlayerForBuzzer(buzzer);
 
-            if (player) {
-                // Immediately turn off the light
-                buzzer.setLight(false);
+        if (player) {
+            // Immediately turn off the light
+            buzzer.disable();
 
-                if (this._playerCanBuzz(state, player)) {
-                    // Buzz in the player
-                    await this._players.buzzInPlayer(player.id);
-                }
+            if (this._playerCanBuzz(state, player)) {
+                // Buzz in the player
+                await this._players.buzzInPlayer(player.id);
             }
         }
     }

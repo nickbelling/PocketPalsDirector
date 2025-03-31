@@ -1,8 +1,10 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, inject } from '@angular/core';
-import { BuzzerDevice } from '../../buzzers/buzzer-devices/buzzer-device';
-import { BuzzerDeviceService } from '../../buzzers/buzzer-devices/buzzer-device-service';
-import { BuzzerHub } from '../../buzzers/buzzer-devices/buzzer-hub';
+import {
+    BuzzerDevice,
+    BuzzerDeviceHub,
+    BuzzerDeviceService,
+} from '../../buzzers/buzzer-devices';
 import {
     BuzzerPlayer,
     BUZZERS_STORAGE_IMAGES_PATH,
@@ -36,7 +38,7 @@ export class DashboardBuzzerDevices {
         return this._devices.connectHubs();
     }
 
-    public async disconnectHub(hub: BuzzerHub): Promise<void> {
+    public async disconnectHub(hub: BuzzerDeviceHub): Promise<void> {
         this._confirm.open(
             'yesNo',
             'Disconnect and unpair hub',
@@ -50,8 +52,8 @@ export class DashboardBuzzerDevices {
     }
 
     public async identify(buzzer: BuzzerDevice): Promise<void> {
-        this._toast.info(`Flashing the light on buzzer ${buzzer.buzzerIndex}.`);
-        await buzzer.flash();
+        this._toast.info(`Flashing the light on ${buzzer.name}.`);
+        await buzzer.identify();
     }
 
     public playerDropped(

@@ -1,17 +1,24 @@
 import { computed, EventEmitter } from '@angular/core';
-import { sleep } from '../../common/utils';
-import { BuzzerHub } from './buzzer-hub';
-import { BuzzerDeviceButton, BuzzerDeviceButtonState } from './model';
+import { sleep } from '../../../common/utils';
+import { BuzzerDevice, SupportedBuzzerDeviceType } from '../model';
+import {
+    SonyBuzzControllerButton,
+    SonyBuzzControllerButtonState,
+} from './model';
+import { SonyWirelessBuzzControllerHub } from './sony-wireless-buzz-controller-hub';
 
 /**
- * Represents a single Buzz! Wireless Controller, paired to a {@link BuzzerHub}.
+ * Represents a single Sony Buzz! Wireless Controller, paired to a
+ * {@link SonyWirelessBuzzControllerHub}.
  */
-export class BuzzerDevice {
+export class SonyWirelessBuzzController implements BuzzerDevice {
+    public type: SupportedBuzzerDeviceType = 'sonyWirelessBuzz';
+
     /**
      * The last known state of each button on the controller. Used to determine
      * if it just transitioned from "pressed" to "unpressed".
      */
-    private _lastState: BuzzerDeviceButtonState = {
+    private _lastState: SonyBuzzControllerButtonState = {
         red: false,
         yellow: false,
         orange: false,
@@ -36,16 +43,40 @@ export class BuzzerDevice {
     });
 
     /**
-     * Emits when a button on the controller has been pressed with the argument
+     * Emits when a button on the controller has been pressed (with the argument
      * describing which one was).
      */
-    public readonly buttonPressed = new EventEmitter<BuzzerDeviceButton>();
+    public readonly buttonPressed =
+        new EventEmitter<SonyBuzzControllerButton>();
+
+    /** @inheritdoc */
+    public get name(): string {
+        return `Buzz Controller ${this.buzzerIndex}`;
+    }
+
+    /** @inheritdoc */
+    public readonly buzzed = new EventEmitter<void>();
 
     /** @constructor */
     constructor(
-        private hub: BuzzerHub,
+        private hub: SonyWirelessBuzzControllerHub,
         public readonly buzzerIndex: number,
     ) {}
+
+    /** @inheritdoc */
+    public enable(): Promise<void> {
+        return this.setLight(true);
+    }
+
+    /** @inheritdoc */
+    public disable(): Promise<void> {
+        return this.setLight(false);
+    }
+
+    /** @inheritdoc */
+    public identify(): Promise<void> {
+        return this.flash();
+    }
 
     /** Turns this controller's light on or off. */
     public async setLight(on: boolean): Promise<void> {
@@ -75,7 +106,7 @@ export class BuzzerDevice {
      * and the new state shows that it isn't, we can infer it has just been
      * released, and emit the {@link buttonPressed} event.
      */
-    public setButtonState(newState: BuzzerDeviceButtonState): void {
+    public setButtonState(newState: SonyBuzzControllerButtonState): void {
         // Check if each button was just released
         if (this._lastState.red && !newState.red) {
             this.buttonPressed.emit('red');

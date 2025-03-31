@@ -15,7 +15,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
-import { BuzzerDeviceService } from '../buzzers/buzzer-devices/buzzer-device-service';
+import { BuzzerDeviceService } from '../buzzers/buzzer-devices';
 import { AudioService } from '../common/audio';
 import { AuthService } from '../common/auth';
 import { BuzzerPlayerService } from './devices/buzzer-player-service';
