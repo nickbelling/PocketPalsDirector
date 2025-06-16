@@ -1,0 +1,20 @@
+{
+    "name": "pocket-pals-devcontainer",
+    "image": "mcr.microsoft.com/devcontainers/typescript-node",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "angular.ng-template",
+                "esbenp.prettier-vscode",
+                "orta.vscode-jest",
+                "streetsidesoftware.code-spell-checker",
+                "dbaeumer.vscode-eslint"
+            ]
+        }
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker": {},
+        "ghcr.io/devcontainers-extra/features/angular-cli": {},
+        "ghcr.io/devcontainers-extra/features/supabase-cli": {}
+    }
+}
