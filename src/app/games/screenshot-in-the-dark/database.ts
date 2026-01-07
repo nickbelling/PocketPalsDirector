@@ -59,9 +59,9 @@ export class ScreenshotInTheDarkDatabase extends BaseGameDatabase<
         screenshotNumber: number,
     ): Promise<File> {
         let blob;
+        const url = `https://images.guessthe.game/gtg_images/${guessTheGameId}/${screenshotNumber}.webp`;
+        // Try and get a .webp
         try {
-            const url = `https://guessthe.game/games/${guessTheGameId}/${screenshotNumber}.webp`;
-            // Try and get a .webp
             blob = await firstValueFrom(
                 this._http.get(
                     `${CORS_PROXY_FUNCTION_URL}?url=${encodeURI(url)}`,
@@ -70,10 +70,14 @@ export class ScreenshotInTheDarkDatabase extends BaseGameDatabase<
                     },
                 ),
             );
-
-            if (blob.type !== 'image/webp') {
-                const url = `https://guessthe.game/games/${guessTheGameId}/video/${screenshotNumber}.webm`;
-                // If that failed, try and get a .webm instead
+        } catch (err: unknown) {
+            console.warn(
+                'Failed to download image. Attempting video instead...',
+                err,
+            );
+            const url = `https://images.guessthe.game/gtg_images/${guessTheGameId}/video/${screenshotNumber}.webm`;
+            // If that failed, try and get a .webm instead
+            try {
                 blob = await firstValueFrom(
                     this._http.get(
                         `${CORS_PROXY_FUNCTION_URL}?url=${encodeURI(url)}`,
@@ -82,8 +86,10 @@ export class ScreenshotInTheDarkDatabase extends BaseGameDatabase<
                         },
                     ),
                 );
+            } catch (err: unknown) {
+                console.error('Failed to download video:', err);
             }
-        } catch {}
+        }
 
         if (blob) {
             return new File([blob], `${screenshotNumber}`, { type: blob.type });
