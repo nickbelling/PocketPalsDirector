@@ -70,48 +70,36 @@ export class FitTextDirective implements OnChanges, AfterViewInit {
     }
 
     private _adjustFontSize(): void {
-        if (this._originalFontSize !== undefined) {
-            const element = this._el.nativeElement;
+        if (this._originalFontSize == null) return;
 
-            // Cache the element's dimensions outside the loop (as each of
-            // these cause a layout recalculation)
-            const styles = getComputedStyle(element);
-            const clientHeight = Math.round(parseFloat(styles.height));
-            const clientWidth = Math.round(parseFloat(styles.width));
+        const el = this._el.nativeElement as HTMLElement;
 
-            if (clientHeight > 0 && clientWidth > 0) {
-                let minSize = this.fitTextMinSize();
-                let maxSize = Math.floor(this._originalFontSize);
-                let fontSize = maxSize;
+        let min = this.fitTextMinSize();
+        let max = Math.floor(this._originalFontSize);
+        let best = min;
 
-                let adjustments = 0;
-                // Apply a binary search to find the optimal font size
-                while (minSize <= maxSize) {
-                    const midSize = Math.floor((minSize + maxSize) / 2);
-                    element.style.fontSize = `${midSize}px`;
+        while (min <= max) {
+            const mid = (min + max) >> 1;
+            el.style.fontSize = `${mid}px`;
 
-                    const scrollHeight = element.scrollHeight;
-                    const scrollWidth = element.scrollWidth;
+            // Read after write
+            const availableHeight = el.clientHeight;
+            const availableWidth = el.clientWidth;
+            const neededHeight = el.scrollHeight;
+            const neededWidth = el.scrollWidth;
 
-                    // Check if the current font size fits within the element
-                    if (
-                        scrollHeight <= clientHeight &&
-                        scrollWidth <= clientWidth
-                    ) {
-                        // Font size fits, try a larger size
-                        fontSize = midSize;
-                        minSize = midSize + 1;
-                    } else {
-                        // Font size does not fit, try a smaller size
-                        maxSize = midSize - 1;
-                    }
+            const fits =
+                neededHeight <= availableHeight &&
+                neededWidth <= availableWidth;
 
-                    adjustments++;
-                }
-
-                // Apply the final font size
-                element.style.fontSize = `${fontSize}px`;
+            if (fits) {
+                best = mid;
+                min = mid + 1;
+            } else {
+                max = mid - 1;
             }
         }
+
+        el.style.fontSize = `${best}px`;
     }
 }

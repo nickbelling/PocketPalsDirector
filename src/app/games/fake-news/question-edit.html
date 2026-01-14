@@ -1,0 +1,37 @@
+<mat-toolbar>
+    @if (editing) {
+        <span>Edit question</span>
+    } @else {
+        <span>Add question</span>
+    }
+</mat-toolbar>
+
+<mat-dialog-content class="layout-column g p-bottom">
+    <mat-form-field class="layout-fill">
+        <mat-label>Subject</mat-label>
+        <input matInput required focus [(ngModel)]="subject" />
+        <mat-hint>e.g. "Bioshock (2007)"</mat-hint>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Prompt</mat-label>
+        <textarea matInput required rows="5" [(ngModel)]="prompt"></textarea>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Correction</mat-label>
+        <textarea
+            matInput
+            required
+            rows="3"
+            [(ngModel)]="correction"></textarea>
+    </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions class="layout-row layout-items-middle g">
+    <button mat-button [disabled]="loading()" mat-dialog-close>Cancel</button>
+    <button
+        mat-flat-button
+        [disabled]="!isValid() || loading()"
+        (click)="submit()">
+        <span>{{ editing ? 'Edit' : 'Add' }}</span>
+    </button>
+</mat-dialog-actions>

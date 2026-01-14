@@ -1,0 +1,63 @@
+@let state = this.state();
+@let questions = this.questions();
+@let question = this.currentQuestion();
+
+<div class="layout-column g">
+    <question-selector
+        [questions]="questions"
+        [currentQuestion]="currentQuestion()"
+        (currentQuestionChange)="setQuestion($event)"
+        (reset)="reset()"
+        [documentation]="docs"
+        canNavigate
+        (addQuestion)="addQuestion()"
+        canEdit
+        (editQuestion)="editQuestion($event)"
+        canDelete
+        (deleteQuestion)="deleteQuestion($event)">
+        <question-display *question="let question; from: questions">
+            <span>{{ question.subject }}</span>
+        </question-display>
+    </question-selector>
+
+    @if (question) {
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>
+                    <span>{{ question.subject }}</span>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="layout-column g p-y">
+                <strong>Prompt:</strong>
+                @let prompt = question.prompt;
+                <p class="pre">
+                    <span>{{
+                        prompt | splitSentence: state.currentSentence
+                    }}</span>
+                    <em class="text-disabled-alt">{{
+                        prompt | splitSentenceAtIndex: state.currentSentence
+                    }}</em>
+                    <span class="text-disabled">{{
+                        prompt | splitSentence: state.currentSentence + 1 : true
+                    }}</span>
+                </p>
+                <mat-progress-bar
+                    [value]="
+                        (state.currentSentence /
+                            (prompt | splitSentenceCount)) *
+                        100
+                    " />
+                <button
+                    mat-flat-button
+                    (click)="revealNextSentence()"
+                    [disabled]="
+                        state.currentSentence >= (prompt | splitSentenceCount)
+                    ">
+                    <span>Reveal next sentence</span>
+                </button>
+                <strong>Correction:</strong>
+                <em>{{ question.correction }}</em>
+            </mat-card-content>
+        </mat-card>
+    }
+</div>

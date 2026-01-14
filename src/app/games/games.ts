@@ -11,6 +11,8 @@ import { BeatItController } from './beat-it/controller';
 import { BeatItGame } from './beat-it/game';
 import { EmojionalDamageController } from './emojional-damage/controller';
 import { EmojionalDamageGame } from './emojional-damage/game';
+import { FakeNewsFactCheckersController } from './fake-news/controller';
+import { FakeNewsFactCheckersGame } from './fake-news/game';
 import { ImpockstersController } from './impocksters/controller';
 import { ImpockstersGame } from './impocksters/game';
 import { LightlySteamedController } from './lightly-steamed/controller';
@@ -93,6 +95,15 @@ export const GAMES: GameDefinition[] = [
         controller: EmojionalDamageController,
         supportsBuzzers: true,
         defaultResolution: RESOLUTION_960x720,
+    },
+    {
+        name: 'Fake News Fact Checkers',
+        slug: 'fake-news',
+        icon: 'newspaper',
+        game: FakeNewsFactCheckersGame,
+        controller: FakeNewsFactCheckersController,
+        supportsBuzzers: true,
+        defaultResolution: RESOLUTION_1280x720,
     },
     {
         name: 'Impocksters',
