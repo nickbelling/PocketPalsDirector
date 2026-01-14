@@ -1,0 +1,23 @@
+.prompt,
+.answer {
+    text-wrap: balance;
+    text-shadow: 1cqh 1cqh 1cqh rgba(0, 0, 0, 0.3);
+}
+
+.prompt {
+    font-size: 20cqh;
+    font-family: 'Noto Color Emoji', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+
+    .emoji {
+        --delay: 0;
+        animation-delay: calc(var(--delay) * 500ms);
+    }
+}
+
+.answer {
+    font-size: 15cqh;
+    text-transform: uppercase;
+    font-weight: 700;
+}

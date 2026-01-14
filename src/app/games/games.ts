@@ -9,6 +9,8 @@ import { AvoidingTheDmcaController } from './avoiding-the-dmca/controller';
 import { AvoidingTheDmcaGame } from './avoiding-the-dmca/game';
 import { BeatItController } from './beat-it/controller';
 import { BeatItGame } from './beat-it/game';
+import { EmojionalDamageController } from './emojional-damage/controller';
+import { EmojionalDamageGame } from './emojional-damage/game';
 import { ImpockstersController } from './impocksters/controller';
 import { ImpockstersGame } from './impocksters/game';
 import { LightlySteamedController } from './lightly-steamed/controller';
@@ -84,6 +86,15 @@ export const GAMES: GameDefinition[] = [
         defaultResolution: RESOLUTION_1280x720,
     },
     {
+        name: 'Emojional Damage',
+        slug: 'emojional-damage',
+        icon: 'mood',
+        game: EmojionalDamageGame,
+        controller: EmojionalDamageController,
+        supportsBuzzers: true,
+        defaultResolution: RESOLUTION_960x720,
+    },
+    {
         name: 'Impocksters',
         slug: 'impocksters',
         icon: 'theater_comedy',
@@ -149,7 +160,7 @@ export const GAMES: GameDefinition[] = [
     {
         name: "Tag, You're It!",
         slug: 'tag-youre-it',
-        icon: 'tag',
+        icon: 'sell',
         game: TagYoureItGame,
         controller: TagYoureItController,
         supportsBuzzers: true,

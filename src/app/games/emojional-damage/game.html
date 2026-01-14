@@ -1,0 +1,28 @@
+@let state = this.state();
+@let question = this.currentQuestion();
+
+@if (question) {
+    <div class="game-panel">
+        <p class="prompt">
+            @for (character of promptCharacters(); track character.index) {
+                @if (character.character === '\n') {
+                    <br />
+                } @else {
+                    <span
+                        [style.--delay]="character.delay"
+                        class="emoji animate__bounceInUp animate__animated"
+                        >{{ character.character }}</span
+                    >
+                }
+            }
+        </p>
+
+        <p class="answer">
+            @if (state.showingAnswer) {
+                <span @fadeInOut>{{ question.answer }}</span>
+            } @else {
+                <span>&ZeroWidthSpace;</span>
+            }
+        </p>
+    </div>
+}
