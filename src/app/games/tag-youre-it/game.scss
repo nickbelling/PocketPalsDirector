@@ -1,0 +1,86 @@
+.tags-layout {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: flex;
+
+    width: 100%;
+    height: 100%;
+
+    .tag-container {
+        display: flex;
+        flex-direction: column;
+
+        padding: 1em 2em;
+        box-sizing: border-box;
+
+        &.tag-container-list {
+            gap: 0.4em;
+
+            width: 30%;
+
+            border-right: 3px solid rgba(0, 0, 0, 0.2);
+        }
+
+        &.tag-container-current {
+            justify-content: center;
+            gap: 1.4em;
+
+            width: 70%;
+
+            .tag {
+                padding: 0.4em;
+                font-size: 3em;
+            }
+        }
+
+        .tag {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            height: 5%;
+            margin: 0.5%;
+
+            font-size: 1.6em;
+
+            background-image: var(--bg-blue);
+
+            border-radius: 2em;
+        }
+    }
+}
+
+.game-display {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 1;
+
+    opacity: 0;
+
+    &.game-display-shown {
+        opacity: 1;
+    }
+
+    img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    game-hero {
+        height: 100%;
+        width: 100%;
+    }
+
+    > div {
+        width: 100%;
+        height: 100%;
+    }
+}

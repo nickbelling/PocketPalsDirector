@@ -1,0 +1,24 @@
+<div class="game-display" [class.game-display-shown]="this.showingAnswer()">
+    <game-hero [gameId]="this.gameId()!" />
+</div>
+
+<div class="tags-layout">
+    <div class="tag-container tag-container-list">
+        @for (tag of oldTags(); track tag) {
+            <div class="tag animate__animated animate__bounceInUp">
+                {{ tag }}
+            </div>
+        }
+    </div>
+
+    <div class="tag-container tag-container-current">
+        @for (tag of newTags(); track tag) {
+            <div
+                class="tag animate__animated animate__pulse animate__bounceInUp animate__delay-{{
+                    $index
+                }}s">
+                {{ tag }}
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,61 @@
+@let state = this.state();
+@let questions = this.questions();
+@let question = this.currentQuestion();
+
+<div class="layout-column g">
+    <question-selector
+        [questions]="questions"
+        [currentQuestion]="currentQuestion()"
+        (currentQuestionChange)="setQuestion($event)"
+        (reset)="reset()"
+        [documentation]="docs"
+        (addQuestion)="addQuestion()"
+        canNavigate
+        canDelete
+        (deleteQuestion)="deleteQuestion($event)">
+        <question-display *question="let question; from: questions">
+            <span>{{ question.gameId | gameName }}</span>
+        </question-display>
+    </question-selector>
+
+    @if (question) {
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>
+                    <span>{{ question.gameId | gameName }}</span>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="layout-column g p-y">
+                @for (
+                    tagGroup of groupedTags();
+                    track $index;
+                    let groupIndex = $index
+                ) {
+                    <p
+                        [class.text-disabled]="
+                            state.revealedTagIndex > groupIndex ||
+                            state.showingAnswer
+                        ">
+                        {{ groupIndex + 1 }}. {{ tagGroup.join(', ') }}
+                    </p>
+                }
+
+                <button
+                    mat-flat-button
+                    [disabled]="state.showingAnswer || allTagsRevealed()"
+                    (click)="revealNextTagGroup()">
+                    <mat-icon>check_circle</mat-icon>
+                    <span>Reveal next tags</span>
+                </button>
+
+                <button
+                    mat-flat-button
+                    [disabled]="state.showingAnswer"
+                    (click)="showAnswer()">
+                    <mat-icon>check_circle</mat-icon>
+                    <span>Show answer</span>
+                </button>
+            </mat-card-content>
+        </mat-card>
+    }
+</div>
