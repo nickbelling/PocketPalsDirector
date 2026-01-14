@@ -59,6 +59,7 @@ export class FakeNewsFactCheckersGame extends BaseGame<
         effect(() => {
             const questionChanged = this.currentQuestionId();
 
+            this.dv = 800;
             this.comments.set(0);
             this.likes.set(0);
             this.retweets.set(0);

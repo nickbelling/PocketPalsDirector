@@ -28,6 +28,12 @@ export class FakeNewsFactCheckersQuestionEditDialog extends BaseQuestionEditDial
         const db = inject(FakeNewsFactCheckersDatabase);
         super(db);
         this._db = db;
+
+        if (this.editing) {
+            this.subject.set(this.question?.subject || '');
+            this.prompt.set(this.question?.prompt || '');
+            this.correction.set(this.question?.correction || '');
+        }
     }
 
     public async submit(): Promise<void> {
