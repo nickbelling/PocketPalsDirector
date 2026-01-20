@@ -7,3 +7,15 @@
         height: 60px;
     }
 }
+
+.placeholder {
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+
+    border-style: dashed;
+    border-width: 3px;
+    border-color: var(--mat-sys-outline-variant);
+    border-radius: var(--rounding);
+}

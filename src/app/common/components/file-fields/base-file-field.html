@@ -6,24 +6,26 @@
         readonly
         [value]="fileToUpload()?.name || 'Upload/paste a file'" />
 
-    <button
-        matSuffix
-        mat-icon-button
-        matTooltip="Browse for file..."
-        (click)="fileInput.click()">
-        <mat-icon>upload_file</mat-icon>
-    </button>
-
-    @if (canPaste()) {
+    <div matSuffix class="layout-row">
         <button
             matSuffix
             mat-icon-button
-            matTooltip="Paste from clipboard"
-            [disabled]="!clipboardHasValidFile()"
-            (click)="pasteFile()">
-            <mat-icon>content_paste</mat-icon>
+            matTooltip="Browse for file..."
+            (click)="fileInput.click()">
+            <mat-icon>upload_file</mat-icon>
         </button>
-    }
+
+        @if (canPaste()) {
+            <button
+                matSuffix
+                mat-icon-button
+                matTooltip="Paste from clipboard"
+                [disabled]="!clipboardHasValidFile()"
+                (click)="pasteFile()">
+                <mat-icon>content_paste</mat-icon>
+            </button>
+        }
+    </div>
     @if (hint()) {
         <mat-hint>{{ hint() }}</mat-hint>
     }
