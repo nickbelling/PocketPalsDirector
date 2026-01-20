@@ -1,0 +1,96 @@
+@let state = this.state();
+<!-- @let questions = this.questions(); -->
+@let question = this.currentQuestion();
+@let location = this.currentLocation();
+
+<div class="layout-column layout-fill p g">
+    <div class="header-bar layout-row layout-items-middle g">
+        <img class="logo" src="img/where_in_this_game/acme.png" />
+        <div class="layout-column">
+            <h1>ACME Detective Agency</h1>
+            <h2>Pocket Pals Division</h2>
+        </div>
+        <span class="layout-fill"></span>
+        <div class="led-strip" aria-hidden="true">
+            <span class="led"></span><span class="led"></span
+            ><span class="led"></span><span class="led"></span>
+            <span class="led"></span><span class="led"></span
+            ><span class="led"></span><span class="led"></span>
+            <span class="led"></span><span class="led"></span
+            ><span class="led"></span><span class="led"></span>
+        </div>
+    </div>
+
+    <div class="layout-row layout-fill g">
+        <div class="layout-basis-3/5 layout-column layout-fill panel">
+            <div class="panel-header">
+                <h2>Primary Evidence</h2>
+                <h1>Last Known Location</h1>
+            </div>
+            <div class="layout-column layout-fill panel-body">
+                @if (question) {
+                    @let mapSrc = baseUrl + question.mapImageId | resolveUrl;
+
+                    <location-map
+                        [src]="mapSrc"
+                        [rows]="question.rows"
+                        [cols]="question.columns"
+                        [pins]="pins()"
+                        [highlight]="
+                            state.showingAnswer
+                                ? (location?.locationReference ?? null)
+                                : null
+                        " />
+                } @else {
+                    <div
+                        class="layout-column layout-fill layout-items-middle-center cyber-datastream">
+                        <h1
+                            class="mono cyber-glitch"
+                            data-text="LOCATION UNKNOWN">
+                            LOCATION UNKNOWN
+                        </h1>
+                        <h2
+                            class="mono cyber-glitch"
+                            data-text="STANDBY FOR NEW LOCATION">
+                            Standby for new location...
+                        </h2>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="layout-basis-2/5 layout-column panel">
+            <div class="panel-header">
+                <h2>Secondary Evidence</h2>
+                <h1>Field Photograph</h1>
+            </div>
+
+            <div class="panel-body layout-column layout-fill">
+                @if (location) {
+                    <div
+                        class="layout-column layout-fill layout-items-middle-center">
+                        <div class="polaroid animate__rollIn animate__animated">
+                            <img
+                                [attr.src]="
+                                    baseUrl + location.locationImageId
+                                        | resolveUrl
+                                " />
+                        </div>
+                    </div>
+                } @else {
+                    <div
+                        class="layout-column layout-fill layout-items-middle-center cyber-datastream">
+                        <h1 class="mono cyber-glitch" data-text="NO EVIDENCE">
+                            NO EVIDENCE
+                        </h1>
+                        <h2
+                            class="mono cyber-glitch"
+                            data-text="STANDBY FOR EVIDENCE">
+                            Standby for evidence...
+                        </h2>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

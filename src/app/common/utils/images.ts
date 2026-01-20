@@ -8,6 +8,7 @@ export function resizeImage(
     file: File,
     maxWidth: number,
     maxHeight: number,
+    cropToNewRatio = false,
 ): Promise<File> {
     return new Promise((resolve, reject) => {
         const pica = new Pica();
@@ -19,37 +20,73 @@ export function resizeImage(
         };
 
         img.onload = async () => {
-            // Calculate the new dimensions while maintaining aspect ratio
-            let { width, height } = img;
-            if (width > height) {
-                if (width > maxWidth) {
-                    height = Math.floor((height * maxWidth) / width);
-                    width = maxWidth;
+            const srcWidth = img.width;
+            const srcHeight = img.height;
+
+            let destWidth: number;
+            let destHeight: number;
+
+            let sx = 0;
+            let sy = 0;
+            let sWidth = srcWidth;
+            let sHeight = srcHeight;
+
+            if (cropToNewRatio) {
+                const srcRatio = srcWidth / srcHeight;
+                const targetRatio = maxWidth / maxHeight;
+
+                if (srcRatio > targetRatio) {
+                    // Source is wider → crop left/right
+                    sHeight = srcHeight;
+                    sWidth = Math.floor(srcHeight * targetRatio);
+                    sx = Math.floor((srcWidth - sWidth) / 2);
+                } else {
+                    // Source is taller → crop top/bottom
+                    sWidth = srcWidth;
+                    sHeight = Math.floor(srcWidth / targetRatio);
+                    sy = Math.floor((srcHeight - sHeight) / 2);
                 }
+
+                destWidth = maxWidth;
+                destHeight = maxHeight;
             } else {
-                if (height > maxHeight) {
-                    width = Math.floor((width * maxHeight) / height);
-                    height = maxHeight;
+                const srcRatio = srcWidth / srcHeight;
+                const maxRatio = maxWidth / maxHeight;
+
+                if (srcRatio > maxRatio) {
+                    destWidth = maxWidth;
+                    destHeight = Math.floor(maxWidth / srcRatio);
+                } else {
+                    destHeight = maxHeight;
+                    destWidth = Math.floor(maxHeight * srcRatio);
                 }
             }
 
-            // Create source and destination canvases
+            // Source canvas
             const srcCanvas = document.createElement('canvas');
-            srcCanvas.width = img.width;
-            srcCanvas.height = img.height;
+            srcCanvas.width = sWidth;
+            srcCanvas.height = sHeight;
+
             const srcCtx = srcCanvas.getContext('2d');
-            srcCtx?.drawImage(img, 0, 0);
+            srcCtx?.drawImage(
+                img,
+                sx,
+                sy,
+                sWidth,
+                sHeight,
+                0,
+                0,
+                sWidth,
+                sHeight,
+            );
 
+            // Destination canvas
             const destCanvas = document.createElement('canvas');
-            destCanvas.width = width;
-            destCanvas.height = height;
+            destCanvas.width = destWidth;
+            destCanvas.height = destHeight;
 
-            // Use Pica to resize the image
-            await pica.resize(srcCanvas, destCanvas, {
-                quality: 3, // 1 (fast) to 3 (high quality)
-            });
+            await pica.resize(srcCanvas, destCanvas, { quality: 3 });
 
-            // Convert the canvas to a Blob
             const blob = await pica.toBlob(destCanvas, 'image/webp', 0.9);
 
             resolve(new File([blob], file.name, { type: 'image/webp' }));

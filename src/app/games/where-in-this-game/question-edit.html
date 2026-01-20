@@ -1,0 +1,171 @@
+<mat-toolbar>
+    @if (editing) {
+        <span>Edit question</span>
+    } @else {
+        <span>Add question</span>
+    }
+</mat-toolbar>
+
+<mat-dialog-content #focus class="layout-row layout-fill g">
+    <div class="layout-column layout-basis-3/5 g">
+        <game-selector [(gameId)]="gameId" />
+
+        <div class="layout-row g">
+            <image-file-field
+                class="layout-fill"
+                label="Map image file"
+                [(fileToUpload)]="mapImageFile"
+                [focusElement]="focus"
+                hint="Use a square-ish image." />
+
+            <mat-form-field [style.width.px]="100">
+                <mat-label>Columns</mat-label>
+                <input
+                    matInput
+                    type="number"
+                    required
+                    min="3"
+                    max="26"
+                    [(ngModel)]="columns" />
+                <mat-hint>A, B, C, ...</mat-hint>
+            </mat-form-field>
+            <mat-form-field [style.width.px]="100">
+                <mat-label>Rows</mat-label>
+                <input
+                    matInput
+                    type="number"
+                    required
+                    min="3"
+                    max="26"
+                    [(ngModel)]="rows" />
+                <mat-hint>1, 2, 3, ...</mat-hint>
+            </mat-form-field>
+        </div>
+
+        <div class="layout-fill">
+            @let mapSrc =
+                mapImageFile()
+                    ? (mapImageFile() | blobToUrl)
+                    : mapImageId()
+                      ? (baseUrl + mapImageId() | resolveUrl)
+                      : null;
+            @if (mapSrc) {
+                <location-map
+                    [src]="mapSrc"
+                    [rows]="rows()"
+                    [cols]="columns()"
+                    [pins]="mapPins()"
+                    (gridRefClicked)="locationReference.set($event)" />
+            } @else {
+                <div class="placeholder">
+                    <p>No map image loaded.</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="layout-column layout-basis-2/5 g">
+        <mat-accordion multi>
+            @for (location of locations(); track location) {
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <span>{{ $index + 1 }}: </span>
+                            <span>{{
+                                toGridRef(
+                                    location.locationReference,
+                                    columns(),
+                                    rows()
+                                )
+                            }}</span>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <span>{{ location.name }}</span>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    @let imgSrc =
+                        location.image
+                            ? (location.image | blobToUrl)
+                            : (baseUrl + location.imageId | resolveUrl);
+                    <img class="square" [attr.src]="imgSrc" />
+                    <mat-action-row>
+                        <button
+                            mat-flat-button
+                            class="error"
+                            (click)="deleteLocation($index)">
+                            <mat-icon>Delete</mat-icon>
+                            <span>Delete</span>
+                        </button>
+                    </mat-action-row>
+                </mat-expansion-panel>
+            }
+        </mat-accordion>
+
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Add location</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="layout-column g">
+                <mat-form-field>
+                    <mat-label>Name (optional)</mat-label>
+                    <input
+                        matInput
+                        [(ngModel)]="locationName"
+                        [disabled]="!baseIsValid()" />
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Grid reference</mat-label>
+                    <input
+                        matInput
+                        type="text"
+                        [ngModel]="
+                            toGridRef(locationReference(), columns(), rows())
+                        "
+                        (ngModelChange)="
+                            locationReference.set(
+                                fromGridRef($event, columns(), rows())
+                            )
+                        "
+                        [disabled]="!baseIsValid()" />
+                    <mat-hint>Click a grid reference to set.</mat-hint>
+                </mat-form-field>
+
+                <image-file-field
+                    label="Location image file"
+                    [(fileToUpload)]="locationImage"
+                    [focusElement]="focus"
+                    [disabled]="!baseIsValid()" />
+
+                @if (locationImage()) {
+                    <img
+                        class="square"
+                        [attr.src]="locationImage() | blobToUrl" />
+                } @else {
+                    <div class="placeholder">
+                        <p>No image provided.</p>
+                    </div>
+                }
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button
+                    mat-flat-button
+                    [disabled]="!locationIsValid()"
+                    (click)="addLocation()">
+                    <span>Add Location</span>
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="layout-row layout-items-middle g">
+    <progress-indicator [monitor]="progress" class="layout-fill" />
+    <button mat-button [disabled]="loading()" mat-dialog-close>Cancel</button>
+    <button
+        mat-flat-button
+        [disabled]="!isValid() || loading()"
+        (click)="submit()">
+        <span>{{ editing ? 'Edit' : 'Add' }}</span>
+    </button>
+</mat-dialog-actions>

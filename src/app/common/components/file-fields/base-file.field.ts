@@ -70,6 +70,8 @@ export abstract class BaseFileField {
     /** An optional hint to display underneath the form field. */
     public readonly hint = input<string | undefined>();
 
+    public readonly disabled = input<boolean>(false);
+
     /** True if pasting is allowed. */
     public readonly canPaste = input(true);
 

@@ -1,0 +1,139 @@
+:host {
+    container-type: size;
+
+    --bg: #050814;
+    --panel: rgba(10, 25, 49, 0.82);
+    --panel2: rgba(0, 0, 0, 0.78);
+    --ink: rgba(235, 244, 255, 0.92);
+    --muted: rgba(235, 244, 255, 0.68);
+    --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter,
+        Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        'Liberation Mono', 'Courier New', monospace;
+
+    display: flex;
+    // background-color: var(--bg);
+    color: var(--ink);
+    font-family: var(--font);
+    text-transform: uppercase;
+}
+
+.mono {
+    font-family: var(--mono);
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.square {
+    aspect-ratio: 1 / 1;
+}
+
+.header-bar {
+    height: 10cqh;
+    background-color: var(--panel);
+    padding-right: 5cqh;
+
+    .logo {
+        height: 15cqh;
+        top: -2.5cqh;
+        left: 0;
+    }
+
+    h1 {
+        font-size: 3cqh;
+    }
+    h2 {
+        font-family: var(--mono);
+        font-size: 2cqh;
+        font-weight: 100;
+        color: var(--muted);
+    }
+}
+
+.panel {
+    background-color: var(--panel);
+
+    .panel-header {
+        padding: 2cqh;
+        h1 {
+            font-size: 3cqh;
+        }
+        h2 {
+            font-family: var(--mono);
+            font-size: 2cqh;
+            font-weight: 100;
+            color: var(--muted);
+        }
+    }
+
+    .panel-body {
+        background-color: var(--panel2);
+
+        h1 {
+            font-size: 5cqh;
+        }
+        h2 {
+            font-size: 2cqh;
+        }
+    }
+}
+
+.polaroid {
+    background-color: white;
+    padding-left: 2cqh;
+    padding-top: 2cqh;
+    padding-right: 2cqh;
+    padding-bottom: 5cqh;
+    rotate: 4deg;
+}
+
+.led-strip {
+    display: flex;
+    gap: 1cqh;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 4px;
+}
+
+.led {
+    width: 2cqh;
+    height: 2cqh;
+    border-radius: 50%;
+    background: rgba(56, 189, 248, 0.55);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
+    animation: blink 1.8s infinite ease-in-out;
+}
+
+.led:nth-child(3n + 1) {
+    background: rgba(34, 197, 94, 0.55);
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.45);
+    animation-duration: 2.4s;
+    animation-delay: 0.2s;
+}
+
+.led:nth-child(3n + 2) {
+    background: rgba(167, 139, 250, 0.55);
+    box-shadow: 0 0 10px rgba(167, 139, 250, 0.45);
+    animation-duration: 1.6s;
+    animation-delay: 0.5s;
+}
+
+.led:nth-child(7n) {
+    background: rgba(251, 113, 133, 0.6);
+    box-shadow: 0 0 12px rgba(251, 113, 133, 0.5);
+    animation-duration: 1.2s;
+}
+
+@keyframes blink {
+    0%,
+    100% {
+        opacity: 0.25;
+        transform: scale(0.92);
+    }
+    55% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}

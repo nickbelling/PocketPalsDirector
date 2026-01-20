@@ -4,14 +4,16 @@
     <input
         matInput
         readonly
-        [value]="fileToUpload()?.name || 'Upload/paste a file'" />
+        [value]="fileToUpload()?.name || 'Upload/paste a file'"
+        [disabled]="disabled()" />
 
     <div matSuffix class="layout-row">
         <button
             matSuffix
             mat-icon-button
             matTooltip="Browse for file..."
-            (click)="fileInput.click()">
+            (click)="fileInput.click()"
+            [disabled]="disabled()">
             <mat-icon>upload_file</mat-icon>
         </button>
 
@@ -20,7 +22,7 @@
                 matSuffix
                 mat-icon-button
                 matTooltip="Paste from clipboard"
-                [disabled]="!clipboardHasValidFile()"
+                [disabled]="!clipboardHasValidFile() || disabled()"
                 (click)="pasteFile()">
                 <mat-icon>content_paste</mat-icon>
             </button>

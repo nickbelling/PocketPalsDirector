@@ -15,6 +15,11 @@
     justify-content: space-evenly;
 }
 
+.pocket-pals-game-minimal {
+    height: 100%;
+    width: 100%;
+}
+
 .pocket-pals-game {
     @include reset.reset();
 

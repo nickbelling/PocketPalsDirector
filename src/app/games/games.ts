@@ -2,6 +2,7 @@ import { Type } from '@angular/core';
 import {
     Resolution,
     RESOLUTION_1280x720,
+    RESOLUTION_1920x1080,
     RESOLUTION_540x960,
     RESOLUTION_960x720,
 } from '../common/utils/resolutions';
@@ -31,6 +32,8 @@ import { TagYoureItController } from './tag-youre-it/controller';
 import { TagYoureItGame } from './tag-youre-it/game';
 import { VideogameCentipedeController } from './videogame-centipede/controller';
 import { VideogameCentipedeGame } from './videogame-centipede/game';
+import { WhereInThisGameController } from './where-in-this-game/controller';
+import { WhereInThisGameGame } from './where-in-this-game/game';
 
 export interface GameDefinition {
     /** The game's canonical name. */
@@ -185,5 +188,14 @@ export const GAMES: GameDefinition[] = [
         controller: VideogameCentipedeController,
         supportsBuzzers: true,
         defaultResolution: RESOLUTION_960x720,
+    },
+    {
+        name: 'Where in This Game is Carmen Sandiego?',
+        slug: 'where-in-this-game',
+        icon: 'globe_location_pin',
+        game: WhereInThisGameGame,
+        controller: WhereInThisGameController,
+        supportsBuzzers: true,
+        defaultResolution: RESOLUTION_1920x1080,
     },
 ];
