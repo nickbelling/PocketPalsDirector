@@ -1,14 +1,16 @@
-# Switch That, Reverse It!
+# Emojional Damage
 
-Switch That, Reverse It is a quick-fire game where players are presented with a
-prompt that is **the inverse of the title or subtitle of a video game**.
+Emojional Damage is really straightforward: I’m going to show you some emoji,
+and you need to interpret those emoji to make up the title of a video game.
 
-For example, if I showed you the prompt: **"The First of Them"**, the answer I
-would be looking for here would be for one of you to buzz in and say
-**"The Last of Us"**.
+The questions can be extremely literal, like this one:
 
-Your buzzer will be reset after every second answer, meaning if you guess one
-and get it right, you’re **out for the next prompt**, but you’re
-**back in the prompt after**.
+😡🦶 (Anger Foot)
 
-Each prompt is worth one point.
+Or more conceptual, like this one:
+
+⛓️👫👫⛓️ (Chained Together)
+
+Or made by sounding out literal sounds:
+
+🍲👧💒😮👧🪓🌊 (soup her marry oh gal axe sea: Super Mario Galaxy)

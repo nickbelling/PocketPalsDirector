@@ -44,6 +44,7 @@ export class FakeNewsFactCheckersController extends BaseController<
         this._dialog.open(FakeNewsFactCheckersQuestionEditDialog, {
             autoFocus: false,
             data: question,
+            width: '600px',
         });
     }
 
