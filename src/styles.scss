@@ -5,6 +5,7 @@
 @use './styles/backgrounds';
 @use './styles/controllers';
 @use './styles/games';
+@use './styles/motion';
 
 @include material.all-material();
 @include layout.all-layout();
@@ -48,6 +49,14 @@ body {
 
 .text-disabled-alt {
     color: color-mix(in srgb, var(--mat-sys-on-surface) 66%, transparent);
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
 }
 
 .hidden {
