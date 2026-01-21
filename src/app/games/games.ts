@@ -1,6 +1,7 @@
 import { Type } from '@angular/core';
 import {
     Resolution,
+    RESOLUTION_1000x1000,
     RESOLUTION_1280x720,
     RESOLUTION_1920x1080,
     RESOLUTION_540x960,
@@ -10,6 +11,8 @@ import { AvoidingTheDmcaController } from './avoiding-the-dmca/controller';
 import { AvoidingTheDmcaGame } from './avoiding-the-dmca/game';
 import { BeatItController } from './beat-it/controller';
 import { BeatItGame } from './beat-it/game';
+import { BpWhyFiController } from './bp-why-fi/controller';
+import { BpWhyFiGame } from './bp-why-fi/game';
 import { EmojionalDamageController } from './emojional-damage/controller';
 import { EmojionalDamageGame } from './emojional-damage/game';
 import { FakeNewsFactCheckersController } from './fake-news/controller';
@@ -89,6 +92,15 @@ export const GAMES: GameDefinition[] = [
         controller: BeatItController,
         supportsBuzzers: false,
         defaultResolution: RESOLUTION_1280x720,
+    },
+    {
+        name: 'BP Why-Fi: Games Explained Badly',
+        slug: 'bp-why-fi',
+        icon: 'receipt',
+        game: BpWhyFiGame,
+        controller: BpWhyFiController,
+        supportsBuzzers: true,
+        defaultResolution: RESOLUTION_1000x1000,
     },
     {
         name: 'Emojional Damage',

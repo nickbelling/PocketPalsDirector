@@ -1,0 +1,36 @@
+<mat-toolbar>
+    @if (editing) {
+        <span>Edit question</span>
+    } @else {
+        <span>Add question</span>
+    }
+</mat-toolbar>
+
+<mat-dialog-content class="layout-column g">
+    <game-selector #gameSelector [(gameId)]="gameId" />
+
+    <mat-form-field>
+        <mat-label>Year of Release</mat-label>
+        <input matInput required [(ngModel)]="hintYear" />
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Genre</mat-label>
+        <input matInput required [(ngModel)]="hintGenre" />
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Prompt</mat-label>
+        <textarea matInput required [(ngModel)]="prompt" rows="5"></textarea>
+    </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions class="layout-row layout-items-middle g">
+    <button mat-button [disabled]="loading()" mat-dialog-close>Cancel</button>
+    <button
+        mat-flat-button
+        [disabled]="!isValid() || loading()"
+        (click)="submit()">
+        <span>{{ editing ? 'Edit' : 'Add' }}</span>
+    </button>
+</mat-dialog-actions>

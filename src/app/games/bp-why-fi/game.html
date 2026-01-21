@@ -1,0 +1,48 @@
+@let state = this.state();
+@let question = this.currentQuestion();
+
+@if (question) {
+    <div @fadeInOut class="game-panel">
+        <div class="answer-card" [class.hidden]="!state.showingAnswer">
+            <game-hero [gameId]="question.gameId" [align]="'top'" />
+            <div class="small">
+                <ng-container *ngTemplateOutlet="jbCard" />
+            </div>
+        </div>
+        @if (!state.showingAnswer) {
+            <ng-container *ngTemplateOutlet="jbCard" />
+        }
+    </div>
+
+    <ng-template #jbCard>
+        <div class="jb-card layout-column layout-fill g">
+            @if (state.showingAnswer) {
+                <fit-text class="title" [text]="question.gameId | gameName" />
+            } @else {
+                <h1 class="title unknown">???</h1>
+            }
+            @if (state.showingPrompt) {
+                <div
+                    class="prompt layout-fill layout-items-middle-center"
+                    [fitText]="question.prompt">
+                    <span>{{ question.prompt }}</span>
+                </div>
+            } @else {
+                <div class="layout-fill"></div>
+            }
+            <div class="layout-row layout-items-middle g">
+                <div class="layout-column layout-fill g">
+                    <p class="hint">
+                        <strong>Year of Release:</strong>
+                        {{ state.showingHints ? question.hintYear : '???' }}
+                    </p>
+                    <p class="hint">
+                        <strong>Genre:</strong>
+                        {{ state.showingHints ? question.hintGenre : '???' }}
+                    </p>
+                </div>
+                <img class="icon" src="img/bp_why_fi/texta_pockety.webp" />
+            </div>
+        </div>
+    </ng-template>
+}

@@ -1,0 +1,104 @@
+@font-face {
+    font-family: 'JB Callout';
+    src: url('https://apps.pagefly.io/api/public/uploaded-files/tmp-file/prod-jbhifi.myshopify.com/JB-Callout.woff2')
+        format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SmashingPricesJB';
+    src: url('https://apps.pagefly.io/api/public/uploaded-files/tmp-file/prod-jbhifi.myshopify.com/SmashingPricesJB.woff2')
+        format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'JBCrazy';
+    src: url('https://cdn.shopify.com/s/files/1/0024/9803/5810/files/JBCrazy.woff2?v=1743553247')
+        format('woff2');
+    font-display: swap;
+}
+
+:host {
+    --jb-yellow: #ffec10;
+    --jb-red: #e02020;
+    --jb-font: 'JB Callout';
+
+    container-type: size;
+}
+
+.answer-card {
+    position: absolute;
+    padding: inherit;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    game-hero {
+        height: 100%;
+        width: 100%;
+        border-radius: var(--rounding);
+        box-shadow: var(--mat-sys-level5);
+        overflow: hidden;
+    }
+
+    .small {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        scale: 0.5;
+        transform-origin: bottom;
+        bottom: 5%;
+        rotate: 5deg;
+    }
+}
+
+.jb-card {
+    container-type: size;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8cqh;
+
+    border-radius: var(--rounding);
+    box-shadow: var(--mat-sys-level5);
+    background-color: var(--jb-yellow);
+
+    font-family: var(--jb-font);
+    font-size: 10cqh;
+    text-align: center;
+    text-transform: uppercase;
+    color: black;
+
+    outline-width: 1cqh;
+    outline-offset: -5cqh;
+    outline-style: solid;
+    outline-color: black;
+
+    .title {
+        color: var(--jb-red);
+        --font-size: 20cqh;
+        text-shadow: none;
+
+        &.unknown {
+            font-size: 20cqh;
+        }
+    }
+
+    .prompt {
+        text-wrap: balance;
+    }
+
+    .hint {
+        font-size: 7cqh;
+        strong {
+            color: var(--jb-red);
+        }
+    }
+
+    .icon {
+        height: 40cqh;
+        object-fit: contain;
+    }
+}

@@ -1,0 +1,64 @@
+@let state = this.state();
+@let questions = this.questions();
+@let question = this.currentQuestion();
+
+<div class="layout-column g">
+    <question-selector
+        [questions]="questions"
+        [currentQuestion]="currentQuestion()"
+        (currentQuestionChange)="setQuestion($event)"
+        (reset)="reset()"
+        canNavigate
+        (addQuestion)="addQuestion()"
+        canEdit
+        (editQuestion)="editQuestion()"
+        canDelete
+        (deleteQuestion)="deleteQuestion($event)">
+        <question-display *question="let question; from: questions">
+            <span>{{ question.gameId | gameName }}</span>
+        </question-display>
+    </question-selector>
+
+    @if (question) {
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>{{
+                    question.gameId | gameName
+                }}</mat-card-title>
+                <mat-card-subtitle>
+                    <span>{{ question.hintYear }},&nbsp;</span>
+                    <span>{{ question.hintGenre }}</span>
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="layout-column p-y g">
+                <button
+                    mat-flat-button
+                    [disabled]="state.showingPrompt"
+                    (click)="showPrompt()">
+                    <mat-icon>lightbulb</mat-icon>
+                    <span>Show prompt</span>
+                </button>
+
+                <p>{{ question.prompt }}</p>
+
+                <button
+                    mat-flat-button
+                    [disabled]="state.showingHints"
+                    (click)="showHints()">
+                    <mat-icon>lightbulb</mat-icon>
+                    <span>Show hints</span>
+                </button>
+
+                <mat-divider />
+
+                <button
+                    mat-flat-button
+                    [disabled]="state.showingAnswer"
+                    (click)="showAnswer()">
+                    <mat-icon>check_circle</mat-icon>
+                    <span>Show answer</span>
+                </button>
+            </mat-card-content>
+        </mat-card>
+    }
+</div>
