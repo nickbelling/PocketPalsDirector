@@ -26,4 +26,14 @@
     height: 80%;
     object-fit: contain;
     filter: drop-shadow(4px 4px 5px #000000bb);
+
+    &.top {
+        height: 40%;
+        margin-bottom: 40%;
+    }
+
+    &.bottom {
+        height: 40%;
+        margin-top: 40%;
+    }
 }

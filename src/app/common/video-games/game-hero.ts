@@ -41,6 +41,8 @@ export class GameHero {
      */
     public readonly useThumbnails = input<boolean>(false);
 
+    public readonly align = input<'center' | 'top' | 'bottom'>('center');
+
     /**
      * Becomes true when the logo and hero images have fully loaded (or errored).
      */

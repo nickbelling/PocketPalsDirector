@@ -13,6 +13,8 @@
     @if (logoSrc) {
         <img
             class="game-logo"
+            [class.top]="align() === 'top'"
+            [class.bottom]="align() === 'bottom'"
             [src]="logoSrc"
             (load)="logoLoaded.set(true)"
             (error)="logoLoaded.set(true)" />
