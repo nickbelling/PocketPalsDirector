@@ -49,3 +49,7 @@ body {
 .text-disabled-alt {
     color: color-mix(in srgb, var(--mat-sys-on-surface) 66%, transparent);
 }
+
+.hidden {
+    opacity: 0;
+}
