@@ -1,5 +1,15 @@
 import { default as Pica } from 'pica';
 
+export function preloadImage(src: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.decoding = 'async';
+        image.onload = () => resolve();
+        image.onerror = (err) => reject(err);
+        image.src = src;
+    });
+}
+
 /**
  * Given a `File` representing an image, resizes it to fit within the given
  * boundaries and returns a new `File` object.

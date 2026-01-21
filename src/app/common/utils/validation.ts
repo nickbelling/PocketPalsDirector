@@ -30,6 +30,18 @@ export function hasAtLeast<T>(
     }
 }
 
+/** Returns true if every item in the given array matches the given predicate. */
+export function every<T>(
+    array: T[] | Signal<T[]>,
+    predicate: (item: T) => boolean,
+): boolean {
+    if (isSignal(array)) {
+        return array().every(predicate);
+    } else {
+        return array.every(predicate);
+    }
+}
+
 /** Returns true if the given value is not null. */
 export function isNotNull<T>(value: T | null | Signal<T | null>): boolean {
     if (isSignal(value)) {
