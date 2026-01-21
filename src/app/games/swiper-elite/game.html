@@ -1,0 +1,67 @@
+@let state = this.state();
+@let questions = this.questions();
+@let question = this.currentQuestion();
+
+@if (!question) {
+    <div @fadeInOut class="game-panel">
+        <categories>
+            @for (question of questions; track question.id) {
+                <category
+                    [selected]="state.questionsDone.includes(question.id)">
+                    <span>{{ question.title }}</span>
+                </category>
+            }
+        </categories>
+    </div>
+} @else {
+    <div
+        @fadeInOut
+        class="game-panel layout-row layout-items-space layout-items-middle-center">
+        <div
+            class="float category"
+            [style.--glow-color]="'red'"
+            [style.--seed]="0.26"
+            [fitText]="question.categoryRight">
+            <p>{{ question.categoryLeft }}</p>
+        </div>
+
+        <div class="float" [style.--seed]="0.45">
+            <div class="phone">
+                <div class="screen">
+                    @for (item of items(); track item.title) {
+                        @let isVisible =
+                            items().length - $index >= state.currentItem;
+                        <div
+                            class="card layout-column layout-items-middle-center"
+                            [class.animate__animated]="!isVisible"
+                            [class.animate__rotateOutUpLeft]="
+                                !item.isInRightCategory && !isVisible
+                            "
+                            [class.animate__rotateOutUpRight]="
+                                item.isInRightCategory && !isVisible
+                            "
+                            [fitText]="item.title">
+                            <p>{{ item.title }}</p>
+                        </div>
+                    }
+
+                    <div
+                        class="card title-card layout-column layout-items-middle-center"
+                        [class.animate__animated]="state.currentItem > 0"
+                        [class.animate__fadeOutUpBig]="state.currentItem > 0"
+                        [fitText]="question.title">
+                        <p>{{ question.title }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="float category"
+            [style.--glow-color]="'green'"
+            [style.--seed]="0.75"
+            [fitText]="question.categoryRight">
+            <p>{{ question.categoryRight }}</p>
+        </div>
+    </div>
+}

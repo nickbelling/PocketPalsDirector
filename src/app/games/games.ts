@@ -3,6 +3,7 @@ import {
     Resolution,
     RESOLUTION_1000x1000,
     RESOLUTION_1280x720,
+    RESOLUTION_1440x1080,
     RESOLUTION_1920x1080,
     RESOLUTION_540x960,
     RESOLUTION_960x720,
@@ -31,6 +32,8 @@ import { ScreenshotInTheDarkController } from './screenshot-in-the-dark/controll
 import { ScreenshotInTheDarkGame } from './screenshot-in-the-dark/game';
 import { StateYourBidnessController } from './state-your-bidness/controller';
 import { StateYourBidnessGame } from './state-your-bidness/game';
+import { SwiperEliteController } from './swiper-elite/controller';
+import { SwiperEliteGame } from './swiper-elite/game';
 import { SwitchThatReverseItController } from './switch-that-reverse-it/controller';
 import { SwitchThatReverseItGame } from './switch-that-reverse-it/game';
 import { TagYoureItController } from './tag-youre-it/controller';
@@ -184,6 +187,15 @@ export const GAMES: GameDefinition[] = [
         controller: StateYourBidnessController,
         supportsBuzzers: false,
         defaultResolution: RESOLUTION_1280x720,
+    },
+    {
+        name: 'Swiper Elite',
+        slug: 'swiper-elite',
+        icon: 'swipe',
+        game: SwiperEliteGame,
+        controller: SwiperEliteController,
+        supportsBuzzers: false,
+        defaultResolution: RESOLUTION_1440x1080,
     },
     {
         name: 'Switch That, Reverse It',

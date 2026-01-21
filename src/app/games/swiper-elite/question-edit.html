@@ -1,0 +1,63 @@
+<mat-toolbar>
+    @if (editing) {
+        <span>Edit question</span>
+    } @else {
+        <span>Add question</span>
+    }
+</mat-toolbar>
+
+<mat-dialog-content class="layout-column g">
+    <mat-form-field>
+        <mat-label>Title</mat-label>
+        <input matInput required [(ngModel)]="title" />
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Description</mat-label>
+        <textarea matInput [(ngModel)]="description" rows="3"></textarea>
+    </mat-form-field>
+
+    <div class="layout-row g">
+        <div class="layout-column layout-basis-1/2 g">
+            <mat-form-field>
+                <mat-label>Left category title</mat-label>
+                <input matInput required [(ngModel)]="categoryLeft" />
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Left category items</mat-label>
+                <textarea
+                    matInput
+                    [(ngModel)]="categoryLeftItems"
+                    rows="7"></textarea>
+                <mat-hint>One per line.</mat-hint>
+            </mat-form-field>
+        </div>
+
+        <div class="layout-column layout-basis-1/2 g">
+            <mat-form-field>
+                <mat-label>Right category title</mat-label>
+                <input matInput required [(ngModel)]="categoryRight" />
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Right category items</mat-label>
+                <textarea
+                    matInput
+                    [(ngModel)]="categoryRightItems"
+                    rows="7"></textarea>
+                <mat-hint>One per line.</mat-hint>
+            </mat-form-field>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="layout-row layout-items-middle g">
+    <button mat-button [disabled]="loading()" mat-dialog-close>Cancel</button>
+    <button
+        mat-flat-button
+        [disabled]="!isValid() || loading()"
+        (click)="submit()">
+        <span>{{ editing ? 'Edit' : 'Add' }}</span>
+    </button>
+</mat-dialog-actions>

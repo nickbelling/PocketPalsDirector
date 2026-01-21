@@ -1,0 +1,97 @@
+@let state = this.state();
+@let questions = this.questions();
+@let question = this.currentQuestion();
+
+<div class="layout-column g">
+    <question-selector
+        [questions]="questions"
+        [currentQuestion]="currentQuestion()"
+        (currentQuestionChange)="setQuestion($event)"
+        (reset)="reset()"
+        (addQuestion)="addQuestion()"
+        canEdit
+        (editQuestion)="editQuestion($event)"
+        canDelete
+        (deleteQuestion)="deleteQuestion($event)">
+        <question-display *question="let question; from: questions">
+            <span>{{ question.title }}</span>
+        </question-display>
+    </question-selector>
+
+    @if (question) {
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>{{ question.title }}</mat-card-title>
+                <mat-card-subtitle>{{
+                    question.description
+                }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="layout-column p-y g">
+                @if (state.currentItems) {
+                    <table mat-table [dataSource]="state.currentItems">
+                        <ng-container matColumnDef="left">
+                            <th
+                                mat-header-cell
+                                *matHeaderCellDef
+                                class="text-left">
+                                <span>⬅️ {{ question.categoryLeft }}</span>
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let item; let $index = index"
+                                class="text-left">
+                                @if (!item.isInRightCategory) {
+                                    @if ($index + 1 === state.currentItem) {
+                                        <strong>{{ item.title }}</strong>
+                                    } @else {
+                                        <span>{{ item.title }}</span>
+                                    }
+                                }
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="right">
+                            <th
+                                mat-header-cell
+                                *matHeaderCellDef
+                                class="text-right">
+                                <span>{{ question.categoryRight }} ➡️</span>
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let item; let $index = index">
+                                @if (item.isInRightCategory) {
+                                    @if ($index + 1 === state.currentItem) {
+                                        <strong>{{ item.title }}</strong>
+                                    } @else {
+                                        <span>{{ item.title }}</span>
+                                    }
+                                }
+                            </td>
+                        </ng-container>
+
+                        <tr
+                            mat-header-row
+                            *matHeaderRowDef="['left', 'right']"></tr>
+                        <tr
+                            mat-row
+                            *matRowDef="
+                                let row;
+                                columns: ['left', 'right']
+                            "></tr>
+                    </table>
+
+                    <button
+                        mat-flat-button
+                        [disabled]="
+                            state.currentItem > state.currentItems.length
+                        "
+                        (click)="showNextCard()">
+                        <mat-icon>swipe</mat-icon>
+                        <span>Show next card</span>
+                    </button>
+                }
+            </mat-card-content>
+        </mat-card>
+    }
+</div>
