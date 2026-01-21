@@ -3,9 +3,9 @@ import { isSignal, Signal } from '@angular/core';
 /** Returns true if the given string is not empty. */
 export function isNotEmpty(value: string | Signal<string>): boolean {
     if (isSignal(value)) {
-        return value().trim().length > 0;
+        return value()?.trim().length > 0;
     } else {
-        return value.trim().length > 0;
+        return value?.trim().length > 0;
     }
 }
 
