@@ -1,0 +1,67 @@
+<mat-toolbar>
+    @if (editing) {
+        <span>Edit question</span>
+    } @else {
+        <span>Add question</span>
+    }
+</mat-toolbar>
+
+<mat-dialog-content #focus class="layout-column g">
+    <mat-form-field>
+        <mat-label>Title</mat-label>
+        <input matInput required [(ngModel)]="title" />
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Notes (optional)</mat-label>
+        <textarea matInput [(ngModel)]="notes"></textarea>
+    </mat-form-field>
+
+    @for (clue of clues(); track $index) {
+        <h4>Clue #{{ $index + 1 }}</h4>
+        <div class="layout-row g">
+            <div class="layout-column g">
+                <mat-form-field>
+                    <mat-label>Clue label</mat-label>
+                    <input
+                        matInput
+                        required
+                        [ngModel]="clue.title"
+                        (ngModelChange)="
+                            updateClue($index, { title: $event })
+                        " />
+                </mat-form-field>
+
+                <image-file-field
+                    label="Clue image"
+                    hint="Use a square-ish image."
+                    [focusElement]="focus"
+                    [fileToUpload]="clue.imageFile"
+                    (fileToUploadChange)="
+                        updateClue($index, { imageFile: $event })
+                    " />
+            </div>
+            @if (clue.imageFile) {
+                <img class="square" [attr.src]="clue.imageFile | blobToUrl" />
+            } @else if (clue.imageId) {
+                <img
+                    class="square"
+                    [attr.src]="baseUrl + clue.imageId | resolveUrl" />
+            } @else {
+                <div class="placeholder square">
+                    <span>No image loaded</span>
+                </div>
+            }
+        </div>
+    }
+</mat-dialog-content>
+
+<mat-dialog-actions class="layout-row layout-items-middle g">
+    <button mat-button [disabled]="loading()" mat-dialog-close>Cancel</button>
+    <button
+        mat-flat-button
+        [disabled]="!isValid() || loading()"
+        (click)="submit()">
+        <span>{{ editing ? 'Edit' : 'Add' }}</span>
+    </button>
+</mat-dialog-actions>

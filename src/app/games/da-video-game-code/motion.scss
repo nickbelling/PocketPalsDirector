@@ -1,0 +1,21 @@
+.float {
+    display: inline-block; /* so transforms don't affect siblings oddly */
+
+    /* Float-specific tilt, derived from the shared seed */
+    --tilt: calc((var(--seed, 0.37) - 0.5) * 4deg);
+
+    /* Duration also derived from seed, with a sensible default */
+    animation: float calc(2.4s + 2.2s * var(--seed, 0.37)) ease-in-out infinite;
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0) rotateX(0deg) rotateZ(0deg);
+    }
+    50% {
+        transform: translateY(calc(-2.2% - 1.2% * var(--seed, 0.37)))
+            rotateX(calc(1.5deg + 2.6deg * var(--seed, 0.37)))
+            rotateZ(calc(-1deg + var(--tilt)));
+    }
+}

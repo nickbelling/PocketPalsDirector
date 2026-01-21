@@ -1,0 +1,30 @@
+@let state = this.state();
+@let question = this.currentQuestion();
+
+@if (question) {
+    <div @fadeInOut class="layout-row layout-items-middle-center g clues">
+        @for (clue of question.clues; track $index) {
+            <div class="clue float" [style.--seed]="1 - 1 / ($index + 1)">
+                <div class="mystery-box">
+                    @if ($index + 1 > state.showingClues) {
+                        <div @fadeInOut class="mystery-box-content question">
+                            ?
+                        </div>
+                    } @else {
+                        <div
+                            @fadeInOut
+                            class="mystery-box-content layout-column">
+                            <img
+                                [attr.src]="
+                                    baseUrl + clue.imageId | resolveUrl
+                                " />
+                            <div class="answer">
+                                <fit-text [text]="clue.title" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}

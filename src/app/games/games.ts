@@ -13,6 +13,8 @@ import { BeatItController } from './beat-it/controller';
 import { BeatItGame } from './beat-it/game';
 import { BpWhyFiController } from './bp-why-fi/controller';
 import { BpWhyFiGame } from './bp-why-fi/game';
+import { DaVideoGameCodeController } from './da-video-game-code/controller';
+import { DaVideoGameCodeGame } from './da-video-game-code/game';
 import { EmojionalDamageController } from './emojional-damage/controller';
 import { EmojionalDamageGame } from './emojional-damage/game';
 import { FakeNewsFactCheckersController } from './fake-news/controller';
@@ -101,6 +103,15 @@ export const GAMES: GameDefinition[] = [
         controller: BpWhyFiController,
         supportsBuzzers: true,
         defaultResolution: RESOLUTION_1000x1000,
+    },
+    {
+        name: 'The Da Video Game Code',
+        slug: 'da-video-game-code',
+        icon: 'mystery',
+        game: DaVideoGameCodeGame,
+        controller: DaVideoGameCodeController,
+        supportsBuzzers: true,
+        defaultResolution: RESOLUTION_1280x720,
     },
     {
         name: 'Emojional Damage',

@@ -1,0 +1,40 @@
+@use './mystery-box.scss';
+@use './motion.scss';
+
+.clues {
+    padding: 5cqh;
+    width: 100%;
+    height: 100%;
+}
+
+.clue {
+    display: flex;
+    flex-grow: 1;
+    aspect-ratio: 2/2.5;
+    --font-size: 5cqh;
+    --max-font-size: 10cqh;
+    filter: drop-shadow(black 0 0 1cqh);
+
+    .question {
+        // For the "?"
+        font-size: 40cqh;
+    }
+
+    img {
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+        opacity: 0.9;
+        border-radius: var(--radius);
+    }
+
+    .answer {
+        display: flex;
+        width: 100%;
+        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--game-font-family);
+        font-weight: 300;
+    }
+}
