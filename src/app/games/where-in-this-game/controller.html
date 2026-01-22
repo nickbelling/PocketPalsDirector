@@ -28,7 +28,9 @@
             <mat-card-content class="layout-column g p-y">
                 <mat-form-field>
                     <mat-label>Select location</mat-label>
-                    <mat-select (selectionChange)="setLocation($event.value)">
+                    <mat-select
+                        [ngModel]="state.currentLocation"
+                        (selectionChange)="setLocation($event.value)">
                         @for (
                             location of question.locations;
                             track location.locationImageId
