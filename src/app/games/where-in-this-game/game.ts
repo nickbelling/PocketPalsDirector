@@ -1,5 +1,7 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { BuzzerDisplayDataStore } from '../../buzzers/data';
+import { resolveStorageUrl } from '../../common/firestore';
+import { preloadImage } from '../../common/utils';
 import { BaseGame, CommonGameModule } from '../base/game';
 import { WhereInThisGameDatabase } from './database';
 import { Map, MapPin } from './map';
@@ -61,5 +63,25 @@ export class WhereInThisGameGame extends BaseGame<
         const database = inject(WhereInThisGameDatabase);
         super(database);
         this.data = database;
+
+        effect(() => {
+            const question = this.currentQuestion();
+
+            if (question) {
+                const preloads: Promise<void>[] = question.locations.map((l) =>
+                    preloadImage(
+                        resolveStorageUrl(this.baseUrl + l.locationImageId),
+                    ),
+                );
+
+                Promise.all(preloads)
+                    .catch((err) => console.error(err))
+                    .then(() => {
+                        console.log(
+                            `Preloaded all images for question "${question.gameId}".`,
+                        );
+                    });
+            }
+        });
     }
 }

@@ -55,14 +55,14 @@
                                         : [question.columns, question.rows]
                             "
                             (ngModelChange)="updateGuess(team.id, $event)"
-                            [disabled]="!state.currentLocation" />
+                            [disabled]="state.currentLocation === null" />
                     </mat-form-field>
                 }
 
                 <button
                     mat-flat-button
                     (click)="updateGuesses()"
-                    [disabled]="!state.currentLocation">
+                    [disabled]="state.currentLocation === null">
                     <mat-icon>refresh</mat-icon>
                     <span>Update pins</span>
                 </button>
@@ -72,7 +72,7 @@
                 <button
                     mat-flat-button
                     (click)="showAnswer()"
-                    [disabled]="!state.currentLocation">
+                    [disabled]="state.currentLocation === null">
                     <mat-icon>check_circle</mat-icon>
                     <span>Show answer</span>
                 </button>
