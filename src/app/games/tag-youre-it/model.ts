@@ -1,9 +1,26 @@
+import { isNotNullOrUndefined } from '../../common/utils';
+
 export const TAG_YOURE_IT_BASE_PATH = 'games/tag-youre-it';
 
 export interface SteamSpyAppResponse {
-    appId: number;
+    appid: number;
     name: string;
     tags: Record<string, number>;
+}
+
+export function isSteamSpyAppResponse(
+    value: unknown,
+): value is SteamSpyAppResponse {
+    if (!value) return false;
+    if (typeof value !== 'object') return false;
+
+    const typed = value as SteamSpyAppResponse;
+    return (
+        isNotNullOrUndefined(typed.appid) &&
+        isNotNullOrUndefined(typed.name) &&
+        isNotNullOrUndefined(typed.tags) &&
+        typeof typed.tags === 'object'
+    );
 }
 
 export const TAG_GROUPS = [

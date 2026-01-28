@@ -5,6 +5,7 @@ import { CORS_PROXY_FUNCTION_URL, Entity } from '../../common/firestore';
 import { VideogameDatabaseService } from '../../common/video-games';
 import { BaseGameDatabase } from '../base/database';
 import {
+    isSteamSpyAppResponse,
     SteamSpyAppResponse,
     TAG_YOURE_IT_BASE_PATH,
     TAG_YOURE_IT_STATE_DEFAULT,
@@ -42,6 +43,13 @@ export class TagYoureItDatabase extends BaseGameDatabase<
                     responseType: 'json',
                 }),
             );
+
+            if (!isSteamSpyAppResponse(response)) {
+                console.error('Invalid response:', response);
+                throw new Error(
+                    `Got an invalid response from the SteamSpy API.`,
+                );
+            }
 
             const tags = Object.entries(response.tags)
                 .sort((a: [string, number], b: [string, number]) => b[1] - a[1])
